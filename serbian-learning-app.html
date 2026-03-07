@@ -328,7 +328,7 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   <div class="sp-icon"><img src="icon-192.png" style="width:80px;height:80px;border-radius:20px" alt="Zeka"></div>
   <div class="sp-t">Zeka</div>
   <div class="sp-s">Learn Serbian &middot; A1 to B2</div>
-  <button class="sp-btn" onclick="fbSignIn()">Sign in with Google</button>
+  <button class="sp-btn" id="sp-signin" onclick="fbSignIn()">Sign in with Google</button>
 </div>
 
 <div class="sc" id="home">
@@ -659,15 +659,31 @@ let _fbSaveTimer=null;
 // Keep user signed in across sessions (persists in IndexedDB)
 fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
+// Track whether we're waiting for a redirect result
+let _authReady=false;
+
+// Process redirect result on page load (before onAuthStateChanged fires with null)
+fbAuth.getRedirectResult().then(result=>{
+  _authReady=true;
+  // If redirect sign-in succeeded, onAuthStateChanged will handle it
+}).catch(e=>{
+  _authReady=true;
+  console.log('Redirect result error:',e.code);
+});
+
 function fbSignIn(){
+  const btn=document.getElementById('sp-signin');
+  if(btn){btn.textContent='Signing in...';btn.disabled=true;}
   // Use redirect on mobile (popups are blocked), popup on desktop
   const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||window.matchMedia('(display-mode:standalone)').matches;
   if(isMobile){
     fbAuth.signInWithRedirect(googleProvider);
   }else{
-    fbAuth.signInWithPopup(googleProvider).catch(e=>{
+    fbAuth.signInWithPopup(googleProvider).then(()=>{}).catch(e=>{
       if(e.code==='auth/popup-blocked'||e.code==='auth/cancelled-popup-request'){
         fbAuth.signInWithRedirect(googleProvider);
+      }else{
+        if(btn){btn.textContent='Sign in with Google';btn.disabled=false;}
       }
     });
   }
@@ -721,12 +737,25 @@ fbAuth.onAuthStateChanged(async user=>{
   if(user){
     await fbLoad();
     S.goHome();
+    updateSyncUI();
   }else{
-    // Not signed in — show splash
-    document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
-    document.getElementById('splash').classList.add('act');
+    // Wait for redirect result before showing splash (prevents loop)
+    const showSplash=()=>{
+      document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
+      document.getElementById('splash').classList.add('act');
+      const btn=document.getElementById('sp-signin');
+      if(btn){btn.textContent='Sign in with Google';btn.disabled=false;}
+      updateSyncUI();
+    };
+    if(_authReady){
+      showSplash();
+    }else{
+      // Redirect still processing — wait for it, then show splash only if still no user
+      const wait=setInterval(()=>{
+        if(_authReady){clearInterval(wait);if(!fbUser)showSplash();}
+      },100);
+    }
   }
-  updateSyncUI();
 });
 
 function updateSyncUI(){
