@@ -96,12 +96,6 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .node.done .node-lbl{color:rgba(255,200,0,.6)}
 .node.cur .node-lbl{color:rgba(88,204,2,.8)}
 
-/* Connector lines between nodes */
-.path-line{width:4px;height:28px;border-radius:2px;margin:0 auto}
-.path-line.done{background:var(--gold);opacity:.5}
-.path-line.cur{background:var(--green);opacity:.5}
-.path-line.lock{background:#2A3C44}
-
 /* NAV */
 .bnav{position:absolute;bottom:0;left:0;right:0;height:82px;background:#1B2B33;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:flex-start;justify-content:space-around;padding-top:10px;z-index:100}
 .bnav-lt{background:var(--w);border-top:2px solid var(--g2)}
@@ -823,11 +817,6 @@ rPath(){
         <div class="sec-lbl">Section &middot; ${u.lv}</div>
         <div class="sec-title">${u.lv==='A1'?'Getting Started':u.lv==='A2'?'Building Basics':u.lv==='B1'?'Intermediate':u.lv==='B2'?'Upper Intermediate':u.lv}</div>
       </div>`;
-    }
-    // Connector line
-    if(ui>0){
-      const prevDone=st.completed.includes(UNITS[ui-1].id);
-      h+=`<div class="path-line ${prevDone?'done':(unlocked?'cur':'lock')}"></div>`;
     }
     // Node
     const pos=positions[ui%positions.length];
