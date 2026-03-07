@@ -637,12 +637,17 @@ let fbUser=null;
 let _fbSaveTimer=null;
 
 function fbSignIn(){
-  fbAuth.signInWithPopup(googleProvider).catch(e=>{
-    // Popup blocked on mobile — fall back to redirect
-    if(e.code==='auth/popup-blocked'||e.code==='auth/cancelled-popup-request'){
-      fbAuth.signInWithRedirect(googleProvider);
-    }
-  });
+  // Use redirect on mobile (popups are blocked), popup on desktop
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||window.matchMedia('(display-mode:standalone)').matches;
+  if(isMobile){
+    fbAuth.signInWithRedirect(googleProvider);
+  }else{
+    fbAuth.signInWithPopup(googleProvider).catch(e=>{
+      if(e.code==='auth/popup-blocked'||e.code==='auth/cancelled-popup-request'){
+        fbAuth.signInWithRedirect(googleProvider);
+      }
+    });
+  }
 }
 function fbSignOut(){fbAuth.signOut();}
 
