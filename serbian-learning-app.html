@@ -330,7 +330,7 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   <div class="sp-t">Zeka</div>
   <div class="sp-s">Learn Serbian &middot; A1 to B2</div>
   <div id="sp-loading" style="color:rgba(255,255,255,.7);font-size:14px;font-weight:600;margin-top:30px">Loading...</div>
-  <button class="sp-btn" id="sp-signin" onclick="fbSignIn()" style="display:none">Sign in with Google</button>
+  <div id="g-signin-btn" style="display:none;margin-top:30px"></div>
 </div>
 
 <div class="sc" id="home">
@@ -402,8 +402,9 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   </div>
   <div class="pach" id="p-ach"></div>
   <div class="sync-sec">
-    <button class="sync-btn" id="sync-btn" onclick="fbSignIn()">Sign in with Google</button>
-    <div class="sync-status" id="sync-status">📱 Local only — sign in to sync</div>
+    <button class="sync-btn" id="sync-btn" onclick="fbSignOut()" style="display:none">Sign Out</button>
+    <div id="g-signin-prof" style="display:flex;justify-content:center"></div>
+    <div class="sync-status" id="sync-status"></div>
   </div>
   <div class="bnav bnav-lt">
     <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i">🏠</span><span class="ni-l">Learn</span></button>
@@ -663,53 +664,49 @@ fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 const GOOGLE_CLIENT_ID='1039748109651-3bn8fe9dcdho1btpo38kkh806i6nu2i6.apps.googleusercontent.com';
 
-function fbSignIn(){
-  const btn=document.getElementById('sp-signin');
-  if(btn){btn.textContent='Signing in...';btn.disabled=true;}
-  // Use Google Identity Services — works in PWAs, no popup/redirect needed
-  if(window.google&&google.accounts&&google.accounts.id){
-    google.accounts.id.prompt(notification=>{
-      if(notification.isNotDisplayed()||notification.isSkippedMoment()){
-        // One Tap not available — fall back to popup
-        fbSignInPopup();
-      }
-    });
-  }else{
-    // GIS library not loaded yet — fall back to popup
-    fbSignInPopup();
-  }
-}
-
-function fbSignInPopup(){
-  const btn=document.getElementById('sp-signin');
-  fbAuth.signInWithPopup(googleProvider).catch(e=>{
-    console.log('Sign-in error:',e.code);
-    if(btn){btn.textContent='Sign in with Google';btn.disabled=false;}
-  });
-}
-
 function handleGoogleCredential(response){
   const credential=firebase.auth.GoogleAuthProvider.credential(response.credential);
   fbAuth.signInWithCredential(credential).catch(e=>{
     console.log('Firebase credential error:',e.code);
-    const btn=document.getElementById('sp-signin');
-    if(btn){btn.textContent='Sign in with Google';btn.disabled=false;}
   });
 }
 
-// Initialize Google Identity Services when library loads
+// Render the Google Sign-In button (works in PWAs via iframe, no popup/redirect)
+let _gisReady=false;
 function initGIS(){
+  if(_gisReady)return;
   if(window.google&&google.accounts&&google.accounts.id){
+    _gisReady=true;
     google.accounts.id.initialize({
       client_id:GOOGLE_CLIENT_ID,
       callback:handleGoogleCredential,
-      auto_select:true
+      auto_select:true,
+      itp_support:true
     });
+    // Render Google Sign-In buttons (uses iframe, works in PWAs)
+    ['g-signin-btn','g-signin-prof'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){
+        google.accounts.id.renderButton(el,{
+          type:'standard',
+          theme:id==='g-signin-btn'?'outline':'filled_blue',
+          size:'large',
+          text:'signin_with',
+          shape:'pill',
+          width:280
+        });
+      }
+    });
+    // Also try One Tap auto-sign-in for returning users
+    google.accounts.id.prompt();
   }
 }
-// Try init now and also on window load (GIS script is async)
-initGIS();
-window.addEventListener('load',initGIS);
+// GIS script is async — try on load
+window.addEventListener('load',()=>{initGIS();
+  // Retry after a short delay in case script is still loading
+  if(!_gisReady)setTimeout(initGIS,500);
+  if(!_gisReady)setTimeout(initGIS,1500);
+});
 
 function fbSignOut(){
   fbAuth.signOut();
@@ -720,9 +717,9 @@ function fbSignOut(){
 
 function showSplashReady(){
   const ld=document.getElementById('sp-loading');
-  const btn=document.getElementById('sp-signin');
+  const btnDiv=document.getElementById('g-signin-btn');
   if(ld)ld.style.display='none';
-  if(btn){btn.style.display='';btn.textContent='Sign in with Google';btn.disabled=false;}
+  if(btnDiv)btnDiv.style.display='';
 }
 
 function getStateData(){
@@ -786,8 +783,10 @@ function updateSyncUI(){
   const avatar=document.getElementById('p-avatar');
   const nameEl=document.getElementById('p-name');
   const emailEl=document.getElementById('p-email');
+  const profGBtn=document.getElementById('g-signin-prof');
   if(fbUser){
-    if(btn){btn.textContent='Sign Out';btn.onclick=fbSignOut;}
+    if(btn){btn.style.display='';btn.textContent='Sign Out';btn.onclick=fbSignOut;}
+    if(profGBtn)profGBtn.style.display='none';
     if(status)status.innerHTML='☁️ Synced as '+fbUser.email;
     if(avatar&&fbUser.photoURL){
       avatar.innerHTML='<img src="'+fbUser.photoURL+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover" alt="Profile" referrerpolicy="no-referrer">';
@@ -795,7 +794,8 @@ function updateSyncUI(){
     if(nameEl&&fbUser.displayName)nameEl.textContent=fbUser.displayName;
     if(emailEl)emailEl.textContent=fbUser.email;
   }else{
-    if(btn){btn.textContent='Sign in with Google';btn.onclick=fbSignIn;}
+    if(btn)btn.style.display='none';
+    if(profGBtn)profGBtn.style.display='flex';
     if(status)status.innerHTML='';
     if(avatar)avatar.innerHTML='<img src="icon-192.png" style="width:60px;height:60px;border-radius:16px" alt="Zeka">';
     if(nameEl)nameEl.textContent='';
