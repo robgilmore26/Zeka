@@ -1,4 +1,4 @@
-const CACHE='serbian-v2';
+const CACHE='zeka-v1';
 const ASSETS=[
   'serbian-learning-app.html',
   'manifest.json',

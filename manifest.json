@@ -1,11 +1,11 @@
 {
-  "name": "Learn Serbian",
-  "short_name": "Serbian",
-  "description": "Duolingo-style Serbian language learning app",
+  "name": "Zeka — Learn Serbian",
+  "short_name": "Zeka",
+  "description": "Learn Serbian with Zeka, your friendly bunny language tutor",
   "start_url": "serbian-learning-app.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#58CC02",
+  "theme_color": "#7EC8E3",
   "orientation": "portrait",
   "icons": [
     {

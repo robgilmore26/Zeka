@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Learn Serbian</title>
+<title>Zeka — Learn Serbian</title>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Serbian">
+<meta name="apple-mobile-web-app-title" content="Zeka">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#58CC02">
+<meta name="theme-color" content="#7EC8E3">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -44,7 +44,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .elo-float.pos{color:var(--green)}.elo-float.neg{color:var(--red)}
 
 /* SPLASH */
-#splash{background:linear-gradient(180deg,#58CC02,#46a302);align-items:center;justify-content:center;gap:20px}
+#splash{background:linear-gradient(180deg,#7EC8E3,#3FA0D8);align-items:center;justify-content:center;gap:20px}
 .sp-icon{font-size:80px;animation:bounceIn .8s ease}
 .sp-t{color:#fff;font-size:32px;font-weight:800;text-align:center}
 .sp-s{color:rgba(255,255,255,.85);font-size:16px;font-weight:600}
@@ -305,16 +305,16 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
 <div class="sbar" id="sbar"><span id="stime">9:41</span><div style="display:flex;gap:5px;align-items:center;font-size:12px"><span>&#9679;&#9679;&#9679;&#9679;</span><span>&#128267;</span></div></div>
 
 <div class="sc act" id="splash">
-  <div class="sp-icon">🇷🇸</div>
-  <div class="sp-t">Learn Serbian</div>
-  <div class="sp-s">A1 to B2 &middot; Latin Script</div>
+  <div class="sp-icon"><img src="icon-192.png" style="width:80px;height:80px;border-radius:20px" alt="Zeka"></div>
+  <div class="sp-t">Zeka</div>
+  <div class="sp-s">Learn Serbian &middot; A1 to B2</div>
   <button class="sp-btn" onclick="S.goHome()">Get Started</button>
   <div class="sp-sync" onclick="fbSignIn()">☁️ Sign in to sync across devices</div>
 </div>
 
 <div class="sc" id="home">
   <div class="hdr">
-    <div class="st"><span class="st-i">🇷🇸</span><span class="elo-badge" id="h-elo">1000</span></div>
+    <div class="st"><span class="st-i"><img src="icon-192.png" style="width:24px;height:24px;border-radius:6px;vertical-align:middle" alt="Zeka"></span><span class="elo-badge" id="h-elo">1000</span></div>
     <div class="hdr-stats">
       <div class="st" style="color:var(--orange)"><span class="st-i">🔥</span><span id="h-str">0</span></div>
       <div class="st" style="color:var(--gold)"><span class="st-i">⚡</span><span id="h-xp">0</span></div>
@@ -366,7 +366,7 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
 
 <div class="sc" id="prof">
   <div class="ptop">
-    <div class="pav">🧑‍🎓</div>
+    <div class="pav"><img src="icon-192.png" style="width:60px;height:60px;border-radius:16px" alt="Zeka"></div>
     <div class="pnm">Robby</div>
     <div class="pjn" id="p-lvl">Novice</div>
     <div class="pelo" id="p-elo">1000</div>
