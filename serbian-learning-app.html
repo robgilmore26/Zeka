@@ -1372,19 +1372,29 @@ function langName(){return LANG_DATA[curLang].name;}
 function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLang].flag+'.png" style="height:18px;vertical-align:middle">';}
 
 // ═══════════════ SPEECH SYNTHESIS ═══════════════
-const SPEECH_LOCALE={sr:'sr-RS',it:'it-IT'};
-if(window.speechSynthesis)speechSynthesis.getVoices();// preload voices (Chrome fires onvoiceschanged async)
+const SPEECH_LOCALE={sr:'sr',it:'it-IT',en:'en-US'};
+if(window.speechSynthesis)speechSynthesis.getVoices();
+let _spkAudio=null;
 function speak(text,lang){
-  if(!window.speechSynthesis)return;
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=lang||SPEECH_LOCALE[curLang]||curLang;
-  u.rate=0.85;
-  // Try to pick a voice matching the locale
-  const voices=speechSynthesis.getVoices();
-  const v=voices.find(v=>v.lang===u.lang)||voices.find(v=>v.lang.startsWith(u.lang.split('-')[0]));
-  if(v)u.voice=v;
-  speechSynthesis.speak(u);
+  const locale=lang||SPEECH_LOCALE[curLang]||curLang;
+  const shortCode=locale.split('-')[0];
+  // Try Web Speech API first — check if a matching voice exists
+  if(window.speechSynthesis){
+    const voices=speechSynthesis.getVoices();
+    const v=voices.find(v=>v.lang===locale)||voices.find(v=>v.lang.startsWith(shortCode));
+    if(v){
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text);
+      u.lang=locale;u.rate=0.85;u.voice=v;
+      speechSynthesis.speak(u);return;
+    }
+  }
+  // Fallback: Google Translate TTS (supports Serbian, etc.)
+  if(_spkAudio){_spkAudio.pause();_spkAudio=null;}
+  const enc=encodeURIComponent(text);
+  _spkAudio=new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${shortCode}&q=${enc}`);
+  _spkAudio.playbackRate=0.9;
+  _spkAudio.play().catch(()=>{});
 }
 function speakEN(text){speak(text,'en-US');}
 function spkBtn(text,lang,cls){
