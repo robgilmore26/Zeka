@@ -1373,28 +1373,30 @@ function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLan
 
 // ═══════════════ SPEECH SYNTHESIS ═══════════════
 const SPEECH_LOCALE={sr:'sr',it:'it-IT',en:'en-US'};
+// Fallback chain: if no voice for a language, try these (closest phonetic match)
+const SPEECH_FALLBACK={sr:['hr','bs','pl','ru']};
 if(window.speechSynthesis)speechSynthesis.getVoices();
-let _spkAudio=null;
 function speak(text,lang){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
   const locale=lang||SPEECH_LOCALE[curLang]||curLang;
   const shortCode=locale.split('-')[0];
-  // Try Web Speech API first — check if a matching voice exists
-  if(window.speechSynthesis){
-    const voices=speechSynthesis.getVoices();
-    const v=voices.find(v=>v.lang===locale)||voices.find(v=>v.lang.startsWith(shortCode));
-    if(v){
-      speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(text);
-      u.lang=locale;u.rate=0.85;u.voice=v;
-      speechSynthesis.speak(u);return;
+  const voices=speechSynthesis.getVoices();
+  // Try exact match, then prefix match
+  let v=voices.find(v=>v.lang===locale)||voices.find(v=>v.lang.startsWith(shortCode));
+  // If no voice, try fallback languages
+  if(!v&&SPEECH_FALLBACK[shortCode]){
+    for(const fb of SPEECH_FALLBACK[shortCode]){
+      v=voices.find(v=>v.lang.startsWith(fb));
+      if(v)break;
     }
   }
-  // Fallback: Google Translate TTS (supports Serbian, etc.)
-  if(_spkAudio){_spkAudio.pause();_spkAudio=null;}
-  const enc=encodeURIComponent(text);
-  _spkAudio=new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${shortCode}&q=${enc}`);
-  _spkAudio.playbackRate=0.9;
-  _spkAudio.play().catch(()=>{});
+  // Last resort: use default voice — better than silence
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=v?v.lang:locale;
+  u.rate=0.85;
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);
 }
 function speakEN(text){speak(text,'en-US');}
 function spkBtn(text,lang,cls){
