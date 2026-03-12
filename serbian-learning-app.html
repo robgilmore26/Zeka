@@ -52,6 +52,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .lang-flag{font-size:36px;background:rgba(255,255,255,.15);border:3px solid transparent;border-radius:16px;padding:10px 16px;cursor:pointer;transition:all .2s}
 .lang-flag:hover,.lang-flag.sel{border-color:#fff;background:rgba(255,255,255,.25);transform:scale(1.1)}
 .lang-ind{font-size:18px;cursor:pointer;padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.1);border:none}
+.lang-flag img.emoji,.lang-ind img.emoji{height:1em;width:1em;vertical-align:-.1em}
 .sp-btn{margin-top:40px;background:#fff;color:var(--green);border:none;padding:16px 60px;border-radius:16px;font-size:17px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;box-shadow:0 4px 0 rgba(0,0,0,.15);transition:.1s}
 .sp-btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
 
@@ -1487,11 +1488,13 @@ function fbSignOut(){
   }
 }
 
+function parseFlagEmoji(el){twemoji.parse(el,{callback:function(icon){return 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple@16.0.0/img/apple/64/'+icon+'.png';},attributes:function(){return{onerror:'this.style.display="none"'};}});}
 function showSplashReady(){
   const ld=document.getElementById('sp-loading');
   const btnDiv=document.getElementById('g-signin-btn');
   if(ld)ld.style.display='none';
   if(btnDiv)btnDiv.style.display='';
+  const sl=document.getElementById('sp-lang');if(sl)parseFlagEmoji(sl);
 }
 
 function getStateData(){
@@ -1646,8 +1649,7 @@ updH(){document.getElementById('h-elo').textContent=st.elo;
   document.getElementById('h-str').textContent=st.streak;
   document.getElementById('h-xp').textContent=st.xp;
   document.getElementById('h-hrt').textContent=st.hearts;
-  document.getElementById('h-lang').textContent=langFlag();
-  document.getElementById('h-lang').title=langName();},
+  const hl=document.getElementById('h-lang');hl.textContent=langFlag();hl.title=langName();parseFlagEmoji(hl);},
 
 rPath(){
   const el=document.getElementById('hscr');let h='';
