@@ -1,7 +1,7 @@
 {
-  "name": "Zeka — Learn Serbian",
+  "name": "Zeka — Language Learning",
   "short_name": "Zeka",
-  "description": "Learn Serbian with Zeka, your friendly bunny language tutor",
+  "description": "Learn languages with Zeka, your friendly bunny language tutor",
   "start_url": "serbian-learning-app.html",
   "display": "standalone",
   "background_color": "#ffffff",

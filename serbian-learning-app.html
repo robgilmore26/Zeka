@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Zeka — Learn Serbian</title>
+<title>Zeka — Language Learning</title>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -49,6 +49,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sp-icon{font-size:80px;animation:bounceIn .8s ease}
 .sp-t{color:#fff;font-size:32px;font-weight:800;text-align:center}
 .sp-s{color:rgba(255,255,255,.85);font-size:16px;font-weight:600}
+.lang-flag{font-size:36px;background:rgba(255,255,255,.15);border:3px solid transparent;border-radius:16px;padding:10px 16px;cursor:pointer;transition:all .2s}
+.lang-flag:hover,.lang-flag.sel{border-color:#fff;background:rgba(255,255,255,.25);transform:scale(1.1)}
+.lang-ind{font-size:18px;cursor:pointer;padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.1);border:none}
 .sp-btn{margin-top:40px;background:#fff;color:var(--green);border:none;padding:16px 60px;border-radius:16px;font-size:17px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;box-shadow:0 4px 0 rgba(0,0,0,.15);transition:.1s}
 .sp-btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
 
@@ -328,14 +331,18 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
 <div class="sc act" id="splash">
   <div class="sp-icon"><img src="icon-192.png" style="width:80px;height:80px;border-radius:20px" alt="Zeka"></div>
   <div class="sp-t">Zeka</div>
-  <div class="sp-s">Learn Serbian &middot; A1 to B2</div>
+  <div class="sp-s" id="sp-sub">Learn a language &middot; A1 to C1</div>
+  <div id="sp-lang" style="display:flex;gap:12px;justify-content:center;margin-top:20px">
+    <button class="lang-flag" onclick="pickLang('sr')" title="Serbian">🇷🇸</button>
+    <button class="lang-flag" onclick="pickLang('it')" title="Italian">🇮🇹</button>
+  </div>
   <div id="sp-loading" style="color:rgba(255,255,255,.7);font-size:14px;font-weight:600;margin-top:30px">Loading...</div>
   <div id="g-signin-btn" style="display:none;margin-top:30px"></div>
 </div>
 
 <div class="sc" id="home">
   <div class="hdr">
-    <div class="st"><span class="st-i"><img src="icon-192.png" style="width:24px;height:24px;border-radius:6px;vertical-align:middle" alt="Zeka"></span><span class="elo-badge" id="h-elo">1000</span></div>
+    <div class="st"><button class="lang-ind" id="h-lang" onclick="S.switchLang()" title="Switch language">🇷🇸</button><span class="elo-badge" id="h-elo">1000</span></div>
     <div class="hdr-stats">
       <div class="st" style="color:var(--orange)"><span class="st-i">🔥</span><span id="h-str">0</span></div>
       <div class="st" style="color:var(--gold)"><span class="st-i">⚡</span><span id="h-xp">0</span></div>
@@ -417,8 +424,8 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
 </div></div>
 
 <script>
-// ═══════════════ VOCABULARY (88 units, A1→C1) ═══════════════
-const U=[
+// ═══════════════ VOCABULARY — SERBIAN (88 units, A1→C1) ═══════════════
+const U_SR=[
 // ── A1 ──
 {id:1,t:"Greetings",d:"Hello, goodbye, basics",lv:"A1",ic:"👋",co:"#58CC02",w:[
 ["Здраво","Zdravo","Hello","👋"],["Добар дан","Dobar dan","Good day","☀️"],["Добро јутро","Dobro jutro","Good morning","🌅"],
@@ -884,10 +891,497 @@ p:[["Inflacija raste ove godine","Inflation is rising this year"],["Devizni kurs
 p:[["Novinar izveštava sa lica mesta","The journalist reports from the scene"],["Naslov privlači pažnju","The headline grabs attention"],["Objektivnost je važna u novinarstvu","Objectivity is important in journalism"],["Medijska pismenost je neophodna","Media literacy is essential"]]}
 ];
 
-// Build word objects
-const UNITS=U.map(u=>({...u,words:u.w.map((w,i)=>({id:u.id*100+i,s:w[0],l:w[1],e:w[2],em:w[3]})),phrases:(u.p||[]).map(p=>({sr:p[0],en:p[1]}))}));
-const ALL_PH=UNITS.flatMap(u=>u.phrases);
-const ALL_W=UNITS.flatMap(u=>u.words);
+const U_IT=[
+// ── A1 ──
+{id:1,t:"Greetings",d:"Hello, goodbye, basics",lv:"A1",ic:"👋",co:"#58CC02",w:[
+["","Ciao","Hello","👋"],["","Buongiorno","Good day","☀️"],["","Buon mattino","Good morning","🌅"],
+["","Buonasera","Good evening","🌇"],["","Buonanotte","Good night","🌙"],["","Arrivederci","Goodbye","👋"],
+["","Grazie","Thank you","🙏"],["","Per favore","Please","🤲"],["","Sì","Yes","✅"],["","No","No","❌"]],
+p:[["Ciao, come stai?","Hello, how are you?"],["Buongiorno, grazie","Good day, thank you"],["Buon mattino, per favore","Good morning, please"],["Buonanotte, arrivederci","Good night, goodbye"]]},
+{id:2,t:"Introductions",d:"Introduce yourself",lv:"A1",ic:"🗣️",co:"#CE82FF",w:[
+["","Io sono","I am","🙋"],["","Tu sei","You are","👉"],["","Come stai?","How are you?","🤔"],
+["","Sto bene","I am fine","😊"],["","Mi chiamo","My name is","📛"],["","Piacere","Nice to meet you","🤝"],
+["","Scusa","Sorry","😔"],["","Capisco","I understand","💡"],["","Non capisco","I don't understand","😕"],
+["","Parlo","I speak","🗣️"]],
+p:[["Sto bene, grazie","I am fine, thank you"],["Come ti chiami?","What is your name?"],["Piacere, io sono Anna","Nice to meet you, I am Anna"],["Non capisco, scusa","I don't understand, sorry"]]},
+{id:3,t:"Numbers",d:"Count from one to ten",lv:"A1",ic:"🔢",co:"#1CB0F6",w:[
+["","Uno","One","1️⃣"],["","Due","Two","2️⃣"],["","Tre","Three","3️⃣"],["","Quattro","Four","4️⃣"],
+["","Cinque","Five","5️⃣"],["","Sei","Six","6️⃣"],["","Sette","Seven","7️⃣"],["","Otto","Eight","8️⃣"],
+["","Nove","Nine","9️⃣"],["","Dieci","Ten","🔟"]],
+p:[["Ho tre fratelli","I have three brothers"],["Cinque più cinque fa dieci","Five and five is ten"],["Lei ha due bambini","She has two children"],["Ho sette anni","I am seven years old"]]},
+{id:4,t:"Family",d:"Talk about relatives",lv:"A1",ic:"👨‍👩‍👧‍👦",co:"#FF4B4B",w:[
+["","Madre","Mother","👩"],["","Padre","Father","👨"],["","Fratello","Brother","👦"],["","Sorella","Sister","👧"],
+["","Figlio","Son","👶"],["","Figlia","Daughter","👧"],["","Nonna","Grandmother","👵"],["","Nonno","Grandfather","👴"],
+["","Famiglia","Family","👨‍👩‍👧‍👦"],["","Bambino","Child","🧒"]],
+p:[["Mia madre è bella","My mother is beautiful"],["Ho una sorella","I have one sister"],["Padre e madre sono a casa","Father and mother are at home"],["Il bambino è piccolo","The child is small"]]},
+{id:5,t:"Food & Drink",d:"Eat and drink",lv:"A1",ic:"🍽️",co:"#FF9600",w:[
+["","Pane","Bread","🍞"],["","Acqua","Water","💧"],["","Latte","Milk","🥛"],["","Caffè","Coffee","☕"],
+["","Tè","Tea","🍵"],["","Mela","Apple","🍎"],["","Carne","Meat","🥩"],["","Formaggio","Cheese","🧀"],
+["","Pranzo","Lunch","🍽️"],["","Cena","Dinner","🌙"]],
+p:[["Voglio pane e formaggio","I want bread and cheese"],["Caffè con latte, per favore","Coffee with milk, please"],["Il pranzo è pronto","Lunch is ready"],["L'acqua è fredda","The water is cold"]]},
+{id:6,t:"Colors",d:"Name all the colors",lv:"A1",ic:"🎨",co:"#FF86D0",w:[
+["","Rosso","Red","🎨"],["","Blu","Blue","🎨"],["","Verde","Green","🎨"],["","Giallo","Yellow","🎨"],
+["","Bianco","White","🎨"],["","Nero","Black","🎨"],["","Arancione","Orange","🎨"],["","Rosa","Pink","🎨"],
+["","Grigio","Gray","🎨"],["","Marrone","Brown","🎨"]],
+p:[["Il cielo è blu","The sky is blue"],["La rosa rossa è bella","The red rose is beautiful"],["Il gatto nero dorme","The black cat is sleeping"],["L'erba è verde","The grass is green"]]},
+{id:7,t:"Animals",d:"Learn animal names",lv:"A1",ic:"🐾",co:"#78C800",w:[
+["","Cane","Dog","🐕"],["","Gatto","Cat","🐈"],["","Uccello","Bird","🐦"],["","Pesce","Fish","🐟"],
+["","Cavallo","Horse","🐴"],["","Mucca","Cow","🐄"],["","Maiale","Pig","🐷"],["","Coniglio","Rabbit","🐇"],
+["","Orso","Bear","🐻"],["","Leone","Lion","🦁"]],
+p:[["Il cane è grande","The dog is big"],["Il gatto beve il latte","The cat drinks milk"],["Il pesce vive nell'acqua","The fish lives in water"],["Il leone è forte e veloce","The lion is strong and fast"]]},
+{id:8,t:"Days & Time",d:"Days of the week",lv:"A1",ic:"📅",co:"#00CD9C",w:[
+["","Lunedì","Monday","📅"],["","Martedì","Tuesday","📅"],["","Mercoledì","Wednesday","📅"],
+["","Giovedì","Thursday","📅"],["","Venerdì","Friday","📅"],["","Sabato","Saturday","🎉"],
+["","Domenica","Sunday","☀️"],["","Oggi","Today","📌"],["","Domani","Tomorrow","➡️"],["","Ieri","Yesterday","⬅️"]],
+p:[["Oggi è lunedì","Today is Monday"],["Domani è venerdì","Tomorrow is Friday"],["Ieri era domenica","Yesterday was Sunday"],["Il sabato è un giorno libero","Saturday is a free day"]]},
+{id:31,t:"Places in Town",d:"Navigate your city",lv:"A1",ic:"🏙️",co:"#1CB0F6",w:[
+["","Ristorante","Restaurant","🍽️"],["","Scuola","School","🏫"],["","Ospedale","Hospital","🏥"],["","Farmacia","Pharmacy","💊"],
+["","Banca","Bank","🏦"],["","Ufficio postale","Post office","📮"],["","Parco","Park","🌳"],["","Negozio","Store","🏪"],
+["","Chiesa","Church","⛪"],["","Cinema","Cinema","🎬"]],
+p:[["Dov'è la farmacia più vicina?","Where is the nearest pharmacy?"],["La banca è accanto all'ufficio postale","The bank is next to the post office"],["Andiamo al cinema stasera","Let's go to the cinema tonight"],["La scuola è nel centro della città","The school is in the city center"]]},
+{id:32,t:"Common Phrases",d:"Useful everyday phrases",lv:"A1",ic:"💬",co:"#FF4B4B",w:[
+["","Dov'è?","Where is?","📍"],["","Quanto costa?","How much?","💲"],["","Voglio","I want","👆"],
+["","Ho bisogno","I need","🙋"],["","Mi piace","I like","❤️"],["","Non mi piace","I don't like","👎"],
+["","Posso?","Can I?","🤔"],["","Mi scusi","Excuse me","🙇"],["","Aiuto","Help","🆘"],["","Andiamo","Let's go","🚶"]],
+p:[["Dov'è il bagno, per favore?","Where is the toilet, please?"],["Ho bisogno di aiuto","I need help"],["Mi piace questo cibo","I like this food"],["Andiamo, torniamo a casa!","Let's go, let's go home!"]]},
+{id:33,t:"Around the House",d:"Kitchen and home items",lv:"A1",ic:"🏡",co:"#CE82FF",w:[
+["","Cucchiaio","Spoon","🥄"],["","Forchetta","Fork","🍴"],["","Piatto","Plate","🍽️"],["","Tazza","Cup","☕"],
+["","Televisore","TV","📺"],["","Telefono","Phone","📱"],["","Chiave","Key","🔑"],["","Orologio","Clock","🕐"],
+["","Lampada","Lamp","💡"],["","Specchio","Mirror","🪞"]],
+p:[["Dov'è il cucchiaio?","Where is the spoon?"],["Dammi la chiave, per favore","Give me the key, please"],["L'orologio segna le cinque","The clock shows five"],["Spegni il televisore","Turn off the TV"]]},
+{id:34,t:"Drinks & Snacks",d:"More food vocabulary",lv:"A1",ic:"🥤",co:"#FF9600",w:[
+["","Succo","Juice","🧃"],["","Birra","Beer","🍺"],["","Vino","Wine","🍷"],["","Zuppa","Soup","🍲"],
+["","Torta","Cake","🍰"],["","Gelato","Ice cream","🍦"],["","Uovo","Egg","🥚"],["","Riso","Rice","🍚"],
+["","Patata","Potato","🥔"],["","Zucchero","Sugar","🧂"]],
+p:[["Vuoi succo o vino?","Do you want juice or wine?"],["La zuppa è calda","The soup is warm"],["Adoro il gelato","I love ice cream"],["La torta è dolce","The cake is sweet"]]},
+{id:35,t:"Basic Adjectives",d:"Describe the world",lv:"A1",ic:"📏",co:"#78C800",w:[
+["","Grande","Big","🐘"],["","Piccolo","Small","🐜"],["","Buono","Good","👍"],["","Cattivo","Bad","👎"],
+["","Nuovo","New","✨"],["","Vecchio","Old","🏚️"],["","Caldo","Hot","🔥"],["","Freddo","Cold","🥶"],
+["","Veloce","Fast","🏎️"],["","Lento","Slow","🐢"]],
+p:[["La casa è grande","The house is big"],["L'auto è veloce e nuova","The car is fast and new"],["Questo è buono","This is good"],["Il tempo è cattivo oggi","The weather is bad today"]]},
+{id:36,t:"My Body",d:"Head, hands and more",lv:"A1",ic:"🧍",co:"#FF86D0",w:[
+["","Testa","Head","🗣️"],["","Mano","Hand","✋"],["","Piede","Foot","🦶"],["","Occhio","Eye","👁️"],
+["","Orecchio","Ear","👂"],["","Naso","Nose","👃"],["","Bocca","Mouth","👄"],["","Capelli","Hair","💇"],
+["","Dito","Finger","☝️"],["","Dente","Tooth","🦷"]],
+p:[["Ho gli occhi blu","I have blue eyes"],["Mi lavo le mani","I am washing my hands"],["Mi fa male il dente","My tooth hurts"],["Ho i capelli lunghi","I have long hair"]]},
+{id:37,t:"Everyday Verbs",d:"Actions you do daily",lv:"A1",ic:"🏃",co:"#00CD9C",w:[
+["","Camminare","To walk","🚶"],["","Correre","To run","🏃"],["","Sedersi","To sit","🪑"],["","Stare in piedi","To stand","🧍"],
+["","Aprire","To open","🚪"],["","Chiudere","To close","🔒"],["","Dare","To give","🤲"],["","Prendere","To take","✊"],
+["","Vedere","To see","👀"],["","Sentire","To hear","👂"]],
+p:[["Cammino fino a scuola","I walk to school"],["Apri la finestra, per favore","Open the window, please"],["Vedo la montagna","I see the mountain"],["Sento una bella musica","I hear beautiful music"]]},
+{id:38,t:"Fruits & Vegetables",d:"Fresh produce",lv:"A1",ic:"🍎",co:"#FF4B4B",w:[
+["","Mela","Apple","🍎"],["","Banana","Banana","🍌"],["","Pomodoro","Tomato","🍅"],["","Cetriolo","Cucumber","🥒"],
+["","Cipolla","Onion","🧅"],["","Uva","Grapes","🍇"],["","Limone","Lemon","🍋"],["","Carota","Carrot","🥕"],
+["","Peperone","Pepper","🫑"],["","Melone","Melon","🍈"]],
+p:[["Le mele sono rosse","The apples are red"],["Mi piacciono le banane","I like bananas"],["Il pomodoro è maturo","The tomato is ripe"],["Compra carote e cipolle","Buy carrot and onion"]]},
+{id:39,t:"Classroom",d:"School supplies",lv:"A1",ic:"📚",co:"#1CB0F6",w:[
+["","Libro","Book","📖"],["","Matita","Pencil","✏️"],["","Quaderno","Notebook","📓"],["","Lavagna","Board","📋"],
+["","Aula","Classroom","🏫"],["","Compito","Task","📝"],["","Studente","Student","🧑‍🎓"],["","Lezione","Class","🔔"],
+["","Gesso","Chalk","🖍️"],["","Zaino","Bag","🎒"]],
+p:[["Apri il libro","Open the book"],["Dov'è la mia matita?","Where is my pencil?"],["La lezione inizia alle otto","Class starts at eight"],["Lo studente scrive nel quaderno","The student writes in the notebook"]]},
+{id:40,t:"Months & Seasons",d:"Calendar and seasons",lv:"A1",ic:"📆",co:"#CE82FF",w:[
+["","Gennaio","January","❄️"],["","Marzo","March","🌱"],["","Maggio","May","🌸"],["","Luglio","July","☀️"],
+["","Settembre","September","🍂"],["","Novembre","November","🍁"],["","Primavera","Spring","🌷"],["","Estate","Summer","☀️"],
+["","Autunno","Autumn","🍂"],["","Inverno","Winter","❄️"]],
+p:[["Amo la primavera","I love spring"],["L'inverno è freddo","Winter is cold"],["Sono nato a maggio","I was born in May"],["L'estate è calda e bella","Summer is warm and beautiful"]]},
+{id:41,t:"Numbers 11-100",d:"Count higher",lv:"A1",ic:"🔢",co:"#00CD9C",w:[
+["","Undici","Eleven","1️⃣"],["","Venti","Twenty","2️⃣"],["","Trenta","Thirty","3️⃣"],["","Quaranta","Forty","4️⃣"],
+["","Cinquanta","Fifty","5️⃣"],["","Sessanta","Sixty","6️⃣"],["","Settanta","Seventy","7️⃣"],["","Ottanta","Eighty","8️⃣"],
+["","Novanta","Ninety","9️⃣"],["","Cento","One hundred","💯"]],
+p:[["Ho venti anni","I am twenty years old"],["Costa cinquanta euro","That costs fifty euros"],["Cento persone sono qui","A hundred people are here"],["Lei ha trentacinque anni","She is thirty-five years old"]]},
+
+// ── A2 ──
+{id:9,t:"Home & Rooms",d:"Where you live",lv:"A2",ic:"🏠",co:"#FF9600",w:[
+["","Casa","House","🏠"],["","Appartamento","Apartment","🏢"],["","Stanza","Room","🚪"],["","Cucina","Kitchen","🍳"],
+["","Bagno","Bathroom","🛁"],["","Letto","Bed","🛏️"],["","Tavolo","Table","🪑"],["","Sedia","Chair","💺"],
+["","Porta","Door","🚪"],["","Finestra","Window","🪟"]],
+p:[["La casa ha tre stanze","The house has three rooms"],["Il letto è nella stanza","The bed is in the room"],["Chiudi la porta, per favore","Close the door, please"],["La finestra è aperta","The window is open"]]},
+{id:10,t:"Body & Health",d:"Parts of the body",lv:"A2",ic:"🏥",co:"#FF4B4B",w:[
+["","Testa","Head","🗣️"],["","Mano","Hand","✋"],["","Gamba","Leg","🦵"],["","Occhio","Eye","👁️"],
+["","Orecchio","Ear","👂"],["","Naso","Nose","👃"],["","Bocca","Mouth","👄"],["","Cuore","Heart","❤️"],
+["","Medico","Doctor","👨‍⚕️"],["","Ospedale","Hospital","🏥"]],
+p:[["Mi fa male la testa","My head hurts"],["Vado dal medico","I am going to the doctor"],["Ho due mani","I have two hands"],["L'ospedale è vicino","The hospital is near"]]},
+{id:11,t:"Clothing",d:"Get dressed",lv:"A2",ic:"👔",co:"#CE82FF",w:[
+["","Camicia","Shirt","👔"],["","Pantaloni","Pants","👖"],["","Vestito","Dress","👗"],["","Scarpe","Shoes","👞"],
+["","Giacca","Jacket","🧥"],["","Cappello","Hat","🧢"],["","Calze","Socks","🧦"],["","Maglietta","T-shirt","👕"],
+["","Gonna","Skirt","👗"],["","Borsa","Bag","👜"]],
+p:[["Metterò la giacca","I will put on a jacket"],["Le scarpe sono nuove","The shoes are new"],["Il vestito è bello","The dress is beautiful"],["Dove sono le mie calze?","Where are my socks?"]]},
+{id:12,t:"Weather",d:"Describe the weather",lv:"A2",ic:"🌤️",co:"#1CB0F6",w:[
+["","Sole","Sun","☀️"],["","Pioggia","Rain","🌧️"],["","Neve","Snow","❄️"],["","Vento","Wind","💨"],
+["","Nuvola","Cloud","☁️"],["","Caldo","Warm","🌡️"],["","Freddo","Cold","🥶"],["","Albero","Tree","🌳"],
+["","Fiore","Flower","🌸"],["","Fiume","River","🏞️"]],
+p:[["Oggi fa caldo","Today is warm"],["Piove fuori","It is raining outside"],["Nevica in inverno","Snow falls in winter"],["Il vento è forte oggi","The wind is strong today"]]},
+{id:13,t:"Travel",d:"Navigate and move",lv:"A2",ic:"✈️",co:"#00CD9C",w:[
+["","Aeroporto","Airport","✈️"],["","Treno","Train","🚂"],["","Autobus","Bus","🚌"],["","Taxi","Taxi","🚕"],
+["","Biglietto","Ticket","🎫"],["","Passaporto","Passport","🛂"],["","Albergo","Hotel","🏨"],["","Strada","Road","🛣️"],
+["","Stazione","Station","🚉"],["","Viaggio","Journey","🧳"]],
+p:[["Dov'è l'aeroporto?","Where is the airport?"],["Ho un biglietto per il treno","I have a train ticket"],["L'albergo è vicino alla stazione","The hotel is near the station"],["Il viaggio è lungo","The journey is long"]]},
+{id:14,t:"Shopping",d:"Buy and pay",lv:"A2",ic:"🛒",co:"#FF86D0",w:[
+["","Negozio","Store","🏪"],["","Prezzo","Price","💲"],["","Denaro","Money","💰"],["","Economico","Cheap","👍"],
+["","Costoso","Expensive","💎"],["","Comprare","To buy","🛒"],["","Pagare","To pay","💳"],["","Conto","Bill","🧾"],
+["","Centro commerciale","Mall","🏬"],["","Mercato","Market","🧺"]],
+p:[["Quanto costa questo?","How much does this cost?"],["È troppo costoso","That is too expensive"],["Dove posso pagare?","Where can I pay?"],["Vado al negozio","I am going to the store"]]},
+{id:15,t:"Professions",d:"Jobs and careers",lv:"A2",ic:"💼",co:"#78C800",w:[
+["","Insegnante","Teacher","👩‍🏫"],["","Ingegnere","Engineer","👷"],["","Avvocato","Lawyer","⚖️"],
+["","Poliziotto","Police officer","👮"],["","Cuoco","Chef","👨‍🍳"],["","Autista","Driver","🚗"],
+["","Attore","Actor","🎭"],["","Giornalista","Journalist","📰"],["","Programmatore","Programmer","💻"],
+["","Infermiera","Nurse","👩‍⚕️"]],
+p:[["Lei è insegnante","She is a teacher"],["Lui è un bravo cuoco","He is a good chef"],["Lavoro come programmatore","I work as a programmer"],["Il poliziotto aiuta le persone","The police officer helps people"]]},
+{id:16,t:"Common Verbs",d:"Essential actions",lv:"A2",ic:"🏃",co:"#FF9600",w:[
+["","Essere","To be","🔵"],["","Avere","To have","✊"],["","Andare","To go","🚶"],["","Venire","To come","🔙"],
+["","Lavorare","To work","💼"],["","Mangiare","To eat","🍽️"],["","Bere","To drink","🥤"],["","Dormire","To sleep","😴"],
+["","Leggere","To read","📖"],["","Scrivere","To write","✍️"]],
+p:[["Amo leggere i libri","I love to read books"],["Vado al lavoro","I am going to work"],["Vuoi mangiare?","Do you want to eat?"],["Devo dormire","I have to sleep"]]},
+{id:42,t:"Nature & Landscape",d:"Explore the outdoors",lv:"A2",ic:"🏔️",co:"#78C800",w:[
+["","Montagna","Mountain","🏔️"],["","Lago","Lake","🏞️"],["","Mare","Sea","🌊"],["","Bosco","Forest","🌲"],
+["","Campo","Field","🌾"],["","Isola","Island","🏝️"],["","Costa","Coast","🏖️"],["","Spiaggia","Beach","🏖️"],
+["","Cascata","Waterfall","💦"],["","Grotta","Cave","🕳️"]],
+p:[["La montagna è alta","The mountain is high"],["Il lago è profondo","The lake is deep"],["Andiamo al mare","Let's go to the sea"],["Il bosco è verde","The forest is green"]]},
+{id:43,t:"Daily Routine",d:"Your typical day",lv:"A2",ic:"⏰",co:"#FF86D0",w:[
+["","Svegliarsi","To wake up","⏰"],["","Fare la doccia","To shower","🚿"],["","Fare colazione","To have breakfast","🥣"],
+["","Vestirsi","To get dressed","👔"],["","Uscire","To leave","🚶"],["","Pranzare","To have lunch","🍽️"],
+["","Tornare","To return","🔙"],["","Cenare","To have dinner","🍲"],["","Lavarsi i denti","To brush teeth","🪥"],
+["","Coricarsi","To lie down","🛏️"]],
+p:[["Mi sveglio alle sette","I wake up at seven"],["Faccio colazione con la famiglia","I have breakfast with family"],["Torno a casa alle cinque","I return home at five"],["Mi corico alle dieci di sera","I go to bed at ten"]]},
+{id:44,t:"Telling Time",d:"What time is it?",lv:"A2",ic:"🕐",co:"#1CB0F6",w:[
+["","Ora","Hour","🕐"],["","Minuto","Minute","⏱️"],["","Secondo","Second","⏲️"],["","Mezza","Half","⏳"],
+["","Quarto","Quarter","🕐"],["","In punto","Exactly","✅"],["","Di mattina","In the morning","🌅"],["","Di pomeriggio","In the afternoon","☀️"],
+["","Di sera","In the evening","🌇"],["","Di notte","At night","🌙"]],
+p:[["Che ora è?","What time is it?"],["Sono le due e mezza","Now it is half past two"],["Vieni alle cinque di pomeriggio","Come at five in the afternoon"],["Di mattina bevo il caffè","In the morning I drink coffee"]]},
+{id:45,t:"Countries & Nationalities",d:"Around the world",lv:"A2",ic:"🌍",co:"#FF9600",w:[
+["","Italia","Italy","🇮🇹"],["","Francia","France","🇫🇷"],["","Germania","Germany","🇩🇪"],["","Spagna","Spain","🇪🇸"],
+["","Inghilterra","England","🇬🇧"],["","America","America","🇺🇸"],["","Russia","Russia","🇷🇺"],["","Cina","China","🇨🇳"],
+["","Italiano","Italian (m)","🧑"],["","Straniero","Foreigner","🌍"]],
+p:[["Sono dall'Italia","I am from Italy"],["Lei è dalla Francia","She is from France"],["Parli italiano?","Do you speak Italian?"],["Lo straniero impara l'italiano","The foreigner is learning Italian"]]},
+{id:46,t:"At the Market",d:"Buy fresh goods",lv:"A2",ic:"🧺",co:"#CE82FF",w:[
+["","Chilogrammo","Kilogram","⚖️"],["","Pezzo","Piece","🔢"],["","Sacchetto","Bag","🛍️"],["","Fresco","Fresh","🌿"],
+["","Maturo","Ripe","🍅"],["","Pesare","To weigh","⚖️"],["","Scegliere","To choose","👆"],["","Pagare","To pay","💳"],
+["","Venditore","Seller","🧑‍💼"],["","Mercato rionale","Farmer's market","🏪"]],
+p:[["Mi dia un chilo di mele","Give me a kilogram of apples"],["Quanto costa al chilo?","How much per kilogram?"],["Questa frutta è fresca","This fruit is fresh"],["Scelgo il pomodoro più maturo","I choose the ripest tomato"]]},
+{id:47,t:"Furniture & Rooms",d:"Decorate your home",lv:"A2",ic:"🛋️",co:"#FF4B4B",w:[
+["","Poltrona","Armchair","🛋️"],["","Armadio","Wardrobe","🚪"],["","Scaffale","Shelf","📚"],["","Tappeto","Carpet","🟫"],
+["","Tenda","Curtain","🪟"],["","Specchio","Mirror","🪞"],["","Quadro","Picture","🖼️"],["","Divano","Couch","🛋️"],
+["","Frigorifero","Refrigerator","🧊"],["","Fornello","Stove","🔥"]],
+p:[["Il divano è comodo","The couch is comfortable"],["Metti il quadro sullo scaffale","Put the picture on the shelf"],["Il tappeto è nuovo","The carpet is new"],["L'armadio è nella stanza","The wardrobe is in the room"]]},
+{id:48,t:"Describing People",d:"Physical appearance",lv:"A2",ic:"👤",co:"#58CC02",w:[
+["","Alto","Tall","📏"],["","Basso","Short","📐"],["","Magro","Thin","🤸"],["","Grasso","Fat","🎈"],
+["","Bello","Beautiful","✨"],["","Brutto","Ugly","😬"],["","Giovane","Young","👶"],["","Vecchio","Old","👴"],
+["","Forte","Strong","💪"],["","Debole","Weak","😔"]],
+p:[["Lui è alto e magro","He is tall and thin"],["Lei è molto bella","She is very beautiful"],["Mio nonno è vecchio ma forte","My grandpa is old but strong"],["I bambini sono giovani e allegri","The children are young and cheerful"]]},
+{id:49,t:"Prepositions",d:"Where things are",lv:"A2",ic:"📍",co:"#00CD9C",w:[
+["","In","In","📦"],["","Su","On","📌"],["","Sotto","Under","⬇️"],["","Sopra","Above","⬆️"],
+["","Accanto a","Next to","↔️"],["","Davanti a","In front of","⏩"],["","Dietro","Behind","⏪"],["","Tra","Between","↔️"],
+["","Attraverso","Through","🚪"],["","Intorno a","Around","🔄"]],
+p:[["Il libro è sul tavolo","The book is on the table"],["Il gatto è sotto il letto","The cat is under the bed"],["Il parco è accanto alla scuola","The park is next to the school"],["Andiamo attraverso il bosco","We go through the forest"]]},
+{id:50,t:"Pronouns",d:"I, you, he, she",lv:"A2",ic:"👥",co:"#FF86D0",w:[
+["","Io","I","🙋"],["","Tu","You (sg)","👉"],["","Lui","He","👨"],["","Lei","She","👩"],
+["","Noi","We","👫"],["","Voi","You (pl/formal)","👥"],["","Loro","They (m)","👬"],["","Loro","They (f)","👭"],
+["","Proprio","One's own","✋"],["","Sé","Oneself","🔄"]],
+p:[["Io imparo l'italiano","I am learning Italian"],["Noi andiamo a scuola","We go to school"],["Loro parlano italiano","They speak Italian"],["Voi siete dall'America?","Are you from America?"]]},
+{id:51,t:"Vehicles & Transport",d:"Getting around",lv:"A2",ic:"🚗",co:"#FF9600",w:[
+["","Auto","Car","🚗"],["","Bicicletta","Bicycle","🚲"],["","Motocicletta","Motorcycle","🏍️"],["","Tram","Tram","🚃"],
+["","Metropolitana","Metro","🚇"],["","Camion","Truck","🚛"],["","Nave","Ship","🚢"],["","Aereo","Airplane","✈️"],
+["","Guidare","To drive","🚗"],["","Parcheggiare","To park","🅿️"]],
+p:[["Guido l'auto al lavoro","I drive to work"],["La bicicletta è veloce","The bicycle is fast"],["L'aereo vola in alto","The airplane flies high"],["Dove posso parcheggiare?","Where should I park?"]]},
+{id:52,t:"Hobbies & Free Time",d:"What do you enjoy?",lv:"A2",ic:"🎮",co:"#78C800",w:[
+["","Giocare","To play","🎮"],["","Cantare","To sing","🎤"],["","Ballare","To dance","💃"],["","Disegnare","To draw","✏️"],
+["","Fotografare","To photograph","📸"],["","Pescare","To fish","🎣"],["","Passeggiare","To walk","🚶"],
+["","Viaggiare","To travel","✈️"],["","Guardare","To watch","👀"],["","Ascoltare","To listen","👂"]],
+p:[["Mi piace giocare ai videogiochi","I love to play games"],["Lei canta bene","She sings beautifully"],["Passeggiamo nel parco","We walk through the park"],["Guardo un film ogni sera","I watch a movie every evening"]]},
+{id:53,t:"Present Tense",d:"Verb conjugation now",lv:"A2",ic:"📖",co:"#CE82FF",w:[
+["","Lavoro","I work","💼"],["","Lavori","You work","👉"],["","Lavora","He/she works","👤"],["","Lavoriamo","We work","👫"],
+["","Lavorate","You (pl) work","👥"],["","Lavorano","They work","👬"],["","So","I know","💡"],["","Sai","You know","🤔"],
+["","Posso","I can","💪"],["","Devo","I must","⚡"]],
+p:[["Lavoro ogni giorno","I work every day"],["Sai dov'è?","Do you know where it is?"],["Dobbiamo andare","We must go"],["Posso aiutarti","I can help you"]]},
+{id:54,t:"Questions & Negation",d:"Ask and deny",lv:"A2",ic:"❓",co:"#FF4B4B",w:[
+["","Chi","Who","❓"],["","Che cosa","What","❓"],["","Dove","Where","📍"],["","Quando","When","⏰"],
+["","Perché","Why","🤷"],["","Come","How","🔧"],["","Né","Neither","🚫"],["","Mai","Never","❌"],
+["","Niente","Nothing","0️⃣"],["","Nessuno","Nobody","🚷"]],
+p:[["Chi è quello?","Who is that?"],["Che cosa vuoi?","What do you want?"],["Dove vai?","Where are you going?"],["Non sono mai in ritardo","I am never late"]]},
+
+// ── B1 ──
+{id:17,t:"Education",d:"School and study",lv:"B1",ic:"🎓",co:"#CE82FF",w:[
+["","Scuola","School","🏫"],["","Università","University","🎓"],["","Studente","Student","🧑‍🎓"],
+["","Professore","Professor","👨‍🏫"],["","Materia","Subject","📘"],["","Esame","Exam","📝"],
+["","Voto","Grade","💯"],["","Biblioteca","Library","📚"],["","Compiti a casa","Homework","📓"],
+["","Studiare","To study","📖"]],
+p:[["Studio la lingua italiana","I am studying Italian"],["L'esame è lunedì","The exam is on Monday"],["La biblioteca è aperta","The library is open"],["Ho i compiti per domani","I have homework for tomorrow"]]},
+{id:18,t:"Work & Office",d:"Professional life",lv:"B1",ic:"🏢",co:"#1CB0F6",w:[
+["","Lavoro","Job","💼"],["","Ufficio","Office","🏢"],["","Riunione","Meeting","🤝"],["","Capo","Boss","👔"],
+["","Collega","Colleague","🧑‍💼"],["","Stipendio","Salary","💰"],["","Progetto","Project","📋"],["","Scadenza","Deadline","⏰"],
+["","Esperienza","Experience","📈"],["","Carriera","Career","🚀"]],
+p:[["La riunione è alle dieci","The meeting is at ten"],["Il capo è in ufficio","The boss is in the office"],["La scadenza è domani","The deadline is tomorrow"],["Amo il mio lavoro","I love my job"]]},
+{id:19,t:"Technology",d:"Digital world",lv:"B1",ic:"💻",co:"#00CD9C",w:[
+["","Computer","Computer","💻"],["","Telefono","Phone","📱"],["","Internet","Internet","🌐"],
+["","Notizie","News","📰"],["","Programma","Software","💾"],["","Messaggio","Message","✉️"],
+["","Immagine","Picture","🖼️"],["","Film","Movie","🎬"],["","Programma TV","TV show","📺"],["","Rete","Network","🔗"]],
+p:[["Dov'è il mio telefono?","Where is my phone?"],["Ho un nuovo messaggio","I have a new message"],["Il film inizia alle otto","The movie starts at eight"],["Internet non funziona","The internet is not working"]]},
+{id:20,t:"Feelings",d:"Express emotions",lv:"B1",ic:"😊",co:"#FF4B4B",w:[
+["","Felice","Happy","😊"],["","Triste","Sad","😢"],["","Arrabbiato","Angry","😠"],["","Spaventato","Scared","😨"],
+["","Entusiasta","Excited","🤩"],["","Stanco","Tired","😴"],["","Preoccupato","Worried","😟"],
+["","Sorpreso","Surprised","😲"],["","Orgoglioso","Proud","😤"],["","Grato","Grateful","🙏"]],
+p:[["Oggi sono felice","Today I am happy"],["Perché sei triste?","Why are you sad?"],["Sono molto stanco","I am very tired"],["Sono orgogliosa di te","I am proud of you"]]},
+{id:21,t:"Restaurant",d:"Order a meal",lv:"B1",ic:"🍽️",co:"#FF9600",w:[
+["","Menù","Menu","📋"],["","Ordinare","To order","📝"],["","Cameriere","Waiter","🤵"],["","Bevanda","Beverage","🥤"],
+["","Piatto","Dish","🍲"],["","Dolce","Dessert","🍰"],["","Prenotazione","Reservation","📅"],
+["","Contorno","Side dish","🥗"],["","Mancia","Tip","💵"],["","Delizioso","Delicious","😋"]],
+p:[["Posso ordinare?","Can I order?"],["Il piatto è molto delizioso","The food is very delicious"],["Il conto, per favore","The bill, please"],["Ho una prenotazione per due","I have a reservation for two"]]},
+{id:22,t:"City & Directions",d:"Find your way",lv:"B1",ic:"🏙️",co:"#FF86D0",w:[
+["","Città","City","🏙️"],["","Via","Street","🛣️"],["","Parco","Park","🌳"],["","Ponte","Bridge","🌉"],
+["","Piazza","Square","⬜"],["","Sinistra","Left","⬅️"],["","Destra","Right","➡️"],["","Dritto","Straight","⬆️"],
+["","Vicino","Near","📍"],["","Lontano","Far","🔭"]],
+p:[["Dov'è la piazza?","Where is the square?"],["Vada dritto, poi a sinistra","Go straight, then left"],["Il parco è vicino","The park is near"],["La città è molto lontana","The city is very far"]]},
+{id:23,t:"Sports & Hobbies",d:"Free time activities",lv:"B1",ic:"⚽",co:"#78C800",w:[
+["","Calcio","Football","⚽"],["","Pallacanestro","Basketball","🏀"],["","Nuoto","Swimming","🏊"],
+["","Corsa","Running","🏃"],["","Musica","Music","🎵"],["","Cucina","Cooking","👨‍🍳"],
+["","Pittura","Painting","🎨"],["","Allenarsi","To exercise","💪"],["","Vincere","To win","🏆"],
+["","Partita","Match","🏟️"]],
+p:[["Mi piace giocare a calcio","I love to play football"],["La corsa fa bene alla salute","Running is healthy"],["Chi ha vinto la partita?","Who won the match?"],["Suono musica ogni giorno","I play music every day"]]},
+{id:24,t:"Opinions",d:"Express your views",lv:"B1",ic:"💬",co:"#58CC02",w:[
+["","Penso","I think","🤔"],["","Sono d'accordo","I agree","👍"],["","Non sono d'accordo","I disagree","👎"],
+["","Forse","Maybe","🤷"],["","Certo","Of course","✅"],["","Tuttavia","However","↩️"],
+["","In realtà","Actually","☝️"],["","Anche","Also","➕"],["","Perciò","Therefore","➡️"],["","Comunque","Nevertheless","🔄"]],
+p:[["Penso che tu abbia ragione","I think you are right"],["Sono d'accordo con te","I agree with you"],["Forse è così","Maybe it is so"],["Certo, perché no?","Of course, why not?"]]},
+{id:55,t:"Cooking & Kitchen",d:"Prepare a meal",lv:"B1",ic:"👨‍🍳",co:"#FF86D0",w:[
+["","Cucinare","To cook","👨‍🍳"],["","Cuocere al forno","To bake","🍞"],["","Tagliare","To cut","🔪"],["","Mescolare","To stir","🥄"],
+["","Ricetta","Recipe","📋"],["","Ingrediente","Ingredient","🧂"],["","Spezia","Spice","🌶️"],["","Olio","Oil","🫒"],
+["","Salsa","Sauce","🥫"],["","Padella","Frying pan","🍳"]],
+p:[["Cucino il pranzo per la famiglia","I cook lunch for the family"],["Aggiungi un po' d'olio","Add a little oil"],["La ricetta è semplice","The recipe is simple"],["Taglia le verdure a cubetti","Cut the vegetables into cubes"]]},
+{id:56,t:"Past Tense",d:"Talk about yesterday",lv:"B1",ic:"⏪",co:"#1CB0F6",w:[
+["","Ero","I was","🕐"],["","Sono andato","I went","🚶"],["","Ho lavorato","I worked","💼"],["","Ho mangiato","I ate","🍽️"],
+["","Ho visto","I saw","👀"],["","Ho detto","I said","🗣️"],["","Ho comprato","I bought","🛒"],["","Ho imparato","I learned","📚"],
+["","Sono venuto","I came","🔙"],["","Ho letto","I read","📖"]],
+p:[["Ieri ero a scuola","Yesterday I was at school"],["Ho mangiato il pranzo alle due","I ate lunch at two"],["Ho visto un bel film","I saw a nice movie"],["Ho comprato un libro nuovo","I bought a new book"]]},
+{id:57,t:"Future Tense",d:"Plans and intentions",lv:"B1",ic:"⏩",co:"#00CD9C",w:[
+["","Sarò","I will be","⏩"],["","Sarai","You will be","👉"],["","Sarà","He/she will be","👤"],["","Saremo","We will be","👫"],
+["","Sarete","You (pl) will be","👥"],["","Viaggerò","I will travel","✈️"],["","Studierò","I will study","📚"],
+["","Lavorerò","I will work","💼"],["","Verrò","I will come","🔙"],["","Pianificare","To plan","📋"]],
+p:[["Domani studierò italiano","Tomorrow I will study Italian"],["Verremo sabato","We will come on Saturday"],["Viaggerò in Italia","I will travel to Italy"],["Che cosa farai domani?","What will you do tomorrow?"]]},
+{id:58,t:"Relationships",d:"Love and friendship",lv:"B1",ic:"💕",co:"#FF4B4B",w:[
+["","Amico","Friend","🤝"],["","Ragazza","Girlfriend","👩"],["","Ragazzo","Boyfriend","👨"],["","Moglie","Wife","💍"],
+["","Marito","Husband","💍"],["","Amore","Love","❤️"],["","Relazione","Relationship","💑"],["","Matrimonio","Wedding","💒"],
+["","Frequentarsi","To date","💕"],["","Lasciarsi","To break up","💔"]],
+p:[["Il mio migliore amico vive vicino","My best friend lives nearby"],["Loro si amano","They love each other"],["Il matrimonio è a giugno","The wedding is in June"],["Abbiamo una bella relazione","We have a nice relationship"]]},
+{id:59,t:"Health & Wellness",d:"Feel better",lv:"B1",ic:"💊",co:"#CE82FF",w:[
+["","Mal di testa","Headache","🤕"],["","Influenza","Flu","🤒"],["","Febbre","Fever","🌡️"],["","Medicina","Medicine","💊"],
+["","Ricetta medica","Prescription","📋"],["","Esaminare","To examine","🔍"],["","Malato","Sick","😷"],["","Sano","Healthy","💪"],
+["","Allenarsi","To exercise","🏋️"],["","Dieta","Diet","🥗"]],
+p:[["Ho mal di testa","I have a headache"],["Sono malato da ieri","I have been sick since yesterday"],["Il medico mi ha dato la medicina","The doctor gave me medicine"],["Mi alleno ogni giorno","I exercise every day"]]},
+{id:60,t:"Media & Entertainment",d:"Movies, music, TV",lv:"B1",ic:"🎬",co:"#FF9600",w:[
+["","Serie TV","TV series","📺"],["","Attore","Actor","🎭"],["","Attrice","Actress","🎭"],["","Regista","Director","🎥"],
+["","Canzone","Song","🎵"],["","Gruppo musicale","Band","🎸"],["","Teatro","Theater","🎭"],["","Spettacolo","Performance","🎪"],
+["","Pubblico","Audience","👏"],["","Recensione","Review","📝"]],
+p:[["Guardiamo una nuova serie","We are watching a new series"],["L'attore è eccellente","The actor is excellent"],["Andiamo allo spettacolo","Let's go to the performance"],["La canzone è molto popolare","The song is very popular"]]},
+{id:61,t:"Appointments",d:"Schedule and plan",lv:"B1",ic:"📅",co:"#78C800",w:[
+["","Fissare","To schedule","📅"],["","Appuntamento","Appointment","⏰"],["","Libero","Available","✅"],["","Occupato","Busy","🚫"],
+["","Annullare","To cancel","❌"],["","Rimandare","To postpone","➡️"],["","Confermare","To confirm","✔️"],["","Promemoria","Reminder","🔔"],
+["","Puntuale","On time","⏰"],["","Sono in ritardo","I am late","🕐"]],
+p:[["Ho fissato un appuntamento dal medico","I scheduled a doctor's appointment"],["Sei libero mercoledì?","Are you available on Wednesday?"],["Devo annullare la riunione","I have to cancel the meeting"],["Arrivo sempre puntuale","I always arrive on time"]]},
+{id:62,t:"Holidays & Celebrations",d:"Italian traditions",lv:"B1",ic:"🎉",co:"#FF86D0",w:[
+["","Natale","Christmas","🎄"],["","Pasqua","Easter","🥚"],["","Capodanno","New Year","🎆"],["","Ferragosto","Ferragosto","☀️"],
+["","Compleanno","Birthday","🎂"],["","Festa","Holiday","🎉"],["","Regalo","Gift","🎁"],["","Epifania","Epiphany","⭐"],
+["","Carnevale","Carnival","🎭"],["","Festeggiare","To celebrate","🥳"]],
+p:[["Buon compleanno!","Happy birthday!"],["Festeggiamo il Natale a dicembre","We celebrate Christmas in December"],["Ferragosto è il quindici agosto","Ferragosto is the fifteenth of August"],["Il Carnevale di Venezia è famoso","The Venice Carnival is famous"]]},
+{id:63,t:"Comparisons",d:"Bigger, better, best",lv:"B1",ic:"📊",co:"#1CB0F6",w:[
+["","Più grande","Bigger","📈"],["","Più piccolo","Smaller","📉"],["","Migliore","Better","👍"],["","Peggiore","Worse","👎"],
+["","Il più grande","Biggest","🏆"],["","Il più piccolo","Smallest","🐜"],["","Il migliore","Best","🥇"],["","Il peggiore","Worst","😞"],
+["","Come","Like/as","↔️"],["","Uguale","Same","🟰"]],
+p:[["Questo è meglio di quello","This is better than that"],["Lui è più grande di me","He is bigger than me"],["Quello è il miglior ristorante","That is the best restaurant"],["Loro sono ugualmente alti","They are the same height"]]},
+{id:64,t:"Travel Planning",d:"Book and prepare",lv:"B1",ic:"🗺️",co:"#FF4B4B",w:[
+["","Prenotare","To book","📋"],["","Alloggio","Accommodation","🏨"],["","Escursione","Excursion","🗺️"],["","Guida","Guide","🗣️"],
+["","Souvenir","Souvenir","🎁"],["","Visto","Visa","🛂"],["","Assicurazione","Insurance","📄"],["","Partenza","Departure","🛫"],
+["","Arrivo","Arrival","🛬"],["","Biglietto di ritorno","Return ticket","🎫"]],
+p:[["Ho prenotato l'albergo","I booked a hotel"],["Quando è la partenza del treno?","When is the train departure?"],["Ho comprato un souvenir","I bought a souvenir"],["Mi serve un biglietto di ritorno","I need a return ticket"]]},
+{id:65,t:"Housing & Renting",d:"Find a place to live",lv:"B1",ic:"🏘️",co:"#00CD9C",w:[
+["","Appartamento","Apartment","🏢"],["","Affitto","Rent","💰"],["","Padrone di casa","Landlord","🏠"],["","Inquilino","Tenant","🔑"],
+["","Contratto","Contract","📄"],["","Caparra","Deposit","💵"],["","Ammobiliato","Furnished","🛋️"],["","Non ammobiliato","Unfurnished","📦"],
+["","Trasloco","Moving in","📦"],["","Piano","Floor/story","🏢"]],
+p:[["Cerco un appartamento in affitto","I am looking for an apartment to rent"],["L'affitto è cinquecento euro","The rent is five hundred euros"],["L'appartamento è ammobiliato","The apartment is furnished"],["Vivo al terzo piano","I live on the third floor"]]},
+{id:66,t:"Italian Geography",d:"Know the country",lv:"B1",ic:"🇮🇹",co:"#CE82FF",w:[
+["","Roma","Rome","🏙️"],["","Milano","Milan","🏰"],["","Tevere","Tiber","🏞️"],["","Colosseo","Colosseum","🏛️"],
+["","Toscana","Tuscany","🌾"],["","Napoli","Naples","🏛️"],["","Dolomiti","Dolomites","⛷️"],["","Sicilia","Sicily","🏝️"],
+["","Venezia","Venice","🌊"],["","Costiera Amalfitana","Amalfi Coast","🏖️"]],
+p:[["Roma è la capitale d'Italia","Rome is the capital of Italy"],["Il Tevere attraversa Roma","The Tiber flows through Rome"],["Le Dolomiti sono montagne famose","The Dolomites are famous mountains"],["Venezia è costruita sull'acqua","Venice is built on water"]]},
+{id:67,t:"Formal Language",d:"Polite and official",lv:"B1",ic:"🎩",co:"#FF9600",w:[
+["","Gentile","Dear Sir/Madam","📧"],["","Richiesta","Request","📋"],["","Domanda","Demand","📝"],["","Avviso","Notice","📢"],
+["","Domanda di lavoro","Application","📄"],["","Conferma","Confirmation","✔️"],["","Risposta","Reply","📩"],["","Cordiali saluti","Respectfully","🙏"],
+["","Modulo","Form","📃"],["","Documento","Document","📄"]],
+p:[["Gentile signore, Le scrivo una richiesta","Dear Sir, I am writing a request"],["Cordiali saluti, Anna Rossi","Respectfully, Anna Rossi"],["Le chiedo gentilmente una conferma","I kindly ask for confirmation"],["Compili il modulo, per favore","Please fill out the form"]]},
+{id:68,t:"Modal Verbs",d:"Can, must, should",lv:"B1",ic:"💡",co:"#78C800",w:[
+["","Potere","Can","💪"],["","Dovere","Must","⚡"],["","Bisognare","Should","👆"],["","Essere permesso","May/allowed","✅"],
+["","Volere","To want","🙋"],["","Amare","To love/like","❤️"],["","Sapere","To know how","🧠"],["","Desiderare","To wish","⭐"],
+["","Riuscire","To succeed","🏆"],["","Provare","To try","🎯"]],
+p:[["Devo andare al lavoro","I must go to work"],["Ti è permesso uscire?","Are you allowed to go out?"],["So cucinare","I know how to cook"],["Proverò a imparare","I will try to learn"]]},
+
+// ── B2 ──
+{id:25,t:"Politics & Society",d:"Civic vocabulary",lv:"B2",ic:"🏛️",co:"#CE82FF",w:[
+["","Governo","Government","🏛️"],["","Elezioni","Elections","🗳️"],["","Legge","Law","⚖️"],["","Diritto","Right","✊"],
+["","Libertà","Freedom","🕊️"],["","Società","Society","👥"],["","Cittadino","Citizen","🧑"],
+["","Tassa","Tax","💸"],["","Democrazia","Democracy","🗽"],["","Politica","Politics","🏛️"]],
+p:[["Le elezioni sono l'anno prossimo","Elections are next year"],["La legge protegge i cittadini","The law protects citizens"],["La libertà è importante","Freedom is important"],["Il governo prende decisioni","The government makes decisions"]]},
+{id:26,t:"Culture & Arts",d:"Art and traditions",lv:"B2",ic:"🎭",co:"#FF86D0",w:[
+["","Teatro","Theater","🎭"],["","Arte","Art","🎨"],["","Letteratura","Literature","📚"],
+["","Canzone","Song","🎵"],["","Mostra","Exhibition","🖼️"],["","Museo","Museum","🏛️"],
+["","Concerto","Concert","🎶"],["","Tradizione","Tradition","🏺"],["","Usanza","Custom","🎎"],
+["","Cultura","Culture","🌍"]],
+p:[["Andiamo a teatro stasera","Let's go to the theater tonight"],["La mostra è bellissima","The exhibition is beautiful"],["Il museo è chiuso oggi","The museum is closed today"],["Amo la tradizione italiana","I love Italian tradition"]]},
+{id:27,t:"Science & Environment",d:"Research and nature",lv:"B2",ic:"🔬",co:"#00CD9C",w:[
+["","Scienza","Science","🔬"],["","Ricerca","Research","🔍"],["","Ambiente","Environment","🌍"],
+["","Inquinamento","Pollution","🏭"],["","Energia","Energy","⚡"],["","Clima","Climate","🌡️"],
+["","Natura","Nature","🌿"],["","Sviluppo","Development","📈"],["","Tecnologia","Technology","🤖"],
+["","Esperimento","Experiment","🧪"]],
+p:[["L'inquinamento è un grande problema","Pollution is a big problem"],["La natura è bella","Nature is beautiful"],["Il clima sta cambiando rapidamente","The climate is changing fast"],["La scienza progredisce ogni giorno","Science advances every day"]]},
+{id:28,t:"Business & Economy",d:"Commerce and trade",lv:"B2",ic:"📊",co:"#FF9600",w:[
+["","Azienda","Company","🏢"],["","Contratto","Contract","📄"],["","Mercato","Market","📊"],
+["","Investimento","Investment","💹"],["","Profitto","Profit","💰"],["","Economia","Economy","📈"],
+["","Bilancio","Budget","🧮"],["","Esportazione","Export","📤"],["","Importazione","Import","📥"],
+["","Impresa","Enterprise","🏭"]],
+p:[["L'azienda cresce rapidamente","The company is growing fast"],["Il contratto è firmato","The contract is signed"],["Il bilancio è limitato","The budget is limited"],["L'economia si sta riprendendo","The economy is recovering"]]},
+{id:29,t:"Idioms & Phrases",d:"Sound like a local",lv:"B2",ic:"🗝️",co:"#78C800",w:[
+["","Prego","You're welcome","🤝"],["","Come va?","What's up?","👋"],
+["","Non mi importa","I don't care","🤷"],["","Buon viaggio","Have a good trip","✈️"],
+["","Buon appetito","Bon appetit","🍽️"],["","Va bene","It's okay","👌"],["","Davvero?","Really?","😮"],
+["","Non preoccuparti","No worries","😎"],["","Complimenti","Well done","👏"],["","Stai tranquillo","Don't worry","🙏"]],
+p:[["Come va, come stai?","What's up, how are you?"],["Prego, davvero","You're welcome, really"],["Non preoccuparti, andrà bene","No worries, it will be fine"],["Complimenti, ottimo lavoro!","Well done, excellent!"]]},
+{id:30,t:"Advanced Discussion",d:"Complex conversation",lv:"B2",ic:"🧠",co:"#1CB0F6",w:[
+["","Presupposto","Assumption","🤔"],["","Conseguenza","Consequence","⚡"],
+["","Negoziati","Negotiations","🤝"],["","Responsabilità","Responsibility","⚖️"],
+["","Opportunità","Opportunity","🚪"],["","Vantaggio","Advantage","✅"],["","Svantaggio","Disadvantage","❌"],
+["","Punto di vista","Point of view","👁️"],["","Soluzione","Solution","💡"],["","Conclusione","Conclusion","🎯"]],
+p:[["Qual è il tuo presupposto?","What is your assumption?"],["Questo ha conseguenze serie","That has serious consequences"],["La soluzione è semplice","The solution is simple"],["Devo trarre una conclusione","I have to draw a conclusion"]]},
+{id:69,t:"Grammar: Articles & Prepositions",d:"Italian articles and prepositions",lv:"B2",ic:"📐",co:"#1CB0F6",w:[
+["","Il","The (m. sg.)","1️⃣"],["","La","The (f. sg.)","2️⃣"],["","I","The (m. pl.)","3️⃣"],["","Le","The (f. pl.)","4️⃣"],
+["","Un","A (m.)","5️⃣"],["","Una","A (f.)","6️⃣"],["","Del","Of the","7️⃣"],["","Articolo","Article","📐"],
+["","Preposizione","Preposition","🔚"],["","Articolata","Combined preposition","🔄"]],
+p:[["Il libro è sul tavolo — articolo determinativo","The book is on the table — definite article"],["Vado al mercato — preposizione articolata","I go to the market — combined preposition"],["Ho comprato una mela — articolo indeterminativo","I bought an apple — indefinite article"],["Vengo dalla Francia — preposizione articolata","I come from France — combined preposition"]]},
+{id:70,t:"Verb Moods",d:"Indicative, subjunctive, conditional",lv:"B2",ic:"🔄",co:"#FF86D0",w:[
+["","Indicativo","Indicative","✍️"],["","Congiuntivo","Subjunctive","✅"],["","Condizionale","Conditional","📖"],["","Imperativo","Imperative","📕"],
+["","Gerundio","Gerund","🔨"],["","Participio","Participle","✅"],["","Infinito","Infinitive","📚"],["","Passato remoto","Past absolute","🎓"],
+["","Trapassato","Past perfect","🥤"],["","Futuro anteriore","Future perfect","✅"]],
+p:[["Parlo italiano — indicativo","I speak Italian — indicative"],["Vorrei che tu venissi — congiuntivo","I would like you to come — subjunctive"],["Mangerei la pizza — condizionale","I would eat pizza — conditional"],["Apri la porta! — imperativo","Open the door! — imperative"]]},
+{id:71,t:"Legal & Admin",d:"Official matters",lv:"B2",ic:"⚖️",co:"#FF9600",w:[
+["","Tribunale","Court","⚖️"],["","Giudice","Judge","👨‍⚖️"],["","Multa","Fine/penalty","💸"],["","Reclamo","Complaint","📝"],
+["","Permesso","Permit","📄"],["","Carta d'identità","ID card","🪪"],["","Residenza","Residence","🏠"],["","Cittadinanza","Citizenship","🛂"],
+["","Autenticazione","Notarization","📋"],["","Firma","Signature","✍️"]],
+p:[["Devo rinnovare la carta d'identità","I need to renew my ID card"],["Dove posso autenticare il documento?","Where can I notarize the document?"],["Firmi qui, per favore","Please sign here"],["Ho la cittadinanza italiana","I have Italian citizenship"]]},
+{id:72,t:"Psychology & Mind",d:"Thoughts and feelings",lv:"B2",ic:"🧠",co:"#CE82FF",w:[
+["","Coscienza","Consciousness","🧠"],["","Comportamento","Behavior","🎭"],["","Abitudine","Habit","🔄"],["","Stress","Stress","😰"],
+["","Emozione","Emotion","💭"],["","Motivazione","Motivation","🚀"],["","Autostima","Self-confidence","💪"],
+["","Ansia","Anxiety","😟"],["","Personalità","Personality","🧩"],["","Carattere","Character","⭐"]],
+p:[["Lo stress influisce sulla salute","Stress affects health"],["Ho una buona abitudine","I have a good habit"],["La motivazione è importante","Motivation is important"],["Lui ha un carattere forte","He has a strong character"]]},
+{id:73,t:"Abstract Concepts",d:"Ideas and theories",lv:"B2",ic:"💭",co:"#00CD9C",w:[
+["","Verità","Truth","✅"],["","Bugia","Lie","❌"],["","Giustizia","Justice","⚖️"],["","Speranza","Hope","🌟"],
+["","Paura","Fear","😨"],["","Fede","Faith","🕊️"],["","Conoscenza","Knowledge","📚"],["","Saggezza","Wisdom","🦉"],
+["","Coscienza","Conscience","💭"],["","Destino","Destiny","⭐"]],
+p:[["La verità viene sempre a galla","The truth always comes to light"],["La speranza è l'ultima a morire","Hope dies last"],["La conoscenza è potere","Knowledge is power"],["La giustizia è cieca","Justice is blind"]]},
+{id:74,t:"History & Heritage",d:"Italian past",lv:"B2",ic:"🏛️",co:"#FF4B4B",w:[
+["","Storia","History","📜"],["","Re","King","👑"],["","Impero","Empire","🏰"],["","Battaglia","Battle","⚔️"],
+["","Libertà","Freedom","🕊️"],["","Indipendenza","Independence","🎆"],["","Monumento","Monument","🗽"],["","Rinascimento","Renaissance","👑"],
+["","Patrimonio","Heritage","🏛️"],["","Popolo","Nation/people","👥"]],
+p:[["L'Italia ha una storia ricca","Italy has a rich history"],["Il monumento è nel centro della città","The monument is in the city center"],["Il popolo preserva il suo patrimonio","The people preserve their heritage"],["Il Rinascimento è nato in Italia","The Renaissance was born in Italy"]]},
+{id:75,t:"Proverbs & Wisdom",d:"Italian sayings",lv:"B2",ic:"📜",co:"#78C800",w:[
+["","Chi dorme","Who sleeps","🌅"],["","Chi va piano","Who goes slowly","🐢"],["","Meglio tardi","Better late","⏰"],
+["","Non è tutto oro","Not all gold","💨"],["","Tra il dire","Between saying","🐺"],["","Chi semina vento","Who sows wind","🌪️"],
+["","Senza fatica","Without effort","💪"],["","Chi cerca trova","Who seeks finds","🔍"],["","Sbagliando si impara","By making mistakes","📚"],
+["","Chi sa sa","Who knows, knows","🤷"]],
+p:[["Chi dorme non piglia pesci","The early bird catches the worm"],["Chi va piano, va sano e va lontano","Slow and steady wins the race"],["Sbagliando si impara","You learn from your mistakes"],["Chi semina vento, raccoglie tempesta","Who sows the wind, reaps the storm"]]},
+{id:76,t:"Debate & Arguments",d:"Make your point",lv:"B2",ic:"🗣️",co:"#1CB0F6",w:[
+["","Affermare","To claim","🗣️"],["","Dimostrare","To prove","📊"],["","Confutare","To refute","❌"],["","Argomento","Argument","💬"],
+["","Fatto","Fact","✅"],["","Opinione","Opinion","💭"],["","Dibattito","Debate","🗣️"],["","Criticare","To criticize","📝"],
+["","Sostenere","To support","👍"],["","Opporsi","To oppose","⚡"]],
+p:[["Lui afferma di avere ragione","He claims he is right"],["Dimostralo con i fatti","Prove it with facts"],["Sostengo la tua opinione","I support your opinion"],["Questa è solo la tua opinione","That is just your opinion"]]},
+{id:77,t:"Social Issues",d:"Society and change",lv:"B2",ic:"🌍",co:"#FF86D0",w:[
+["","Uguaglianza","Equality","⚖️"],["","Povertà","Poverty","😔"],["","Istruzione","Education","🎓"],["","Disoccupazione","Unemployment","📉"],
+["","Migrazione","Migration","✈️"],["","Corruzione","Corruption","🚫"],["","Fare volontariato","To volunteer","🤝"],["","Diritti","Rights","✊"],
+["","Sicurezza","Safety","🛡️"],["","Cambiamento","Change","🔄"]],
+p:[["L'uguaglianza è un diritto fondamentale","Equality is a basic right"],["La povertà è un grande problema","Poverty is a big problem"],["L'istruzione cambia il mondo","Education changes the world"],["Faccio volontariato nella comunità","I volunteer in the local community"]]},
+{id:78,t:"Environment & Climate",d:"Protect the planet",lv:"B2",ic:"🌱",co:"#58CC02",w:[
+["","Riciclare","To recycle","♻️"],["","Rinnovabile","Renewable","🌱"],["","Inquinatore","Polluter","🏭"],["","Rifiuti","Waste","🗑️"],
+["","Foresta","Forest","🌲"],["","Carbonio","Carbon","⚫"],["","Sostenibile","Sustainable","🌿"],["","Ecosistema","Ecosystem","🌎"],
+["","Biodiversità","Biodiversity","🦋"],["","Riscaldamento globale","Global warming","🌡️"]],
+p:[["Dobbiamo riciclare di più","We must recycle more"],["L'energia rinnovabile è il futuro","Renewable energy is the future"],["Proteggiamo le nostre foreste","Let's protect our forests"],["Il riscaldamento globale riguarda tutti","Global warming affects everyone"]]},
+
+// ── C1 ──
+{id:79,t:"Academic Language",d:"Research and scholarship",lv:"C1",ic:"🎓",co:"#CE82FF",w:[
+["","Ipotesi","Hypothesis","🔬"],["","Teoria","Theory","💡"],["","Analisi","Analysis","📊"],["","Conclusione","Conclusion","🎯"],
+["","Metodologia","Methodology","📋"],["","Citazione","Citation","📝"],["","Ricercatore","Researcher","🔍"],["","Tesi","Dissertation","📕"],
+["","Revisione paritaria","Peer review","👁️"],["","Articolo scientifico","Scientific paper","📄"]],
+p:[["L'ipotesi è stata confermata","The hypothesis was confirmed"],["L'analisi dei dati è completa","The data analysis is complete"],["La metodologia è chiara","The methodology is clear"],["La conclusione deriva dalle prove","The conclusion follows from the evidence"]]},
+{id:80,t:"Complex Verb Forms",d:"Subjunctive and conditional",lv:"C1",ic:"📝",co:"#FF9600",w:[
+["","Sarei","I would be","🤔"],["","Se avessi saputo","Had I known","💭"],["","Che sia","Let it be","🙏"],
+["","Affinché potesse","So that he could","💡"],["","Se avessi","If I had","🌟"],["","Vorrei","I would like","⭐"],
+["","Si dovrebbe","It should","👆"],["","Si potrebbe","It could","🤷"],["","Si direbbe","One would say","🗣️"],
+["","Mi sembra","It seems to me","🧐"]],
+p:[["Sarei felice se venissi","I would be happy if you came"],["Se avessi saputo, non l'avrei fatto","Had I known, I wouldn't have done it"],["Vorrei imparare di più","I would like to learn more"],["Si dovrebbe parlarne","We should talk about it"]]},
+{id:81,t:"Literature & Writing",d:"Books and authors",lv:"C1",ic:"📚",co:"#1CB0F6",w:[
+["","Romanzo","Novel","📖"],["","Poesia","Poetry","📜"],["","Racconto","Short story","📝"],["","Poeta","Poet","✍️"],
+["","Scrittore","Writer","🖊️"],["","Editore","Publisher","🏢"],["","Traduzione","Translation","🔄"],["","Narrativa","Narrative","📖"],
+["","Genere","Genre","📂"],["","Manoscritto","Manuscript","📜"]],
+p:[["Leggo un romanzo italiano","I am reading an Italian novel"],["La poesia mi ispira","Poetry inspires me"],["La traduzione è fedele all'originale","The translation is faithful to the original"],["Lo scrittore ha vinto un premio","The writer won an award"]]},
+{id:82,t:"Philosophy & Ethics",d:"Deep thinking",lv:"C1",ic:"🤔",co:"#00CD9C",w:[
+["","Morale","Morality","⚖️"],["","Etica","Ethics","📋"],["","Dovere","Duty","✊"],["","Virtù","Virtue","⭐"],
+["","Libero arbitrio","Free will","🕊️"],["","Ragione","Reason","🧠"],["","Esistenza","Existence","🌌"],
+["","Essenza","Essence","💎"],["","Paradosso","Paradox","🔄"],["","Dialettica","Dialectics","💬"]],
+p:[["Qual è il senso della vita?","What is the meaning of life?"],["Morale e etica sono diversi","Morality and ethics are different"],["La ragione conduce alla verità","Reason leads to truth"],["Questo è un paradosso filosofico","That is a philosophical paradox"]]},
+{id:83,t:"Italian Folklore",d:"Myths and tradition",lv:"C1",ic:"🧚",co:"#FF4B4B",w:[
+["","Commedia dell'arte","Commedia dell'arte","🎭"],["","Arlecchino","Harlequin","🃏"],["","Pinocchio","Pinocchio","🤥"],["","Befana","Befana (gift witch)","🧙"],
+["","Pulcinella","Pulcinella","🎭"],["","Leggenda","Legend","📖"],["","Rito","Ritual","🕯️"],["","Tarantella","Tarantella (dance)","💃"],
+["","Malocchio","Evil eye","🧿"],["","Palio","Palio (horse race)","🏇"]],
+p:[["La commedia dell'arte è nata in Italia","Commedia dell'arte was born in Italy"],["Pinocchio è un personaggio italiano famoso","Pinocchio is a famous Italian character"],["La tarantella è un ballo tradizionale","The tarantella is a traditional dance"],["La Befana porta i regali ai bambini","The Befana brings gifts to children"]]},
+{id:84,t:"Professional Writing",d:"Business communication",lv:"C1",ic:"💼",co:"#FF86D0",w:[
+["","Corrispondenza","Correspondence","📧"],["","Verbale","Minutes","📋"],["","Rapporto","Report","📊"],["","Proposta","Proposal","📄"],
+["","Negoziare","To negotiate","🤝"],["","Condizione","Condition","📌"],["","Clausola","Clause","📃"],
+["","Collaborazione","Cooperation","🤝"],["","Strategia","Strategy","🎯"],["","Priorità","Priority","⬆️"]],
+p:[["Le invio il rapporto","I am sending you the report"],["Stiamo negoziando le condizioni","We are negotiating the conditions"],["La collaborazione è un successo","The cooperation is successful"],["Questa è la nostra priorità","That is our priority"]]},
+{id:85,t:"Advanced Idioms",d:"Native-level expressions",lv:"C1",ic:"🗝️",co:"#78C800",w:[
+["","Buttare i soldi","To waste money","💸"],["","Avere le mani in pasta","To have a hand in everything","🙌"],
+["","Fare il furbo","To play smart","🤪"],["","Dare alla testa","To go to one's head","🤯"],
+["","Togliersi un peso","A weight off one's shoulders","😌"],["","Incrociare le dita","To cross fingers","🤞"],
+["","Mettere il bastone tra le ruote","To put a spoke in the wheel","🌊"],["","Non avere peli sulla lingua","To be outspoken","🗣️"],
+["","Essere al settimo cielo","To be on cloud nine","🏇"],["","Andare in fumo","To go up in smoke","💦"]],
+p:[["Non buttare i soldi in sciocchezze","Don't waste money on nonsense"],["Ha le mani in pasta dappertutto","She has a hand in everything"],["Mi sono tolto un peso quando ho saputo","A weight off my shoulders when I heard"],["Lui non ha peli sulla lingua","He speaks his mind freely"]]},
+{id:86,t:"Nuanced Opinions",d:"Express complexity",lv:"C1",ic:"💬",co:"#FF9600",w:[
+["","Considerando","Considering","🤔"],["","Nonostante","Despite","↩️"],["","Tuttavia","Nevertheless","🔄"],["","Inoltre","Moreover","➕"],
+["","In parte","To some extent","📊"],["","In sostanza","Essentially","💎"],["","Ovvero","Namely","☝️"],["","D'altra parte","On the other hand","↔️"],
+["","Prevalentemente","Predominantly","📈"],["","Di conseguenza","Accordingly","➡️"]],
+p:[["Considerando le circostanze, sono d'accordo","Considering the circumstances, I agree"],["Nonostante i problemi, ce l'abbiamo fatta","Despite the problems, we succeeded"],["Inoltre, i risultati sono eccellenti","Moreover, the results are excellent"],["D'altra parte, ci sono anche svantaggi","On the other hand, that has disadvantages too"]]},
+{id:87,t:"Economics & Finance",d:"Markets and money",lv:"C1",ic:"📈",co:"#1CB0F6",w:[
+["","Inflazione","Inflation","📈"],["","Tasso d'interesse","Interest rate","💹"],["","Borsa","Stock exchange","📊"],["","Azione","Stock/share","📉"],
+["","Debito","Debt","💳"],["","Prestito","Loan","🏦"],["","Valuta","Currency","💰"],["","Tasso di cambio","Exchange rate","🔄"],
+["","Crescita","Growth","📈"],["","Recessione","Recession","📉"]],
+p:[["L'inflazione cresce quest'anno","Inflation is rising this year"],["Il tasso di cambio cambia ogni giorno","The exchange rate changes every day"],["La borsa è instabile","The stock exchange is unstable"],["La crescita economica è rallentata","Economic growth has slowed down"]]},
+{id:88,t:"Journalism & Media",d:"News and reporting",lv:"C1",ic:"📰",co:"#FF4B4B",w:[
+["","Fare un reportage","To report","📰"],["","Redattore","Editor","✏️"],["","Titolo","Headline","📢"],["","Fonte","Source","🔍"],
+["","Intervista","Interview","🎤"],["","Pubblicare","To publish","📤"],["","Stampa","Press","🗞️"],["","Obiettività","Objectivity","⚖️"],
+["","Censura","Censorship","🚫"],["","Alfabetizzazione mediatica","Media literacy","📚"]],
+p:[["Il giornalista fa un reportage dal luogo","The journalist reports from the scene"],["Il titolo attira l'attenzione","The headline grabs attention"],["L'obiettività è importante nel giornalismo","Objectivity is important in journalism"],["L'alfabetizzazione mediatica è essenziale","Media literacy is essential"]]}
+];
+
+
+// ═══════════════ LANGUAGE SYSTEM ═══════════════
+const LANG_DATA={
+  sr:{name:'Serbian',flag:'🇷🇸',code:'sr',units:U_SR},
+  it:{name:'Italian',flag:'🇮🇹',code:'it',units:U_IT}
+};
+let curLang=localStorage.getItem('zeka_lang')||'sr';
+let UNITS,ALL_PH,ALL_W;
+function langName(){return LANG_DATA[curLang].name;}
+function langFlag(){return LANG_DATA[curLang].flag;}
+function buildUnits(raw){
+  return raw.map(u=>({...u,words:u.w.map((w,i)=>({id:u.id*100+i,s:w[0],l:w[1],e:w[2],em:w[3]})),phrases:(u.p||[]).map(p=>({tl:p[0],en:p[1]}))}));
+}
+function setLang(code){
+  curLang=code;localStorage.setItem('zeka_lang',code);
+  const ld=LANG_DATA[code];
+  UNITS=buildUnits(ld.units);ALL_PH=UNITS.flatMap(u=>u.phrases);ALL_W=UNITS.flatMap(u=>u.words);
+}
+setLang(curLang);// Initialize on load
+
+function pickLang(code){
+  setLang(code);
+  document.querySelectorAll('.lang-flag').forEach(b=>{b.classList.toggle('sel',b.title===LANG_DATA[code].name);});
+  document.getElementById('sp-sub').textContent='Learn '+langName()+' · A1 to C1';
+}
 
 // ═══════════════ SPELLING NORMALIZATION (US/UK) ═══════════════
 function normEN(s){
@@ -1011,22 +1505,29 @@ function applyStateData(p){
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
 }
 
+function fbLangDoc(){return fbDb.collection('users').doc(fbUser.uid).collection('langs').doc(curLang);}
+
 async function fbLoad(){
   if(!fbUser)return;
   try{
-    const doc=await fbDb.collection('users').doc(fbUser.uid).get();
+    // Migrate old root-level data to per-language subcollection
+    const oldDoc=await fbDb.collection('users').doc(fbUser.uid).get();
+    if(oldDoc.exists&&oldDoc.data().elo){
+      const srRef=fbDb.collection('users').doc(fbUser.uid).collection('langs').doc('sr');
+      const srDoc=await srRef.get();
+      if(!srDoc.exists){await srRef.set(oldDoc.data());}
+    }
+    const doc=await fbLangDoc().get();
     if(doc.exists){
       const cloud=doc.data();
       const local=getStateData();
-      // Use whichever has more progress (higher XP)
       if(cloud.xp>=local.xp){
         applyStateData(cloud);
-        saveLocal();// Update localStorage with cloud data
+        saveLocal();
       }else{
-        fbSaveCloud();// Push local (better) data to cloud
+        fbSaveCloud();
       }
     }else{
-      // No cloud data yet — push local data up
       fbSaveCloud();
     }
   }catch(e){console.log('Cloud load failed, using local');}
@@ -1038,19 +1539,23 @@ function fbSaveCloud(){
   _fbSaveTimer=setTimeout(()=>{
     const data=getStateData();
     data.updatedAt=firebase.firestore.FieldValue.serverTimestamp();
-    fbDb.collection('users').doc(fbUser.uid).set(data).catch(()=>{});
+    fbLangDoc().set(data).catch(()=>{});
   },500);
 }
 
 fbAuth.onAuthStateChanged(async user=>{
   fbUser=user;
   if(user){
+    load();// Load local state for current language first
     await fbLoad();
     S.goHome();
   }else{
     document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
     document.getElementById('splash').classList.add('act');
     showSplashReady();
+    // Highlight current language on splash
+    document.querySelectorAll('.lang-flag').forEach(b=>{b.classList.toggle('sel',b.title===langName());});
+    document.getElementById('sp-sub').textContent='Learn '+langName()+' · A1 to C1';
   }
   updateSyncUI();
 });
@@ -1085,11 +1590,15 @@ function updateSyncUI(){
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null};
 
-function load(){try{const s=localStorage.getItem('srb_v2');if(s){
+function load(){try{
+  // Migrate old single-language key to new per-language format
+  const old=localStorage.getItem('srb_v2');
+  if(old&&!localStorage.getItem('zeka_sr')){localStorage.setItem('zeka_sr',old);localStorage.removeItem('srb_v2');}
+  const s=localStorage.getItem('zeka_'+curLang);if(s){
   applyStateData(JSON.parse(s));
 }}catch(e){}}
 
-function saveLocal(){try{localStorage.setItem('srb_v2',JSON.stringify(getStateData()));
+function saveLocal(){try{localStorage.setItem('zeka_'+curLang,JSON.stringify(getStateData()));
 }catch(e){}}
 
 function save(){
@@ -1122,10 +1631,23 @@ goScr(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'))
 
 goHome(){this.updH();this.rPath();this.goScr('home');},
 
+switchLang(){
+  const codes=Object.keys(LANG_DATA);
+  const next=codes[(codes.indexOf(curLang)+1)%codes.length];
+  setLang(next);
+  // Reset state for new language
+  st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};
+  load();// Load saved progress for this language
+  if(fbUser)fbLoad();
+  this.goHome();
+},
+
 updH(){document.getElementById('h-elo').textContent=st.elo;
   document.getElementById('h-str').textContent=st.streak;
   document.getElementById('h-xp').textContent=st.xp;
-  document.getElementById('h-hrt').textContent=st.hearts;},
+  document.getElementById('h-hrt').textContent=st.hearts;
+  document.getElementById('h-lang').textContent=langFlag();
+  document.getElementById('h-lang').title=langName();},
 
 rPath(){
   const el=document.getElementById('hscr');let h='';
@@ -1193,7 +1715,7 @@ mkMC(words,dir){
     distr=[...distr,...this.pk(gPool,3-distr.length).map(x=>dir==='se'?x.e:x.l)];
   }
   const opts=this.sh([correct,...distr]);
-  return{type:'mc',dir,word:w,opts,ci:opts.indexOf(correct),prompt:dir==='se'?'What does this mean?':'How do you say this in Serbian?'};
+  return{type:'mc',dir,word:w,opts,ci:opts.indexOf(correct),prompt:dir==='se'?'What does this mean?':'How do you say this in '+langName()+'?'};
 },
 
 mkEm(words){
@@ -1238,8 +1760,8 @@ mkPh(unit){
 // PHRASE
 rPh(b,ex){
   let h=`<div class="lcont"><div class="exq">What does this mean?</div>
-    <div class="phbox"><div class="phbox-lbl">Read in Serbian</div>
-    <div class="phbox-sr">${ex.phrase.sr}</div></div><div class="opts">`;
+    <div class="phbox"><div class="phbox-lbl">Read in ${langName()}</div>
+    <div class="phbox-sr">${ex.phrase.tl}</div></div><div class="opts">`;
   ex.opts.forEach((o,i)=>{h+=`<button class="ob" data-i="${i}" onclick="S.selO(${i})"><span class="on">${i+1}</span><span>${o}</span></button>`;});
   h+=`</div></div>${this.bb()}`;b.innerHTML=h;
 },
@@ -1307,7 +1829,7 @@ rMa(b,ex){
   st.matchSt={sel:null,selT:null,matched:[],err:0};
   const sC=this.sh(ex.pairs.map(p=>({t:p.l,k:p.id}))),eC=this.sh(ex.pairs.map(p=>({t:p.e,k:p.id})));
   let h=`<div class="lcont"><div class="exq">Match the pairs</div>
-    <div class="exsub">Tap Serbian, then its English match</div><div class="mcon">`;
+    <div class="exsub">Tap ${langName()}, then its English match</div><div class="mcon">`;
   sC.forEach(it=>{h+=`<button class="mb" data-t="s" data-k="${it.k}" onclick="S.mTap(this)">${it.t}</button>`;});
   eC.forEach(it=>{h+=`<button class="mb" data-t="e" data-k="${it.k}" onclick="S.mTap(this)">${it.t}</button>`;});
   h+=`</div></div><div class="fbar" id="fbar" style="display:none"></div>`;b.innerHTML=h;
@@ -1365,7 +1887,7 @@ onTy(){const v=document.getElementById('tinp').value.trim();
 // WORD BANK
 rWB(b,ex){
   st.wbAns=[];st.wbUsed=new Set();
-  let h=`<div class="lcont"><div class="exq">Translate to Serbian</div>
+  let h=`<div class="lcont"><div class="exq">Translate to ${langName()}</div>
     <div class="exsub">"${ex.word.e}"</div><div class="wba" id="wba"></div><div class="wbc" id="wbc">`;
   ex.chips.forEach((c,i)=>{h+=`<button class="wch" data-i="${i}" onclick="S.wbA(${i})">${c}</button>`;});
   h+=`</div></div>${this.bb()}`;b.innerHTML=h;
@@ -1567,7 +2089,7 @@ goProfile(){
     {i:'🔥',n:'On Fire',d:'3-day streak',u:st.streak>=3},{i:'💯',n:'Century',d:'Earn 100 XP',u:st.xp>=100},
     {i:'📚',n:'Scholar',d:'Complete 10 units',u:st.completed.length>=10},
     {i:'🏆',n:'Polyglot',d:'Complete 20 units',u:st.completed.length>=20},
-    {i:'👑',n:'Master',d:'All 37 units done',u:st.completed.length>=37},
+    {i:'👑',n:'Master',d:'All '+UNITS.length+' units done',u:st.completed.length>=UNITS.length},
     {i:'⚡',n:'Lightning',d:'Earn 500 XP',u:st.xp>=500},
     {i:'🧠',n:'Big Brain',d:'Reach ELO 1500',u:st.elo>=1500},
     {i:'🌟',n:'Expert',d:'Reach ELO 1900',u:st.elo>=1900}];
