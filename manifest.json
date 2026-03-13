@@ -2,7 +2,7 @@
   "name": "Zeka — Language Learning",
   "short_name": "Zeka",
   "description": "Learn languages with Zeka, your friendly bunny language tutor",
-  "start_url": "serbian-learning-app.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#7EC8E3",
