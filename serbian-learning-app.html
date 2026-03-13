@@ -1372,10 +1372,31 @@ function langName(){return LANG_DATA[curLang].name;}
 function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLang].flag+'.png" style="height:18px;vertical-align:middle">';}
 
 // ═══════════════ SPEECH SYNTHESIS ═══════════════
-const SPEECH_LOCALE={sr:'sr',it:'it-IT',en:'en-US'};
+const SPEECH_LOCALE={sr:'ru-RU',it:'it-IT',en:'en-US'};
 // Fallback chain: if no voice for a language, try these (closest phonetic match)
-const SPEECH_FALLBACK={sr:['hr','bs','pl','ru']};
+const SPEECH_FALLBACK={ru:['ru'],sr:['ru','hr','bs','pl']};
 if(window.speechSynthesis)speechSynthesis.getVoices();
+// Serbian Latin→Cyrillic transliteration for accurate TTS pronunciation
+const _SR_CYR={lj:'љ',nj:'њ',dž:'џ',Lj:'Љ',Nj:'Њ',Dž:'Џ',LJ:'Љ',NJ:'Њ',DŽ:'Џ',
+a:'а',b:'б',v:'в',g:'г',d:'д',đ:'ђ',e:'е',ž:'ж',z:'з',i:'и',j:'ј',k:'к',l:'л',m:'м',n:'н',o:'о',p:'п',r:'р',s:'с',t:'т',ć:'ћ',u:'у',f:'ф',h:'х',c:'ц',č:'ч',š:'ш',
+A:'А',B:'Б',V:'В',G:'Г',D:'Д',Đ:'Ђ',E:'Е',Ž:'Ж',Z:'З',I:'И',J:'Ј',K:'К',L:'Л',M:'М',N:'Н',O:'О',P:'П',R:'Р',S:'С',T:'Т',Ć:'Ћ',U:'У',F:'Ф',H:'Х',C:'Ц',Č:'Ч',Š:'Ш'};
+function toCyr(text){
+  let r='';
+  for(let i=0;i<text.length;i++){
+    const di=text.substring(i,i+2);
+    if(_SR_CYR[di]){r+=_SR_CYR[di];i++;continue;}
+    const ch=text[i];
+    r+=_SR_CYR[ch]||ch;
+  }
+  return r;
+}
+// For Serbian: use Cyrillic for speech (Russian voice handles it well)
+function speakWord(w){
+  if(curLang==='sr'){speak(w.s||toCyr(w.l));}else{speak(w.l);}
+}
+function speakTL(text){
+  if(curLang==='sr'){speak(toCyr(text));}else{speak(text);}
+}
 function speak(text,lang){
   if(!window.speechSynthesis)return;
   speechSynthesis.cancel();
@@ -1404,6 +1425,11 @@ function spkBtn(text,lang,cls){
   const safe=text.replace(/'/g,"\\'").replace(/"/g,'&quot;');
   const args=lang?`'${safe}','${lang}'`:`'${safe}'`;
   return `<button class="spk-btn${c}" onclick="event.stopPropagation();speak(${args})" title="Listen">🔊</button>`;
+}
+// Button that speaks the best pronunciation text for a word (Cyrillic for Serbian)
+function spkWBtn(w,cls){
+  const text=curLang==='sr'?(w.s||toCyr(w.l)):w.l;
+  return spkBtn(text,'',cls);
 }
 
 function buildUnits(raw){
@@ -1799,10 +1825,10 @@ mkPh(unit){
 rPh(b,ex){
   let h=`<div class="lcont"><div class="exq">What does this mean?</div>
     <div class="phbox"><div class="phbox-lbl">Read in ${langName()}</div>
-    <div class="phbox-sr">${ex.phrase.tl} ${spkBtn(ex.phrase.tl)}</div></div><div class="opts">`;
+    <div class="phbox-sr">${ex.phrase.tl} ${spkBtn(curLang==='sr'?toCyr(ex.phrase.tl):ex.phrase.tl)}</div></div><div class="opts">`;
   ex.opts.forEach((o,i)=>{h+=`<button class="ob" data-i="${i}" onclick="S.selO(${i})"><span class="on">${i+1}</span><span>${o}</span></button>`;});
   h+=`</div></div>${this.bb()}`;b.innerHTML=h;
-  speak(ex.phrase.tl);
+  speakTL(ex.phrase.tl);
 },
 
 updL(){
@@ -1815,7 +1841,7 @@ showIntro(){
   const u=st.unit,b=document.getElementById('lbody');
   let h=`<div class="ibox"><div class="itit">${u.ic} ${u.t}</div><div class="isub">${u.lv} &middot; ${u.d}</div>`;
   u.words.forEach(w=>{h+=`<div class="vcard"><div class="vem">${w.em}</div><div class="vinf">
-    <div class="vs">${w.l} ${spkBtn(w.l,'','spk-sm')}</div><div class="ve">${w.e}</div></div></div>`;});
+    <div class="vs">${w.l} ${spkWBtn(w,'spk-sm')}</div><div class="ve">${w.e}</div></div></div>`;});
   h+=`<button class="igo" onclick="S.nxt()">Start Lesson</button></div>`;b.innerHTML=h;
 },
 
@@ -1837,13 +1863,13 @@ rEx(){
 rMC(b,ex){
   const w=ex.word,isSE=ex.dir==='se';
   const shown=isSE?w.l:w.e;
-  const spk=isSE?spkBtn(w.l):'';
+  const spk=isSE?spkWBtn(w):'';
   let h=`<div class="lcont"><div class="exq">${ex.prompt}</div>
     <div class="wordbox"><div class="wb-em">${isSE?'🔤':w.em}</div><div class="wb-txt">
     <div class="wb-cyr">${shown}</div></div>${spk}</div><div class="opts">`;
   ex.opts.forEach((o,i)=>{h+=`<button class="ob" data-i="${i}" onclick="S.selO(${i})"><span class="on">${i+1}</span><span>${o}</span></button>`;});
   h+=`</div></div>${this.bb()}`;b.innerHTML=h;
-  if(isSE)speak(w.l);
+  if(isSE)speakWord(w);
 },
 
 selO(i){if(st.answered)return;sCl();st.selIdx=i;
@@ -1856,10 +1882,10 @@ rEm(b,ex){
   const w=ex.word;
   let h=`<div class="lcont"><div class="exq">Select the correct meaning</div>
     <div class="wordbox"><div class="wb-em">🔤</div><div class="wb-txt">
-    <div class="wb-cyr">${w.l}</div></div>${spkBtn(w.l)}</div><div class="egrid">`;
+    <div class="wb-cyr">${w.l}</div></div>${spkWBtn(w)}</div><div class="egrid">`;
   ex.opts.forEach((o,i)=>{h+=`<button class="eopt" data-i="${i}" onclick="S.selE(${i})"><span class="ee">${o.em}</span><span class="el">${o.e}</span></button>`;});
   h+=`</div></div>${this.bb()}`;b.innerHTML=h;
-  speak(w.l);
+  speakWord(w);
 },
 
 selE(i){if(st.answered)return;sCl();st.selIdx=i;
@@ -1916,11 +1942,11 @@ rTy(b,ex){
   const w=ex.word;
   let h=`<div class="lcont"><div class="exq">Write this in English</div>
     <div class="wordbox"><div class="wb-em">🔤</div><div class="wb-txt">
-    <div class="wb-cyr">${w.l}</div></div>${spkBtn(w.l)}</div>
+    <div class="wb-cyr">${w.l}</div></div>${spkWBtn(w)}</div>
     <input type="text" class="tinp" id="tinp" placeholder="Type in English..." autocomplete="off" autocapitalize="off" oninput="S.onTy()">
     <div class="thint">Type the English translation</div></div>${this.bb()}`;
   b.innerHTML=h;setTimeout(()=>document.getElementById('tinp').focus(),200);
-  speak(w.l);
+  speakWord(w);
 },
 
 onTy(){const v=document.getElementById('tinp').value.trim();
