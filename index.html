@@ -1375,41 +1375,23 @@ function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLan
 const SPEECH_LOCALE={it:'it-IT',en:'en-US'};
 const LINGVA_HOST='https://lingva.ml';
 const LINGVA_LANGS=new Set(['sr','it']);
-let _spkCtx=null;
-let _ttsDb=null;
+let _spkAudio=null;
 if(window.speechSynthesis)speechSynthesis.getVoices();
-
-// IndexedDB cache for Lingva audio — each word fetched once, then plays from cache
-function _openTtsDb(){
-  if(_ttsDb)return Promise.resolve(_ttsDb);
-  return new Promise((res,rej)=>{
-    const req=indexedDB.open('zeka_tts',1);
-    req.onupgradeneeded=()=>req.result.createObjectStore('audio');
-    req.onsuccess=()=>{_ttsDb=req.result;res(_ttsDb);};
-    req.onerror=()=>rej(req.error);
-  });
-}
-function _ttsGet(key){
-  return _openTtsDb().then(db=>new Promise((res,rej)=>{
-    const tx=db.transaction('audio','readonly');
-    const req=tx.objectStore('audio').get(key);
-    req.onsuccess=()=>res(req.result);
-    req.onerror=()=>rej(req.error);
-  }));
-}
-function _ttsPut(key,val){
-  return _openTtsDb().then(db=>{
-    const tx=db.transaction('audio','readwrite');
-    tx.objectStore('audio').put(val,key);
-  }).catch(()=>{});
-}
 
 function speak(text,lang){
   const code=lang||(LINGVA_LANGS.has(curLang)?curLang:null);
   const shortCode=code?code.split('-')[0]:null;
+  // Use pre-downloaded MP3 files for Lingva languages
   if(shortCode&&LINGVA_LANGS.has(shortCode)){
-    _speakLingva(text,shortCode);return;
+    const enc=encodeURIComponent(text);
+    const url=`audio/${shortCode}/${enc}.mp3`;
+    if(_spkAudio){_spkAudio.pause();_spkAudio.currentTime=0;}
+    else{_spkAudio=new Audio();}
+    _spkAudio.src=url;
+    _spkAudio.play().catch(()=>{});
+    return;
   }
+  // Fallback: Web Speech API for other languages (English)
   if(!window.speechSynthesis)return;
   speechSynthesis.cancel();
   const locale=code||SPEECH_LOCALE[curLang]||curLang;
@@ -1420,42 +1402,6 @@ function speak(text,lang){
   u.lang=v?v.lang:locale;u.rate=0.85;
   if(v)u.voice=v;
   speechSynthesis.speak(u);
-}
-
-function _playAudioBytes(bytes){
-  if(!_spkCtx)_spkCtx=new AudioContext();
-  if(_spkCtx.state==='suspended')_spkCtx.resume();
-  const buf=bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength);
-  return _spkCtx.decodeAudioData(buf).then(abuf=>{
-    const src=_spkCtx.createBufferSource();
-    src.buffer=abuf;src.connect(_spkCtx.destination);src.start();
-  });
-}
-
-function _speakLingva(text,lang){
-  const key=lang+':'+text;
-  // 1. Try IndexedDB cache
-  _ttsGet(key).then(cached=>{
-    if(cached){return _playAudioBytes(new Uint8Array(cached));}
-    // 2. Try pre-downloaded audio from server
-    const enc=encodeURIComponent(text);
-    return fetch(`audio/${lang}/${enc}.mp3`).then(r=>{
-      if(r.ok)return r.arrayBuffer().then(ab=>{
-        const bytes=new Uint8Array(ab);
-        _ttsPut(key,Array.from(bytes));
-        return _playAudioBytes(bytes);
-      });
-      // 3. Fallback to Lingva API
-      return fetch(`${LINGVA_HOST}/api/v1/audio/${lang}/${enc}`)
-        .then(r=>r.json())
-        .then(d=>{
-          if(!d.audio||!d.audio.length)return;
-          const bytes=new Uint8Array(d.audio);
-          _ttsPut(key,Array.from(bytes));
-          return _playAudioBytes(bytes);
-        });
-    });
-  }).catch(()=>{});
 }
 function speakWord(w){speak(w.l);}
 function speakTL(text){speak(text);}
