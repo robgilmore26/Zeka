@@ -237,7 +237,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .psc-i{font-size:26px;margin-bottom:4px}
 .psc-v{font-size:22px;font-weight:800;color:var(--g7)}
 .psc-l{font-size:11px;color:var(--g5);font-weight:700;text-transform:uppercase;margin-top:1px}
-.pach{padding:8px 22px 100px;overflow-y:auto}
+.pach{padding:8px 22px 20px}
 .pach::-webkit-scrollbar{display:none}
 .psect{font-size:16px;font-weight:800;color:var(--g7);margin-bottom:10px}
 .arow{display:flex;align-items:center;gap:12px;padding:12px;border:2px solid var(--g2);border-radius:14px;margin-bottom:8px}
@@ -323,6 +323,66 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
 .st-i img.emoji{height:18px;width:18px}
 .arow-i img.emoji{height:28px;width:28px}
 .lbub img.emoji{height:26px;width:26px}
+
+/* USERNAME & FRIENDS */
+.prof-user{font-size:22px;font-weight:800;color:#fff;margin-top:6px}
+.prof-user::before{content:'@';opacity:.7}
+.prof-code{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700;font-family:'Courier New',monospace;color:rgba(255,255,255,.9);cursor:pointer;margin-top:8px;transition:background .2s}
+.prof-code:hover{background:rgba(255,255,255,.25)}
+.prof-code:active{background:rgba(255,255,255,.3)}
+.set-user{padding:16px 22px;text-align:center}
+.set-user-lbl{font-size:16px;font-weight:800;color:var(--g7);margin-bottom:4px}
+.set-user-hint{font-size:12px;color:var(--g5);margin-bottom:12px}
+.set-user-row{display:flex;gap:8px}
+.set-user-row input{flex:1;padding:12px 14px;border:2px solid var(--g3);border-radius:12px;font-size:15px;font-family:var(--font);font-weight:600;color:var(--g7);outline:none;transition:border-color .2s}
+.set-user-row input:focus{border-color:var(--blue)}
+.set-user-row input.err{border-color:var(--red)}
+.set-user-err{font-size:12px;color:var(--red);margin-top:6px;min-height:16px}
+.friend-list{padding:0 22px 8px}
+.friend-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.friend-hdr-t{font-size:16px;font-weight:800;color:var(--g7)}
+.friend-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:2px solid var(--g2);border-radius:14px;margin-bottom:8px}
+.friend-item .fi-av{width:36px;height:36px;border-radius:50%;background:var(--g2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.friend-item .fi-inf{flex:1;min-width:0}
+.friend-item .fi-name{font-size:14px;font-weight:800;color:var(--g7)}
+.friend-item .fi-name::before{content:'@';opacity:.5}
+.friend-item .fi-meta{font-size:11px;color:var(--g5);display:flex;align-items:center;gap:6px;margin-top:1px}
+.friend-item .fi-elo{font-size:12px;font-weight:800;color:var(--purple);white-space:nowrap}
+.freq-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:2px solid var(--orange);border-radius:14px;margin-bottom:8px;background:#fff8f0}
+.freq-item .fi-inf{flex:1;min-width:0}
+.freq-item .fi-name{font-size:14px;font-weight:700;color:var(--g7)}
+.freq-item .fi-name::before{content:'@';opacity:.5}
+.freq-item .fi-time{font-size:11px;color:var(--g5)}
+.freq-btns{display:flex;gap:6px;flex-shrink:0}
+.freq-btns button{border:none;border-radius:10px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer;transition:.1s}
+.freq-btns button:active{transform:scale(.95)}
+.freq-btns .fb-acc{background:var(--green);color:#fff}
+.freq-btns .fb-dec{background:var(--g2);color:var(--g5)}
+.prof-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:12px;font-size:13px;font-weight:800;cursor:pointer;transition:.1s;background:var(--green);color:#fff;box-shadow:0 3px 0 var(--green-d)}
+.prof-btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--green-d)}
+.prof-btn.sec{background:var(--blue);box-shadow:0 3px 0 var(--blue-d)}
+.friend-modal{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn .2s}
+.friend-modal-c{background:#fff;border-radius:20px;padding:24px;margin:20px;width:100%;max-width:340px;animation:popIn .3s ease;position:relative}
+.friend-modal-x{position:absolute;top:12px;right:16px;font-size:20px;color:var(--g4);cursor:pointer;border:none;background:none;line-height:1}
+.friend-modal-t{font-size:18px;font-weight:800;color:var(--g7);text-align:center;margin-bottom:14px}
+.friend-tabs{display:flex;border-radius:12px;overflow:hidden;border:2px solid var(--g2);margin-bottom:16px}
+.friend-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:800;cursor:pointer;border:none;background:var(--w);color:var(--g5);transition:.2s}
+.friend-tab.act{background:var(--blue);color:#fff}
+.friend-search{display:flex;gap:8px;margin-bottom:12px}
+.friend-search input{flex:1;padding:10px 12px;border:2px solid var(--g3);border-radius:12px;font-size:14px;font-family:var(--font);font-weight:600;color:var(--g7);outline:none}
+.friend-search input:focus{border-color:var(--blue)}
+.fm-result{padding:10px 12px;border:2px solid var(--g2);border-radius:12px;display:flex;align-items:center;gap:10px}
+.fm-result .fmr-name{flex:1;font-size:14px;font-weight:800;color:var(--g7)}
+.fm-result .fmr-name::before{content:'@';opacity:.5}
+.fm-result .fmr-elo{font-size:12px;font-weight:700;color:var(--purple)}
+.fm-code-sec{text-align:center}
+.fm-code-sec .fm-your{font-size:12px;color:var(--g5);margin-bottom:4px}
+.fm-code-sec .fm-code-val{font-size:22px;font-weight:800;font-family:'Courier New',monospace;color:var(--g7);letter-spacing:2px;margin-bottom:12px}
+.fm-code-sec .fm-sep{font-size:12px;color:var(--g4);margin:12px 0 10px}
+.fm-msg{font-size:13px;font-weight:600;padding:8px;border-radius:10px;text-align:center;margin-top:8px}
+.fm-msg.ok{background:#d7ffb8;color:var(--green-d)}
+.fm-msg.err{background:#ffd6d6;color:var(--red-d)}
+.fm-msg.inf{background:#ddf4ff;color:var(--blue-d)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@jdecked/twemoji@15.1.0/dist/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
@@ -399,28 +459,35 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   <div class="ptop">
     <div class="pav" id="p-avatar"><img src="icon-192.png" style="width:60px;height:60px;border-radius:16px" alt="Zeka"></div>
     <div class="pnm" id="p-name">Robby</div>
+    <div id="p-username-display"></div>
     <div class="p-email" id="p-email"></div>
     <div class="pjn" id="p-lvl">Novice</div>
     <div class="pelo" id="p-elo">1000</div>
     <div class="pelbl">ELO Rating</div>
+    <div id="p-fcode-display"></div>
   </div>
+  <div style="flex:1;overflow-y:auto;padding-bottom:80px;-webkit-overflow-scrolling:touch">
+  <div id="p-set-user"></div>
   <div class="psg">
     <div class="psc"><div class="psc-i">🔥</div><div class="psc-v" id="p-str">0</div><div class="psc-l">Streak</div></div>
     <div class="psc"><div class="psc-i">⚡</div><div class="psc-v" id="p-xp">0</div><div class="psc-l">Total XP</div></div>
     <div class="psc"><div class="psc-i">📚</div><div class="psc-v" id="p-les">0</div><div class="psc-l">Lessons</div></div>
     <div class="psc"><div class="psc-i">🏆</div><div class="psc-v" id="p-wrd">0</div><div class="psc-l">Words</div></div>
   </div>
+  <div id="p-friends"></div>
   <div class="pach" id="p-ach"></div>
   <div class="sync-sec">
     <button class="sync-btn" id="sync-btn" onclick="fbSignOut()" style="display:none">Sign Out</button>
     <div id="g-signin-prof" style="display:flex;justify-content:center"></div>
     <div class="sync-status" id="sync-status"></div>
   </div>
+  </div>
   <div class="bnav bnav-lt">
     <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i">🏠</span><span class="ni-l">Learn</span></button>
     <button class="ni ni-lt" onclick="S.goReview()"><span class="ni-i">📝</span><span class="ni-l">Review</span></button>
     <button class="ni ni-lt act" onclick="S.goProfile()"><span class="ni-i">👤</span><span class="ni-l">Profile</span></button>
   </div>
+  <div id="friend-modal-wrap"></div>
 </div>
 
 <div class="hind"></div>
@@ -1634,6 +1701,172 @@ function updateSyncUI(){
   }
 }
 
+// ═══════════════ USERNAME & FRIENDS ═══════════════
+async function fbSetUsername(username){
+  if(!fbUser)return{ok:false,error:'Not signed in'};
+  username=username.trim().toLowerCase();
+  if(!/^[a-z0-9_]{3,20}$/.test(username))return{ok:false,error:'3-20 chars, letters, numbers, underscores only'};
+  try{
+    const uDoc=await fbDb.collection('usernames').doc(username).get();
+    if(uDoc.exists){
+      if(uDoc.data().uid===fbUser.uid)return{ok:true};
+      return{ok:false,error:'Username is already taken'};
+    }
+    // Check if user had a previous username and delete it
+    const myDoc=await fbUserDoc().get();
+    const myData=myDoc.exists?myDoc.data():{};
+    if(myData.username&&myData.username!==username){
+      await fbDb.collection('usernames').doc(myData.username).delete().catch(()=>{});
+    }
+    const now=firebase.firestore.FieldValue.serverTimestamp();
+    const batch=fbDb.batch();
+    batch.set(fbDb.collection('usernames').doc(username),{uid:fbUser.uid,createdAt:now});
+    batch.set(fbUserDoc(),{username:username,usernameSetAt:now},{merge:true});
+    await batch.commit();
+    return{ok:true};
+  }catch(e){return{ok:false,error:'Failed to save username'};}
+}
+
+async function fbCheckUsername(username){
+  username=username.trim().toLowerCase();
+  if(!/^[a-z0-9_]{3,20}$/.test(username))return false;
+  try{
+    const doc=await fbDb.collection('usernames').doc(username).get();
+    if(!doc.exists)return true;
+    if(doc.data().uid===fbUser.uid)return true;
+    return false;
+  }catch(e){return false;}
+}
+
+async function fbGetFriendCode(){
+  if(!fbUser)return null;
+  try{
+    const doc=await fbUserDoc().get();
+    const data=doc.exists?doc.data():{};
+    if(data.friendCode)return data.friendCode;
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code='';
+    for(let i=0;i<4;i++)code+=chars[Math.floor(Math.random()*chars.length)];
+    code='ZK-'+code;
+    const now=firebase.firestore.FieldValue.serverTimestamp();
+    const batch=fbDb.batch();
+    batch.set(fbDb.collection('friendCodes').doc(code),{uid:fbUser.uid,createdAt:now});
+    batch.set(fbUserDoc(),{friendCode:code},{merge:true});
+    await batch.commit();
+    return code;
+  }catch(e){return null;}
+}
+
+async function fbSendFriendRequest(targetUid){
+  if(!fbUser||targetUid===fbUser.uid)return{ok:false,error:'Cannot add yourself'};
+  try{
+    const myDoc=await fbUserDoc().get();
+    const myData=myDoc.exists?myDoc.data():{};
+    const targetDoc=await fbDb.collection('users').doc(targetUid).get();
+    const targetData=targetDoc.exists?targetDoc.data():{};
+    if(myData.friends&&myData.friends.includes(targetUid))return{ok:false,error:'Already friends'};
+    // Check if request already exists
+    const existing=await fbDb.collection('friendRequests').doc(targetUid).collection('incoming').doc(fbUser.uid).get();
+    if(existing.exists)return{ok:false,error:'Request already sent'};
+    const now=firebase.firestore.FieldValue.serverTimestamp();
+    const batch=fbDb.batch();
+    batch.set(fbDb.collection('friendRequests').doc(targetUid).collection('incoming').doc(fbUser.uid),
+      {from:fbUser.uid,fromUsername:myData.username||'unknown',timestamp:now});
+    batch.set(fbDb.collection('friendRequests').doc(fbUser.uid).collection('outgoing').doc(targetUid),
+      {to:targetUid,toUsername:targetData.username||'unknown',timestamp:now});
+    await batch.commit();
+    return{ok:true};
+  }catch(e){return{ok:false,error:'Failed to send request'};}
+}
+
+async function fbAcceptFriend(fromUid){
+  if(!fbUser)return;
+  try{
+    const batch=fbDb.batch();
+    batch.update(fbUserDoc(),{friends:firebase.firestore.FieldValue.arrayUnion(fromUid)});
+    batch.update(fbDb.collection('users').doc(fromUid),{friends:firebase.firestore.FieldValue.arrayUnion(fbUser.uid)});
+    batch.delete(fbDb.collection('friendRequests').doc(fbUser.uid).collection('incoming').doc(fromUid));
+    batch.delete(fbDb.collection('friendRequests').doc(fromUid).collection('outgoing').doc(fbUser.uid));
+    await batch.commit();
+  }catch(e){console.log('Accept friend failed',e);}
+}
+
+async function fbDeclineFriend(fromUid){
+  if(!fbUser)return;
+  try{
+    const batch=fbDb.batch();
+    batch.delete(fbDb.collection('friendRequests').doc(fbUser.uid).collection('incoming').doc(fromUid));
+    batch.delete(fbDb.collection('friendRequests').doc(fromUid).collection('outgoing').doc(fbUser.uid));
+    await batch.commit();
+  }catch(e){console.log('Decline friend failed',e);}
+}
+
+async function fbSearchUser(username){
+  username=username.trim().toLowerCase();
+  if(!username)return null;
+  try{
+    const doc=await fbDb.collection('usernames').doc(username).get();
+    if(!doc.exists)return null;
+    return{uid:doc.data().uid,username:username};
+  }catch(e){return null;}
+}
+
+async function fbAddByCode(code){
+  code=code.trim().toUpperCase();
+  if(!code)return{ok:false,error:'Enter a code'};
+  try{
+    const doc=await fbDb.collection('friendCodes').doc(code).get();
+    if(!doc.exists)return{ok:false,error:'Invalid friend code'};
+    const targetUid=doc.data().uid;
+    if(targetUid===fbUser.uid)return{ok:false,error:'That is your own code'};
+    return await fbSendFriendRequest(targetUid);
+  }catch(e){return{ok:false,error:'Failed to add by code'};}
+}
+
+async function fbGetFriends(){
+  if(!fbUser)return[];
+  try{
+    const doc=await fbUserDoc().get();
+    const data=doc.exists?doc.data():{};
+    const friendUids=data.friends||[];
+    if(!friendUids.length)return[];
+    const friends=[];
+    for(const fid of friendUids){
+      try{
+        const fd=await fbDb.collection('users').doc(fid).get();
+        if(fd.exists){
+          const fdata=fd.data();
+          // Find the language with most XP
+          let topLang=curLang,topXp=0;
+          if(fdata.langs){
+            for(const[lk,lv] of Object.entries(fdata.langs)){
+              if(lv.xp>topXp){topXp=lv.xp;topLang=lk;}
+            }
+          }
+          const langElo=fdata.langs&&fdata.langs[topLang]?fdata.langs[topLang].elo:1000;
+          friends.push({uid:fid,username:fdata.username||'user',elo:langElo,lang:topLang,
+            flag:LANG_DATA[topLang]?LANG_DATA[topLang].flag:'rs'});
+        }
+      }catch(e){}
+    }
+    friends.sort((a,b)=>b.elo-a.elo);
+    return friends;
+  }catch(e){return[];}
+}
+
+async function fbGetPendingRequests(){
+  if(!fbUser)return[];
+  try{
+    const snap=await fbDb.collection('friendRequests').doc(fbUser.uid).collection('incoming').get();
+    const reqs=[];
+    snap.forEach(d=>{
+      const data=d.data();
+      reqs.push({uid:d.id,username:data.fromUsername||'user',timestamp:data.timestamp});
+    });
+    return reqs;
+  }catch(e){return[];}
+}
+
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null};
@@ -2130,13 +2363,55 @@ startRandomPractice(){
 },
 toast(msg){const t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'absolute',top:'80px',left:'50%',transform:'translateX(-50%)',background:'rgba(0,0,0,.8)',color:'#fff',padding:'10px 20px',borderRadius:'12px',fontSize:'14px',fontWeight:'700',zIndex:'300',pointerEvents:'none',animation:'eloFloat 2s ease-out forwards'});document.getElementById('scr').appendChild(t);setTimeout(()=>t.remove(),2200);},
 
-goProfile(){
+async goProfile(){
   document.getElementById('p-elo').textContent=st.elo;
   document.getElementById('p-lvl').textContent=ELO.lvl(st.elo);
   document.getElementById('p-str').textContent=st.streak;
   document.getElementById('p-xp').textContent=st.xp;
   document.getElementById('p-les').textContent=st.completed.length;
   document.getElementById('p-wrd').textContent=Object.keys(st.ws).filter(k=>st.ws[k].c>0).length;
+
+  // Username + friend code display
+  const usrDisp=document.getElementById('p-username-display');
+  const fcodeDisp=document.getElementById('p-fcode-display');
+  const setUserEl=document.getElementById('p-set-user');
+  usrDisp.innerHTML='';
+  fcodeDisp.innerHTML='';
+  setUserEl.innerHTML='';
+
+  if(fbUser){
+    try{
+      const doc=await fbUserDoc().get();
+      const data=doc.exists?doc.data():{};
+      if(data.username){
+        usrDisp.innerHTML=`<div class="prof-user">${data.username}</div>`;
+        // Show username change info
+        if(data.usernameSetAt){
+          const setAt=data.usernameSetAt.toDate?data.usernameSetAt.toDate():new Date(data.usernameSetAt);
+          const daysSince=Math.floor((Date.now()-setAt.getTime())/(1000*60*60*24));
+          if(daysSince<30){
+            const daysLeft=30-daysSince;
+            setUserEl.innerHTML=`<div class="set-user"><div class="set-user-hint">You can change your username in ${daysLeft} day${daysLeft===1?'':'s'}</div></div>`;
+          }else{
+            setUserEl.innerHTML=`<div class="set-user"><button class="prof-btn sec" onclick="S.showSetUsername()" style="font-size:12px;padding:6px 14px">Change Username</button></div>`;
+          }
+        }
+        // Friend code
+        const code=await fbGetFriendCode();
+        if(code){
+          fcodeDisp.innerHTML=`<div class="prof-code" onclick="S.copyFriendCode('${code}')" title="Copy friend code">${code} &#128203;</div>`;
+        }
+        // Friends section
+        this._loadFriends();
+      }else{
+        this.showSetUsername();
+      }
+    }catch(e){
+      this.showSetUsername();
+    }
+  }
+
+  // Achievements
   const ach=document.getElementById('p-ach');
   const a=[{i:'🎯',n:'First Lesson',d:'Complete 1 lesson',u:st.completed.length>=1},
     {i:'🔥',n:'On Fire',d:'3-day streak',u:st.streak>=3},{i:'💯',n:'Century',d:'Earn 100 XP',u:st.xp>=100},
@@ -2151,6 +2426,202 @@ goProfile(){
     <div class="arow-n">${x.n}</div><div class="arow-d">${x.d}</div></div><div>${x.u?'✅':'🔒'}</div></div>`).join('');
   this.goScr('prof');
   updateSyncUI();
+},
+
+async _loadFriends(){
+  const el=document.getElementById('p-friends');
+  el.innerHTML='<div class="friend-list" style="text-align:center;color:var(--g4);font-size:13px;padding:16px">Loading friends...</div>';
+  const [friends,pending]=await Promise.all([fbGetFriends(),fbGetPendingRequests()]);
+  let h='<div class="friend-list">';
+  h+=`<div class="friend-hdr"><div class="friend-hdr-t">Friends (${friends.length})</div>
+    <button class="prof-btn" onclick="S.showAddFriend()" style="font-size:12px;padding:6px 14px">+ Add Friend</button></div>`;
+  // Pending requests
+  if(pending.length){
+    h+=`<div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:6px">Pending Requests</div>`;
+    for(const req of pending){
+      h+=`<div class="freq-item">
+        <div class="fi-inf"><div class="fi-name">${req.username}</div>
+        <div class="fi-time">Wants to be your friend</div></div>
+        <div class="freq-btns">
+          <button class="fb-acc" onclick="S.acceptRequest('${req.uid}')">Accept</button>
+          <button class="fb-dec" onclick="S.declineRequest('${req.uid}')">Decline</button>
+        </div></div>`;
+    }
+  }
+  // Friend list
+  if(friends.length){
+    for(const f of friends){
+      const flagImg=LANG_DATA[f.lang]?`<img src="https://flagcdn.com/w40/${LANG_DATA[f.lang].flag}.png" style="height:14px;vertical-align:middle">`:'';
+      h+=`<div class="friend-item">
+        <div class="fi-av">👤</div>
+        <div class="fi-inf"><div class="fi-name">${f.username}</div>
+        <div class="fi-meta">${flagImg} <span>${LANG_DATA[f.lang]?LANG_DATA[f.lang].name:f.lang}</span></div></div>
+        <div class="fi-elo">${f.elo} ELO</div></div>`;
+    }
+  }else if(!pending.length){
+    h+=`<div style="text-align:center;padding:16px;color:var(--g5);font-size:13px">No friends yet. Add friends to see them here!</div>`;
+  }
+  h+='</div>';
+  el.innerHTML=h;
+},
+
+showSetUsername(){
+  const el=document.getElementById('p-set-user');
+  el.innerHTML=`<div class="set-user">
+    <div class="set-user-lbl">Set your username</div>
+    <div class="set-user-hint">3-20 characters: letters, numbers, underscores</div>
+    <div class="set-user-row">
+      <input type="text" id="username-input" placeholder="username" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false">
+      <button class="prof-btn" onclick="S.saveUsername()">Save</button>
+    </div>
+    <div class="set-user-err" id="username-err"></div>
+  </div>`;
+},
+
+async saveUsername(){
+  const inp=document.getElementById('username-input');
+  const errEl=document.getElementById('username-err');
+  if(!inp)return;
+  const val=inp.value.trim().toLowerCase();
+  if(!/^[a-z0-9_]{3,20}$/.test(val)){
+    errEl.textContent='3-20 chars: letters, numbers, underscores only';
+    inp.classList.add('err');
+    return;
+  }
+  inp.classList.remove('err');
+  errEl.textContent='Saving...';
+  const result=await fbSetUsername(val);
+  if(result.ok){
+    errEl.textContent='';
+    this.goProfile();
+  }else{
+    errEl.textContent=result.error;
+    inp.classList.add('err');
+  }
+},
+
+showAddFriend(){
+  const wrap=document.getElementById('friend-modal-wrap');
+  wrap.innerHTML=`<div class="friend-modal" onclick="if(event.target===this)S.closeAddFriend()">
+    <div class="friend-modal-c">
+      <button class="friend-modal-x" onclick="S.closeAddFriend()">&#10005;</button>
+      <div class="friend-modal-t">Add a Friend</div>
+      <div class="friend-tabs">
+        <button class="friend-tab act" id="ft-search" onclick="S.switchFriendTab('search')">Search</button>
+        <button class="friend-tab" id="ft-code" onclick="S.switchFriendTab('code')">Friend Code</button>
+      </div>
+      <div id="fm-content"></div>
+    </div>
+  </div>`;
+  this.switchFriendTab('search');
+},
+
+closeAddFriend(){
+  document.getElementById('friend-modal-wrap').innerHTML='';
+},
+
+switchFriendTab(tab){
+  const ts=document.getElementById('ft-search');
+  const tc=document.getElementById('ft-code');
+  const content=document.getElementById('fm-content');
+  if(!ts||!tc||!content)return;
+  ts.classList.toggle('act',tab==='search');
+  tc.classList.toggle('act',tab==='code');
+  if(tab==='search'){
+    content.innerHTML=`<div class="friend-search">
+      <input type="text" id="fm-search-input" placeholder="Enter username" autocapitalize="off" autocorrect="off" spellcheck="false">
+      <button class="prof-btn sec" onclick="S.searchFriend()">Search</button>
+    </div><div id="fm-search-result"></div>`;
+  }else{
+    // Code tab
+    this._renderCodeTab(content);
+  }
+},
+
+async _renderCodeTab(container){
+  const code=await fbGetFriendCode();
+  container.innerHTML=`<div class="fm-code-sec">
+    <div class="fm-your">Your friend code</div>
+    <div class="fm-code-val">${code||'...'}</div>
+    <button class="prof-btn sec" onclick="S.copyFriendCode('${code}')" style="font-size:12px;padding:6px 12px">Copy Code</button>
+    <div class="fm-sep">-- or enter a friend's code --</div>
+    <div class="friend-search">
+      <input type="text" id="fm-code-input" placeholder="ZK-XXXX" maxlength="7" autocapitalize="characters" style="text-align:center;font-family:'Courier New',monospace;font-size:16px;letter-spacing:2px">
+      <button class="prof-btn" onclick="S.addByCode()">Add</button>
+    </div>
+    <div id="fm-code-result"></div>
+  </div>`;
+},
+
+async searchFriend(){
+  const inp=document.getElementById('fm-search-input');
+  const resEl=document.getElementById('fm-search-result');
+  if(!inp||!resEl)return;
+  const val=inp.value.trim();
+  if(!val){resEl.innerHTML='<div class="fm-msg err">Enter a username</div>';return;}
+  resEl.innerHTML='<div class="fm-msg inf">Searching...</div>';
+  const user=await fbSearchUser(val);
+  if(!user){
+    resEl.innerHTML='<div class="fm-msg err">User not found</div>';
+    return;
+  }
+  if(user.uid===fbUser.uid){
+    resEl.innerHTML='<div class="fm-msg inf">That\'s you!</div>';
+    return;
+  }
+  resEl.innerHTML=`<div class="fm-result">
+    <div class="fmr-name">${user.username}</div>
+    <button class="prof-btn" onclick="S.sendRequest('${user.uid}')" style="font-size:12px;padding:6px 12px">Send Request</button>
+  </div>`;
+},
+
+async sendRequest(uid){
+  const res=await fbSendFriendRequest(uid);
+  const searchRes=document.getElementById('fm-search-result');
+  const codeRes=document.getElementById('fm-code-result');
+  const target=searchRes||codeRes;
+  if(target){
+    if(res.ok){
+      target.innerHTML='<div class="fm-msg ok">Friend request sent!</div>';
+    }else{
+      target.innerHTML=`<div class="fm-msg err">${res.error}</div>`;
+    }
+  }
+},
+
+async acceptRequest(uid){
+  await fbAcceptFriend(uid);
+  this._loadFriends();
+},
+
+async declineRequest(uid){
+  await fbDeclineFriend(uid);
+  this._loadFriends();
+},
+
+async addByCode(){
+  const inp=document.getElementById('fm-code-input');
+  const resEl=document.getElementById('fm-code-result');
+  if(!inp||!resEl)return;
+  const val=inp.value.trim();
+  if(!val){resEl.innerHTML='<div class="fm-msg err">Enter a friend code</div>';return;}
+  resEl.innerHTML='<div class="fm-msg inf">Adding...</div>';
+  const res=await fbAddByCode(val);
+  if(res.ok){
+    resEl.innerHTML='<div class="fm-msg ok">Friend request sent!</div>';
+  }else{
+    resEl.innerHTML=`<div class="fm-msg err">${res.error}</div>`;
+  }
+},
+
+copyFriendCode(code){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(code).then(()=>{
+      this.toast('Friend code copied!');
+    }).catch(()=>{this.toast('Copy failed');});
+  }else{
+    this.toast('Copy not supported');
+  }
 }
 };
 
