@@ -1552,35 +1552,30 @@ function applyStateData(p){
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
 }
 
-function fbLangDoc(){return fbDb.collection('users').doc(fbUser.uid).collection('langs').doc(curLang);}
+function fbUserDoc(){return fbDb.collection('users').doc(fbUser.uid);}
 
 async function fbLoad(){
   if(!fbUser)return;
   try{
-    // Try per-language subcollection first
-    let doc=null;
-    try{doc=await fbLangDoc().get();}catch(e){}
-    if(doc&&doc.exists){
-      const cloud=doc.data();
+    const doc=await fbUserDoc().get();
+    if(!doc.exists){fbSaveCloud();return;}
+    const root=doc.data();
+    // Per-language data stored as root.langs.sr, root.langs.it, etc.
+    const cloud=(root.langs&&root.langs[curLang])||null;
+    // Legacy: old format stored sr data directly at root level
+    if(!cloud&&curLang==='sr'&&root.elo){
+      const local=getStateData();
+      if(root.xp>=local.xp){applyStateData(root);saveLocal();}
+      fbSaveCloud();// migrate to new format
+      return;
+    }
+    if(cloud){
       const local=getStateData();
       if(cloud.xp>=local.xp){applyStateData(cloud);saveLocal();}
       else{fbSaveCloud();}
-      return;
+    }else{
+      fbSaveCloud();
     }
-    // Fallback: read old root-level doc (pre-migration format) for Serbian
-    if(curLang==='sr'){
-      const oldDoc=await fbDb.collection('users').doc(fbUser.uid).get();
-      if(oldDoc.exists&&oldDoc.data().elo){
-        const cloud=oldDoc.data();
-        const local=getStateData();
-        if(cloud.xp>=local.xp){applyStateData(cloud);saveLocal();}
-        // Try to migrate to subcollection (best-effort)
-        try{await fbLangDoc().set(cloud);}catch(e){}
-        return;
-      }
-    }
-    // No cloud data found — push local to cloud
-    fbSaveCloud();
   }catch(e){console.log('Cloud load failed, using local');}
 }
 
@@ -1589,8 +1584,10 @@ function fbSaveCloud(){
   clearTimeout(_fbSaveTimer);
   _fbSaveTimer=setTimeout(()=>{
     const data=getStateData();
-    data.updatedAt=firebase.firestore.FieldValue.serverTimestamp();
-    fbLangDoc().set(data).catch(()=>{});
+    const update={};
+    update['langs.'+curLang]=data;
+    update.updatedAt=firebase.firestore.FieldValue.serverTimestamp();
+    fbUserDoc().set(update,{merge:true}).catch(()=>{});
   },500);
 }
 
