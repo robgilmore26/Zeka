@@ -294,38 +294,12 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fp-ach-row .fp-ach-i{font-size:20px}
 .fp-ach-row .fp-ach-n{font-weight:700;color:var(--g6)}
 
-/* REVIEW */
-#review{background:var(--w)}
-.rvtop{padding:58px 22px 18px;background:linear-gradient(180deg,var(--orange),#e08600);color:#fff;text-align:center}
-.rvtit{font-size:24px;font-weight:800}
-.rvsub{font-size:13px;opacity:.85;margin-top:4px}
-.rvbody{flex:1;overflow-y:auto;padding:14px 22px 100px}
-.rvbody::-webkit-scrollbar{display:none}
-.rv-empty{text-align:center;padding:40px 20px;color:var(--g5)}
-.rv-empty-i{font-size:56px;margin-bottom:12px}
-.rv-empty-t{font-size:18px;font-weight:800;color:var(--g7);margin-bottom:6px}
-.rv-empty-s{font-size:13px}
-.rv-sect{font-size:14px;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px}
-.rv-word{display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--g2);border-radius:14px;margin-bottom:8px;position:relative;overflow:hidden}
-.rv-word.weak{border-color:#ffd6d6;background:#fff5f5}
-.rv-word.med{border-color:#fff0d6;background:#fffbf5}
-.rv-em{font-size:28px;flex-shrink:0}
-.rv-inf{flex:1}
-.rv-sr{font-size:16px;font-weight:800;color:var(--g7)}
-.rv-en{font-size:12px;color:var(--g5);margin-top:2px}
-.rv-stats{display:flex;gap:8px;margin-top:4px}
-.rv-stat{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px}
-.rv-stat.wrong{background:#ffd6d6;color:var(--red)}
-.rv-stat.right{background:#d7ffb8;color:var(--green-d)}
-.rv-stat.pct{background:var(--g1);color:var(--g5)}
-.rv-btn{width:100%;margin-top:18px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.15);transition:.1s}
-.rv-btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
-.rv-btn.primary{background:var(--orange)}
-.rv-btn.secondary{background:var(--blue);margin-top:10px}
-
 /* SAVE */
 .save-ind{position:absolute;top:58px;right:20px;font-size:11px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;z-index:300}
 .save-ind.show{opacity:1}
+.seg-toggle{display:flex;margin:8px 20px;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:2px}
+.seg-btn{flex:1;padding:8px 0;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:rgba(255,255,255,.5);transition:.2s}
+.seg-btn.seg-active{background:rgba(255,255,255,.15);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .cpiece{position:absolute;width:10px;height:10px;top:-10px;z-index:300;animation:confetti 2.5s ease-in forwards}
 
 /* OVERLAY */
@@ -350,7 +324,6 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   .ltop{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .sbar{padding-top:env(safe-area-inset-top,20px)}
   .ptop{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
-  .rvtop{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .soc-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .bnav{padding-bottom:env(safe-area-inset-bottom,8px);height:calc(82px + env(safe-area-inset-bottom,8px))}
   .fbar{padding-bottom:env(safe-area-inset-bottom,8px)}
@@ -451,10 +424,14 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
     <div class="st"><button class="lang-ind" id="h-lang" onclick="S.switchLang()" title="Switch language"><img src="https://flagcdn.com/w40/rs.png" alt="🇷🇸" style="height:18px;vertical-align:middle"></button><span class="elo-badge" id="h-elo">1000</span><div class="st" style="color:var(--orange);margin-left:10px"><span class="st-i">🔥</span><span id="h-str">0</span></div></div>
   </div>
   <div class="save-ind" id="save-ind">Saved &#10003;</div>
+  <div class="seg-toggle" id="learn-toggle">
+    <button class="seg-btn seg-active" onclick="S.setLearnMode('lessons')">Lessons</button>
+    <button class="seg-btn" onclick="S.setLearnMode('flashcards')">Flashcards</button>
+  </div>
   <div class="hscr" id="hscr"></div>
+  <div id="fc-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i">🏠</span><span class="ni-l">Learn</span></button>
-    <button class="ni" onclick="S.goReview()"><span class="ni-i">📝</span><span class="ni-l">Review</span></button>
     <button class="ni" onclick="S.goSocial()"><span class="ni-i">👥</span><span class="ni-l">Social</span></button>
     <button class="ni" onclick="S.goProfile()"><span class="ni-i">👤</span><span class="ni-l">Profile</span></button>
   </div>
@@ -481,19 +458,6 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   <button class="cp-btn" onclick="S.finishLesson()">Continue</button>
 </div>
 
-<div class="sc" id="review">
-  <div class="rvtop">
-    <div class="rvtit">📝 Review</div>
-    <div class="rvsub">Words you got wrong recently</div>
-  </div>
-  <div class="rvbody" id="rvbody"></div>
-  <div class="bnav bnav-lt">
-    <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i">🏠</span><span class="ni-l">Learn</span></button>
-    <button class="ni ni-lt act" onclick="S.goReview()"><span class="ni-i">📝</span><span class="ni-l">Review</span></button>
-    <button class="ni ni-lt" onclick="S.goSocial()"><span class="ni-i">👥</span><span class="ni-l">Social</span></button>
-    <button class="ni ni-lt" onclick="S.goProfile()"><span class="ni-i">👤</span><span class="ni-l">Profile</span></button>
-  </div>
-</div>
 
 <div class="sc" id="social">
   <div class="soc-top">
@@ -503,7 +467,6 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   <div class="soc-body" id="soc-body"></div>
   <div class="bnav bnav-lt">
     <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i">🏠</span><span class="ni-l">Learn</span></button>
-    <button class="ni ni-lt" onclick="S.goReview()"><span class="ni-i">📝</span><span class="ni-l">Review</span></button>
     <button class="ni ni-lt act" onclick="S.goSocial()"><span class="ni-i">👥</span><span class="ni-l">Social</span></button>
     <button class="ni ni-lt" onclick="S.goProfile()"><span class="ni-i">👤</span><span class="ni-l">Profile</span></button>
   </div>
@@ -539,7 +502,6 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   </div>
   <div class="bnav bnav-lt">
     <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i">🏠</span><span class="ni-l">Learn</span></button>
-    <button class="ni ni-lt" onclick="S.goReview()"><span class="ni-i">📝</span><span class="ni-l">Review</span></button>
     <button class="ni ni-lt" onclick="S.goSocial()"><span class="ni-i">👥</span><span class="ni-l">Social</span></button>
     <button class="ni ni-lt act" onclick="S.goProfile()"><span class="ni-i">👤</span><span class="ni-l">Profile</span></button>
   </div>
@@ -1990,6 +1952,15 @@ goScr(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'))
 
 goHome(){this.updH();this.rPath();this.goScr('home');},
 
+setLearnMode(mode){
+  document.querySelectorAll('.seg-btn').forEach((b,i)=>{
+    b.classList.toggle('seg-active',i===(mode==='lessons'?0:1));
+  });
+  document.getElementById('hscr').style.display=mode==='lessons'?'':'none';
+  document.getElementById('fc-home').style.display=mode==='flashcards'?'':'none';
+  if(mode==='flashcards'&&typeof this.renderFcHome==='function')this.renderFcHome();
+},
+
 switchLang(){
   const codes=Object.keys(LANG_DATA);
   const next=codes[(codes.indexOf(curLang)+1)%codes.length];
@@ -2359,98 +2330,6 @@ confetti(){const scr=document.getElementById('scr');
     p.style.animationDelay=Math.random()*.8+'s';p.style.animationDuration=(Math.random()*1.5+1.5)+'s';
     scr.appendChild(p);setTimeout(()=>p.remove(),3500);}},
 
-goReview(){
-  const el=document.getElementById('rvbody');
-  // Gather all words with stats, find ones with incorrect answers
-  const missed=[];
-  Object.keys(st.ws).forEach(id=>{
-    const w=ALL_W.find(x=>x.id===+id);if(!w)return;
-    const s=st.ws[id];if(s.i>0)missed.push({word:w,stats:s,pct:s.s>0?Math.round(s.c/s.s*100):0});
-  });
-  if(!missed.length){
-    el.innerHTML=`<div class="rv-empty"><div class="rv-empty-i">🎉</div><div class="rv-empty-t">No missed words!</div>
-      <div class="rv-empty-s">Complete some lessons and any words you get wrong will show up here for review.</div></div>`;
-    this.goScr('review');return;
-  }
-  // Sort: worst accuracy first, then most recent mistakes
-  missed.sort((a,b)=>a.pct-b.pct||b.stats.t-a.stats.t);
-  const weak=missed.filter(m=>m.pct<50);
-  const med=missed.filter(m=>m.pct>=50);
-  let h='';
-  if(weak.length){
-    h+=`<div class="rv-sect">Needs Work (${weak.length})</div>`;
-    weak.forEach(m=>{h+=this.rvCard(m,'weak');});
-  }
-  if(med.length){
-    h+=`<div class="rv-sect">Getting There (${med.length})</div>`;
-    med.forEach(m=>{h+=this.rvCard(m,'med');});
-  }
-  const revCount=Math.min(missed.length,10);
-  h+=`<button class="rv-btn primary" onclick="S.startReview()">Review ${revCount} Weakest Words</button>`;
-  if(st.completed.length)h+=`<button class="rv-btn secondary" onclick="S.startRandomPractice()">Random Practice</button>`;
-  el.innerHTML=h;
-  this.goScr('review');
-},
-rvCard(m,cls){
-  const w=m.word,s=m.stats;
-  return`<div class="rv-word ${cls}"><div class="rv-em">${w.em}</div><div class="rv-inf">
-    <div class="rv-sr">${w.l}</div><div class="rv-en">${w.e}</div>
-    <div class="rv-stats"><span class="rv-stat right">✓ ${s.c}</span><span class="rv-stat wrong">✗ ${s.i}</span>
-    <span class="rv-stat pct">${m.pct}%</span></div></div></div>`;
-},
-startReview(){
-  // Get up to 10 weakest words and build a custom lesson
-  const missed=[];
-  Object.keys(st.ws).forEach(id=>{
-    const w=ALL_W.find(x=>x.id===+id);if(!w)return;
-    const s=st.ws[id];if(s.i>0)missed.push({word:w,pct:s.s>0?Math.round(s.c/s.s*100):0});
-  });
-  missed.sort((a,b)=>a.pct-b.pct);
-  const words=missed.slice(0,10).map(m=>m.word);
-  if(!words.length){this.toast('No words to review!');return;}
-  // Find which unit most words belong to, use that as the unit context
-  const uid=words[0].id/100|0;const u=UNITS.find(x=>x.id===uid)||UNITS[0];
-  const fakeUnit={...u,t:'Review',d:'Practice your weakest words',ic:'📝',words};
-  sCl();st.unit=fakeUnit;st.hearts=5;st.ei=-1;st.lxp=0;st.lcor=0;st.ltot=0;st.lelo=0;
-  st.exs=this.genReviewEx(words);this.goScr('lesson');this.updL();this.showIntro();
-},
-genReviewEx(words){
-  const ex=[];
-  ex.push(this.mkMC(words,'se'));ex.push(this.mkMC(words,'es'));
-  ex.push(this.mkEm(words));ex.push(this.mkTy(words));
-  if(words.length>=3)ex.push(this.mkMa(words));
-  ex.push(this.mkMC(words,'se'));ex.push(this.mkMC(words,'es'));
-  ex.push(this.mkWB(words));
-  if(words.length>=3)ex.push(this.mkMa(words));
-  ex.push(this.mkTy(words));
-  return ex;
-},
-startRandomPractice(){
-  if(!st.completed.length){this.toast('Complete a lesson first!');return;}
-  // Pool words from ALL completed units
-  const compUnits=UNITS.filter(u=>st.completed.includes(u.id));
-  const allWords=compUnits.flatMap(u=>u.words);
-  const allPhrases=compUnits.flatMap(u=>u.phrases||[]);
-  // Pick 10 random words from across all completed units
-  const words=this.sh(allWords).slice(0,10);
-  // Build a fake mixed unit
-  const fakeUnit={id:compUnits[0].id,t:'Random Practice',d:'Mixed words from all units',ic:'🔀',co:'#1CB0F6',
-    words,phrases:allPhrases};
-  sCl();st.unit=fakeUnit;st.hearts=5;st.ei=-1;st.lxp=0;st.lcor=0;st.ltot=0;st.lelo=0;
-  // Generate exercises from the mixed pool
-  const ex=[];
-  ex.push(this.mkMC(words,'se'));ex.push(this.mkMC(words,'es'));
-  ex.push(this.mkEm(words));
-  const ph1=this.mkPh(fakeUnit);if(ph1)ex.push(ph1);
-  ex.push(this.mkTy(words));
-  if(words.length>=3)ex.push(this.mkMa(words));
-  ex.push(this.mkMC(words,'se'));ex.push(this.mkMC(words,'es'));
-  const ph2=this.mkPh(fakeUnit);if(ph2)ex.push(ph2);
-  ex.push(this.mkWB(words));
-  if(words.length>=3)ex.push(this.mkMa(words));
-  ex.push(this.mkMC(words,'se'));
-  st.exs=ex;this.goScr('lesson');this.updL();this.showIntro();
-},
 toast(msg){const t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'absolute',top:'80px',left:'50%',transform:'translateX(-50%)',background:'rgba(0,0,0,.8)',color:'#fff',padding:'10px 20px',borderRadius:'12px',fontSize:'14px',fontWeight:'700',zIndex:'300',pointerEvents:'none',animation:'eloFloat 2s ease-out forwards'});document.getElementById('scr').appendChild(t);setTimeout(()=>t.remove(),2200);},
 
 async goProfile(){
