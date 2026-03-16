@@ -2528,7 +2528,9 @@ showComp(){
   sDn();const acc=st.ltot>0?Math.round(st.lcor/st.ltot*100):0;
   if(acc===100)st.lxp+=20;st.xp+=st.lxp;
   const wasNew=!st.completed.includes(st.unit.id);
-  if(wasNew)st.completed.push(st.unit.id);
+  if(wasNew){st.completed.push(st.unit.id);
+    st.unit.words.forEach(w=>{['se','es'].forEach(dir=>{const k=fcKey(w.id,dir);if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0};});});
+  }
   const today=new Date().toDateString();if(st.lastDate!==today){st.streak++;st.lastDate=today;}
   save();
   // Log activity to Firestore for the social feed
