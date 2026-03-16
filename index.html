@@ -1635,11 +1635,11 @@ function showSplashReady(){
 
 function getStateData(){
   return{elo:st.elo,xp:st.xp,streak:st.streak,lastDate:st.lastDate,
-    completed:st.completed,ws:st.ws,hearts:st.hearts};
+    completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
-  st.completed=p.completed||[];st.ws=p.ws||{};st.hearts=p.hearts??5;
+  st.completed=p.completed||[];st.ws=p.ws||{};st.hearts=p.hearts??5;st.fc=p.fc||{};
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
 }
@@ -1908,7 +1908,7 @@ async function fbGetPendingRequests(){
 }
 
 // ═══════════════ STATE ═══════════════
-let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},
+let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null};
 
 function load(){try{
