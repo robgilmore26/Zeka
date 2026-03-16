@@ -2021,6 +2021,49 @@ goScr(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'))
 
 goHome(){this.updH();this.rPath();this.goScr('home');},
 
+renderFcHome(){
+  const el=document.getElementById('fc-home');
+  const due=fcDueCards();
+  const total=fcTotalCards();
+  if(total===0){
+    el.innerHTML='<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,.6)">'+
+      '<div style="font-size:56px;margin-bottom:12px">📚</div>'+
+      '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px">No Flashcards Yet</div>'+
+      '<div style="font-size:13px">Complete a lesson to unlock flashcards for those words.</div></div>';
+    return;
+  }
+  let h='<div style="text-align:center;padding:20px 0">';
+  h+='<div style="font-size:48px;margin-bottom:8px">'+(due.length>0?'📖':'🎉')+'</div>';
+  h+='<div style="font-size:28px;font-weight:800;color:#fff">'+due.length+' card'+(due.length!==1?'s':'')+' due</div>';
+  h+='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-top:4px">'+total+' total cards</div>';
+  if(due.length>0){
+    h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Start Review</button>';
+  }else{
+    h+='<div style="font-size:15px;color:var(--green);font-weight:700;margin-top:16px">All caught up! Come back later.</div>';
+  }
+  h+='</div>';
+  const compUnits=UNITS.filter(u=>st.completed.includes(u.id));
+  if(compUnits.length>0){
+    h+='<div style="margin-top:20px">';
+    h+='<div style="font-size:14px;font-weight:800;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">By Unit</div>';
+    const now=Date.now();
+    compUnits.forEach(u=>{
+      const uDue=u.words.reduce((n,w)=>{
+        return n+['se','es'].filter(d=>{const c=st.fc[fcKey(w.id,d)];return !c||c.due<=now;}).length;
+      },0);
+      h+='<div style="display:flex;align-items:center;gap:10px;padding:10px;border:2px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:6px">';
+      h+='<span style="font-size:24px">'+esc(u.ic)+'</span>';
+      h+='<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">'+esc(u.t)+'</div>';
+      h+='<div style="font-size:11px;color:rgba(255,255,255,.5)">'+(u.words.length*2)+' cards</div></div>';
+      if(uDue>0)h+='<span style="background:var(--orange);color:#fff;font-size:12px;font-weight:800;padding:3px 8px;border-radius:10px">'+uDue+' due</span>';
+      else h+='<span style="color:var(--green);font-size:12px;font-weight:700">✓</span>';
+      h+='</div>';
+    });
+    h+='</div>';
+  }
+  el.innerHTML=h;
+},
+
 setLearnMode(mode){
   document.querySelectorAll('.seg-btn').forEach((b,i)=>{
     b.classList.toggle('seg-active',i===(mode==='lessons'?0:1));
