@@ -1940,7 +1940,8 @@ async function fbGetPendingRequests(){
 
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},
-  unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null};
+  unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
+  fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0};
 
 function load(){try{
   // Migrate old single-language key to new per-language format
@@ -2093,6 +2094,96 @@ renderFcHome(){
     h+='</div>';
   }
   el.innerHTML=h;
+},
+
+startFcSession(){
+  const due=fcDueCards();
+  if(!due.length){return;}
+  st.fcCards=this.sh(due);
+  st.fcIdx=0;st.fcFlipped=false;st.fcReviewed=0;st.fcAgainCount=0;st.fcCorrectCount=0;
+  this.goScr('flashcard');
+  this.renderFcCard();
+},
+
+renderFcCard(){
+  if(st.fcIdx>=st.fcCards.length){this.finishFcSession();return;}
+  const card=st.fcCards[st.fcIdx];
+  const w=card.word;
+  const isSE=card.dir==='se';
+  const frontText=isSE?w.l:w.e;
+  const frontLang=isSE?curLang:'en';
+  const dirLabel=isSE?(langName()+' → English'):('English → '+langName());
+  const backText=isSE?w.e:w.l;
+  const backLang=isSE?'en':curLang;
+  document.getElementById('fc-count').textContent=(st.fcIdx+1)+' / '+st.fcCards.length;
+  let h='<div class="fc-card-wrap" onclick="S.flipFc()">';
+  h+='<div class="fc-card" id="fc-card">';
+  h+='<div class="fc-face fc-front">';
+  h+='<div class="fc-dir">'+esc(dirLabel)+'</div>';
+  h+='<div class="fc-word">'+esc(frontText)+'</div>';
+  h+=spkBtn(frontText,frontLang);
+  h+='<div class="fc-hint">Tap to flip</div>';
+  h+='</div>';
+  h+='<div class="fc-face fc-back">';
+  h+='<div class="fc-em">'+w.em+'</div>';
+  h+='<div class="fc-trans">'+esc(backText)+'</div>';
+  h+=spkBtn(backText,backLang);
+  h+='</div>';
+  h+='</div></div>';
+  h+='<div class="fc-ratings" id="fc-ratings" style="display:none">';
+  h+='<button class="fc-rate-btn r-again" onclick="S.rateFc(0)">Again<span class="fc-rate-ivl">'+fcIvlLabel(w.id,card.dir,0)+'</span></button>';
+  h+='<button class="fc-rate-btn r-hard" onclick="S.rateFc(1)">Hard<span class="fc-rate-ivl">'+fcIvlLabel(w.id,card.dir,1)+'</span></button>';
+  h+='<button class="fc-rate-btn r-good" onclick="S.rateFc(2)">Good<span class="fc-rate-ivl">'+fcIvlLabel(w.id,card.dir,2)+'</span></button>';
+  h+='<button class="fc-rate-btn r-easy" onclick="S.rateFc(3)">Easy<span class="fc-rate-ivl">'+fcIvlLabel(w.id,card.dir,3)+'</span></button>';
+  h+='</div>';
+  document.getElementById('fc-body').innerHTML=h;
+  st.fcFlipped=false;
+},
+
+flipFc(){
+  if(st.fcFlipped)return;
+  st.fcFlipped=true;
+  const card=document.getElementById('fc-card');
+  if(card)card.classList.add('flipped');
+  const ratings=document.getElementById('fc-ratings');
+  if(ratings)ratings.style.display='flex';
+},
+
+rateFc(rating){
+  const card=st.fcCards[st.fcIdx];
+  fcRate(card.word.id,card.dir,rating);
+  st.fcReviewed++;
+  if(rating===0){
+    st.fcAgainCount++;
+    const insertAt=Math.min(st.fcIdx+3+Math.floor(Math.random()*3),st.fcCards.length);
+    st.fcCards.splice(insertAt,0,{...card});
+  }else{
+    st.fcCorrectCount++;
+  }
+  st.fcIdx++;
+  this.renderFcCard();
+},
+
+exitFc(){
+  sCl();
+  this.goHome();
+},
+
+finishFcSession(){
+  const el=document.getElementById('fc-body');
+  const pct=st.fcReviewed>0?Math.round(st.fcCorrectCount/st.fcReviewed*100):0;
+  let h='<div style="text-align:center;padding:40px 20px">';
+  h+='<div style="font-size:56px;margin-bottom:12px">🎉</div>';
+  h+='<div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:20px">Session Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center;margin-bottom:24px">';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.fcReviewed+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">REVIEWED</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">RECALLED</div></div>';
+  if(st.fcAgainCount>0)h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--orange)">'+st.fcAgainCount+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">REPEATED</div></div>';
+  h+='</div>';
+  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
+  h+='</div>';
+  el.innerHTML=h;
+  sDn();
 },
 
 setLearnMode(mode){
