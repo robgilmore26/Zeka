@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Zeka — Language Learning</title>
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1620,8 +1622,11 @@ function handleGoogleCredential(response){
 
 // Render the Google Sign-In button (works in PWAs via iframe, no popup/redirect)
 let _gisReady=false;
+let _authResolved=false;
 function initGIS(){
   if(_gisReady)return;
+  // Don't init GIS if user is already signed in via Firebase
+  if(fbUser)return;
   if(window.google&&google.accounts&&google.accounts.id){
     _gisReady=true;
     google.accounts.id.initialize({
@@ -1644,15 +1649,18 @@ function initGIS(){
         });
       }
     });
-    // Also try One Tap auto-sign-in for returning users
-    google.accounts.id.prompt();
+    // Only show One Tap if auth has resolved and user is NOT signed in
+    if(_authResolved&&!fbUser){
+      google.accounts.id.prompt();
+    }
   }
 }
-// GIS script is async — try on load
-window.addEventListener('load',()=>{initGIS();
-  // Retry after a short delay in case script is still loading
-  if(!_gisReady)setTimeout(initGIS,500);
-  if(!_gisReady)setTimeout(initGIS,1500);
+// Wait for Firebase auth to resolve before initializing GIS
+// This prevents the One Tap popup from flashing when already signed in
+window.addEventListener('load',()=>{
+  // If auth already resolved (fast), init immediately
+  if(_authResolved&&!fbUser){initGIS();if(!_gisReady)setTimeout(initGIS,500);if(!_gisReady)setTimeout(initGIS,1500);}
+  // Otherwise, onAuthStateChanged will trigger initGIS if needed
 });
 
 function fbSignOut(){
@@ -1721,6 +1729,7 @@ function fbSaveCloud(){
 
 fbAuth.onAuthStateChanged(async user=>{
   fbUser=user;
+  _authResolved=true;
   if(user){
     load();// Load local state for current language first
     await fbLoad();
@@ -1732,6 +1741,10 @@ fbAuth.onAuthStateChanged(async user=>{
     // Highlight current language on splash
     document.querySelectorAll('.lang-flag').forEach(b=>{b.classList.toggle('sel',b.title===langName());});
     document.getElementById('sp-sub').textContent='Learn '+langName()+' · A1 to C1';
+    // User is not signed in — now safe to show Google Sign-In
+    initGIS();
+    if(!_gisReady)setTimeout(initGIS,500);
+    if(!_gisReady)setTimeout(initGIS,1500);
   }
   updateSyncUI();
 });
