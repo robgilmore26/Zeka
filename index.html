@@ -300,6 +300,28 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .seg-toggle{display:flex;margin:8px 20px;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:2px}
 .seg-btn{flex:1;padding:8px 0;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:rgba(255,255,255,.5);transition:.2s}
 .seg-btn.seg-active{background:rgba(255,255,255,.15);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.fc-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:#131F24}
+.fc-count{font-size:14px;font-weight:700;color:rgba(255,255,255,.6)}
+.fc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#131F24}
+.fc-card-wrap{width:100%;max-width:320px;perspective:1000px;cursor:pointer}
+.fc-card{position:relative;width:100%;min-height:280px;transition:transform .5s;transform-style:preserve-3d}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;top:0;left:0;width:100%;min-height:280px;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}
+.fc-front{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 8px 30px rgba(102,126,234,.3)}
+.fc-back{background:#fff;border:2px solid var(--g2);transform:rotateY(180deg)}
+.fc-dir{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.7;margin-bottom:12px}
+.fc-word{font-size:32px;font-weight:800;line-height:1.3}
+.fc-em{font-size:40px;margin-bottom:8px}
+.fc-trans{font-size:24px;font-weight:800;color:var(--g7);margin-top:8px}
+.fc-hint{font-size:12px;color:rgba(255,255,255,.6);margin-top:20px}
+.fc-ratings{display:flex;gap:6px;margin-top:20px;width:100%;max-width:320px}
+.fc-rate-btn{flex:1;padding:12px 4px;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.15);transition:.1s}
+.fc-rate-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.fc-rate-btn .fc-rate-ivl{display:block;font-size:10px;opacity:.8;margin-top:2px}
+.fc-rate-btn.r-again{background:var(--red)}
+.fc-rate-btn.r-hard{background:var(--orange)}
+.fc-rate-btn.r-good{background:var(--green)}
+.fc-rate-btn.r-easy{background:var(--blue)}
 .cpiece{position:absolute;width:10px;height:10px;top:-10px;z-index:300;animation:confetti 2.5s ease-in forwards}
 
 /* OVERLAY */
@@ -325,6 +347,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   .sbar{padding-top:env(safe-area-inset-top,20px)}
   .ptop{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .soc-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
+  .fc-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .bnav{padding-bottom:env(safe-area-inset-bottom,8px);height:calc(82px + env(safe-area-inset-bottom,8px))}
   .fbar{padding-bottom:env(safe-area-inset-bottom,8px)}
   .cp-btn{margin-bottom:env(safe-area-inset-bottom,8px)}
@@ -458,6 +481,14 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   <button class="cp-btn" onclick="S.finishLesson()">Continue</button>
 </div>
 
+<div class="sc" id="flashcard">
+  <div class="fc-top">
+    <button class="xbtn" onclick="S.exitFc()">&#10005;</button>
+    <div class="fc-count" id="fc-count">0 / 0</div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="fc-body" id="fc-body"></div>
+</div>
 
 <div class="sc" id="social">
   <div class="soc-top">
@@ -2017,7 +2048,7 @@ pk(a,n,ex=[]){return this.sh(a.filter(x=>!ex.includes(x))).slice(0,n)},
 
 goScr(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
   document.getElementById(id).classList.add('act');
-  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social');},
+  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social'||id==='flashcard');},
 
 goHome(){this.updH();this.rPath();this.goScr('home');},
 
