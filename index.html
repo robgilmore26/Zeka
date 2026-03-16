@@ -59,7 +59,6 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 /* HOME */
 #home{background:#131F24}
 .hdr{padding:58px 20px 10px;display:flex;justify-content:space-between;align-items:center;background:#1B2B33;z-index:10;border-bottom:1px solid rgba(255,255,255,.06)}
-.hdr-stats{display:flex;gap:14px;align-items:center}
 .st{display:flex;align-items:center;gap:4px;font-size:14px;font-weight:700;color:rgba(255,255,255,.85)}
 .st-i{font-size:18px}
 .elo-badge{background:linear-gradient(135deg,var(--purple),#a855f7);color:#fff;padding:3px 10px;border-radius:20px;font-size:13px;font-weight:800;letter-spacing:.5px}
@@ -449,12 +448,7 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
 
 <div class="sc" id="home">
   <div class="hdr">
-    <div class="st"><button class="lang-ind" id="h-lang" onclick="S.switchLang()" title="Switch language"><img src="https://flagcdn.com/w40/rs.png" alt="🇷🇸" style="height:18px;vertical-align:middle"></button><span class="elo-badge" id="h-elo">1000</span></div>
-    <div class="hdr-stats">
-      <div class="st" style="color:var(--orange)"><span class="st-i">🔥</span><span id="h-str">0</span></div>
-      <div class="st" style="color:var(--gold)"><span class="st-i">⚡</span><span id="h-xp">0</span></div>
-      <div class="st" style="color:var(--red)"><span class="st-i">❤️</span><span id="h-hrt">5</span></div>
-    </div>
+    <div class="st"><button class="lang-ind" id="h-lang" onclick="S.switchLang()" title="Switch language"><img src="https://flagcdn.com/w40/rs.png" alt="🇷🇸" style="height:18px;vertical-align:middle"></button><span class="elo-badge" id="h-elo">1000</span><div class="st" style="color:var(--orange);margin-left:10px"><span class="st-i">🔥</span><span id="h-str">0</span></div></div>
   </div>
   <div class="save-ind" id="save-ind">Saved &#10003;</div>
   <div class="hscr" id="hscr"></div>
@@ -2009,8 +2003,6 @@ switchLang(){
 
 updH(){document.getElementById('h-elo').textContent=st.elo;
   document.getElementById('h-str').textContent=st.streak;
-  document.getElementById('h-xp').textContent=st.xp;
-  document.getElementById('h-hrt').textContent=st.hearts;
   const hl=document.getElementById('h-lang');hl.innerHTML=langFlag();hl.title=langName();},
 
 rPath(){
