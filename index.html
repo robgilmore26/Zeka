@@ -375,15 +375,6 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   .cp-btn{margin-bottom:env(safe-area-inset-bottom,8px)}
 }
 @media(max-height:750px){#phone{transform:scale(.85);transform-origin:center}}
-img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inline-block}
-.sp-icon img.emoji{height:80px;width:80px}
-.wb-em img.emoji{height:36px;width:36px}
-.vem img.emoji{height:28px;width:28px}
-.ee img.emoji{height:32px;width:32px}
-.ni-i img.emoji{height:24px;width:24px}
-.st-i img.emoji{height:18px;width:18px}
-.arow-i img.emoji{height:28px;width:28px}
-.lbub img.emoji{height:26px;width:26px}
 
 /* USERNAME & FRIENDS */
 .prof-user{font-size:22px;font-weight:800;color:#fff;margin-top:6px}
@@ -445,7 +436,6 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
 .fm-msg.err{background:#ffd6d6;color:var(--red-d)}
 .fm-msg.inf{background:#ddf4ff;color:var(--blue-d)}
 </style>
-<script src="https://unpkg.com/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div id="phone"><div id="scr">
@@ -3279,21 +3269,6 @@ load();
 (function tick(){const n=new Date();document.getElementById('stime').textContent=
   String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');setTimeout(tick,30000);})();
 if(st.xp>0||st.completed.length>0)S.goHome();
-
-// APPLE EMOJI
-function parseAppleEmoji(){
-  if(typeof twemoji==='undefined')return;
-  twemoji.parse(document.getElementById('scr'),{
-    callback:function(icon){
-      return 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple@16.0.0/img/apple/64/'+icon+'.png';
-    },
-    attributes:function(){return{onerror:'this.style.display=\"none\"'};}
-  });
-}
-let _emojiT;
-const _emojiObs=new MutationObserver(()=>{clearTimeout(_emojiT);_emojiT=setTimeout(parseAppleEmoji,30);});
-_emojiObs.observe(document.getElementById('scr'),{childList:true,subtree:true,characterData:true});
-parseAppleEmoji();
 
 // SERVICE WORKER
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
