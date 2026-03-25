@@ -445,7 +445,7 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
 .fm-msg.err{background:#ffd6d6;color:var(--red-d)}
 .fm-msg.inf{background:#ddf4ff;color:var(--blue-d)}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@jdecked/twemoji@16.0.1/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div id="phone"><div id="scr">
@@ -3282,6 +3282,7 @@ if(st.xp>0||st.completed.length>0)S.goHome();
 
 // APPLE EMOJI
 function parseAppleEmoji(){
+  if(typeof twemoji==='undefined')return;
   twemoji.parse(document.getElementById('scr'),{
     callback:function(icon){
       return 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple@16.0.0/img/apple/64/'+icon+'.png';
