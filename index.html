@@ -450,9 +450,11 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
   <div class="seg-toggle" id="learn-toggle">
     <button class="seg-btn seg-active" onclick="S.setLearnMode('lessons')">Lessons</button>
     <button class="seg-btn" onclick="S.setLearnMode('flashcards')">Flashcards</button>
+    <button class="seg-btn" onclick="S.setLearnMode('verbs')">Verbs</button>
   </div>
   <div class="hscr" id="hscr"></div>
   <div id="fc-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
+  <div id="verb-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i">🏠</span><span class="ni-l">Learn</span></button>
     <button class="ni" onclick="S.goSocial()"><span class="ni-i">👥</span><span class="ni-l">Social</span></button>
@@ -2227,13 +2229,50 @@ finishFcSession(){
   sDn();
 },
 
+renderVerbHome(){
+  const el=document.getElementById('verb-home');
+  if(!VERBS.length){
+    el.innerHTML='<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,.6)">'+
+      '<div style="font-size:56px;margin-bottom:12px">🔤</div>'+
+      '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px">No Verbs Available</div>'+
+      '<div style="font-size:13px">Verb conjugation is not yet available for '+esc(langName())+'.</div></div>';
+    return;
+  }
+  let h='<div style="text-align:center;padding:16px 0">';
+  h+='<div style="font-size:48px;margin-bottom:8px">🔤</div>';
+  h+='<div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">Verb Conjugation</div>';
+  h+='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px">Present Tense · '+VERBS.length+' verbs</div>';
+  h+='<div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">';
+  [3,5,10].forEach(n=>{
+    h+='<button style="padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;color:#fff;background:rgba(255,255,255,.12);transition:.2s" onclick="S.startVerbSession('+n+')">'+n+' verbs</button>';
+  });
+  h+='</div>';
+  h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);margin-top:8px" onclick="S.startVerbSession('+Math.min(5,VERBS.length)+')">Random Session</button>';
+  h+='</div>';
+  h+='<div style="margin-top:20px">';
+  h+='<div style="font-size:14px;font-weight:800;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">All Verbs</div>';
+  VERBS.forEach((v,i)=>{
+    h+='<div style="display:flex;align-items:center;gap:10px;padding:12px;border:2px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:6px;cursor:pointer" onclick="S.startVerbSession(1,'+i+')">';
+    h+='<span style="font-size:24px">'+v.em+'</span>';
+    h+='<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">'+esc(v.inf)+'</div>';
+    h+='<div style="font-size:12px;color:rgba(255,255,255,.5)">'+esc(v.en)+'</div></div>';
+    h+='<span style="color:rgba(255,255,255,.3);font-size:18px">›</span>';
+    h+='</div>';
+  });
+  h+='</div>';
+  el.innerHTML=h;
+},
+
 setLearnMode(mode){
+  const modes=['lessons','flashcards','verbs'];
   document.querySelectorAll('.seg-btn').forEach((b,i)=>{
-    b.classList.toggle('seg-active',i===(mode==='lessons'?0:1));
+    b.classList.toggle('seg-active',i===modes.indexOf(mode));
   });
   document.getElementById('hscr').style.display=mode==='lessons'?'':'none';
   document.getElementById('fc-home').style.display=mode==='flashcards'?'':'none';
+  document.getElementById('verb-home').style.display=mode==='verbs'?'':'none';
   if(mode==='flashcards'&&typeof this.renderFcHome==='function')this.renderFcHome();
+  if(mode==='verbs')this.renderVerbHome();
 },
 
 switchLang(){
