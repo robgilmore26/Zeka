@@ -1476,6 +1476,33 @@ p:[["L'inflazione cresce quest'anno","Inflation is rising this year"],["Il tasso
 p:[["Il giornalista fa un reportage dal luogo","The journalist reports from the scene"],["Il titolo attira l'attenzione","The headline grabs attention"],["L'obiettività è importante nel giornalismo","Objectivity is important in journalism"],["L'alfabetizzazione mediatica è essenziale","Media literacy is essential"]]}
 ];
 
+const V_SR=[
+{inf:'biti',en:'to be',em:'🔄',conj:{ja:'sam',ti:'si',on:'je',mi:'smo',vi:'ste',oni:'su'}},
+{inf:'imati',en:'to have',em:'🤲',conj:{ja:'imam',ti:'imaš',on:'ima',mi:'imamo',vi:'imate',oni:'imaju'}},
+{inf:'hteti',en:'to want',em:'💭',conj:{ja:'hoću',ti:'hoćeš',on:'hoće',mi:'hoćemo',vi:'hoćete',oni:'hoće'}},
+{inf:'moći',en:'to be able',em:'💪',conj:{ja:'mogu',ti:'možeš',on:'može',mi:'možemo',vi:'možete',oni:'mogu'}},
+{inf:'ići',en:'to go',em:'🚶',conj:{ja:'idem',ti:'ideš',on:'ide',mi:'idemo',vi:'idete',oni:'idu'}},
+{inf:'raditi',en:'to work',em:'💼',conj:{ja:'radim',ti:'radiš',on:'radi',mi:'radimo',vi:'radite',oni:'rade'}},
+{inf:'znati',en:'to know',em:'🧠',conj:{ja:'znam',ti:'znaš',on:'zna',mi:'znamo',vi:'znate',oni:'znaju'}},
+{inf:'videti',en:'to see',em:'👀',conj:{ja:'vidim',ti:'vidiš',on:'vidi',mi:'vidimo',vi:'vidite',oni:'vide'}},
+{inf:'jesti',en:'to eat',em:'🍽️',conj:{ja:'jedem',ti:'jedeš',on:'jede',mi:'jedemo',vi:'jedete',oni:'jedu'}},
+{inf:'piti',en:'to drink',em:'🥤',conj:{ja:'pijem',ti:'piješ',on:'pije',mi:'pijemo',vi:'pijete',oni:'piju'}},
+{inf:'govoriti',en:'to speak',em:'🗣️',conj:{ja:'govorim',ti:'govoriš',on:'govori',mi:'govorimo',vi:'govorite',oni:'govore'}},
+{inf:'razumeti',en:'to understand',em:'💡',conj:{ja:'razumem',ti:'razumeš',on:'razume',mi:'razumemo',vi:'razumete',oni:'razumeju'}},
+{inf:'pisati',en:'to write',em:'✍️',conj:{ja:'pišem',ti:'pišeš',on:'piše',mi:'pišemo',vi:'pišete',oni:'pišu'}},
+{inf:'čitati',en:'to read',em:'📖',conj:{ja:'čitam',ti:'čitaš',on:'čita',mi:'čitamo',vi:'čitate',oni:'čitaju'}},
+{inf:'učiti',en:'to learn',em:'📚',conj:{ja:'učim',ti:'učiš',on:'uči',mi:'učimo',vi:'učite',oni:'uče'}},
+{inf:'živeti',en:'to live',em:'🏠',conj:{ja:'živim',ti:'živiš',on:'živi',mi:'živimo',vi:'živite',oni:'žive'}},
+{inf:'voleti',en:'to love',em:'❤️',conj:{ja:'volim',ti:'voliš',on:'voli',mi:'volimo',vi:'volite',oni:'vole'}},
+{inf:'spavati',en:'to sleep',em:'😴',conj:{ja:'spavam',ti:'spavaš',on:'spava',mi:'spavamo',vi:'spavate',oni:'spavaju'}},
+{inf:'kupovati',en:'to buy',em:'🛒',conj:{ja:'kupujem',ti:'kupuješ',on:'kupuje',mi:'kupujemo',vi:'kupujete',oni:'kupuju'}},
+{inf:'davati',en:'to give',em:'🎁',conj:{ja:'dajem',ti:'daješ',on:'daje',mi:'dajemo',vi:'dajete',oni:'daju'}},
+{inf:'igrati',en:'to play',em:'⚽',conj:{ja:'igram',ti:'igraš',on:'igra',mi:'igramo',vi:'igrate',oni:'igraju'}},
+{inf:'pevati',en:'to sing',em:'🎤',conj:{ja:'pevam',ti:'pevaš',on:'peva',mi:'pevamo',vi:'pevate',oni:'pevaju'}},
+{inf:'trčati',en:'to run',em:'🏃',conj:{ja:'trčim',ti:'trčiš',on:'trči',mi:'trčimo',vi:'trčite',oni:'trče'}},
+{inf:'putovati',en:'to travel',em:'✈️',conj:{ja:'putujem',ti:'putuješ',on:'putuje',mi:'putujemo',vi:'putujete',oni:'putuju'}},
+{inf:'kuvati',en:'to cook',em:'👨‍🍳',conj:{ja:'kuvam',ti:'kuvaš',on:'kuva',mi:'kuvamo',vi:'kuvate',oni:'kuvaju'}}
+];
 
 // ═══════════════ LANGUAGE SYSTEM ═══════════════
 const LANG_DATA={
@@ -1484,6 +1511,7 @@ const LANG_DATA={
 };
 let curLang=localStorage.getItem('zeka_lang')||'sr';
 let UNITS,ALL_PH,ALL_W;
+let VERBS=[];
 function langName(){return LANG_DATA[curLang].name;}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLang].flag+'.png" style="height:18px;vertical-align:middle">';}
@@ -1538,6 +1566,7 @@ function setLang(code){
   curLang=code;localStorage.setItem('zeka_lang',code);
   const ld=LANG_DATA[code];
   UNITS=buildUnits(ld.units);ALL_PH=UNITS.flatMap(u=>u.phrases);ALL_W=UNITS.flatMap(u=>u.words);
+  VERBS=curLang==='sr'?V_SR:[];
 }
 setLang(curLang);// Initialize on load
 
@@ -2031,6 +2060,16 @@ function fcDueCards(){
 function fcTotalCards(){
   const compWords=UNITS.filter(u=>st.completed.includes(u.id)).flatMap(u=>u.words);
   return compWords.length*2;
+}
+
+function verbPrefix(v){
+  const forms=Object.values(v.conj);
+  let pre=forms[0];
+  for(let i=1;i<forms.length;i++){
+    while(forms[i].indexOf(pre)!==0)pre=pre.slice(0,-1);
+    if(!pre)return '';
+  }
+  return pre;
 }
 
 // ═══════════════ AUDIO (effects only) ═══════════════
