@@ -1735,8 +1735,8 @@ async function fbLoad(){
     const doc=await fbUserDoc().get();
     if(!doc.exists){fbSaveCloud();return;}
     const root=doc.data();
-    // Per-language data stored as root.langs.sr, root.langs.it, etc.
-    const cloud=(root.langs&&root.langs[curLang])||null;
+    // Per-language data: check nested path (root.langs.sr) and literal key ("langs.sr")
+    const cloud=(root.langs&&root.langs[curLang])||root['langs.'+curLang]||null;
     // Legacy: old format stored sr data directly at root level
     if(!cloud&&curLang==='sr'&&root.elo){
       const local=getStateData();
@@ -1762,7 +1762,10 @@ function fbSaveCloud(){
     const update={};
     update['langs.'+curLang]=data;
     update.updatedAt=firebase.firestore.FieldValue.serverTimestamp();
-    fbUserDoc().set(update,{merge:true}).catch(()=>{});
+    fbUserDoc().update(update).catch(()=>{
+      // Doc may not exist yet, create it
+      fbUserDoc().set(update).catch(()=>{});
+    });
   },500);
 }
 
