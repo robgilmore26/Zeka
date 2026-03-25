@@ -343,6 +343,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .vd-suffix.correct{border-color:var(--green);background:rgba(88,204,2,.1)}
 .vd-suffix.wrong{border-color:var(--red);background:rgba(255,75,75,.1)}
 .vd-next{width:100%;max-width:360px;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);margin-top:16px}
+.sr-keys{display:flex;gap:6px;justify-content:center;margin-top:12px;width:100%;max-width:360px}
+.sr-key{padding:10px 14px;border:none;border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;transition:.1s;flex:1}
+.sr-key:active{background:rgba(255,255,255,.25);transform:scale(.95)}
 .cpiece{position:absolute;width:10px;height:10px;top:-10px;z-index:300;animation:confetti 2.5s ease-in forwards}
 
 /* OVERLAY */
@@ -2102,6 +2105,11 @@ function fcTotalCards(){
   return total;
 }
 
+function srKeysHtml(){
+  if(curLang!=='sr')return '';
+  return '<div class="sr-keys">'+'šžčćđ'.split('').map(c=>'<button class="sr-key" onclick="S.insertSrKey(\''+c+'\')">'+c+'</button>').join('')+'</div>';
+}
+
 function verbPrefix(v){
   const forms=Object.values(v.conj);
   let pre=forms[0];
@@ -2267,6 +2275,16 @@ finishFcSession(){
   sDn();
 },
 
+insertSrKey(ch){
+  const el=document.activeElement;
+  if(!el||!el.classList.contains('vd-input')&&!el.classList.contains('vd-suffix'))return;
+  const start=el.selectionStart||el.value.length;
+  const end=el.selectionEnd||el.value.length;
+  el.value=el.value.slice(0,start)+ch+el.value.slice(end);
+  el.selectionStart=el.selectionEnd=start+1;
+  el.focus();
+},
+
 renderVerbHome(){
   const el=document.getElementById('verb-home');
   if(!VERBS.length){
@@ -2331,6 +2349,7 @@ renderVerbP1(v){
   h+='<div class="vd-prompt">'+esc(prompt)+'</div>';
   h+='<div class="vd-inf">'+v.em+' '+esc(shown)+'</div>';
   h+='<input class="vd-input" id="vd-inf-input" placeholder="Type translation..." autocomplete="off" autocapitalize="off" spellcheck="false">';
+  h+=srKeysHtml();
   h+='<div id="vd-inf-fb"></div>';
   h+='<button class="vd-next" id="vd-p1-btn" onclick="S.checkVerbP1()">Check</button>';
   h+='</div>';
@@ -2348,8 +2367,9 @@ checkVerbP1(){
   const val=inp.value.trim().toLowerCase();
   const answer=inp.dataset.answer;
   const correct=answer.toLowerCase();
+  const correctBase=correct.replace(/^to /,'');
   st.vbTotal++;
-  if(val===correct){
+  if(val===correct||val===correctBase){
     st.vbCorrect++;inp.classList.add('correct');sCl();
   }else{
     inp.classList.add('wrong');
@@ -2377,6 +2397,7 @@ renderVerbP2(v){
     h+='</div>';
   });
   h+='</div>';
+  h+=srKeysHtml();
   h+='<button class="vd-next" id="vd-p2-done" style="display:none" onclick="S.nextVerb()">Next Verb</button>';
   h+='</div>';
   document.getElementById('vd-body').innerHTML=h;
