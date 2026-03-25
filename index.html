@@ -322,6 +322,27 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fc-rate-btn.r-hard{background:var(--orange)}
 .fc-rate-btn.r-good{background:var(--green)}
 .fc-rate-btn.r-easy{background:var(--blue)}
+/* VERB DRILL */
+.vd-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:#131F24}
+.vd-count{font-size:14px;font-weight:700;color:rgba(255,255,255,.6)}
+.vd-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px;background:#131F24;overflow-y:auto}
+.vd-phase{width:100%;max-width:360px}
+.vd-prompt{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-bottom:8px;text-align:center}
+.vd-inf{font-size:28px;font-weight:800;color:#fff;text-align:center;margin-bottom:16px}
+.vd-input{width:100%;padding:14px;border:2px solid rgba(255,255,255,.15);border-radius:14px;font-size:18px;font-weight:700;text-align:center;background:rgba(255,255,255,.08);color:#fff;outline:none;transition:.2s;box-sizing:border-box}
+.vd-input:focus{border-color:var(--blue)}
+.vd-input.correct{border-color:var(--green);background:rgba(88,204,2,.1)}
+.vd-input.wrong{border-color:var(--red);background:rgba(255,75,75,.1)}
+.vd-correction{font-size:14px;color:var(--red);font-weight:700;text-align:center;margin-top:6px}
+.vd-conj{width:100%;max-width:360px;margin-top:16px}
+.vd-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.vd-pronoun{font-size:14px;font-weight:800;color:rgba(255,255,255,.6);width:90px;text-align:right;flex-shrink:0}
+.vd-stem{font-size:16px;font-weight:700;color:rgba(255,255,255,.4)}
+.vd-suffix{flex:1;padding:10px;border:2px solid rgba(255,255,255,.15);border-radius:10px;font-size:16px;font-weight:700;background:rgba(255,255,255,.08);color:#fff;outline:none;transition:.2s;box-sizing:border-box}
+.vd-suffix:focus{border-color:var(--blue)}
+.vd-suffix.correct{border-color:var(--green);background:rgba(88,204,2,.1)}
+.vd-suffix.wrong{border-color:var(--red);background:rgba(255,75,75,.1)}
+.vd-next{width:100%;max-width:360px;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);margin-top:16px}
 .cpiece{position:absolute;width:10px;height:10px;top:-10px;z-index:300;animation:confetti 2.5s ease-in forwards}
 
 /* OVERLAY */
@@ -348,6 +369,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   .ptop{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .soc-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .fc-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
+  .vd-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .bnav{padding-bottom:env(safe-area-inset-bottom,8px);height:calc(82px + env(safe-area-inset-bottom,8px))}
   .fbar{padding-bottom:env(safe-area-inset-bottom,8px)}
   .cp-btn{margin-bottom:env(safe-area-inset-bottom,8px)}
@@ -490,6 +512,15 @@ img.emoji{height:1em;width:1em;margin:0 .05em;vertical-align:-0.15em;display:inl
     <div style="width:32px"></div>
   </div>
   <div class="fc-body" id="fc-body"></div>
+</div>
+
+<div class="sc" id="verb-drill">
+  <div class="vd-top">
+    <button class="xbtn" onclick="S.exitVerb()">&#10005;</button>
+    <div class="vd-count" id="vd-count">0 / 0</div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="vd-body" id="vd-body"></div>
 </div>
 
 <div class="sc" id="social">
@@ -1972,7 +2003,8 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
-  fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0};
+  fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
+  vbVerbs:[],vbIdx:0,vbPhase:1,vbCorrect:0,vbTotal:0};
 
 function load(){try{
   // Migrate old single-language key to new per-language format
@@ -2056,12 +2088,25 @@ function fcDueCards(){
       if(!c||c.due<=now)cards.push({word:w,dir:dir,key:k});
     });
   });
+  VERBS.forEach(v=>{
+    const vId='v_'+v.inf;
+    ['se','es'].forEach(dir=>{
+      const k=vId+'_'+dir;
+      const c=st.fc[k];
+      if(c&&c.due<=now)cards.push({word:{id:vId,l:v.inf,e:v.en,em:v.em,s:v.inf},dir:dir,key:k});
+    });
+  });
   return cards;
 }
 
 function fcTotalCards(){
   const compWords=UNITS.filter(u=>st.completed.includes(u.id)).flatMap(u=>u.words);
-  return compWords.length*2;
+  let total=compWords.length*2;
+  VERBS.forEach(v=>{
+    const vId='v_'+v.inf;
+    if(st.fc[vId+'_se']||st.fc[vId+'_es'])total+=2;
+  });
+  return total;
 }
 
 function verbPrefix(v){
@@ -2091,7 +2136,7 @@ pk(a,n,ex=[]){return this.sh(a.filter(x=>!ex.includes(x))).slice(0,n)},
 
 goScr(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
   document.getElementById(id).classList.add('act');
-  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social'||id==='flashcard');},
+  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social'||id==='flashcard'||id==='verb-drill');},
 
 goHome(){this.updH();this.rPath();this.goScr('home');},
 
@@ -2259,6 +2304,148 @@ renderVerbHome(){
     h+='<span style="color:rgba(255,255,255,.3);font-size:18px">›</span>';
     h+='</div>';
   });
+  h+='</div>';
+  el.innerHTML=h;
+},
+
+startVerbSession(count,specificIdx){
+  if(!VERBS.length)return;
+  if(typeof specificIdx==='number'){
+    st.vbVerbs=[VERBS[specificIdx]];
+  }else{
+    const shuffled=this.sh([...VERBS]);
+    st.vbVerbs=shuffled.slice(0,Math.min(count,shuffled.length));
+  }
+  st.vbIdx=0;st.vbPhase=1;st.vbCorrect=0;st.vbTotal=0;
+  this.goScr('verb-drill');
+  this.renderVerbPhase();
+},
+
+renderVerbPhase(){
+  if(st.vbIdx>=st.vbVerbs.length){this.finishVerbSession();return;}
+  const v=st.vbVerbs[st.vbIdx];
+  document.getElementById('vd-count').textContent=(st.vbIdx+1)+' / '+st.vbVerbs.length;
+  if(st.vbPhase===1){this.renderVerbP1(v);}
+  else{this.renderVerbP2(v);}
+},
+
+renderVerbP1(v){
+  const toSr=Math.random()<0.5;
+  const prompt=toSr?'Translate to '+langName():'Translate to English';
+  const shown=toSr?v.en:v.inf;
+  const answer=toSr?v.inf:v.en;
+  let h='<div class="vd-phase">';
+  h+='<div class="vd-prompt">'+esc(prompt)+'</div>';
+  h+='<div class="vd-inf">'+v.em+' '+esc(shown)+'</div>';
+  h+='<input class="vd-input" id="vd-inf-input" placeholder="Type translation..." autocomplete="off" autocapitalize="off" spellcheck="false">';
+  h+='<div id="vd-inf-fb"></div>';
+  h+='<button class="vd-next" id="vd-p1-btn" onclick="S.checkVerbP1()">Check</button>';
+  h+='</div>';
+  document.getElementById('vd-body').innerHTML=h;
+  document.getElementById('vd-inf-input').dataset.answer=answer;
+  const inp=document.getElementById('vd-inf-input');
+  inp.focus();
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('vd-p1-btn').click();}});
+},
+
+checkVerbP1(){
+  const inp=document.getElementById('vd-inf-input');
+  const btn=document.getElementById('vd-p1-btn');
+  if(btn.textContent==='Next'){st.vbPhase=2;this.renderVerbPhase();return;}
+  const val=inp.value.trim().toLowerCase();
+  const answer=inp.dataset.answer;
+  const correct=answer.toLowerCase();
+  st.vbTotal++;
+  if(val===correct){
+    st.vbCorrect++;inp.classList.add('correct');sCl();
+  }else{
+    inp.classList.add('wrong');
+    document.getElementById('vd-inf-fb').innerHTML='<div class="vd-correction">'+esc(answer)+'</div>';
+  }
+  inp.disabled=true;
+  btn.textContent='Next';
+},
+
+renderVerbP2(v){
+  const pre=verbPrefix(v);
+  const pronouns=[
+    ['Ja',v.conj.ja],['Ti',v.conj.ti],['On/Ona/Ono',v.conj.on],
+    ['Mi',v.conj.mi],['Vi',v.conj.vi],['Oni/One/Ona',v.conj.oni]
+  ];
+  let h='<div class="vd-phase">';
+  h+='<div class="vd-prompt">Conjugate: '+v.em+' '+esc(v.inf)+' ('+esc(v.en)+')</div>';
+  h+='<div class="vd-conj">';
+  pronouns.forEach((p,i)=>{
+    const suffix=p[1].slice(pre.length);
+    h+='<div class="vd-row">';
+    h+='<span class="vd-pronoun">'+esc(p[0])+'</span>';
+    if(pre)h+='<span class="vd-stem">'+esc(pre)+'</span>';
+    h+='<input class="vd-suffix" id="vd-c'+i+'" data-answer="'+esc(suffix)+'" data-full="'+esc(p[1])+'" placeholder="'+(pre?'...':p[1].charAt(0)+'...')+'" autocomplete="off" autocapitalize="off" spellcheck="false">';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+='<button class="vd-next" id="vd-p2-done" style="display:none" onclick="S.nextVerb()">Next Verb</button>';
+  h+='</div>';
+  document.getElementById('vd-body').innerHTML=h;
+  pronouns.forEach((p,i)=>{
+    const el=document.getElementById('vd-c'+i);
+    const validate=()=>{
+      if(el.classList.contains('correct')||el.classList.contains('wrong'))return;
+      const val=el.value.trim().toLowerCase();
+      if(!val)return;
+      const ans=el.dataset.answer.toLowerCase();
+      const full=el.dataset.full.toLowerCase();
+      st.vbTotal++;
+      if(val===ans||val===full){
+        st.vbCorrect++;el.classList.add('correct');sCl();
+      }else{
+        el.classList.add('wrong');el.value=el.dataset.answer;
+      }
+      el.disabled=true;
+      let next=null;
+      for(let j=i+1;j<pronouns.length;j++){
+        const nx=document.getElementById('vd-c'+j);
+        if(!nx.disabled){next=nx;break;}
+      }
+      if(next)next.focus();
+      else document.getElementById('vd-p2-done').style.display='';
+    };
+    el.addEventListener('blur',validate);
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='Tab'){e.preventDefault();validate();}});
+  });
+  document.getElementById('vd-c0').focus();
+},
+
+nextVerb(){
+  const v=st.vbVerbs[st.vbIdx];
+  const vId='v_'+v.inf;
+  ['se','es'].forEach(dir=>{
+    const k=vId+'_'+dir;
+    if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0};
+  });
+  st.vbIdx++;st.vbPhase=1;
+  this.renderVerbPhase();
+},
+
+exitVerb(){
+  sCl();save();
+  this.goHome();
+  this.setLearnMode('verbs');
+},
+
+finishVerbSession(){
+  sDn();save();
+  const el=document.getElementById('vd-body');
+  const pct=st.vbTotal>0?Math.round(st.vbCorrect/st.vbTotal*100):0;
+  let h='<div style="text-align:center;padding:40px 20px">';
+  h+='<div style="font-size:56px;margin-bottom:12px">🎉</div>';
+  h+='<div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:20px">Session Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center;margin-bottom:24px">';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.vbVerbs.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">VERBS</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--orange)">'+st.vbCorrect+'/'+st.vbTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
+  h+='</div>';
+  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitVerb()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
 },
