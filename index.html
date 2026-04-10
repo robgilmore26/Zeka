@@ -1544,7 +1544,6 @@ function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLan
 
 // ═══════════════ SPEECH SYNTHESIS ═══════════════
 const SPEECH_LOCALE={it:'it-IT',en:'en-US'};
-const LINGVA_HOST='https://lingva.ml';
 const LINGVA_LANGS=new Set(['sr','it']);
 let _spkAudio=null;
 if(window.speechSynthesis)speechSynthesis.getVoices();
@@ -1767,7 +1766,7 @@ function fbSaveCloud(){
     update.updatedAt=firebase.firestore.FieldValue.serverTimestamp();
     fbUserDoc().update(update).catch(()=>{
       // Doc may not exist yet, create it
-      fbUserDoc().set(update).catch(()=>{});
+      fbUserDoc().set(update,{merge:true}).catch(()=>{});
     });
   },500);
 }
@@ -2481,7 +2480,7 @@ switchLang(){
   const next=codes[(codes.indexOf(curLang)+1)%codes.length];
   setLang(next);
   // Reset state for new language
-  st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};
+  st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};st.fc={};
   load();// Load saved progress for this language
   if(fbUser)fbLoad();
   this.goHome();
@@ -3070,7 +3069,7 @@ async sendRequest(uid){
     if(res.ok){
       target.innerHTML='<div class="fm-msg ok">Friend request sent!</div>';
     }else{
-      target.innerHTML=`<div class="fm-msg err">${res.error}</div>`;
+      target.innerHTML=`<div class="fm-msg err">${esc(res.error)}</div>`;
     }
   }
 },
@@ -3096,7 +3095,7 @@ async addByCode(){
   if(res.ok){
     resEl.innerHTML='<div class="fm-msg ok">Friend request sent!</div>';
   }else{
-    resEl.innerHTML=`<div class="fm-msg err">${res.error}</div>`;
+    resEl.innerHTML=`<div class="fm-msg err">${esc(res.error)}</div>`;
   }
 },
 
