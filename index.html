@@ -128,7 +128,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .wordbox{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--g1);border-radius:16px;margin-bottom:20px}
 .wb-em{font-size:36px;flex-shrink:0}
 .wb-txt{display:flex;flex-direction:column;gap:1px}
-.wb-cyr{font-size:21px;font-weight:800;color:var(--g7)}
+.wb-word{font-size:21px;font-weight:800;color:var(--g7)}
 .wb-lat{font-size:13px;color:var(--g5);font-style:italic}
 
 /* OPTIONS */
@@ -2643,7 +2643,7 @@ rMC(b,ex){
   const spk=isSE?spkWBtn(w):'';
   let h=`<div class="lcont"><div class="exq">${ex.prompt}</div>
     <div class="wordbox"><div class="wb-em">${isSE?'🔤':w.em}</div><div class="wb-txt">
-    <div class="wb-cyr">${shown}</div></div>${spk}</div><div class="opts">`;
+    <div class="wb-word">${shown}</div></div>${spk}</div><div class="opts">`;
   ex.opts.forEach((o,i)=>{h+=`<button class="ob" data-i="${i}" onclick="S.selO(${i})"><span class="on">${i+1}</span><span>${o}</span></button>`;});
   h+=`</div></div>${this.bb()}`;b.innerHTML=h;
   if(isSE)speakWord(w);
@@ -2659,7 +2659,7 @@ rEm(b,ex){
   const w=ex.word;
   let h=`<div class="lcont"><div class="exq">Select the correct meaning</div>
     <div class="wordbox"><div class="wb-em">🔤</div><div class="wb-txt">
-    <div class="wb-cyr">${w.l}</div></div>${spkWBtn(w)}</div><div class="egrid">`;
+    <div class="wb-word">${w.l}</div></div>${spkWBtn(w)}</div><div class="egrid">`;
   ex.opts.forEach((o,i)=>{h+=`<button class="eopt" data-i="${i}" onclick="S.selE(${i})"><span class="ee">${o.em}</span><span class="el">${o.e}</span></button>`;});
   h+=`</div></div>${this.bb()}`;b.innerHTML=h;
   speakWord(w);
@@ -2719,7 +2719,7 @@ rTy(b,ex){
   const w=ex.word;
   let h=`<div class="lcont"><div class="exq">Write this in English</div>
     <div class="wordbox"><div class="wb-em">🔤</div><div class="wb-txt">
-    <div class="wb-cyr">${w.l}</div></div>${spkWBtn(w)}</div>
+    <div class="wb-word">${w.l}</div></div>${spkWBtn(w)}</div>
     <input type="text" class="tinp" id="tinp" placeholder="Type in English..." autocomplete="off" autocapitalize="off" oninput="S.onTy()">
     <div class="thint">Type the English translation</div></div>${this.bb()}`;
   b.innerHTML=h;setTimeout(()=>document.getElementById('tinp').focus(),200);
@@ -2838,13 +2838,14 @@ finishLesson(){sCl();this.goHome();},
 exitL(){const ov=document.getElementById('ovnh');if(ov)ov.remove();sCl();this.goHome();},
 
 confetti(){const scr=document.getElementById('scr');
+  document.querySelectorAll('.cpiece').forEach(el=>el.remove());
   const cols=['#58CC02','#1CB0F6','#FF4B4B','#FFC800','#CE82FF','#FF9600'];
   for(let i=0;i<35;i++){const p=document.createElement('div');p.className='cpiece';
     p.style.left=Math.random()*100+'%';p.style.background=cols[Math.floor(Math.random()*cols.length)];
     p.style.width=(Math.random()*8+5)+'px';p.style.height=(Math.random()*8+5)+'px';
     p.style.borderRadius=Math.random()>.5?'50%':'2px';
     p.style.animationDelay=Math.random()*.8+'s';p.style.animationDuration=(Math.random()*1.5+1.5)+'s';
-    scr.appendChild(p);setTimeout(()=>p.remove(),3500);}},
+    scr.appendChild(p);setTimeout(()=>{if(p.parentNode)p.remove();},3500);}},
 
 toast(msg){const t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'absolute',top:'80px',left:'50%',transform:'translateX(-50%)',background:'rgba(0,0,0,.8)',color:'#fff',padding:'10px 20px',borderRadius:'12px',fontSize:'14px',fontWeight:'700',zIndex:'300',pointerEvents:'none',animation:'eloFloat 2s ease-out forwards'});document.getElementById('scr').appendChild(t);setTimeout(()=>t.remove(),2200);},
 

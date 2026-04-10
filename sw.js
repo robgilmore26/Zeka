@@ -1,4 +1,4 @@
-const CACHE='zeka-v31';
+const CACHE='zeka-v32';
 const ASSETS=[
   'index.html',
   'manifest.json',
@@ -27,9 +27,20 @@ self.addEventListener('fetch',e=>{
      url.includes('gsi/client')||url.includes('gsi/status')){
     return;// Let the browser handle these normally
   }
+  // Network-first for HTML pages (prevents stale cache)
+  if(e.request.mode==='navigate'||url.endsWith('.html')){
+    e.respondWith(
+      fetch(e.request).then(res=>{
+        if(res.ok){const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));}
+        return res;
+      }).catch(()=>caches.match(e.request).then(r=>r||caches.match('index.html')))
+    );
+    return;
+  }
+  // Cache-first for static assets (audio, images, etc.)
   e.respondWith(
     caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
-      if(res.ok&&e.request.method==='GET'){
+      if(res.ok&&e.request.method==='GET'&&!url.includes('chrome-extension')){
         const clone=res.clone();
         caches.open(CACHE).then(c=>c.put(e.request,clone));
       }
