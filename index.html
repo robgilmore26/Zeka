@@ -2016,12 +2016,14 @@ function showSplashReady(){
 
 function getStateData(){
   return{elo:st.elo,xp:st.xp,streak:st.streak,lastDate:st.lastDate,
-    completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc};
+    completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
+    fcNewToday:st.fcNewToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
   st.completed=p.completed||[];st.ws=p.ws||{};st.hearts=p.hearts??5;st.fc=p.fc||{};
   st.uacc=p.uacc||{};
+  st.fcNewToday=p.fcNewToday||0;st.fcNewDate=p.fcNewDate||'';st.fcNewLimit=p.fcNewLimit||10;
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false},p.firsts||{});
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
@@ -2295,6 +2297,7 @@ async function fbGetPendingRequests(){
 
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
+  fcNewToday:0,fcNewDate:'',fcNewLimit:10,
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -2330,9 +2333,21 @@ function fcGet(wordId,dir){
   return st.fc[k];
 }
 
+// Daily new-card limit (Anki-style)
+const FC_NEW_LIMIT_DEFAULT=10;
+function _fcResetDayIfNeeded(){
+  const today=new Date().toDateString();
+  if(st.fcNewDate!==today){st.fcNewDate=today;st.fcNewToday=0;}
+}
+function fcNewLimitRemaining(){
+  _fcResetDayIfNeeded();
+  return Math.max(0,(st.fcNewLimit||FC_NEW_LIMIT_DEFAULT)-st.fcNewToday);
+}
+
 function fcRate(wordId,dir,rating){
   const c=fcGet(wordId,dir);
   const now=Date.now();
+  const wasBrandNew=(c.due===0&&c.reps===0);
   if(rating===0){
     c.reps=0;c.ivl=1/(24*60);
     c.ease=Math.max(1.3,c.ease-0.2);
@@ -2351,6 +2366,8 @@ function fcRate(wordId,dir,rating){
     c.reps++;
   }
   c.due=now+c.ivl*86400000;
+  // Count this introduction toward today's new-card budget
+  if(wasBrandNew){_fcResetDayIfNeeded();st.fcNewToday++;}
   save();
 }
 
@@ -2372,15 +2389,21 @@ function fcIvlLabel(wordId,dir,rating){
   return Math.round(ivl/30)+'mo';
 }
 
-function fcDueCards(){
+// Returns due cards split into reviews and new, capped by daily new-card limit.
+// {all: [...], reviews: [...], newAvailable: int, newShown: int, newRemaining: int}
+function fcDueBreakdown(){
+  _fcResetDayIfNeeded();
   const now=Date.now();
-  const cards=[];
+  const reviews=[];
+  const newPool=[];
   const compWords=UNITS.filter(u=>st.completed.includes(u.id)).flatMap(u=>u.words);
   compWords.forEach(w=>{
     ['se','es'].forEach(dir=>{
       const k=fcKey(w.id,dir);
       const c=st.fc[k];
-      if(!c||c.due<=now)cards.push({word:w,dir:dir,key:k});
+      const isNew=!c||(c.due===0&&c.reps===0);
+      if(isNew)newPool.push({word:w,dir:dir,key:k,isNew:true});
+      else if(c.due<=now)reviews.push({word:w,dir:dir,key:k,isNew:false});
     });
   });
   VERBS.forEach(v=>{
@@ -2388,11 +2411,17 @@ function fcDueCards(){
     ['se','es'].forEach(dir=>{
       const k=vId+'_'+dir;
       const c=st.fc[k];
-      if(c&&c.due<=now)cards.push({word:{id:vId,l:v.inf,e:v.en,em:v.em,s:v.inf},dir:dir,key:k});
+      if(!c)return;// verbs are only added to FC when explicitly seeded; no auto-new
+      if(c.due<=now)reviews.push({word:{id:vId,l:v.inf,e:v.en,em:v.em,s:v.inf},dir:dir,key:k,isNew:false});
     });
   });
-  return cards;
+  const newRemaining=fcNewLimitRemaining();
+  const newShown=Math.min(newRemaining,newPool.length);
+  const all=[...reviews,...newPool.slice(0,newShown)];
+  return{all,reviews,newAvailable:newPool.length,newShown,newRemaining};
 }
+
+function fcDueCards(){return fcDueBreakdown().all;}
 
 function fcTotalCards(){
   const compWords=UNITS.filter(u=>st.completed.includes(u.id)).flatMap(u=>u.words);
@@ -2452,7 +2481,8 @@ goHome(){this.updH();this.rPath();this.goScr('home');},
 
 renderFcHome(){
   const el=document.getElementById('fc-home');
-  const due=fcDueCards();
+  const bd=fcDueBreakdown();
+  const due=bd.all;
   const total=fcTotalCards();
   if(total===0){
     el.innerHTML='<div class="empty-state">'+
@@ -2463,7 +2493,15 @@ renderFcHome(){
   let h='<div style="text-align:center;padding:20px 0">';
   h+='<div style="font-size:48px;margin-bottom:8px">'+(due.length>0?'📖':'🎉')+'</div>';
   h+='<div style="font-size:28px;font-weight:800;color:#fff">'+due.length+' card'+(due.length!==1?'s':'')+' due</div>';
-  h+='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-top:4px">'+total+' total cards</div>';
+  // Breakdown line
+  const parts=[];
+  if(bd.reviews.length>0)parts.push('<span style="color:var(--blue)">'+bd.reviews.length+' review'+(bd.reviews.length!==1?'s':'')+'</span>');
+  if(bd.newShown>0)parts.push('<span style="color:var(--green)">'+bd.newShown+' new</span>');
+  if(parts.length>0)h+='<div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:4px;font-weight:700">'+parts.join(' · ')+'</div>';
+  h+='<div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:6px">'+total+' total cards · '+bd.newRemaining+'/'+(st.fcNewLimit||10)+' new today</div>';
+  if(bd.newAvailable>bd.newShown){
+    h+='<div style="font-size:11px;color:var(--orange);margin-top:4px">'+(bd.newAvailable-bd.newShown)+' new card'+(bd.newAvailable-bd.newShown!==1?'s':'')+' waiting (daily limit)</div>';
+  }
   if(due.length>0){
     h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Start Review</button>';
   }else{
@@ -2478,9 +2516,18 @@ renderFcHome(){
       else when='in '+Math.round(mins/1440)+'d';
     }
     h+='<div style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:16px">';
-    h+=zekaHtml('All caught up! 🎉 Come back '+when+' for more cards.','sm');
+    if(bd.newAvailable>0)h+=zekaHtml("Reviews done! 🎉 "+bd.newAvailable+" new card"+(bd.newAvailable!==1?'s':'')+" will unlock tomorrow.",'sm');
+    else h+=zekaHtml('All caught up! 🎉 Come back '+when+' for more cards.','sm');
     h+='</div>';
   }
+  // Daily new-card limit picker
+  h+='<div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:rgba(255,255,255,.45)">';
+  h+='<span>New cards/day:</span>';
+  [10,20,30,50].forEach(n=>{
+    const active=(st.fcNewLimit||10)===n;
+    h+='<button onclick="S.setFcNewLimit('+n+')" style="border:none;padding:4px 8px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;background:'+(active?'var(--sr-blue)':'rgba(255,255,255,.08)')+';color:'+(active?'#fff':'rgba(255,255,255,.55)')+'">'+n+'</button>';
+  });
+  h+='</div>';
   h+='</div>';
   const compUnits=UNITS.filter(u=>st.completed.includes(u.id));
   if(compUnits.length>0){
@@ -2502,6 +2549,11 @@ renderFcHome(){
     h+='</div>';
   }
   el.innerHTML=h;
+},
+
+setFcNewLimit(n){
+  st.fcNewLimit=n;save();
+  this.renderFcHome();
 },
 
 startFcSession(){
@@ -3027,7 +3079,7 @@ switchLang(){
   setLang(next);
   // Reset state for new language
   st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};st.fc={};
-  st.uacc={};
+  st.uacc={};st.fcNewToday=0;st.fcNewDate='';st.fcNewLimit=10;
   st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false};
   load();// Load saved progress for this language
   if(fbUser)fbLoad();
