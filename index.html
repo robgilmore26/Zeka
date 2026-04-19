@@ -465,11 +465,18 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   <div class="seg-toggle" id="learn-toggle">
     <button class="seg-btn seg-active" onclick="S.setLearnMode('lessons')">Lessons</button>
     <button class="seg-btn" onclick="S.setLearnMode('flashcards')">Flashcards</button>
-    <button class="seg-btn" onclick="S.setLearnMode('verbs')">Verbs</button>
+    <button class="seg-btn" onclick="S.setLearnMode('grammar')">Grammar</button>
   </div>
   <div class="hscr" id="hscr"></div>
   <div id="fc-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
-  <div id="verb-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
+  <div id="grammar-home" style="display:none;flex:1;overflow-y:auto;padding:0 22px 100px">
+    <div class="seg-toggle" id="grammar-toggle" style="margin-top:12px">
+      <button class="seg-btn seg-active" onclick="S.setGrammarMode('verbs')">Verbs</button>
+      <button class="seg-btn" onclick="S.setGrammarMode('cases')" id="gr-cases-btn">Cases</button>
+    </div>
+    <div id="verb-home"></div>
+    <div id="case-home" style="display:none"></div>
+  </div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i">🏠</span><span class="ni-l">Learn</span></button>
     <button class="ni" onclick="S.goSocial()"><span class="ni-i">👥</span><span class="ni-l">Social</span></button>
@@ -514,6 +521,15 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div style="width:32px"></div>
   </div>
   <div class="vd-body" id="vd-body"></div>
+</div>
+
+<div class="sc" id="case-drill">
+  <div class="vd-top">
+    <button class="xbtn" onclick="S.exitCase()">&#10005;</button>
+    <div class="vd-count" id="cs-count">0 / 0</div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="vd-body" id="cs-body"></div>
 </div>
 
 <div class="sc" id="social">
@@ -1530,6 +1546,176 @@ const V_SR=[
 {inf:'kuvati',en:'to cook',em:'👨‍🍳',conj:{ja:'kuvam',ti:'kuvaš',on:'kuva',mi:'kuvamo',vi:'kuvate',oni:'kuvaju'}}
 ];
 
+// ═══════════════ NOUNS (for case drill) ═══════════════
+// cases: nom, gen, dat, acc, voc, ins, loc (singular)
+const N_SR=[
+// ---------- MASCULINE ----------
+{nom:'čovek',en:'man',em:'👨',gender:'m',
+  cases:{nom:'čovek',gen:'čoveka',dat:'čoveku',acc:'čoveka',voc:'čoveče',ins:'čovekom',loc:'čoveku'},
+  sentences:[
+    {c:'acc',t:'Vidim ______ na ulici.',a:'čoveka',hint:'I see the man'},
+    {c:'gen',t:'Nema ovog ______.',a:'čoveka',hint:"there's no such man"},
+    {c:'dat',t:'Pomažem ______.',a:'čoveku',hint:'I help the man'},
+    {c:'ins',t:'Pričam sa ______.',a:'čovekom',hint:'I talk with the man'},
+    {c:'loc',t:'Razgovor je o ______.',a:'čoveku',hint:'conversation is about the man'}
+  ]},
+{nom:'pas',en:'dog',em:'🐕',gender:'m',
+  cases:{nom:'pas',gen:'psa',dat:'psu',acc:'psa',voc:'pse',ins:'psom',loc:'psu'},
+  sentences:[
+    {c:'acc',t:'Vodim ______ u park.',a:'psa',hint:"I'm taking the dog to the park"},
+    {c:'gen',t:'Plašim se ______.',a:'psa',hint:'afraid of the dog'},
+    {c:'dat',t:'Dajem ______ hranu.',a:'psu',hint:'giving food to the dog'},
+    {c:'ins',t:'Šetam sa ______.',a:'psom',hint:'walking with the dog'},
+    {c:'loc',t:'Pričam o ______.',a:'psu',hint:'talking about the dog'}
+  ]},
+{nom:'grad',en:'city',em:'🏙️',gender:'m',
+  cases:{nom:'grad',gen:'grada',dat:'gradu',acc:'grad',voc:'grade',ins:'gradom',loc:'gradu'},
+  sentences:[
+    {c:'acc',t:'Volim ovaj ______.',a:'grad',hint:'I love this city'},
+    {c:'gen',t:'Dolazim iz ______.',a:'grada',hint:'I come from the city'},
+    {c:'dat',t:'Idem ka ______.',a:'gradu',hint:'going toward the city'},
+    {c:'ins',t:'Oduševljen sam ______.',a:'gradom',hint:'amazed by the city'},
+    {c:'loc',t:'Živim u ______.',a:'gradu',hint:'I live in the city'}
+  ]},
+{nom:'sto',en:'table',em:'🪑',gender:'m',
+  cases:{nom:'sto',gen:'stola',dat:'stolu',acc:'sto',voc:'stole',ins:'stolom',loc:'stolu'},
+  sentences:[
+    {c:'acc',t:'Kupujem nov ______.',a:'sto',hint:'buying a new table'},
+    {c:'gen',t:'Ispod ______ je mačka.',a:'stola',hint:'cat under the table'},
+    {c:'dat',t:'Prilazim ______.',a:'stolu',hint:'approaching the table'},
+    {c:'ins',t:'Zadovoljan sam ______.',a:'stolom',hint:'happy with the table'},
+    {c:'loc',t:'Knjiga je na ______.',a:'stolu',hint:'book is on the table'}
+  ]},
+{nom:'auto',en:'car',em:'🚗',gender:'m',
+  cases:{nom:'auto',gen:'auta',dat:'autu',acc:'auto',voc:'auto',ins:'autom',loc:'autu'},
+  sentences:[
+    {c:'acc',t:'Vozim ______.',a:'auto',hint:'driving the car'},
+    {c:'gen',t:'Iz ______ izlazi dim.',a:'auta',hint:'smoke from the car'},
+    {c:'dat',t:'Idem ka ______.',a:'autu',hint:'going toward the car'},
+    {c:'ins',t:'Putujem ______.',a:'autom',hint:'traveling by car'},
+    {c:'loc',t:'Sedim u ______.',a:'autu',hint:'sitting in the car'}
+  ]},
+{nom:'film',en:'film',em:'🎥',gender:'m',
+  cases:{nom:'film',gen:'filma',dat:'filmu',acc:'film',voc:'filme',ins:'filmom',loc:'filmu'},
+  sentences:[
+    {c:'acc',t:'Gledamo ______.',a:'film',hint:"we're watching a film"},
+    {c:'gen',t:'Ne sećam se ovog ______.',a:'filma',hint:"don't remember this film"},
+    {c:'dat',t:'Vraćam se ______.',a:'filmu',hint:'returning to the film'},
+    {c:'ins',t:'Oduševljena sam ______.',a:'filmom',hint:'amazed by the film'},
+    {c:'loc',t:'Pričam o ______.',a:'filmu',hint:'talking about the film'}
+  ]},
+// ---------- FEMININE ----------
+{nom:'škola',en:'school',em:'🏫',gender:'f',
+  cases:{nom:'škola',gen:'škole',dat:'školi',acc:'školu',voc:'školo',ins:'školom',loc:'školi'},
+  sentences:[
+    {c:'acc',t:'Idem u ______.',a:'školu',hint:'going to school'},
+    {c:'gen',t:'Izlazim iz ______.',a:'škole',hint:'leaving the school'},
+    {c:'dat',t:'Prilazim ______.',a:'školi',hint:'approaching the school'},
+    {c:'ins',t:'Zadovoljna sam ______.',a:'školom',hint:'happy with the school'},
+    {c:'loc',t:'Radim u ______.',a:'školi',hint:'working at the school'}
+  ]},
+{nom:'kuća',en:'house',em:'🏠',gender:'f',
+  cases:{nom:'kuća',gen:'kuće',dat:'kući',acc:'kuću',voc:'kućo',ins:'kućom',loc:'kući'},
+  sentences:[
+    {c:'acc',t:'Kupujem ______.',a:'kuću',hint:'buying a house'},
+    {c:'gen',t:'Izlazim iz ______.',a:'kuće',hint:'leaving the house'},
+    {c:'dat',t:'Idem ka ______.',a:'kući',hint:'going toward the house'},
+    {c:'ins',t:'Ponosan sam ______.',a:'kućom',hint:'proud of the house'},
+    {c:'loc',t:'Spavam u ______.',a:'kući',hint:'sleeping in the house'}
+  ]},
+{nom:'žena',en:'woman',em:'👩',gender:'f',
+  cases:{nom:'žena',gen:'žene',dat:'ženi',acc:'ženu',voc:'ženo',ins:'ženom',loc:'ženi'},
+  sentences:[
+    {c:'acc',t:'Vidim ovu ______.',a:'ženu',hint:'I see this woman'},
+    {c:'gen',t:'Pored ______ stoji dete.',a:'žene',hint:'child by the woman'},
+    {c:'dat',t:'Pomažem ______.',a:'ženi',hint:'I help the woman'},
+    {c:'ins',t:'Pričam sa ______.',a:'ženom',hint:'talking with the woman'},
+    {c:'loc',t:'Pričamo o ______.',a:'ženi',hint:'talking about the woman'}
+  ]},
+{nom:'knjiga',en:'book',em:'📖',gender:'f',
+  cases:{nom:'knjiga',gen:'knjige',dat:'knjizi',acc:'knjigu',voc:'knjigo',ins:'knjigom',loc:'knjizi'},
+  sentences:[
+    {c:'acc',t:'Čitam ______.',a:'knjigu',hint:'reading a book'},
+    {c:'gen',t:'Stranice ______ su stare.',a:'knjige',hint:'pages of the book'},
+    {c:'dat',t:'Vraćam se ______.',a:'knjizi',hint:'returning to the book'},
+    {c:'ins',t:'Oduševljena sam ______.',a:'knjigom',hint:'amazed by the book'},
+    {c:'loc',t:'Pišem u ______.',a:'knjizi',hint:'writing in the book'}
+  ]},
+{nom:'voda',en:'water',em:'💧',gender:'f',
+  cases:{nom:'voda',gen:'vode',dat:'vodi',acc:'vodu',voc:'vodo',ins:'vodom',loc:'vodi'},
+  sentences:[
+    {c:'acc',t:'Pijem ______.',a:'vodu',hint:'drinking water'},
+    {c:'gen',t:'Čaša ______ je puna.',a:'vode',hint:'glass of water is full'},
+    {c:'dat',t:'Prilazim ______.',a:'vodi',hint:'approaching the water'},
+    {c:'ins',t:'Umivam se ______.',a:'vodom',hint:'washing with water'},
+    {c:'loc',t:'Plivam u ______.',a:'vodi',hint:'swimming in the water'}
+  ]},
+{nom:'ulica',en:'street',em:'🛣️',gender:'f',
+  cases:{nom:'ulica',gen:'ulice',dat:'ulici',acc:'ulicu',voc:'ulice',ins:'ulicom',loc:'ulici'},
+  sentences:[
+    {c:'acc',t:'Prelazim ______.',a:'ulicu',hint:'crossing the street'},
+    {c:'gen',t:'Sa ove ______ se vidi park.',a:'ulice',hint:'from this street'},
+    {c:'dat',t:'Idem ka ______.',a:'ulici',hint:'going toward the street'},
+    {c:'ins',t:'Oduševljena sam ovom ______.',a:'ulicom',hint:'amazed by this street'},
+    {c:'loc',t:'Hodam po ______.',a:'ulici',hint:'walking on the street'}
+  ]},
+// ---------- NEUTER ----------
+{nom:'jutro',en:'morning',em:'🌅',gender:'n',
+  cases:{nom:'jutro',gen:'jutra',dat:'jutru',acc:'jutro',voc:'jutro',ins:'jutrom',loc:'jutru'},
+  sentences:[
+    {c:'acc',t:'Volim ______.',a:'jutro',hint:'I love the morning'},
+    {c:'gen',t:'Od ovog ______.',a:'jutra',hint:'since this morning'},
+    {c:'dat',t:'Radujem se ______.',a:'jutru',hint:'looking forward to the morning'},
+    {c:'ins',t:'Oduševljen sam ovim ______.',a:'jutrom',hint:'thrilled with this morning'},
+    {c:'loc',t:'U ovom ______.',a:'jutru',hint:'this morning'}
+  ]},
+{nom:'selo',en:'village',em:'🏞️',gender:'n',
+  cases:{nom:'selo',gen:'sela',dat:'selu',acc:'selo',voc:'selo',ins:'selom',loc:'selu'},
+  sentences:[
+    {c:'acc',t:'Posećujem ______.',a:'selo',hint:'visiting the village'},
+    {c:'gen',t:'Dolazim iz ______.',a:'sela',hint:'from the village'},
+    {c:'dat',t:'Idem ka ______.',a:'selu',hint:'toward the village'},
+    {c:'ins',t:'Zadovoljan sam ovim ______.',a:'selom',hint:'happy with this village'},
+    {c:'loc',t:'Živim u ______.',a:'selu',hint:'I live in the village'}
+  ]},
+{nom:'more',en:'sea',em:'🌊',gender:'n',
+  cases:{nom:'more',gen:'mora',dat:'moru',acc:'more',voc:'more',ins:'morem',loc:'moru'},
+  sentences:[
+    {c:'acc',t:'Gledam ______.',a:'more',hint:'looking at the sea'},
+    {c:'gen',t:'Daleko od ______.',a:'mora',hint:'far from the sea'},
+    {c:'dat',t:'Idem ka ______.',a:'moru',hint:'toward the sea'},
+    {c:'ins',t:'Oduševljen sam ______.',a:'morem',hint:'amazed by the sea'},
+    {c:'loc',t:'Plivam u ______.',a:'moru',hint:'swimming in the sea'}
+  ]},
+{nom:'ime',en:'name',em:'📛',gender:'n',
+  cases:{nom:'ime',gen:'imena',dat:'imenu',acc:'ime',voc:'ime',ins:'imenom',loc:'imenu'},
+  sentences:[
+    {c:'acc',t:'Ne znam njeno ______.',a:'ime',hint:"don't know her name"},
+    {c:'gen',t:'Zapis ______.',a:'imena',hint:'record of the name'},
+    {c:'dat',t:'Pridajem značaj ______.',a:'imenu',hint:'giving importance to the name'},
+    {c:'ins',t:'Ponosan sam ______.',a:'imenom',hint:'proud of the name'},
+    {c:'loc',t:'Razmišljam o ______.',a:'imenu',hint:'thinking about the name'}
+  ]},
+{nom:'pismo',en:'letter',em:'✉️',gender:'n',
+  cases:{nom:'pismo',gen:'pisma',dat:'pismu',acc:'pismo',voc:'pismo',ins:'pismom',loc:'pismu'},
+  sentences:[
+    {c:'acc',t:'Pišem ______.',a:'pismo',hint:'writing a letter'},
+    {c:'gen',t:'Sadržaj ______ je tajan.',a:'pisma',hint:'content of the letter'},
+    {c:'dat',t:'Radujem se ______.',a:'pismu',hint:'looking forward to the letter'},
+    {c:'ins',t:'Iznenađen sam ______.',a:'pismom',hint:'surprised by the letter'},
+    {c:'loc',t:'Pišem u ______.',a:'pismu',hint:'writing in the letter'}
+  ]},
+{nom:'dete',en:'child',em:'🧒',gender:'n',
+  cases:{nom:'dete',gen:'deteta',dat:'detetu',acc:'dete',voc:'dete',ins:'detetom',loc:'detetu'},
+  sentences:[
+    {c:'acc',t:'Čuvam ______.',a:'dete',hint:'watching the child'},
+    {c:'gen',t:'Igračka ovog ______.',a:'deteta',hint:'the toy of this child'},
+    {c:'dat',t:'Čitam ______.',a:'detetu',hint:'reading to the child'},
+    {c:'ins',t:'Ponosan sam ovim ______.',a:'detetom',hint:'proud of this child'},
+    {c:'loc',t:'Pričam o ______.',a:'detetu',hint:'talking about the child'}
+  ]}
+];
+
 // ═══════════════ LANGUAGE SYSTEM ═══════════════
 const LANG_DATA={
   sr:{name:'Serbian',flag:'rs',code:'sr',units:U_SR},
@@ -1538,6 +1724,7 @@ const LANG_DATA={
 let curLang=localStorage.getItem('zeka_lang')||'sr';
 let UNITS,ALL_PH,ALL_W;
 let VERBS=[];
+let NOUNS=[];
 function langName(){return LANG_DATA[curLang].name;}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLang].flag+'.png" style="height:18px;vertical-align:middle">';}
@@ -1592,6 +1779,7 @@ function setLang(code){
   const ld=LANG_DATA[code];
   UNITS=buildUnits(ld.units);ALL_PH=UNITS.flatMap(u=>u.phrases);ALL_W=UNITS.flatMap(u=>u.words);
   VERBS=curLang==='sr'?V_SR:[];
+  NOUNS=curLang==='sr'?N_SR:[];
 }
 setLang(curLang);// Initialize on load
 
@@ -1999,7 +2187,8 @@ async function fbGetPendingRequests(){
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
-  vbVerbs:[],vbIdx:0,vbPhase:1,vbCorrect:0,vbTotal:0};
+  vbVerbs:[],vbIdx:0,vbPhase:1,vbCorrect:0,vbTotal:0,
+  grammarMode:'verbs',csNouns:[],csIdx:0,csPhase:1,csSentIdx:0,csCorrect:0,csTotal:0};
 
 function load(){try{
   // Migrate old single-language key to new per-language format
@@ -2119,6 +2308,16 @@ function verbPrefix(v){
   return pre;
 }
 
+function casePrefix(n){
+  const forms=Object.values(n.cases);
+  let pre=forms[0];
+  for(let i=1;i<forms.length;i++){
+    while(forms[i].indexOf(pre)!==0)pre=pre.slice(0,-1);
+    if(!pre)return '';
+  }
+  return pre;
+}
+
 // ═══════════════ AUDIO (effects only) ═══════════════
 let actx=null;
 function ac(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
@@ -2136,7 +2335,7 @@ pk(a,n,ex=[]){return this.sh(a.filter(x=>!ex.includes(x))).slice(0,n)},
 
 goScr(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
   document.getElementById(id).classList.add('act');
-  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social'||id==='flashcard'||id==='verb-drill');},
+  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social'||id==='flashcard'||id==='verb-drill'||id==='case-drill');},
 
 goHome(){this.updH();this.rPath();this.goScr('home');},
 
@@ -2443,7 +2642,200 @@ nextVerb(){
 exitVerb(){
   sCl();save();
   this.goHome();
-  this.setLearnMode('verbs');
+  this.setLearnMode('grammar');
+  this.setGrammarMode('verbs');
+},
+
+// ═══════════════ CASES ═══════════════
+renderCaseHome(){
+  const el=document.getElementById('case-home');
+  if(curLang!=='sr'||!NOUNS.length){
+    el.innerHTML='<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,.6)">'+
+      '<div style="font-size:56px;margin-bottom:12px">🔤</div>'+
+      '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px">Cases Not Available</div>'+
+      '<div style="font-size:13px">Case drills are only available for Serbian.</div></div>';
+    return;
+  }
+  let h='<div style="text-align:center;padding:16px 0">';
+  h+='<div style="font-size:48px;margin-bottom:8px">🔤</div>';
+  h+='<div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">Case Conjugation</div>';
+  h+='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px">All 7 cases · '+NOUNS.length+' nouns</div>';
+  h+='<div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">';
+  [3,5,10].forEach(n=>{
+    h+='<button style="padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;color:#fff;background:rgba(255,255,255,.12);transition:.2s" onclick="S.startCaseSession('+n+')">'+n+' nouns</button>';
+  });
+  h+='</div>';
+  h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);margin-top:8px" onclick="S.startCaseSession('+Math.min(5,NOUNS.length)+')">Random Session</button>';
+  h+='</div>';
+  const groups=[['m','Masculine'],['f','Feminine'],['n','Neuter']];
+  groups.forEach(([g,label])=>{
+    const nouns=NOUNS.filter(n=>n.gender===g);
+    if(!nouns.length)return;
+    h+='<div style="margin-top:20px">';
+    h+='<div style="font-size:13px;font-weight:800;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">'+label+'</div>';
+    nouns.forEach(n=>{
+      const i=NOUNS.indexOf(n);
+      h+='<div style="display:flex;align-items:center;gap:10px;padding:12px;border:2px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:6px;cursor:pointer" onclick="S.startCaseSession(1,'+i+')">';
+      h+='<span style="font-size:24px">'+n.em+'</span>';
+      h+='<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">'+esc(n.nom)+'</div>';
+      h+='<div style="font-size:12px;color:rgba(255,255,255,.5)">'+esc(n.en)+'</div></div>';
+      h+='<span style="color:rgba(255,255,255,.3);font-size:18px">›</span>';
+      h+='</div>';
+    });
+    h+='</div>';
+  });
+  el.innerHTML=h;
+},
+
+startCaseSession(count,specificIdx){
+  if(!NOUNS.length)return;
+  if(typeof specificIdx==='number'){
+    st.csNouns=[NOUNS[specificIdx]];
+  }else{
+    const shuffled=this.sh([...NOUNS]);
+    st.csNouns=shuffled.slice(0,Math.min(count,shuffled.length));
+  }
+  st.csIdx=0;st.csPhase=1;st.csSentIdx=0;st.csCorrect=0;st.csTotal=0;
+  this.goScr('case-drill');
+  this.renderCasePhase();
+},
+
+renderCasePhase(){
+  if(st.csIdx>=st.csNouns.length){this.finishCaseSession();return;}
+  const n=st.csNouns[st.csIdx];
+  document.getElementById('cs-count').textContent=(st.csIdx+1)+' / '+st.csNouns.length;
+  if(st.csPhase===1)this.renderCaseP1(n);
+  else this.renderCaseP2(n);
+},
+
+renderCaseP1(n){
+  const pre=casePrefix(n);
+  const cases=[
+    ['Nominativ','subject',n.cases.nom],
+    ['Genitiv','of / from',n.cases.gen],
+    ['Dativ','to / for',n.cases.dat],
+    ['Akuzativ','direct object',n.cases.acc],
+    ['Vokativ','addressing',n.cases.voc],
+    ['Instrumental','with / by',n.cases.ins],
+    ['Lokativ','in / on / at',n.cases.loc]
+  ];
+  let h='<div class="vd-phase">';
+  h+='<div class="vd-prompt">Decline: '+n.em+' '+esc(n.nom)+' ('+esc(n.en)+')</div>';
+  h+='<div class="vd-conj">';
+  cases.forEach((c,i)=>{
+    const suffix=c[2].slice(pre.length);
+    h+='<div class="vd-row">';
+    h+='<span class="vd-pronoun" style="width:110px"><div style="font-size:14px">'+esc(c[0])+'</div><div style="font-size:10px;font-weight:600;color:rgba(255,255,255,.4)">'+esc(c[1])+'</div></span>';
+    if(pre)h+='<span class="vd-stem">'+esc(pre)+'</span>';
+    h+='<input class="vd-suffix" id="cs-c'+i+'" data-answer="'+esc(suffix)+'" data-full="'+esc(c[2])+'" placeholder="'+(pre?'...':c[2].charAt(0)+'...')+'" autocomplete="off" autocapitalize="off" spellcheck="false">';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+=srKeysHtml();
+  h+='<button class="vd-next" id="cs-p1-done" style="display:none" onclick="S.startCaseP2()">Practice in Sentences</button>';
+  h+='</div>';
+  document.getElementById('cs-body').innerHTML=h;
+  cases.forEach((c,i)=>{
+    const el=document.getElementById('cs-c'+i);
+    const validate=()=>{
+      if(el.classList.contains('correct')||el.classList.contains('wrong'))return;
+      const val=el.value.trim().toLowerCase();
+      if(!val)return;
+      const ans=el.dataset.answer.toLowerCase();
+      const full=el.dataset.full.toLowerCase();
+      st.csTotal++;
+      if(val===ans||val===full){
+        st.csCorrect++;el.classList.add('correct');sCl();
+      }else{
+        el.classList.add('wrong');el.value=el.dataset.answer;
+      }
+      el.disabled=true;
+      const allDone=cases.every((_,j)=>{
+        const e=document.getElementById('cs-c'+j);
+        return e.classList.contains('correct')||e.classList.contains('wrong');
+      });
+      if(!allDone){
+        for(let j=i+1;j<cases.length;j++){
+          const nx=document.getElementById('cs-c'+j);
+          if(!nx.disabled){nx.focus();break;}
+        }
+      }else document.getElementById('cs-p1-done').style.display='';
+    };
+    el.addEventListener('blur',validate);
+    el.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key==='Tab'){e.preventDefault();validate();}
+    });
+  });
+  document.getElementById('cs-c0').focus();
+},
+
+startCaseP2(){
+  st.csPhase=2;st.csSentIdx=0;
+  this.renderCasePhase();
+},
+
+renderCaseP2(n){
+  if(st.csSentIdx>=n.sentences.length){this.nextCase();return;}
+  const s=n.sentences[st.csSentIdx];
+  let h='<div class="vd-phase">';
+  h+='<div class="vd-prompt">Sentence '+(st.csSentIdx+1)+' / '+n.sentences.length+' · '+esc(s.hint)+'</div>';
+  h+='<div class="vd-inf" style="font-size:22px;line-height:1.4">'+esc(s.t.replace('______',''))+'<span style="color:rgba(255,255,255,.3);font-size:14px;margin-left:6px">('+esc(n.nom)+')</span></div>';
+  h+='<input class="vd-input" id="cs-sent-input" placeholder="Type the declined form..." autocomplete="off" autocapitalize="off" spellcheck="false">';
+  h+=srKeysHtml();
+  h+='<div id="cs-sent-fb"></div>';
+  h+='<button class="vd-next" id="cs-sent-btn" onclick="S.checkCaseSent()">Check</button>';
+  h+='</div>';
+  document.getElementById('cs-body').innerHTML=h;
+  const inp=document.getElementById('cs-sent-input');
+  inp.dataset.answer=s.a;
+  inp.focus();
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('cs-sent-btn').click();}});
+},
+
+checkCaseSent(){
+  const inp=document.getElementById('cs-sent-input');
+  const btn=document.getElementById('cs-sent-btn');
+  if(btn.textContent==='Next'){st.csSentIdx++;this.renderCasePhase();return;}
+  const val=inp.value.trim().toLowerCase();
+  const answer=inp.dataset.answer.toLowerCase();
+  st.csTotal++;
+  if(val===answer){
+    st.csCorrect++;inp.classList.add('correct');sCl();
+  }else{
+    inp.classList.add('wrong');
+    document.getElementById('cs-sent-fb').innerHTML='<div class="vd-correction">'+esc(inp.dataset.answer)+'</div>';
+  }
+  inp.disabled=true;
+  btn.textContent='Next';
+},
+
+nextCase(){
+  st.csIdx++;st.csPhase=1;st.csSentIdx=0;
+  this.renderCasePhase();
+},
+
+exitCase(){
+  sCl();save();
+  this.goHome();
+  this.setLearnMode('grammar');
+  this.setGrammarMode('cases');
+},
+
+finishCaseSession(){
+  sDn();save();
+  const el=document.getElementById('cs-body');
+  const pct=st.csTotal>0?Math.round(st.csCorrect/st.csTotal*100):0;
+  let h='<div style="text-align:center;padding:40px 20px">';
+  h+='<div style="font-size:56px;margin-bottom:12px">🎉</div>';
+  h+='<div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:20px">Session Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center;margin-bottom:24px">';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.csNouns.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">NOUNS</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+st.csCorrect+'/'+st.csTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
+  h+='</div>';
+  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitCase()">Done</button>';
+  h+='</div>';
+  el.innerHTML=h;
 },
 
 finishVerbSession(){
@@ -2464,15 +2856,31 @@ finishVerbSession(){
 },
 
 setLearnMode(mode){
-  const modes=['lessons','flashcards','verbs'];
-  document.querySelectorAll('.seg-btn').forEach((b,i)=>{
+  const modes=['lessons','flashcards','grammar'];
+  document.querySelectorAll('#learn-toggle .seg-btn').forEach((b,i)=>{
     b.classList.toggle('seg-active',i===modes.indexOf(mode));
   });
   document.getElementById('hscr').style.display=mode==='lessons'?'':'none';
   document.getElementById('fc-home').style.display=mode==='flashcards'?'':'none';
-  document.getElementById('verb-home').style.display=mode==='verbs'?'':'none';
+  document.getElementById('grammar-home').style.display=mode==='grammar'?'':'none';
   if(mode==='flashcards'&&typeof this.renderFcHome==='function')this.renderFcHome();
+  if(mode==='grammar')this.setGrammarMode(st.grammarMode||'verbs');
+},
+
+setGrammarMode(mode){
+  st.grammarMode=mode;
+  // Hide Cases tab for non-Serbian languages
+  const casesBtn=document.getElementById('gr-cases-btn');
+  if(casesBtn)casesBtn.style.display=(curLang==='sr')?'':'none';
+  if(mode==='cases'&&curLang!=='sr')mode='verbs';
+  const modes=['verbs','cases'];
+  document.querySelectorAll('#grammar-toggle .seg-btn').forEach((b,i)=>{
+    b.classList.toggle('seg-active',i===modes.indexOf(mode));
+  });
+  document.getElementById('verb-home').style.display=mode==='verbs'?'':'none';
+  document.getElementById('case-home').style.display=mode==='cases'?'':'none';
   if(mode==='verbs')this.renderVerbHome();
+  if(mode==='cases')this.renderCaseHome();
 },
 
 switchLang(){
