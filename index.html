@@ -18,9 +18,15 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{
+  /* Refined Dark palette */
+  --bg:#0F1419;--surface:#1A2028;--surface-raised:#222A33;
+  --divider:rgba(255,255,255,.06);
+  --text-1:#F5F7FA;--text-2:rgba(245,247,250,.65);--text-3:rgba(245,247,250,.4);
+  --sr-blue:#1A5FD1;--sr-blue-d:#0C3D8E;
+  /* Legacy + action colors */
   --green:#58CC02;--green-d:#46a302;--blue:#1CB0F6;--blue-d:#1899d6;
-  --red:#FF4B4B;--red-d:#ea2b2b;--orange:#FF9600;--purple:#CE82FF;
-  --gold:#FFC800;--g1:#F7F7F7;--g2:#E5E5E5;--g3:#CDCDCD;--g4:#AFAFAF;
+  --red:#FF6B6B;--red-d:#e04848;--orange:#FFA54F;--purple:#CE82FF;
+  --gold:#FFD43B;--g1:#F7F7F7;--g2:#E5E5E5;--g3:#CDCDCD;--g4:#AFAFAF;
   --g5:#777;--g6:#4B4B4B;--g7:#3C3C3C;--w:#fff;
   --font:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
 }
@@ -57,11 +63,13 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sp-btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
 
 /* HOME */
-#home{background:#131F24}
-.hdr{padding:58px 20px 10px;display:flex;justify-content:space-between;align-items:center;background:#1B2B33;z-index:10;border-bottom:1px solid rgba(255,255,255,.06)}
+#home{background:var(--bg)}
+.hdr{padding:58px 20px 10px;display:flex;justify-content:space-between;align-items:center;background:var(--surface);z-index:10;border-bottom:1px solid rgba(255,255,255,.06)}
 .st{display:flex;align-items:center;gap:4px;font-size:14px;font-weight:700;color:rgba(255,255,255,.85)}
 .st-i{font-size:18px}
-.elo-badge{background:linear-gradient(135deg,var(--purple),#a855f7);color:#fff;padding:3px 10px;border-radius:20px;font-size:13px;font-weight:800;letter-spacing:.5px}
+.elo-badge{background:var(--sr-blue);color:#fff;padding:3px 11px;border-radius:8px;font-size:13px;font-weight:800;letter-spacing:.3px}
+.elo-badge.pulse{animation:eloPulse .4s ease}
+@keyframes eloPulse{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
 .hscr{flex:1;overflow-y:auto;padding:0 0 100px;scroll-behavior:smooth}
 .hscr::-webkit-scrollbar{display:none}
 
@@ -93,7 +101,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 @keyframes ringSpin{to{transform:rotate(360deg)}}
 
 /* Crown on completed */
-.node.done::after{content:'✓';position:absolute;top:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #131F24}
+.node.done::after{content:'✓';position:absolute;top:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg)}
 
 /* Node label */
 .node-lbl{position:absolute;bottom:-22px;font-size:10px;font-weight:700;color:rgba(255,255,255,.45);white-space:nowrap;text-align:center;width:120px;left:50%;transform:translateX(-50%)}
@@ -101,7 +109,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .node.cur .node-lbl{color:rgba(88,204,2,.8)}
 
 /* NAV */
-.bnav{position:absolute;bottom:0;left:0;right:0;height:82px;background:#1B2B33;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:flex-start;justify-content:space-around;padding-top:10px;z-index:100}
+.bnav{position:absolute;bottom:0;left:0;right:0;height:82px;background:var(--surface);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:flex-start;justify-content:space-around;padding-top:10px;z-index:100}
 .bnav-lt{background:var(--w);border-top:2px solid var(--g2)}
 .ni{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border:none;background:none;padding:4px 16px;color:rgba(255,255,255,.35);transition:.2s}
 .ni.act{color:var(--blue)}
@@ -255,18 +263,14 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 
 /* SOCIAL */
 #social{background:var(--w)}
-.soc-top{padding:58px 22px 18px;background:linear-gradient(180deg,#CE82FF,#a855f7);color:#fff;text-align:center}
+.soc-top{padding:58px 22px 18px;background:linear-gradient(180deg,var(--sr-blue),var(--sr-blue-d));color:#fff;text-align:center}
 .soc-tit{font-size:24px;font-weight:800}
 .soc-sub{font-size:13px;opacity:.85;margin-top:4px}
 .soc-body{flex:1;overflow-y:auto;padding:14px 22px 100px}
 .soc-body::-webkit-scrollbar{display:none}
-.soc-empty{text-align:center;padding:40px 20px;color:var(--g5)}
-.soc-empty-i{font-size:56px;margin-bottom:12px}
-.soc-empty-t{font-size:18px;font-weight:800;color:var(--g7);margin-bottom:6px}
-.soc-empty-s{font-size:13px}
 .act-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border:2px solid var(--g2);border-radius:14px;margin-bottom:8px;transition:background .15s}
 .act-item:active{background:var(--g1)}
-.act-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#a855f7);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:#fff;font-weight:800}
+.act-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--sr-blue),var(--sr-blue-d));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:#fff;font-weight:800}
 .act-inf{flex:1;min-width:0}
 .act-user{font-size:14px;font-weight:800;color:var(--blue);cursor:pointer}
 .act-user::before{content:'@';opacity:.5}
@@ -280,7 +284,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fp-ov{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn .2s}
 .fp-card{background:#fff;border-radius:20px;padding:28px;margin:20px;width:100%;max-width:340px;animation:popIn .3s ease;position:relative;text-align:center}
 .fp-x{position:absolute;top:12px;right:16px;font-size:20px;color:var(--g4);cursor:pointer;border:none;background:none;line-height:1}
-.fp-av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#a855f7);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 10px;color:#fff;font-weight:800}
+.fp-av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--sr-blue),var(--sr-blue-d));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 10px;color:#fff;font-weight:800}
 .fp-name{font-size:20px;font-weight:800;color:var(--g7)}
 .fp-name::before{content:'@';opacity:.5}
 .fp-lang{font-size:13px;color:var(--g5);margin-top:4px;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -300,9 +304,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .seg-toggle{display:flex;margin:8px 20px;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:2px}
 .seg-btn{flex:1;padding:8px 0;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:rgba(255,255,255,.5);transition:.2s}
 .seg-btn.seg-active{background:rgba(255,255,255,.15);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.fc-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:#131F24}
+.fc-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
 .fc-count{font-size:14px;font-weight:700;color:rgba(255,255,255,.6)}
-.fc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#131F24}
+.fc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
 .fc-card-wrap{width:100%;max-width:320px;perspective:1000px;cursor:pointer}
 .fc-card{position:relative;width:100%;min-height:280px;transition:transform .5s;transform-style:preserve-3d}
 .fc-card.flipped{transform:rotateY(180deg)}
@@ -323,9 +327,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fc-rate-btn.r-good{background:var(--green)}
 .fc-rate-btn.r-easy{background:var(--blue)}
 /* VERB DRILL */
-.vd-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:#131F24}
+.vd-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
 .vd-count{font-size:14px;font-weight:700;color:rgba(255,255,255,.6)}
-.vd-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px;background:#131F24;overflow-y:auto}
+.vd-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px;background:var(--bg);overflow-y:auto}
 .vd-phase{width:100%;max-width:360px}
 .vd-prompt{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-bottom:8px;text-align:center}
 .vd-inf{font-size:28px;font-weight:800;color:#fff;text-align:center;margin-bottom:16px}
@@ -346,6 +350,35 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sr-keys{display:flex;gap:6px;justify-content:center;margin-top:12px;width:100%;max-width:360px}
 .sr-key{padding:10px 14px;border:none;border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;transition:.1s;flex:1}
 .sr-key:active{background:rgba(255,255,255,.25);transform:scale(.95)}
+
+/* ═══════════════ ZEKA PERSONALITY ═══════════════ */
+.zeka-face{width:100px;height:100px;border-radius:24px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:block}
+.zeka-face.sm{width:60px;height:60px;border-radius:16px}
+.zeka-face.lg{width:140px;height:140px;border-radius:28px}
+.zeka-speak{position:relative;background:var(--surface);border:1px solid var(--divider);padding:12px 16px;border-radius:16px;max-width:280px;font-size:14px;color:var(--text-1);text-align:center;line-height:1.5}
+.zeka-speak::before{content:'';position:absolute;top:-9px;left:50%;margin-left:-8px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:9px solid var(--surface)}
+.zeka-speak::after{content:'';position:absolute;top:-10px;left:50%;margin-left:-9px;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:10px solid var(--divider);z-index:-1}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 24px;gap:18px;text-align:center}
+.empty-state .btn-primary{padding:12px 24px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);transition:.1s}
+.empty-state .btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
+
+/* Streak milestone overlay */
+.stk-milestone{position:fixed;inset:0;background:rgba(15,20,25,.92);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;animation:fadeIn .3s ease;cursor:pointer}
+.stk-milestone .zeka-face{animation:bounceIn .6s cubic-bezier(.175,.885,.32,1.275)}
+.stk-milestone .stk-flames{font-size:80px;animation:flamePulse 1s ease-in-out infinite}
+.stk-milestone .stk-num{font-size:72px;font-weight:900;background:linear-gradient(135deg,var(--orange),#FF6B00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stk-milestone .stk-lbl{font-size:20px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase}
+.stk-milestone .stk-msg{font-size:16px;color:var(--text-2);max-width:300px;text-align:center}
+
+/* Animations */
+@keyframes flamePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes heartShake{0%,100%{transform:scale(1)}20%{transform:scale(1.2) rotate(-8deg)}40%{transform:scale(.85) rotate(8deg)}60%{transform:scale(1.1) rotate(-4deg)}80%{transform:scale(.95) rotate(4deg)}}
+@keyframes unitBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+#hscr,#fc-home,#grammar-home{animation:fadeInUp .18s ease}
+.st-i.fire{display:inline-block;animation:flamePulse 1.6s ease-in-out infinite;transform-origin:center bottom}
+.heart-lost{animation:heartShake .5s ease}
+.node.cur{animation:unitBreathe 2.4s ease-in-out infinite}
 .cpiece{position:absolute;width:10px;height:10px;top:-10px;z-index:300;animation:confetti 2.5s ease-in forwards}
 
 /* OVERLAY */
@@ -446,8 +479,8 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 <div class="sbar" id="sbar"><span id="stime">9:41</span><div style="display:flex;gap:5px;align-items:center;font-size:12px"><span>&#9679;&#9679;&#9679;&#9679;</span><span>&#128267;</span></div></div>
 
 <div class="sc act" id="splash">
-  <div class="sp-icon"><img src="icon-192.png" style="width:80px;height:80px;border-radius:20px" alt="Zeka"></div>
-  <div class="sp-t">Zeka</div>
+  <div class="sp-icon"><img src="icon-192.png" style="width:120px;height:120px;border-radius:28px;box-shadow:0 10px 30px rgba(0,0,0,.4)" alt="Zeka"></div>
+  <div class="sp-t" style="margin-top:12px">Zeka</div>
   <div class="sp-s" id="sp-sub">Learn a language &middot; A1 to C1</div>
   <div id="sp-lang" style="display:flex;gap:12px;justify-content:center;margin-top:20px">
     <button class="lang-flag" onclick="pickLang('sr')" title="Serbian"><img src="https://flagcdn.com/w40/rs.png" alt="🇷🇸" style="height:28px"></button>
@@ -459,7 +492,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 
 <div class="sc" id="home">
   <div class="hdr">
-    <div class="st"><button class="lang-ind" id="h-lang" onclick="S.switchLang()" title="Switch language"><img src="https://flagcdn.com/w40/rs.png" alt="🇷🇸" style="height:18px;vertical-align:middle"></button><span class="elo-badge" id="h-elo">1000</span><div class="st" style="color:var(--orange);margin-left:10px"><span class="st-i">🔥</span><span id="h-str">0</span></div></div>
+    <div class="st"><button class="lang-ind" id="h-lang" onclick="S.switchLang()" title="Switch language"><img src="https://flagcdn.com/w40/rs.png" alt="🇷🇸" style="height:18px;vertical-align:middle"></button><span class="elo-badge" id="h-elo">1000</span><div class="st" style="color:var(--orange);margin-left:10px"><span class="st-i fire">🔥</span><span id="h-str">0</span></div></div>
   </div>
   <div class="save-ind" id="save-ind">Saved &#10003;</div>
   <div class="seg-toggle" id="learn-toggle">
@@ -494,10 +527,10 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 </div>
 
 <div class="sc" id="comp">
-  <div class="cp-i">🎉</div>
-  <div class="cp-t">Lesson Complete!</div>
+  <img src="icon-192.png" alt="Zeka" class="zeka-face" id="cp-zeka" style="margin:30px auto 0">
+  <div class="cp-t" style="margin-top:18px">Lesson Complete!</div>
   <div class="cp-s" id="cp-sub">Great job!</div>
-  <div class="cp-stats">
+  <div class="cp-stats" id="cp-stats">
     <div class="cp-st"><div class="cp-sv" id="cp-xp">0</div><div class="cp-sl">XP</div></div>
     <div class="cp-st"><div class="cp-sv" id="cp-acc">0%</div><div class="cp-sl">Accuracy</div></div>
     <div class="cp-st"><div class="cp-sv" id="cp-elo">+0</div><div class="cp-sl">ELO</div></div>
@@ -1727,6 +1760,39 @@ let VERBS=[];
 let NOUNS=[];
 function langName(){return LANG_DATA[curLang].name;}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+// ═══════════════ ZEKA MASCOT ═══════════════
+const ZEKA_ICON='icon-512.png';
+const ZEKA_MSG={
+  perfect:['Savršeno! No mistakes!','Perfect! Zeka is impressed!','Flawless! 🥕','Incredible work!','Odlično!'],
+  good:['Bravo!','Nice work!','Keep going!','You got this!','Super!'],
+  rough:["Don't give up!",'Every mistake teaches you!','Try again — Zeka believes in you!','Pick yourself up!'],
+  firstLesson:['First lesson done! Zeka is proud!','You started! Amazing!'],
+  firstFlashcard:['First review! Memory unlocked 🧠'],
+  firstVerb:['First verb drill! Conjugations incoming!'],
+  firstCase:['First case drill! You are brave!'],
+  streakMilestone:{3:'Three days straight! 🥕',7:'A whole week! You are on fire!',14:'Two weeks! Unstoppable!',30:'A month! Zeka bows down 🙇',100:'A hundred days! Legend!'}
+};
+function zekaMsg(cat){
+  const arr=ZEKA_MSG[cat];
+  if(Array.isArray(arr))return arr[Math.floor(Math.random()*arr.length)];
+  return '';
+}
+function zekaHtml(msg,size){
+  const cls=size==='sm'?'sm':size==='lg'?'lg':'';
+  return '<img src="'+ZEKA_ICON+'" alt="Zeka" class="zeka-face '+cls+'">'+(msg?'<div class="zeka-speak">'+esc(msg)+'</div>':'');
+}
+const STREAK_MILES=[3,7,14,30,100];
+function showStreakMilestone(days){
+  const msg=ZEKA_MSG.streakMilestone[days]||(days+' days!');
+  const ov=document.createElement('div');
+  ov.className='stk-milestone';
+  ov.innerHTML='<img src="'+ZEKA_ICON+'" class="zeka-face lg" alt="Zeka"><div class="stk-flames">🔥</div><div class="stk-num">'+days+'</div><div class="stk-lbl">Day Streak!</div><div class="stk-msg">'+esc(msg)+'</div>';
+  document.body.appendChild(ov);
+  const dismiss=()=>{if(ov.parentNode)ov.remove();};
+  ov.addEventListener('click',dismiss);
+  setTimeout(dismiss,4200);
+}
 function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLang].flag+'.png" style="height:18px;vertical-align:middle">';}
 
 // ═══════════════ SPEECH SYNTHESIS ═══════════════
@@ -1908,11 +1974,12 @@ function showSplashReady(){
 
 function getStateData(){
   return{elo:st.elo,xp:st.xp,streak:st.streak,lastDate:st.lastDate,
-    completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc};
+    completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
   st.completed=p.completed||[];st.ws=p.ws||{};st.hearts=p.hearts??5;st.fc=p.fc||{};
+  st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false},p.firsts||{});
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
 }
@@ -1993,7 +2060,7 @@ function updateSyncUI(){
     if(profGBtn)profGBtn.style.display='none';
     if(status)status.textContent='☁️ Synced as '+fbUser.email;
     if(avatar&&fbUser.photoURL){
-      avatar.innerHTML='<img src="'+esc(fbUser.photoURL)+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover" alt="Profile" referrerpolicy="no-referrer">';
+      avatar.innerHTML='<img src="'+esc(fbUser.photoURL)+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover" alt="Profile" referrerpolicy="no-referrer" onerror="this.src=\'icon-192.png\';this.style.borderRadius=\'16px\'">';
     }
     // Only show name/email if no username set
     const hasUsername=document.getElementById('p-username-display')&&document.getElementById('p-username-display').textContent.trim();
@@ -2185,6 +2252,7 @@ async function fbGetPendingRequests(){
 
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},
+  firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
   vbVerbs:[],vbIdx:0,vbPhase:1,vbCorrect:0,vbTotal:0,
@@ -2344,10 +2412,9 @@ renderFcHome(){
   const due=fcDueCards();
   const total=fcTotalCards();
   if(total===0){
-    el.innerHTML='<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,.6)">'+
-      '<div style="font-size:56px;margin-bottom:12px">📚</div>'+
-      '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px">No Flashcards Yet</div>'+
-      '<div style="font-size:13px">Complete a lesson to unlock flashcards for those words.</div></div>';
+    el.innerHTML='<div class="empty-state">'+
+      zekaHtml('Finish a lesson to unlock flashcards! 🥕')+
+      '<button class="btn-primary" onclick="S.setLearnMode(\'lessons\')">Go to Lessons</button></div>';
     return;
   }
   let h='<div style="text-align:center;padding:20px 0">';
@@ -2357,7 +2424,19 @@ renderFcHome(){
   if(due.length>0){
     h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Start Review</button>';
   }else{
-    h+='<div style="font-size:15px;color:var(--green);font-weight:700;margin-top:16px">All caught up! Come back later.</div>';
+    // Find next due time
+    const now=Date.now();let nextDue=Infinity;
+    Object.values(st.fc).forEach(c=>{if(c.due&&c.due<nextDue&&c.due>now)nextDue=c.due;});
+    let when='later';
+    if(nextDue!==Infinity){
+      const mins=Math.round((nextDue-now)/60000);
+      if(mins<60)when='in '+mins+'m';
+      else if(mins<1440)when='in '+Math.round(mins/60)+'h';
+      else when='in '+Math.round(mins/1440)+'d';
+    }
+    h+='<div style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:16px">';
+    h+=zekaHtml('All caught up! 🎉 Come back '+when+' for more cards.','sm');
+    h+='</div>';
   }
   h+='</div>';
   const compUnits=UNITS.filter(u=>st.completed.includes(u.id));
@@ -2459,15 +2538,20 @@ exitFc(){
 finishFcSession(){
   const el=document.getElementById('fc-body');
   const pct=st.fcReviewed>0?Math.round(st.fcCorrectCount/st.fcReviewed*100):0;
-  let h='<div style="text-align:center;padding:40px 20px">';
-  h+='<div style="font-size:56px;margin-bottom:12px">🎉</div>';
-  h+='<div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:20px">Session Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center;margin-bottom:24px">';
+  let firstMsg='';
+  if(!st.firsts.flashcard){st.firsts.flashcard=true;save();firstMsg=zekaMsg('firstFlashcard');}
+  const cat=pct===100?'perfect':pct>=70?'good':'rough';
+  let msg=zekaMsg(cat);
+  if(firstMsg)msg+=' · '+firstMsg;
+  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  h+=zekaHtml(msg);
+  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center">';
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.fcReviewed+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">REVIEWED</div></div>';
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">RECALLED</div></div>';
   if(st.fcAgainCount>0)h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--orange)">'+st.fcAgainCount+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">REPEATED</div></div>';
   h+='</div>';
-  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
+  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
   sDn();
@@ -2650,10 +2734,9 @@ exitVerb(){
 renderCaseHome(){
   const el=document.getElementById('case-home');
   if(curLang!=='sr'||!NOUNS.length){
-    el.innerHTML='<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,.6)">'+
-      '<div style="font-size:56px;margin-bottom:12px">🔤</div>'+
-      '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px">Cases Not Available</div>'+
-      '<div style="font-size:13px">Case drills are only available for Serbian.</div></div>';
+    el.innerHTML='<div class="empty-state">'+
+      zekaHtml('Cases are a Serbian thing! Switch to Serbian to practice them.')+
+      '</div>';
     return;
   }
   let h='<div style="text-align:center;padding:16px 0">';
@@ -2822,35 +2905,47 @@ exitCase(){
 },
 
 finishCaseSession(){
-  sDn();save();
+  sDn();
+  let firstMsg='';
+  if(!st.firsts.caseDrill){st.firsts.caseDrill=true;firstMsg=zekaMsg('firstCase');}
+  save();
   const el=document.getElementById('cs-body');
   const pct=st.csTotal>0?Math.round(st.csCorrect/st.csTotal*100):0;
-  let h='<div style="text-align:center;padding:40px 20px">';
-  h+='<div style="font-size:56px;margin-bottom:12px">🎉</div>';
-  h+='<div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:20px">Session Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center;margin-bottom:24px">';
+  const cat=pct===100?'perfect':pct>=70?'good':'rough';
+  let msg=zekaMsg(cat);
+  if(firstMsg)msg+=' · '+firstMsg;
+  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  h+=zekaHtml(msg);
+  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center">';
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.csNouns.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">NOUNS</div></div>';
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+st.csCorrect+'/'+st.csTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
   h+='</div>';
-  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitCase()">Done</button>';
+  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitCase()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
 },
 
 finishVerbSession(){
-  sDn();save();
+  sDn();
+  let firstMsg='';
+  if(!st.firsts.verb){st.firsts.verb=true;firstMsg=zekaMsg('firstVerb');}
+  save();
   const el=document.getElementById('vd-body');
   const pct=st.vbTotal>0?Math.round(st.vbCorrect/st.vbTotal*100):0;
-  let h='<div style="text-align:center;padding:40px 20px">';
-  h+='<div style="font-size:56px;margin-bottom:12px">🎉</div>';
-  h+='<div style="font-size:24px;font-weight:800;color:#fff;margin-bottom:20px">Session Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center;margin-bottom:24px">';
+  const cat=pct===100?'perfect':pct>=70?'good':'rough';
+  let msg=zekaMsg(cat);
+  if(firstMsg)msg+=' · '+firstMsg;
+  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  h+=zekaHtml(msg);
+  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center">';
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.vbVerbs.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">VERBS</div></div>';
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--orange)">'+st.vbCorrect+'/'+st.vbTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
   h+='</div>';
-  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitVerb()">Done</button>';
+  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitVerb()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
 },
@@ -2889,6 +2984,7 @@ switchLang(){
   setLang(next);
   // Reset state for new language
   st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};st.fc={};
+  st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false};
   load();// Load saved progress for this language
   if(fbUser)fbLoad();
   this.goHome();
@@ -3175,7 +3271,9 @@ chk(){
   const diff=ELO.diff(st.unit.id),r=ELO.calc(st.elo,diff,ok);st.elo=r.newElo;st.lelo+=r.chg;
   if(ex.word){const ws=wstat(ex.word.id);ws.s++;if(ok)ws.c++;else ws.i++;ws.t=Date.now();}
   if(ok){st.lcor++;st.lxp+=10;sOk();this.fb(true,ex,r.chg);}
-  else{st.hearts--;sNo();this.fb(false,ex,r.chg);this.updL();if(st.hearts<=0)setTimeout(()=>this.noH(),1000);}
+  else{st.hearts--;sNo();this.fb(false,ex,r.chg);this.updL();
+    const hEl=document.getElementById('lhrt');if(hEl){const p=hEl.parentNode;if(p){p.classList.remove('heart-lost');void p.offsetWidth;p.classList.add('heart-lost');}}
+    if(st.hearts<=0)setTimeout(()=>this.noH(),1000);}
   save();
 },
 
@@ -3219,7 +3317,15 @@ showComp(){
   if(wasNew){st.completed.push(st.unit.id);
     st.unit.words.forEach(w=>{['se','es'].forEach(dir=>{const k=fcKey(w.id,dir);if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0};});});
   }
-  const today=new Date().toDateString();if(st.lastDate!==today){st.streak++;st.lastDate=today;}
+  const today=new Date().toDateString();
+  let streakHit=null;
+  if(st.lastDate!==today){
+    const prevStreak=st.streak;st.streak++;st.lastDate=today;
+    if(STREAK_MILES.includes(st.streak)&&st.streak>prevStreak)streakHit=st.streak;
+  }
+  // Track first-time completions
+  let firstHit=null;
+  if(!st.firsts.lesson){st.firsts.lesson=true;firstHit='firstLesson';}
   save();
   // Log activity to Firestore for the social feed
   if(wasNew&&fbUser){
@@ -3238,8 +3344,20 @@ showComp(){
   document.getElementById('cp-acc').textContent=acc+'%';
   const es=st.lelo>=0?'+':'';document.getElementById('cp-elo').textContent=es+st.lelo;
   document.getElementById('cp-elo').style.color=st.lelo>=0?'#d7ffb8':'#ffd6d6';
-  document.getElementById('cp-sub').textContent=acc===100?'Perfect score!':acc>=70?'Great work!':'Keep practicing!';
-  this.goScr('comp');this.confetti();
+  // Accuracy tier always shows; firstHit shown as suffix if it's the first time
+  const accCat=acc===100?'perfect':acc>=70?'good':'rough';
+  let subMsg=zekaMsg(accCat);
+  if(firstHit)subMsg+=' · '+zekaMsg(firstHit);
+  document.getElementById('cp-sub').textContent=subMsg;
+  // Gold border on 100% perfect
+  const statsEl=document.getElementById('cp-stats');
+  if(statsEl)statsEl.style.border=acc===100?'2px solid var(--gold)':'';
+  this.goScr('comp');
+  if(acc===100)this.confetti();
+  // Fire ELO pulse
+  setTimeout(()=>{const e=document.getElementById('h-elo');if(e){e.classList.remove('pulse');void e.offsetWidth;e.classList.add('pulse');e.addEventListener('animationend',()=>e.classList.remove('pulse'),{once:true});}},50);
+  // Streak milestone overlay fires after comp screen renders
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
 },
 
 finishLesson(){sCl();this.goHome();},
@@ -3534,8 +3652,7 @@ async goSocial(){
   el.innerHTML='<div style="text-align:center;color:var(--g4);font-size:13px;padding:40px 20px">Loading activity feed...</div>';
   this.goScr('social');
   if(!fbUser){
-    el.innerHTML=`<div class="soc-empty"><div class="soc-empty-i">🔐</div><div class="soc-empty-t">Sign in to see activity</div>
-      <div class="soc-empty-s">Sign in and add friends to see their activity here!</div></div>`;
+    el.innerHTML='<div class="empty-state">'+zekaHtml('Sign in and add friends to see activity!')+'</div>';
     return;
   }
   try{
@@ -3543,15 +3660,13 @@ async goSocial(){
     const data=doc.exists?doc.data():{};
     const friendUids=data.friends||[];
     if(!friendUids.length){
-      el.innerHTML=`<div class="soc-empty"><div class="soc-empty-i">👥</div><div class="soc-empty-t">No friends yet</div>
-        <div class="soc-empty-s">Add friends to see their activity here!</div></div>`;
+      el.innerHTML='<div class="empty-state">'+zekaHtml("It's quiet here. Invite a friend to start seeing activity!")+'</div>';
       return;
     }
     this._socFriendUids=friendUids;
     await this._loadActivities(true);
   }catch(e){
-    el.innerHTML=`<div class="soc-empty"><div class="soc-empty-i">😕</div><div class="soc-empty-t">Could not load feed</div>
-      <div class="soc-empty-s">Check your connection and try again.</div></div>`;
+    el.innerHTML='<div class="empty-state">'+zekaHtml('Could not load feed. Check your connection and try again.')+'</div>';
   }
 },
 
@@ -3585,8 +3700,7 @@ _renderFeed(hasMore){
   const el=document.getElementById('soc-body');
   const acts=this._socActivities;
   if(!acts.length){
-    el.innerHTML=`<div class="soc-empty"><div class="soc-empty-i">📭</div><div class="soc-empty-t">No activity yet</div>
-      <div class="soc-empty-s">When your friends complete lessons, their activity will show up here!</div></div>`;
+    el.innerHTML='<div class="empty-state">'+zekaHtml("Your friends haven't finished any lessons yet. Nudge them! 🥕")+'</div>';
     return;
   }
   let h='';
