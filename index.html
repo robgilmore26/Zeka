@@ -3146,7 +3146,7 @@ rMC(b,ex){
   const shown=isSE?w.l:w.e;
   const spk=isSE?spkWBtn(w):'';
   let h=`<div class="lcont"><div class="exq">${ex.prompt}</div>
-    <div class="wordbox"><div class="wb-em">${isSE?'🔤':w.em}</div><div class="wb-txt">
+    <div class="wordbox">${isSE?'':`<div class="wb-em">${w.em}</div>`}<div class="wb-txt">
     <div class="wb-word">${shown}</div></div>${spk}</div><div class="opts">`;
   ex.opts.forEach((o,i)=>{h+=`<button class="ob" data-i="${i}" onclick="S.selO(${i})"><span class="on">${i+1}</span><span>${o}</span></button>`;});
   h+=`</div></div>${this.bb()}`;b.innerHTML=h;
