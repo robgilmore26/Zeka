@@ -1,4 +1,4 @@
-const CACHE='zeka-v36';
+const CACHE='zeka-v37';
 const ASSETS=[
   'index.html',
   'manifest.json',
