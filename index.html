@@ -63,7 +63,8 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sp-btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
 
 /* HOME */
-#home{background:var(--bg)}
+#home{background:radial-gradient(ellipse at 50% -10%,#1B2B3A 0%,var(--bg) 70%)}
+.hscr{padding-bottom:16px}
 .hdr{padding:58px 20px 10px;display:flex;justify-content:space-between;align-items:center;background:var(--surface);z-index:10;border-bottom:1px solid rgba(255,255,255,.06)}
 .st{display:flex;align-items:center;gap:4px;font-size:14px;font-weight:700;color:rgba(255,255,255,.85)}
 .st-i{font-size:18px}
@@ -74,9 +75,20 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .hscr::-webkit-scrollbar{display:none}
 
 /* Section banners */
-.sec-banner{margin:0 16px 6px;padding:14px 18px;border-radius:14px;color:#fff;position:relative;overflow:hidden}
-.sec-lbl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;opacity:.85}
-.sec-title{font-size:18px;font-weight:800;margin-top:2px}
+/* Chapter hero cards (per CEFR level) */
+.chap-hero{margin:14px 16px 0;padding:20px 20px 18px;border-radius:18px;color:#fff;position:relative;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.chap-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.12),transparent 55%);pointer-events:none}
+.chap-hero-em{font-size:42px;line-height:1;margin-bottom:8px}
+.chap-hero-lbl{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.chap-hero-title{font-size:24px;font-weight:900;letter-spacing:-.3px;margin-top:2px}
+.chap-hero-sub{font-size:12px;color:rgba(255,255,255,.8);margin-top:4px}
+.chap-hero-prog{display:flex;align-items:center;gap:10px;margin-top:12px;position:relative;z-index:1}
+.chap-hero-bar{flex:1;height:6px;background:rgba(0,0,0,.25);border-radius:6px;overflow:hidden}
+.chap-hero-fill{height:100%;background:#FFD43B;border-radius:6px;transition:width .6s ease}
+.chap-hero-pct{font-size:12px;font-weight:800;color:rgba(255,255,255,.95);white-space:nowrap}
+/* Units section tinted by chapter color */
+.chap-units{padding:10px 0 18px;position:relative}
+.chap-units::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--chap-tint,transparent) 0%,transparent 140px);opacity:.06;pointer-events:none;border-radius:0 0 20px 20px}
 
 /* Path */
 .path-wrap{position:relative;padding:20px 0 10px;display:flex;flex-direction:column;align-items:center}
@@ -2996,35 +3008,57 @@ updH(){document.getElementById('h-elo').textContent=st.elo;
 
 rPath(){
   const el=document.getElementById('hscr');let h='';
-  // Group units by level for section banners
-  const lvColors={A1:'#58CC02',A2:'#1CB0F6',B1:'#CE82FF',B2:'#FF9600',C1:'#FF4B4B'};
+  const LV={
+    A1:{em:'🌱',lbl:'A1 · Beginner',title:'Foundations',sub:'Greetings, numbers, the basics',g1:'#58CC02',g2:'#3D8B00'},
+    A2:{em:'🏡',lbl:'A2 · Elementary',title:'Everyday Life',sub:'Daily conversations, getting around',g1:'#1A5FD1',g2:'#0C3D8E'},
+    B1:{em:'💬',lbl:'B1 · Intermediate',title:'Conversations',sub:'Express ideas, tell stories',g1:'#A06CD5',g2:'#6D2C8E'},
+    B2:{em:'📚',lbl:'B2 · Upper-Intermediate',title:'Fluency',sub:'Complex topics, nuanced speech',g1:'#FFA54F',g2:'#E8801E'},
+    C1:{em:'🎓',lbl:'C1 · Advanced',title:'Mastery',sub:'Academic and advanced',g1:'#FF6B6B',g2:'#C93030'}
+  };
+  // Pre-compute per-level progress
+  const lvStats={};
+  UNITS.forEach(u=>{
+    if(!lvStats[u.lv])lvStats[u.lv]={done:0,total:0};
+    lvStats[u.lv].total++;
+    if(st.completed.includes(u.id))lvStats[u.lv].done++;
+  });
   let lastLv='';
-  // Winding pattern: center, right, center, left, center, right...
   const positions=['center','right','center','left'];
+  let posIdxInLv=0;
   UNITS.forEach((u,ui)=>{
     const done=st.completed.includes(u.id);
     const unlocked=ui===0||st.completed.includes(UNITS[ui-1].id);
     const cls=done?'done':(unlocked?'cur':'lock');
     const clk=cls!=='lock'?`onclick="S.startL(${u.id})"`:'';
-    // Section banner when level changes
+    // Chapter hero card when level changes
     if(u.lv!==lastLv){
-      lastLv=u.lv;
-      h+=`<div class="sec-banner" style="background:${lvColors[u.lv]||u.co}">
-        <div class="sec-lbl">Section &middot; ${u.lv}</div>
-        <div class="sec-title">${u.lv==='A1'?'Getting Started':u.lv==='A2'?'Building Basics':u.lv==='B1'?'Intermediate':u.lv==='B2'?'Upper Intermediate':u.lv==='C1'?'Advanced':u.lv}</div>
+      if(lastLv)h+='</div>';// close prior chapter-units
+      lastLv=u.lv;posIdxInLv=0;
+      const lv=LV[u.lv]||{em:'📖',lbl:u.lv,title:u.lv,sub:'',g1:'#1A5FD1',g2:'#0C3D8E'};
+      const st2=lvStats[u.lv];
+      const pct=st2.total>0?Math.round(st2.done/st2.total*100):0;
+      h+=`<div class="chap-hero" style="background:linear-gradient(135deg,${lv.g1},${lv.g2})">
+        <div class="chap-hero-em">${lv.em}</div>
+        <div class="chap-hero-lbl">${esc(lv.lbl)}</div>
+        <div class="chap-hero-title">${esc(lv.title)}</div>
+        <div class="chap-hero-sub">${esc(lv.sub)}</div>
+        <div class="chap-hero-prog">
+          <div class="chap-hero-bar"><div class="chap-hero-fill" style="width:${pct}%"></div></div>
+          <div class="chap-hero-pct">${st2.done}/${st2.total}</div>
+        </div>
       </div>`;
+      h+=`<div class="chap-units" style="--chap-tint:${lv.g1}">`;
     }
-    // Node
-    const pos=positions[ui%positions.length];
+    const pos=positions[posIdxInLv%positions.length];posIdxInLv++;
     h+=`<div class="node-row ${pos}">
       <button class="node ${cls}" ${clk}>
         <span class="node-ic">${cls==='lock'?'🔒':u.ic}</span>
-        <span class="node-lbl">${u.t}</span>
+        <span class="node-lbl">${esc(u.t)}</span>
       </button>
     </div>`;
   });
+  if(lastLv)h+='</div>';
   el.innerHTML=h;
-  // Scroll to current unit
   const curNode=el.querySelector('.node.cur');
   if(curNode)setTimeout(()=>curNode.scrollIntoView({block:'center',behavior:'smooth'}),100);
 },
