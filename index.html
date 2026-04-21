@@ -2211,7 +2211,11 @@ async function fbSendFriendRequest(targetUid){
 }
 
 async function fbAcceptFriend(fromUid){
-  if(!fbUser)return;
+  if(!fbUser)return{ok:false,error:'not signed in'};
+  // The rule check requires that /friendRequests/{fromUid}/outgoing/{myUid} exists
+  // BEFORE we write to /users/{fromUid}. The batch.delete for that doc in the same
+  // batch doesn't block it (rules evaluate against the pre-batch state), so ordering
+  // within the batch is fine. But we must not delete it in a separate prior step.
   try{
     const batch=fbDb.batch();
     batch.update(fbUserDoc(),{friends:firebase.firestore.FieldValue.arrayUnion(fromUid)});
@@ -2219,17 +2223,25 @@ async function fbAcceptFriend(fromUid){
     batch.delete(fbDb.collection('friendRequests').doc(fbUser.uid).collection('incoming').doc(fromUid));
     batch.delete(fbDb.collection('friendRequests').doc(fromUid).collection('outgoing').doc(fbUser.uid));
     await batch.commit();
-  }catch(e){console.log('Accept friend failed',e);}
+    return{ok:true};
+  }catch(e){
+    console.error('[fbAcceptFriend]',e);
+    return{ok:false,error:(e.code||e.message||'unknown error')};
+  }
 }
 
 async function fbDeclineFriend(fromUid){
-  if(!fbUser)return;
+  if(!fbUser)return{ok:false,error:'not signed in'};
   try{
     const batch=fbDb.batch();
     batch.delete(fbDb.collection('friendRequests').doc(fbUser.uid).collection('incoming').doc(fromUid));
     batch.delete(fbDb.collection('friendRequests').doc(fromUid).collection('outgoing').doc(fbUser.uid));
     await batch.commit();
-  }catch(e){console.log('Decline friend failed',e);}
+    return{ok:true};
+  }catch(e){
+    console.error('[fbDeclineFriend]',e);
+    return{ok:false,error:(e.code||e.message||'unknown error')};
+  }
 }
 
 async function fbSearchUser(username){
@@ -3739,12 +3751,14 @@ async sendRequest(uid){
 },
 
 async acceptRequest(uid){
-  await fbAcceptFriend(uid);
+  const res=await fbAcceptFriend(uid);
+  if(res&&!res.ok){alert('Could not accept friend request: '+(res.error||'unknown error'));return;}
   this._loadFriends();
 },
 
 async declineRequest(uid){
-  await fbDeclineFriend(uid);
+  const res=await fbDeclineFriend(uid);
+  if(res&&!res.ok){alert('Could not decline: '+(res.error||'unknown error'));return;}
   this._loadFriends();
 },
 
