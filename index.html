@@ -2193,8 +2193,8 @@ async function fbSendFriendRequest(targetUid){
     const targetDoc=await fbDb.collection('users').doc(targetUid).get();
     const targetData=targetDoc.exists?targetDoc.data():{};
     if(myData.friends&&myData.friends.includes(targetUid))return{ok:false,error:'Already friends'};
-    // Check if request already exists
-    const existing=await fbDb.collection('friendRequests').doc(targetUid).collection('incoming').doc(fbUser.uid).get();
+    // Check if request already exists (read my own outgoing — I always have access to this)
+    const existing=await fbDb.collection('friendRequests').doc(fbUser.uid).collection('outgoing').doc(targetUid).get();
     if(existing.exists)return{ok:false,error:'Request already sent'};
     const now=firebase.firestore.FieldValue.serverTimestamp();
     const batch=fbDb.batch();
