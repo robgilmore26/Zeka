@@ -2204,7 +2204,10 @@ async function fbSendFriendRequest(targetUid){
       {to:targetUid,toUsername:targetData.username||'unknown',timestamp:now});
     await batch.commit();
     return{ok:true};
-  }catch(e){return{ok:false,error:'Failed to send request'};}
+  }catch(e){
+    console.error('[fbSendFriendRequest]',e);
+    return{ok:false,error:'Failed: '+(e.code||e.message||'unknown error')};
+  }
 }
 
 async function fbAcceptFriend(fromUid){
