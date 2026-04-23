@@ -288,24 +288,24 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sync-status{text-align:center;font-size:12px;font-weight:600;color:var(--g5);margin-top:10px}
 
 /* SOCIAL */
-#social{background:var(--w)}
+#social{background:var(--bg)}
 .soc-top{padding:58px 22px 18px;background:linear-gradient(180deg,var(--sr-blue),var(--sr-blue-d));color:#fff;text-align:center}
 .soc-tit{font-size:24px;font-weight:800}
 .soc-sub{font-size:13px;opacity:.85;margin-top:4px}
 .soc-body{flex:1;overflow-y:auto;padding:14px 22px 100px}
 .soc-body::-webkit-scrollbar{display:none}
-.act-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border:2px solid var(--g2);border-radius:14px;margin-bottom:8px;transition:background .15s}
-.act-item:active{background:var(--g1)}
+.act-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--divider);background:var(--surface);border-radius:14px;margin-bottom:8px;transition:background .15s;color:var(--text-1)}
+.act-item:active{background:var(--surface-raised)}
 .act-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--sr-blue),var(--sr-blue-d));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:#fff;font-weight:800}
 .act-inf{flex:1;min-width:0}
 .act-user{font-size:14px;font-weight:800;color:var(--blue);cursor:pointer}
 .act-user::before{content:'@';opacity:.5}
-.act-desc{font-size:13px;color:var(--g6);margin-top:2px}
-.act-desc .act-unit{font-weight:700}
-.act-time{font-size:11px;color:var(--g4);margin-top:4px}
+.act-desc{font-size:13px;color:var(--text-2);margin-top:2px}
+.act-desc .act-unit{font-weight:700;color:var(--text-1)}
+.act-time{font-size:11px;color:var(--text-3);margin-top:4px}
 .act-ic{font-size:28px;flex-shrink:0}
-.soc-load{width:100%;margin-top:12px;padding:14px;border:2px solid var(--g2);border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;background:var(--w);color:var(--purple);text-align:center;transition:.15s}
-.soc-load:active{transform:translateY(2px);background:var(--g1)}
+.soc-load{width:100%;margin-top:12px;padding:14px;border:1px solid var(--divider);border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;background:var(--surface);color:var(--sr-blue);text-align:center;transition:.15s}
+.soc-load:active{transform:translateY(2px);background:var(--surface-raised)}
 /* Friend profile overlay */
 .fp-ov{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn .2s}
 .fp-card{background:#fff;border-radius:20px;padding:28px;margin:20px;width:100%;max-width:340px;animation:popIn .3s ease;position:relative;text-align:center}
