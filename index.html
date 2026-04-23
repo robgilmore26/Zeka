@@ -129,7 +129,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 
 /* NAV */
 .bnav{position:absolute;bottom:0;left:0;right:0;height:78px;background:rgba(26,32,40,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:100}
-.bnav-lt{background:var(--w);border-top:2px solid var(--g2)}
+.bnav-lt{background:rgba(26,32,40,.95);border-top:1px solid var(--divider)}
 .ni{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;border:none;background:none;padding:6px 18px;color:rgba(255,255,255,.4);transition:color .2s,transform .15s;border-radius:12px;position:relative}
 .ni:active{transform:scale(.92)}
 .ni.act{color:var(--sr-blue)}
@@ -137,7 +137,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .ni-i{transition:transform .2s;display:flex;align-items:center;justify-content:center;height:24px}
 .ni-i svg{width:24px;height:24px;display:block}
 .ni.act::after{content:'';position:absolute;top:-12px;left:50%;width:28px;height:3px;background:var(--sr-blue);border-radius:0 0 3px 3px;transform:translateX(-50%)}
-.ni-lt{color:var(--g4)}
+.ni-lt{color:rgba(255,255,255,.4)}
 .ni-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 
 /* LESSON */
@@ -259,7 +259,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .cp-btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
 
 /* PROFILE */
-#prof{background:var(--w)}
+#prof{background:var(--bg);color:var(--text-1)}
 .ptop{padding:58px 22px 18px;background:linear-gradient(180deg,var(--blue),var(--blue-d));color:#fff;text-align:center}
 .pav{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 10px;border:3px solid rgba(255,255,255,.4)}
 .pnm{font-size:20px;font-weight:800}
