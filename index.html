@@ -1999,11 +1999,22 @@ function normEN(s){
 
 // ═══════════════ ELO SYSTEM ═══════════════
 const ELO={
-  K:32,
+  // Asymmetric K: gains stay meaningful, losses are gentler.
+  // Designed for learning (not competition): a bad day shouldn't erase a week.
+  K_WIN:24,
+  K_LOSS:8,
+  MAX_LOSS_PER_Q:6,
   expected(a,b){return 1/(1+Math.pow(10,(b-a)/400))},
   calc(uElo,wDiff,ok){
     const exp=this.expected(uElo,wDiff);
-    const chg=Math.round(this.K*((ok?1:0)-exp));
+    let chg;
+    if(ok){
+      chg=Math.round(this.K_WIN*(1-exp));
+    }else{
+      chg=Math.round(this.K_LOSS*(0-exp));// negative
+      // Floor losses so a single mistake against an easy word is never devastating
+      if(chg<-this.MAX_LOSS_PER_Q)chg=-this.MAX_LOSS_PER_Q;
+    }
     return{newElo:uElo+chg,chg};
   },
   diff(uid){const idx=UNITS.findIndex(u=>u.id===uid);return 800+(idx>=0?idx:uid)*40},

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Auto-fetch missing audio for any new words added to index.html.
+# Activated via: git config core.hooksPath .githooks
+
+# Only run when index.html is staged
+if git diff --cached --name-only | grep -q '^index\.html$'; then
+  echo "[zeka] index.html changed — checking for new audio strings..."
+  # Prefer 'py' (Windows launcher) > 'python3' > 'python'
+  PY=$(command -v py || command -v python3 || command -v python)
+  if [ -z "$PY" ]; then
+    echo "[zeka] WARNING: python not found, skipping audio sync"
+    exit 0
+  fi
+  "$PY" sync_audio.py
+  RC=$?
+  if [ $RC -ne 0 ] && [ $RC -ne 2 ]; then
+    echo "[zeka] audio sync failed — aborting commit. Run 'python sync_audio.py' to retry."
+    exit 1
+  fi
+  # Stage any newly downloaded audio
+  if [ -d audio ]; then
+    git add audio/sr/*.mp3 audio/it/*.mp3 2>/dev/null
+  fi
+  echo "[zeka] audio sync done."
+fi
+
+exit 0
