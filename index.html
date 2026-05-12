@@ -113,18 +113,23 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 
 /* Section banners */
 /* Chapter hero cards (per CEFR level) */
-.chap-hero{margin:14px 16px 0;border-radius:22px;color:#fff;position:relative;overflow:hidden;box-shadow:0 14px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);min-height:240px;display:flex;flex-direction:column;justify-content:flex-end}
-.chap-hero::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");mix-blend-mode:overlay;z-index:2}
-.chap-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,transparent 40%,rgba(0,0,0,.55) 100%);pointer-events:none;z-index:1}
-.chap-scene{position:absolute;inset:0;background-size:cover,cover;background-position:center;background-repeat:no-repeat;z-index:0}
-.chap-hero-body{position:relative;z-index:3;padding:20px 22px 18px}
-.chap-hero-lbl{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(0,0,0,.4)}
-.chap-hero-title{font-family:var(--font-display);font-size:30px;font-weight:900;letter-spacing:-.02em;margin-top:4px;line-height:1.02;text-shadow:0 2px 8px rgba(0,0,0,.5)}
-.chap-hero-sub{font-size:13px;color:rgba(255,255,255,.88);margin-top:6px;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.chap-hero{margin:14px 16px 0;border-radius:22px;color:#fff;position:relative;overflow:hidden;box-shadow:0 14px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);min-height:260px;display:flex;flex-direction:column;justify-content:flex-end;background-size:cover;background-position:center;background-repeat:no-repeat}
+.chap-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,transparent 35%,rgba(0,0,0,.65) 100%);pointer-events:none;z-index:1}
+.chap-hero-body{position:relative;z-index:3;padding:22px 22px 20px}
+.chap-hero-lbl{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.9);text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.chap-hero-title{font-family:var(--font-display);font-size:34px;font-weight:900;letter-spacing:-.02em;margin-top:4px;line-height:1.02;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+.chap-hero-sub{font-size:13px;color:rgba(255,255,255,.9);margin-top:6px;text-shadow:0 1px 4px rgba(0,0,0,.5);max-width:280px}
 .chap-hero-prog{display:flex;align-items:center;gap:10px;margin-top:14px}
-.chap-hero-bar{flex:1;height:6px;background:rgba(0,0,0,.35);border-radius:6px;overflow:hidden;backdrop-filter:blur(2px)}
-.chap-hero-fill{height:100%;background:#FFD43B;border-radius:6px;transition:width .6s ease;box-shadow:0 0 12px rgba(255,212,59,.6)}
-.chap-hero-pct{font-family:var(--font-display);font-size:13px;font-weight:800;color:#fff;font-feature-settings:'tnum' on;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.chap-hero-bar{flex:1;height:6px;background:rgba(0,0,0,.4);border-radius:6px;overflow:hidden;backdrop-filter:blur(2px)}
+.chap-hero-fill{height:100%;background:#FFD43B;border-radius:6px;transition:width .6s ease;box-shadow:0 0 14px rgba(255,212,59,.7)}
+.chap-hero-pct{font-family:var(--font-display);font-size:13px;font-weight:800;color:#fff;font-feature-settings:'tnum' on;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+/* Per-level chapter hero gradient + illustrated scene */
+.chap-hero.lv-A1{background-color:#3D8B00;background-image:linear-gradient(135deg,rgba(88,204,2,.35),rgba(61,139,0,.5)),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' preserveAspectRatio='xMidYMid slice'><defs><radialGradient id='sun' cx='.5' cy='.5'><stop offset='0' stop-color='%23FFE680'/><stop offset='1' stop-color='%23FFE680' stop-opacity='0'/></radialGradient></defs><rect width='400' height='260' fill='%23386B14'/><circle cx='340' cy='55' r='34' fill='%23FFE680' opacity='.95'/><circle cx='340' cy='55' r='60' fill='url(%23sun)'/><path d='M0 175 Q 100 130 200 150 Q 300 170 400 145 L 400 260 L 0 260 Z' fill='%232E5A0F'/><path d='M0 205 Q 80 175 180 188 Q 280 200 400 180 L 400 260 L 0 260 Z' fill='%23234608'/><path d='M0 235 L 400 235 L 400 260 L 0 260 Z' fill='%23172F03'/><circle cx='50' cy='198' r='3.5' fill='%23FFB8E0'/><circle cx='120' cy='215' r='3' fill='%23fff'/><circle cx='180' cy='202' r='3.5' fill='%23FFE680'/><circle cx='280' cy='200' r='3' fill='%23FFB8E0'/><circle cx='360' cy='220' r='3' fill='%23fff'/><path d='M30 230 L 30 200 M 30 215 L 25 209 M 30 215 L 35 209' stroke='%23A6E26A' stroke-width='1.5' fill='none'/><path d='M150 235 L 150 205 M 150 220 L 145 214 M 150 220 L 155 214' stroke='%23A6E26A' stroke-width='1.5' fill='none'/><path d='M250 232 L 250 202 M 250 217 L 245 211 M 250 217 L 255 211' stroke='%23A6E26A' stroke-width='1.5' fill='none'/></svg>")}
+.chap-hero.lv-A2{background-color:#0C3D8E;background-image:linear-gradient(135deg,rgba(26,95,209,.4),rgba(12,61,142,.55)),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23FFA54F'/><stop offset='.5' stop-color='%23DB6B3B'/><stop offset='1' stop-color='%23862F4C'/></linearGradient></defs><rect width='400' height='260' fill='url(%23sky)'/><circle cx='80' cy='75' r='28' fill='%23FFE680' opacity='.92'/><circle cx='80' cy='75' r='50' fill='%23FFE680' opacity='.18'/><rect x='30' y='150' width='48' height='110' fill='%23231138'/><rect x='86' y='115' width='58' height='145' fill='%231A0E2C'/><rect x='152' y='160' width='42' height='100' fill='%23231138'/><rect x='202' y='95' width='72' height='165' fill='%231A0E2C'/><rect x='282' y='135' width='54' height='125' fill='%23231138'/><rect x='344' y='118' width='48' height='142' fill='%231A0E2C'/><rect x='48' y='170' width='9' height='12' fill='%23FFD43B'/><rect x='48' y='192' width='9' height='12' fill='%23FFD43B'/><rect x='105' y='135' width='9' height='12' fill='%23FFD43B'/><rect x='105' y='158' width='9' height='12' fill='%23FFD43B'/><rect x='220' y='118' width='9' height='12' fill='%23FFD43B'/><rect x='220' y='142' width='9' height='12' fill='%23FFD43B'/><rect x='220' y='168' width='9' height='12' fill='%23FFD43B'/><rect x='250' y='145' width='9' height='12' fill='%23FFD43B'/><rect x='298' y='160' width='9' height='12' fill='%23FFD43B'/><rect x='298' y='184' width='9' height='12' fill='%23FFD43B'/><rect x='362' y='145' width='9' height='12' fill='%23FFD43B'/><rect x='362' y='170' width='9' height='12' fill='%23FFD43B'/></svg>")}
+.chap-hero.lv-B1{background-color:#6D2C8E;background-image:linear-gradient(135deg,rgba(160,108,213,.4),rgba(109,44,142,.55)),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='dusk' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23E8B5D6'/><stop offset='.5' stop-color='%23A06CD5'/><stop offset='1' stop-color='%234E1670'/></linearGradient></defs><rect width='400' height='260' fill='url(%23dusk)'/><circle cx='320' cy='65' r='20' fill='%23FFE680' opacity='.9'/><circle cx='320' cy='65' r='40' fill='%23FFE680' opacity='.18'/><rect x='40' y='200' width='320' height='60' fill='%23351443'/><rect x='40' y='200' width='320' height='8' fill='%231F0826'/><path d='M70 200 L 70 175 Q 70 165 80 165 L 130 165 Q 140 165 140 175 L 140 200 Z' fill='%23B8783D'/><rect x='75' y='180' width='60' height='20' fill='%232C0E36'/><circle cx='90' cy='220' r='8' fill='%23231038'/><circle cx='130' cy='220' r='8' fill='%23231038'/><ellipse cx='110' cy='185' rx='10' ry='3' fill='%23FFE680' opacity='.8'/><path d='M 200 220 L 200 200 L 215 200 L 215 195 L 220 200 L 220 240 L 200 240 Z' fill='%23fff' opacity='.9'/><text x='205' y='215' fill='%23351443' font-family='sans-serif' font-size='12' font-weight='800'>Zdravo</text><path d='M 300 195 L 300 175 L 325 175 L 325 170 L 332 175 L 332 220 L 300 220 Z' fill='%23fff' opacity='.85'/><text x='305' y='192' fill='%23351443' font-family='sans-serif' font-size='11' font-weight='800'>Ćao</text></svg>")}
+.chap-hero.lv-B2{background-color:#E8801E;background-image:linear-gradient(135deg,rgba(255,165,79,.35),rgba(232,128,30,.55)),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='alps' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23FFD89B'/><stop offset='.5' stop-color='%23FF9A4A'/><stop offset='1' stop-color='%23B84A1E'/></linearGradient></defs><rect width='400' height='260' fill='url(%23alps)'/><circle cx='280' cy='95' r='42' fill='%23FFE680' opacity='.95'/><circle cx='280' cy='95' r='70' fill='%23FFE680' opacity='.2'/><ellipse cx='110' cy='75' rx='40' ry='8' fill='%23fff' opacity='.45'/><ellipse cx='200' cy='115' rx='34' ry='7' fill='%23fff' opacity='.35'/><path d='M 0 260 L 90 130 L 170 175 L 250 110 L 350 185 L 400 145 L 400 260 Z' fill='%23722A0E'/><path d='M 84 145 L 92 130 L 100 145 L 96 142 L 92 145 L 88 142 Z' fill='%23fff' opacity='.85'/><path d='M 244 122 L 252 110 L 260 122 L 256 119 L 252 122 L 248 119 Z' fill='%23fff' opacity='.85'/><path d='M 0 260 L 70 175 L 160 200 L 240 155 L 330 220 L 400 195 L 400 260 Z' fill='%234A1A05'/></svg>")}
+.chap-hero.lv-C1{background-color:#3D1216;background-image:linear-gradient(135deg,rgba(255,107,107,.3),rgba(61,18,22,.6)),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='night' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%230B1031'/><stop offset='.6' stop-color='%231A0E2E'/><stop offset='1' stop-color='%23420814'/></linearGradient></defs><rect width='400' height='260' fill='url(%23night)'/><circle cx='320' cy='55' r='26' fill='%23FFE680'/><circle cx='335' cy='55' r='22' fill='%231A0E2E'/><circle cx='30' cy='35' r='1.8' fill='%23fff'/><circle cx='75' cy='80' r='1.2' fill='%23fff' opacity='.8'/><circle cx='120' cy='40' r='2' fill='%23fff'/><circle cx='150' cy='100' r='1' fill='%23fff' opacity='.7'/><circle cx='195' cy='35' r='1.6' fill='%23fff'/><circle cx='235' cy='90' r='1.2' fill='%23fff' opacity='.8'/><circle cx='270' cy='50' r='1.5' fill='%23fff'/><circle cx='370' cy='95' r='1.4' fill='%23fff' opacity='.85'/><circle cx='60' cy='130' r='1.2' fill='%23fff' opacity='.6'/><circle cx='100' cy='145' r='1.5' fill='%23fff' opacity='.8'/><circle cx='180' cy='140' r='1.2' fill='%23fff' opacity='.65'/><circle cx='290' cy='145' r='1.4' fill='%23fff' opacity='.75'/><circle cx='350' cy='160' r='1' fill='%23fff' opacity='.6'/><path d='M 0 260 L 130 130 L 230 185 L 400 105 L 400 260 Z' fill='%23000' opacity='.8'/><path d='M 120 135 L 130 130 L 140 138 Z' fill='%23fff' opacity='.5'/></svg>")}
 /* Units section tinted by chapter color */
 .chap-units{padding:10px 0 18px;position:relative}
 .chap-units::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--chap-tint,transparent) 0%,transparent 140px);opacity:.06;pointer-events:none;border-radius:0 0 20px 20px}
@@ -137,20 +142,6 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .node-row.left{justify-content:flex-start;padding-left:60px}
 .node-row.center{justify-content:center}
 .node-row.right{justify-content:flex-end;padding-right:60px}
-/* Curved dashed path between nodes — drawn with ::before pseudoelement using SVG-as-bg */
-.node-row::before{
-  content:'';position:absolute;left:0;right:0;top:-30px;height:60px;pointer-events:none;
-  background-repeat:no-repeat;background-position:center;background-size:100% 100%;
-  z-index:0;opacity:.55
-}
-/* Path going from center (above) to left (this row) — curves left */
-.node-row.left::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M 100 0 Q 100 30 50 60' fill='none' stroke='%23FFD43B' stroke-width='3' stroke-dasharray='6 8' stroke-linecap='round'/></svg>")}
-.node-row.right::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M 100 0 Q 100 30 150 60' fill='none' stroke='%23FFD43B' stroke-width='3' stroke-dasharray='6 8' stroke-linecap='round'/></svg>")}
-.node-row.center::before{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M 100 0 L 100 60' fill='none' stroke='%23FFD43B' stroke-width='3' stroke-dasharray='6 8' stroke-linecap='round'/></svg>")}
-/* Hide the line above the first node in each chapter (no predecessor in this chapter) */
-.chap-units > .node-row:first-of-type::before{display:none}
-/* Dim path lines for nodes that are locked (not yet reached) */
-.chap-units > .node-row:has(.node.lock)::before{opacity:.2;filter:grayscale(1)}
 
 .node{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;position:relative;border:none;transition:transform .2s}
 .node.cur{width:84px;height:84px;font-size:32px}
@@ -159,7 +150,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .ns.f{color:#FFD43B}
 .lock-ic svg{width:24px;height:24px;color:rgba(255,255,255,.3)}
 .node:active{transform:scale(.92)}
-.node.done{background:var(--gold);box-shadow:0 6px 0 #b8960a,0 0 20px rgba(255,200,0,.2)}
+.node.done{background:linear-gradient(135deg,#1A5FD1,#0C3D8E);box-shadow:0 6px 0 rgba(0,0,0,.3),0 0 18px rgba(26,95,209,.25);color:#fff}
 .node.done .node-ic{filter:brightness(0) invert(1)}
 .node.cur{background:var(--green);box-shadow:0 6px 0 var(--green-d),0 0 24px rgba(88,204,2,.3)}
 .node.lock{background:#2A3C44;box-shadow:0 6px 0 #1e2d34;cursor:not-allowed}
@@ -175,7 +166,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 
 /* Node label */
 .node-lbl{position:absolute;bottom:-22px;font-size:10px;font-weight:700;color:rgba(255,255,255,.45);white-space:nowrap;text-align:center;width:120px;left:50%;transform:translateX(-50%)}
-.node.done .node-lbl{color:rgba(255,200,0,.6)}
+.node.done .node-lbl{color:rgba(26,95,209,.85)}
 .node.cur .node-lbl{color:rgba(88,204,2,.8)}
 
 /* NAV */
@@ -3176,81 +3167,6 @@ updH(){document.getElementById('h-elo').textContent=st.elo;
 
 rPath(){
   const el=document.getElementById('hscr');let h='';
-  // SVG illustrated scenes per CEFR level (white shapes — colored by gradient behind)
-  const SCENES={
-    A1:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
-      <circle cx='340' cy='40' r='28' fill='rgba(255,230,128,.85)'/>
-      <circle cx='340' cy='40' r='42' fill='rgba(255,230,128,.18)'/>
-      <path d='M0 150 Q 100 110 200 130 Q 300 150 400 120 L 400 220 L 0 220 Z' fill='rgba(255,255,255,.14)'/>
-      <path d='M0 180 Q 80 150 180 165 Q 280 180 400 160 L 400 220 L 0 220 Z' fill='rgba(255,255,255,.1)'/>
-      <path d='M0 200 L 400 200 L 400 220 L 0 220 Z' fill='rgba(0,0,0,.18)'/>
-      <circle cx='50' cy='175' r='3' fill='rgba(255,184,224,.9)'/>
-      <circle cx='120' cy='190' r='3' fill='rgba(255,255,255,.85)'/>
-      <circle cx='180' cy='180' r='3' fill='rgba(255,230,128,.9)'/>
-      <circle cx='280' cy='180' r='3' fill='rgba(255,184,224,.85)'/>
-      <circle cx='360' cy='195' r='3' fill='rgba(255,255,255,.85)'/>
-      <path d='M30 200 L 30 175 M 30 185 L 25 180 M 30 185 L 35 180' stroke='rgba(255,255,255,.4)' stroke-width='1.2' fill='none'/>
-      <path d='M150 205 L 150 178 M 150 188 L 145 183 M 150 188 L 155 183' stroke='rgba(255,255,255,.4)' stroke-width='1.2' fill='none'/>
-    </svg>`,
-    A2:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
-      <circle cx='60' cy='45' r='22' fill='rgba(255,230,128,.7)'/>
-      <circle cx='60' cy='45' r='34' fill='rgba(255,230,128,.15)'/>
-      <ellipse cx='200' cy='55' rx='40' ry='10' fill='rgba(255,255,255,.12)'/>
-      <ellipse cx='320' cy='35' rx='30' ry='7' fill='rgba(255,255,255,.1)'/>
-      <rect x='35' y='130' width='42' height='90' fill='rgba(0,0,0,.28)'/>
-      <rect x='85' y='105' width='52' height='115' fill='rgba(0,0,0,.32)'/>
-      <rect x='145' y='140' width='38' height='80' fill='rgba(0,0,0,.25)'/>
-      <rect x='190' y='90' width='65' height='130' fill='rgba(0,0,0,.36)'/>
-      <rect x='260' y='120' width='48' height='100' fill='rgba(0,0,0,.28)'/>
-      <rect x='314' y='105' width='44' height='115' fill='rgba(0,0,0,.32)'/>
-      <rect x='52' y='150' width='8' height='10' fill='rgba(255,230,128,.65)'/>
-      <rect x='100' y='125' width='8' height='10' fill='rgba(255,230,128,.65)'/>
-      <rect x='205' y='115' width='8' height='10' fill='rgba(255,230,128,.65)'/>
-      <rect x='220' y='150' width='8' height='10' fill='rgba(255,230,128,.65)'/>
-      <rect x='280' y='140' width='8' height='10' fill='rgba(255,230,128,.65)'/>
-      <rect x='328' y='130' width='8' height='10' fill='rgba(255,230,128,.65)'/>
-    </svg>`,
-    B1:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
-      <circle cx='90' cy='75' r='38' fill='rgba(255,255,255,.14)'/>
-      <circle cx='130' cy='115' r='10' fill='rgba(255,255,255,.14)'/>
-      <circle cx='118' cy='128' r='5' fill='rgba(255,255,255,.14)'/>
-      <circle cx='270' cy='55' r='48' fill='rgba(255,255,255,.12)'/>
-      <circle cx='235' cy='110' r='9' fill='rgba(255,255,255,.12)'/>
-      <circle cx='222' cy='122' r='5' fill='rgba(255,255,255,.12)'/>
-      <circle cx='350' cy='130' r='32' fill='rgba(255,255,255,.13)'/>
-      <text x='85' y='82' fill='rgba(255,255,255,.55)' font-family='sans-serif' font-size='28' font-weight='800'>Zdravo</text>
-      <text x='245' y='62' fill='rgba(255,255,255,.5)' font-family='sans-serif' font-size='24' font-weight='800'>Ciao</text>
-    </svg>`,
-    B2:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
-      <circle cx='320' cy='55' r='28' fill='rgba(255,230,128,.85)'/>
-      <circle cx='320' cy='55' r='44' fill='rgba(255,230,128,.18)'/>
-      <ellipse cx='110' cy='50' rx='38' ry='8' fill='rgba(255,255,255,.13)'/>
-      <ellipse cx='250' cy='90' rx='32' ry='7' fill='rgba(255,255,255,.1)'/>
-      <path d='M 0 220 L 90 90 L 170 145 L 250 75 L 350 155 L 400 110 L 400 220 Z' fill='rgba(0,0,0,.3)'/>
-      <path d='M 0 220 L 70 145 L 160 170 L 240 125 L 330 195 L 400 165 L 400 220 Z' fill='rgba(0,0,0,.22)'/>
-      <path d='M 84 105 L 92 90 L 100 105 Z' fill='rgba(255,255,255,.5)'/>
-      <path d='M 244 88 L 252 75 L 260 88 Z' fill='rgba(255,255,255,.5)'/>
-    </svg>`,
-    C1:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
-      <circle cx='320' cy='45' r='22' fill='rgba(255,230,128,.9)'/>
-      <circle cx='335' cy='45' r='17' fill='rgba(0,0,0,.45)'/>
-      <circle cx='30' cy='30' r='1.5' fill='rgba(255,255,255,.9)'/>
-      <circle cx='75' cy='75' r='1' fill='rgba(255,255,255,.7)'/>
-      <circle cx='120' cy='35' r='1.8' fill='rgba(255,255,255,.9)'/>
-      <circle cx='150' cy='95' r='1' fill='rgba(255,255,255,.7)'/>
-      <circle cx='195' cy='30' r='1.5' fill='rgba(255,255,255,.9)'/>
-      <circle cx='235' cy='85' r='1' fill='rgba(255,255,255,.7)'/>
-      <circle cx='270' cy='45' r='1.4' fill='rgba(255,255,255,.85)'/>
-      <circle cx='370' cy='90' r='1.2' fill='rgba(255,255,255,.85)'/>
-      <circle cx='60' cy='110' r='1' fill='rgba(255,255,255,.6)'/>
-      <circle cx='100' cy='130' r='1.3' fill='rgba(255,255,255,.75)'/>
-      <circle cx='180' cy='125' r='1' fill='rgba(255,255,255,.6)'/>
-      <circle cx='290' cy='130' r='1.2' fill='rgba(255,255,255,.7)'/>
-      <path d='M 0 220 L 130 110 L 230 165 L 400 95 L 400 220 Z' fill='rgba(0,0,0,.55)'/>
-      <path d='M 120 115 L 130 110 L 140 118 Z' fill='rgba(255,255,255,.55)'/>
-    </svg>`
-  };
-  function sceneBg(lvKey){const svg=SCENES[lvKey];if(!svg)return '';return 'url("data:image/svg+xml;utf8,'+encodeURIComponent(svg).replace(/'/g,'%27').replace(/"/g,"'")+'")';}
   const LV={
     A1:{em:'🌱',lbl:'A1 · Beginner',title:'Foundations',sub:'Greetings, numbers, the basics',g1:'#58CC02',g2:'#3D8B00',img:'chapter-a1.png'},
     A2:{em:'🏡',lbl:'A2 · Elementary',title:'Everyday Life',sub:'Daily conversations, getting around',g1:'#1A5FD1',g2:'#0C3D8E',img:'chapter-a2.png'},
@@ -3280,9 +3196,7 @@ rPath(){
       const lv=LV[u.lv]||{em:'📖',lbl:u.lv,title:u.lv,sub:'',g1:'#1A5FD1',g2:'#0C3D8E'};
       const st2=lvStats[u.lv];
       const pct=st2.total>0?Math.round(st2.done/st2.total*100):0;
-      const scene=sceneBg(u.lv);
-      h+=`<div class="chap-hero" style="background:linear-gradient(135deg,${lv.g1},${lv.g2})">
-        <div class="chap-scene" style="background-image:url('${lv.img}'),${scene}" onerror="this.style.backgroundImage=&quot;${scene.replace(/"/g,'&quot;')}&quot;"></div>
+      h+=`<div class="chap-hero lv-${u.lv}">
         <div class="chap-hero-body">
           <div class="chap-hero-lbl">${esc(lv.lbl)}</div>
           <div class="chap-hero-title">${esc(lv.title)}</div>
