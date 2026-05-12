@@ -3817,7 +3817,8 @@ async goSocial(){
     this._socFriendUids=friendUids;
     await this._loadActivities(true);
   }catch(e){
-    el.innerHTML='<div class="empty-state">'+zekaHtml('Could not load feed. Check your connection and try again.')+'</div>';
+    console.error('[goSocial]',e);
+    el.innerHTML='<div class="empty-state">'+zekaHtml('Could not load feed: '+(e.code||e.message||'unknown error'))+'</div>';
   }
 },
 
