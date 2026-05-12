@@ -1898,35 +1898,59 @@ function showStreakMilestone(days){
 function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLang].flag+'.png" style="height:18px;vertical-align:middle">';}
 
 // ═══════════════ SPEECH SYNTHESIS ═══════════════
-const SPEECH_LOCALE={it:'it-IT',en:'en-US'};
+const SPEECH_LOCALE={sr:'sr-RS',it:'it-IT',en:'en-US'};
 const LINGVA_LANGS=new Set(['sr','it']);
 let _spkAudio=null;
 if(window.speechSynthesis)speechSynthesis.getVoices();
 
-function speak(text,lang){
-  const code=lang||(LINGVA_LANGS.has(curLang)?curLang:null);
-  const shortCode=code?code.split('-')[0]:null;
-  // Use pre-downloaded MP3 files for Lingva languages
-  if(shortCode&&LINGVA_LANGS.has(shortCode)){
-    const enc=encodeURIComponent(text);
-    const url=`audio/${shortCode}/${enc}.mp3`;
-    if(_spkAudio){_spkAudio.pause();_spkAudio.currentTime=0;}
-    else{_spkAudio=new Audio();}
-    _spkAudio.src=url;
-    _spkAudio.play().catch(()=>{});
-    return;
-  }
-  // Fallback: Web Speech API for other languages (English)
+// Web Speech API fallback (used when no MP3 exists for this word)
+function _speakViaSynth(text,lang){
   if(!window.speechSynthesis)return;
-  speechSynthesis.cancel();
-  const locale=code||SPEECH_LOCALE[curLang]||curLang;
+  try{speechSynthesis.cancel();}catch(e){}
+  const locale=SPEECH_LOCALE[lang]||lang||curLang;
   const sc=locale.split('-')[0];
   const voices=speechSynthesis.getVoices();
-  const v=voices.find(v=>v.lang===locale)||voices.find(v=>v.lang.startsWith(sc));
+  // Prefer exact match, then prefix match, then any voice
+  const v=voices.find(x=>x.lang===locale)||voices.find(x=>x.lang.startsWith(sc));
   const u=new SpeechSynthesisUtterance(text);
-  u.lang=v?v.lang:locale;u.rate=0.85;
+  u.lang=v?v.lang:locale;
+  u.rate=0.85;
   if(v)u.voice=v;
-  speechSynthesis.speak(u);
+  try{speechSynthesis.speak(u);}catch(e){console.warn('[speak] synth failed',e);}
+}
+
+function speak(text,lang){
+  if(!text)return;
+  const code=lang||(LINGVA_LANGS.has(curLang)?curLang:'en');
+  const shortCode=code.split('-')[0];
+  // Try pre-downloaded MP3 first for Lingva-supported languages
+  if(LINGVA_LANGS.has(shortCode)){
+    const enc=encodeURIComponent(text);
+    const url=`audio/${shortCode}/${enc}.mp3`;
+    if(_spkAudio){try{_spkAudio.pause();_spkAudio.currentTime=0;}catch(e){}}
+    else{_spkAudio=new Audio();}
+    let fallbackFired=false;
+    const fallback=()=>{
+      if(fallbackFired)return;fallbackFired=true;
+      _speakViaSynth(text,shortCode);
+    };
+    _spkAudio.onerror=fallback;
+    _spkAudio.src=url;
+    const playPromise=_spkAudio.play();
+    if(playPromise&&playPromise.catch){
+      playPromise.catch(err=>{
+        // Common errors: file missing (NotSupportedError), autoplay blocked, etc.
+        if(err&&err.name==='NotAllowedError'){
+          // Autoplay blocked by browser policy — can't recover this round
+          return;
+        }
+        fallback();
+      });
+    }
+    return;
+  }
+  // Non-Lingva languages (mostly English) go straight to synth
+  _speakViaSynth(text,shortCode);
 }
 function speakWord(w){speak(w.l);}
 function speakTL(text){speak(text);}
