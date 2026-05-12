@@ -113,17 +113,18 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 
 /* Section banners */
 /* Chapter hero cards (per CEFR level) */
-.chap-hero{margin:14px 16px 0;padding:22px 22px 18px;border-radius:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 28px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.1)}
-.chap-hero::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.08;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");mix-blend-mode:overlay}
-.chap-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.12),transparent 55%);pointer-events:none}
-.chap-hero-em{font-size:42px;line-height:1;margin-bottom:8px}
-.chap-hero-lbl{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.85)}
-.chap-hero-title{font-family:var(--font-display);font-size:28px;font-weight:900;letter-spacing:-.02em;margin-top:2px;line-height:1.05}
-.chap-hero-sub{font-size:12px;color:rgba(255,255,255,.8);margin-top:4px}
-.chap-hero-prog{display:flex;align-items:center;gap:10px;margin-top:12px;position:relative;z-index:1}
-.chap-hero-bar{flex:1;height:6px;background:rgba(0,0,0,.25);border-radius:6px;overflow:hidden}
-.chap-hero-fill{height:100%;background:#FFD43B;border-radius:6px;transition:width .6s ease}
-.chap-hero-pct{font-size:12px;font-weight:800;color:rgba(255,255,255,.95);white-space:nowrap}
+.chap-hero{margin:14px 16px 0;border-radius:22px;color:#fff;position:relative;overflow:hidden;box-shadow:0 14px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);min-height:240px;display:flex;flex-direction:column;justify-content:flex-end}
+.chap-hero::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");mix-blend-mode:overlay;z-index:2}
+.chap-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,transparent 40%,rgba(0,0,0,.55) 100%);pointer-events:none;z-index:1}
+.chap-scene{position:absolute;inset:0;background-size:cover,cover;background-position:center;background-repeat:no-repeat;z-index:0}
+.chap-hero-body{position:relative;z-index:3;padding:20px 22px 18px}
+.chap-hero-lbl{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.chap-hero-title{font-family:var(--font-display);font-size:30px;font-weight:900;letter-spacing:-.02em;margin-top:4px;line-height:1.02;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.chap-hero-sub{font-size:13px;color:rgba(255,255,255,.88);margin-top:6px;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.chap-hero-prog{display:flex;align-items:center;gap:10px;margin-top:14px}
+.chap-hero-bar{flex:1;height:6px;background:rgba(0,0,0,.35);border-radius:6px;overflow:hidden;backdrop-filter:blur(2px)}
+.chap-hero-fill{height:100%;background:#FFD43B;border-radius:6px;transition:width .6s ease;box-shadow:0 0 12px rgba(255,212,59,.6)}
+.chap-hero-pct{font-family:var(--font-display);font-size:13px;font-weight:800;color:#fff;font-feature-settings:'tnum' on;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.4)}
 /* Units section tinted by chapter color */
 .chap-units{padding:10px 0 18px;position:relative}
 .chap-units::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--chap-tint,transparent) 0%,transparent 140px);opacity:.06;pointer-events:none;border-radius:0 0 20px 20px}
@@ -3175,12 +3176,87 @@ updH(){document.getElementById('h-elo').textContent=st.elo;
 
 rPath(){
   const el=document.getElementById('hscr');let h='';
+  // SVG illustrated scenes per CEFR level (white shapes — colored by gradient behind)
+  const SCENES={
+    A1:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
+      <circle cx='340' cy='40' r='28' fill='rgba(255,230,128,.85)'/>
+      <circle cx='340' cy='40' r='42' fill='rgba(255,230,128,.18)'/>
+      <path d='M0 150 Q 100 110 200 130 Q 300 150 400 120 L 400 220 L 0 220 Z' fill='rgba(255,255,255,.14)'/>
+      <path d='M0 180 Q 80 150 180 165 Q 280 180 400 160 L 400 220 L 0 220 Z' fill='rgba(255,255,255,.1)'/>
+      <path d='M0 200 L 400 200 L 400 220 L 0 220 Z' fill='rgba(0,0,0,.18)'/>
+      <circle cx='50' cy='175' r='3' fill='rgba(255,184,224,.9)'/>
+      <circle cx='120' cy='190' r='3' fill='rgba(255,255,255,.85)'/>
+      <circle cx='180' cy='180' r='3' fill='rgba(255,230,128,.9)'/>
+      <circle cx='280' cy='180' r='3' fill='rgba(255,184,224,.85)'/>
+      <circle cx='360' cy='195' r='3' fill='rgba(255,255,255,.85)'/>
+      <path d='M30 200 L 30 175 M 30 185 L 25 180 M 30 185 L 35 180' stroke='rgba(255,255,255,.4)' stroke-width='1.2' fill='none'/>
+      <path d='M150 205 L 150 178 M 150 188 L 145 183 M 150 188 L 155 183' stroke='rgba(255,255,255,.4)' stroke-width='1.2' fill='none'/>
+    </svg>`,
+    A2:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
+      <circle cx='60' cy='45' r='22' fill='rgba(255,230,128,.7)'/>
+      <circle cx='60' cy='45' r='34' fill='rgba(255,230,128,.15)'/>
+      <ellipse cx='200' cy='55' rx='40' ry='10' fill='rgba(255,255,255,.12)'/>
+      <ellipse cx='320' cy='35' rx='30' ry='7' fill='rgba(255,255,255,.1)'/>
+      <rect x='35' y='130' width='42' height='90' fill='rgba(0,0,0,.28)'/>
+      <rect x='85' y='105' width='52' height='115' fill='rgba(0,0,0,.32)'/>
+      <rect x='145' y='140' width='38' height='80' fill='rgba(0,0,0,.25)'/>
+      <rect x='190' y='90' width='65' height='130' fill='rgba(0,0,0,.36)'/>
+      <rect x='260' y='120' width='48' height='100' fill='rgba(0,0,0,.28)'/>
+      <rect x='314' y='105' width='44' height='115' fill='rgba(0,0,0,.32)'/>
+      <rect x='52' y='150' width='8' height='10' fill='rgba(255,230,128,.65)'/>
+      <rect x='100' y='125' width='8' height='10' fill='rgba(255,230,128,.65)'/>
+      <rect x='205' y='115' width='8' height='10' fill='rgba(255,230,128,.65)'/>
+      <rect x='220' y='150' width='8' height='10' fill='rgba(255,230,128,.65)'/>
+      <rect x='280' y='140' width='8' height='10' fill='rgba(255,230,128,.65)'/>
+      <rect x='328' y='130' width='8' height='10' fill='rgba(255,230,128,.65)'/>
+    </svg>`,
+    B1:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
+      <circle cx='90' cy='75' r='38' fill='rgba(255,255,255,.14)'/>
+      <circle cx='130' cy='115' r='10' fill='rgba(255,255,255,.14)'/>
+      <circle cx='118' cy='128' r='5' fill='rgba(255,255,255,.14)'/>
+      <circle cx='270' cy='55' r='48' fill='rgba(255,255,255,.12)'/>
+      <circle cx='235' cy='110' r='9' fill='rgba(255,255,255,.12)'/>
+      <circle cx='222' cy='122' r='5' fill='rgba(255,255,255,.12)'/>
+      <circle cx='350' cy='130' r='32' fill='rgba(255,255,255,.13)'/>
+      <text x='85' y='82' fill='rgba(255,255,255,.55)' font-family='sans-serif' font-size='28' font-weight='800'>Zdravo</text>
+      <text x='245' y='62' fill='rgba(255,255,255,.5)' font-family='sans-serif' font-size='24' font-weight='800'>Ciao</text>
+    </svg>`,
+    B2:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
+      <circle cx='320' cy='55' r='28' fill='rgba(255,230,128,.85)'/>
+      <circle cx='320' cy='55' r='44' fill='rgba(255,230,128,.18)'/>
+      <ellipse cx='110' cy='50' rx='38' ry='8' fill='rgba(255,255,255,.13)'/>
+      <ellipse cx='250' cy='90' rx='32' ry='7' fill='rgba(255,255,255,.1)'/>
+      <path d='M 0 220 L 90 90 L 170 145 L 250 75 L 350 155 L 400 110 L 400 220 Z' fill='rgba(0,0,0,.3)'/>
+      <path d='M 0 220 L 70 145 L 160 170 L 240 125 L 330 195 L 400 165 L 400 220 Z' fill='rgba(0,0,0,.22)'/>
+      <path d='M 84 105 L 92 90 L 100 105 Z' fill='rgba(255,255,255,.5)'/>
+      <path d='M 244 88 L 252 75 L 260 88 Z' fill='rgba(255,255,255,.5)'/>
+    </svg>`,
+    C1:`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 220' preserveAspectRatio='xMidYMid slice'>
+      <circle cx='320' cy='45' r='22' fill='rgba(255,230,128,.9)'/>
+      <circle cx='335' cy='45' r='17' fill='rgba(0,0,0,.45)'/>
+      <circle cx='30' cy='30' r='1.5' fill='rgba(255,255,255,.9)'/>
+      <circle cx='75' cy='75' r='1' fill='rgba(255,255,255,.7)'/>
+      <circle cx='120' cy='35' r='1.8' fill='rgba(255,255,255,.9)'/>
+      <circle cx='150' cy='95' r='1' fill='rgba(255,255,255,.7)'/>
+      <circle cx='195' cy='30' r='1.5' fill='rgba(255,255,255,.9)'/>
+      <circle cx='235' cy='85' r='1' fill='rgba(255,255,255,.7)'/>
+      <circle cx='270' cy='45' r='1.4' fill='rgba(255,255,255,.85)'/>
+      <circle cx='370' cy='90' r='1.2' fill='rgba(255,255,255,.85)'/>
+      <circle cx='60' cy='110' r='1' fill='rgba(255,255,255,.6)'/>
+      <circle cx='100' cy='130' r='1.3' fill='rgba(255,255,255,.75)'/>
+      <circle cx='180' cy='125' r='1' fill='rgba(255,255,255,.6)'/>
+      <circle cx='290' cy='130' r='1.2' fill='rgba(255,255,255,.7)'/>
+      <path d='M 0 220 L 130 110 L 230 165 L 400 95 L 400 220 Z' fill='rgba(0,0,0,.55)'/>
+      <path d='M 120 115 L 130 110 L 140 118 Z' fill='rgba(255,255,255,.55)'/>
+    </svg>`
+  };
+  function sceneBg(lvKey){const svg=SCENES[lvKey];if(!svg)return '';return 'url("data:image/svg+xml;utf8,'+encodeURIComponent(svg).replace(/'/g,'%27').replace(/"/g,"'")+'")';}
   const LV={
-    A1:{em:'🌱',lbl:'A1 · Beginner',title:'Foundations',sub:'Greetings, numbers, the basics',g1:'#58CC02',g2:'#3D8B00'},
-    A2:{em:'🏡',lbl:'A2 · Elementary',title:'Everyday Life',sub:'Daily conversations, getting around',g1:'#1A5FD1',g2:'#0C3D8E'},
-    B1:{em:'💬',lbl:'B1 · Intermediate',title:'Conversations',sub:'Express ideas, tell stories',g1:'#A06CD5',g2:'#6D2C8E'},
-    B2:{em:'📚',lbl:'B2 · Upper-Intermediate',title:'Fluency',sub:'Complex topics, nuanced speech',g1:'#FFA54F',g2:'#E8801E'},
-    C1:{em:'🎓',lbl:'C1 · Advanced',title:'Mastery',sub:'Academic and advanced',g1:'#FF6B6B',g2:'#C93030'}
+    A1:{em:'🌱',lbl:'A1 · Beginner',title:'Foundations',sub:'Greetings, numbers, the basics',g1:'#58CC02',g2:'#3D8B00',img:'chapter-a1.png'},
+    A2:{em:'🏡',lbl:'A2 · Elementary',title:'Everyday Life',sub:'Daily conversations, getting around',g1:'#1A5FD1',g2:'#0C3D8E',img:'chapter-a2.png'},
+    B1:{em:'💬',lbl:'B1 · Intermediate',title:'Conversations',sub:'Express ideas, tell stories',g1:'#A06CD5',g2:'#6D2C8E',img:'chapter-b1.png'},
+    B2:{em:'📚',lbl:'B2 · Upper-Intermediate',title:'Fluency',sub:'Complex topics, nuanced speech',g1:'#FFA54F',g2:'#E8801E',img:'chapter-b2.png'},
+    C1:{em:'🎓',lbl:'C1 · Advanced',title:'Mastery',sub:'Academic and advanced',g1:'#FF6B6B',g2:'#C93030',img:'chapter-c1.png'}
   };
   // Pre-compute per-level progress
   const lvStats={};
@@ -3204,14 +3280,17 @@ rPath(){
       const lv=LV[u.lv]||{em:'📖',lbl:u.lv,title:u.lv,sub:'',g1:'#1A5FD1',g2:'#0C3D8E'};
       const st2=lvStats[u.lv];
       const pct=st2.total>0?Math.round(st2.done/st2.total*100):0;
+      const scene=sceneBg(u.lv);
       h+=`<div class="chap-hero" style="background:linear-gradient(135deg,${lv.g1},${lv.g2})">
-        <div class="chap-hero-em">${lv.em}</div>
-        <div class="chap-hero-lbl">${esc(lv.lbl)}</div>
-        <div class="chap-hero-title">${esc(lv.title)}</div>
-        <div class="chap-hero-sub">${esc(lv.sub)}</div>
-        <div class="chap-hero-prog">
-          <div class="chap-hero-bar"><div class="chap-hero-fill" style="width:${pct}%"></div></div>
-          <div class="chap-hero-pct">${st2.done}/${st2.total}</div>
+        <div class="chap-scene" style="background-image:url('${lv.img}'),${scene}" onerror="this.style.backgroundImage=&quot;${scene.replace(/"/g,'&quot;')}&quot;"></div>
+        <div class="chap-hero-body">
+          <div class="chap-hero-lbl">${esc(lv.lbl)}</div>
+          <div class="chap-hero-title">${esc(lv.title)}</div>
+          <div class="chap-hero-sub">${esc(lv.sub)}</div>
+          <div class="chap-hero-prog">
+            <div class="chap-hero-bar"><div class="chap-hero-fill" style="width:${pct}%"></div></div>
+            <div class="chap-hero-pct">${st2.done}/${st2.total}</div>
+          </div>
         </div>
       </div>`;
       h+=`<div class="chap-units" style="--chap-tint:${lv.g1}">`;
