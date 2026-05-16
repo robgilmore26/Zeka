@@ -389,6 +389,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .save-ind.show{opacity:1}
 .seg-toggle{display:flex;margin:8px 20px;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:2px}
 .seg-btn{flex:1;padding:8px 0;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:rgba(255,255,255,.5);transition:.2s}
+.seg-toggle-4 .seg-btn{font-size:11px;padding:8px 2px;letter-spacing:.2px}
 .seg-btn.seg-active{background:rgba(255,255,255,.15);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .fc-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
 .fc-count{font-size:14px;font-weight:700;color:rgba(255,255,255,.6)}
@@ -451,6 +452,44 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sr-keys{display:flex;gap:6px;justify-content:center;margin-top:12px;width:100%;max-width:360px}
 .sr-key{padding:10px 14px;border:none;border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;transition:.1s;flex:1}
 .sr-key:active{background:rgba(255,255,255,.25);transform:scale(.95)}
+
+/* ═══════════════ SENTENCES ═══════════════ */
+/* Daily sentence card */
+.sent-daily{position:relative;margin-top:14px;padding:22px 22px 18px;border-radius:20px;background:linear-gradient(135deg,#1A5FD1,#0C3D8E);overflow:hidden;box-shadow:0 14px 32px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.12);color:#fff}
+.sent-daily.done{opacity:.7}
+.sent-daily::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.12),transparent 55%)}
+.sent-daily > *{position:relative;z-index:1}
+.sent-daily-lbl{font-size:10px;font-weight:800;letter-spacing:2.5px;color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.sent-daily-sr{font-family:var(--font-display);font-size:24px;font-weight:700;line-height:1.3;margin-top:10px;letter-spacing:-.01em;text-shadow:0 2px 6px rgba(0,0,0,.35)}
+.sent-daily-en{font-size:13px;color:rgba(255,255,255,.85);margin-top:8px;font-style:italic;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sent-daily-actions{display:flex;align-items:center;gap:10px;margin-top:14px}
+.sent-daily-actions .spk-btn{background:rgba(255,255,255,.18);color:#fff;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.sent-daily-actions .spk-btn:hover{background:rgba(255,255,255,.28)}
+.spk-lg{font-size:24px}
+.sent-daily-btn{flex:1;padding:11px 14px;border:none;border-radius:11px;font-size:13px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:var(--sr-blue);background:#fff;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.sent-daily-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.sent-daily-done{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;color:rgba(255,255,255,.95);padding:11px 14px;background:rgba(255,255,255,.12);border-radius:11px}
+.sent-daily-done svg{width:16px;height:16px}
+
+/* Level chips */
+.sent-lv-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;justify-content:center}
+.sent-lv-chip{display:flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--divider);background:var(--surface);color:var(--text-2);font-size:13px;font-weight:700;border-radius:999px;cursor:pointer;transition:.15s}
+.sent-lv-chip:hover{background:var(--surface-raised);color:var(--text-1)}
+.sent-lv-chip.act{background:var(--sr-blue);color:#fff;border-color:var(--sr-blue)}
+.sent-lv-n{font-size:11px;font-weight:800;background:rgba(0,0,0,.18);padding:1px 7px;border-radius:999px;font-feature-settings:'tnum' on}
+.sent-lv-chip.act .sent-lv-n{background:rgba(255,255,255,.22)}
+
+/* Sentence drill */
+.sent-phase{width:100%;max-width:420px}
+.sent-lvl{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);text-align:center}
+.sent-en{font-size:14px;color:var(--text-2);text-align:center;margin-top:8px;font-style:italic;line-height:1.4}
+.sent-display{font-family:var(--font-display);font-size:22px;line-height:1.8;color:var(--text-1);background:var(--surface);border:1px solid var(--divider);border-radius:16px;padding:22px 20px;margin-top:18px;text-align:center;letter-spacing:-.01em;display:block;word-spacing:.05em}
+.sent-tok{display:inline}
+.sent-blank{display:inline-block;min-width:90px;padding:4px 10px;margin:0 2px;border:none;border-bottom:2.5px solid var(--sr-blue);background:rgba(26,95,209,.1);color:var(--text-1);font-family:var(--font-display);font-size:22px;font-weight:700;text-align:center;outline:none;border-radius:8px 8px 0 0;transition:.18s;vertical-align:baseline}
+.sent-blank:focus{background:rgba(26,95,209,.2);border-bottom-color:#4DA3FF}
+.sent-blank.cor{border-bottom-color:var(--green);background:rgba(88,204,2,.18);color:#A6E26A}
+.sent-blank.inc{border-bottom-color:var(--red);background:rgba(255,107,107,.15);color:#FF9999}
+.sent-punct{display:inline}
 
 /* ═══════════════ ZEKA PERSONALITY ═══════════════ */
 .zeka-face{width:100px;height:100px;border-radius:24px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:block}
@@ -596,10 +635,11 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div class="st"><button class="lang-ind" id="h-lang" onclick="S.switchLang()" title="Switch language"><img src="https://flagcdn.com/w40/rs.png" alt="🇷🇸" style="height:18px;vertical-align:middle"></button><span class="elo-badge" id="h-elo">1000</span><div class="st" style="color:var(--orange);margin-left:10px"><span class="st-i fire">🔥</span><span id="h-str">0</span></div></div>
   </div>
   <div class="save-ind" id="save-ind">Saved &#10003;</div>
-  <div class="seg-toggle" id="learn-toggle">
+  <div class="seg-toggle seg-toggle-4" id="learn-toggle">
     <button class="seg-btn seg-active" onclick="S.setLearnMode('lessons')">Lessons</button>
     <button class="seg-btn" onclick="S.setLearnMode('flashcards')">Flashcards</button>
-    <button class="seg-btn" onclick="S.setLearnMode('grammar')">Grammar</button>
+    <button class="seg-btn" onclick="S.setLearnMode('verbs')">Verbs</button>
+    <button class="seg-btn" onclick="S.setLearnMode('sentences')">Sentences</button>
   </div>
   <div class="hscr" id="hscr"></div>
   <div id="fc-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
@@ -611,6 +651,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div id="verb-home"></div>
     <div id="case-home" style="display:none"></div>
   </div>
+  <div id="sentence-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
     <button class="ni" onclick="S.goSocial()"><span class="ni-i" data-icon="users"></span><span class="ni-l">Social</span></button>
@@ -664,6 +705,15 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div style="width:32px"></div>
   </div>
   <div class="vd-body" id="cs-body"></div>
+</div>
+
+<div class="sc" id="sent-drill">
+  <div class="vd-top">
+    <button class="xbtn" onclick="S.exitSent()"><span data-icon="x"></span></button>
+    <div class="vd-count" id="sn-count">0 / 0</div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="vd-body" id="sn-body"></div>
 </div>
 
 <div class="sc" id="social">
@@ -1850,6 +1900,42 @@ const N_SR=[
   ]}
 ];
 
+// ═══════════════ SENTENCES (drill bank) ═══════════════
+// {id, sr: full sentence, en: translation, lv: CEFR level, focus: grammar tag,
+//  blanks: words from `sr` that should be hidden — first occurrence is blanked}
+// Tatoeba-import-ready. Run fetch_tatoeba.py to expand the bank.
+const SENT_SR=[
+// ── A1 — simple SVO, present tense ──
+{id:1,sr:'Ja pijem vodu.',en:'I drink water.',lv:'A1',focus:'acc',blanks:['vodu']},
+{id:2,sr:'Idem u školu.',en:'I go to school.',lv:'A1',focus:'acc',blanks:['školu']},
+{id:3,sr:'Volim te.',en:'I love you.',lv:'A1',focus:'verb',blanks:['Volim']},
+{id:4,sr:'Kako se zoveš?',en:'What is your name?',lv:'A1',focus:'phrase',blanks:['zoveš']},
+{id:5,sr:'Ja sam student.',en:'I am a student.',lv:'A1',focus:'verb',blanks:['sam']},
+{id:6,sr:'On živi u Beogradu.',en:'He lives in Belgrade.',lv:'A1',focus:'loc',blanks:['Beogradu']},
+{id:7,sr:'Ona čita knjigu.',en:'She is reading a book.',lv:'A1',focus:'acc',blanks:['knjigu']},
+{id:8,sr:'Mi smo prijatelji.',en:'We are friends.',lv:'A1',focus:'verb',blanks:['smo']},
+// ── A2 — prepositions + cases, common verbs ──
+{id:9,sr:'Sutra idem kod doktora.',en:'Tomorrow I am going to the doctor.',lv:'A2',focus:'gen',blanks:['doktora']},
+{id:10,sr:'Kupujem hleb u prodavnici.',en:'I am buying bread at the store.',lv:'A2',focus:'loc',blanks:['prodavnici']},
+{id:11,sr:'Pišem pismo svojoj sestri.',en:'I am writing a letter to my sister.',lv:'A2',focus:'dat',blanks:['sestri']},
+{id:12,sr:'Šetam sa psom u parku.',en:'I am walking with the dog in the park.',lv:'A2',focus:'ins',blanks:['psom']},
+{id:13,sr:'Učim srpski već dve godine.',en:'I have been learning Serbian for two years.',lv:'A2',focus:'verb',blanks:['Učim']},
+{id:14,sr:'Daj mi tu knjigu, molim te.',en:'Give me that book, please.',lv:'A2',focus:'imp',blanks:['Daj']},
+{id:15,sr:'Restoran je pored crkve.',en:'The restaurant is next to the church.',lv:'A2',focus:'gen',blanks:['crkve']},
+{id:16,sr:'Razgovaram sa kolegom o poslu.',en:'I am talking with a colleague about work.',lv:'A2',focus:'ins',blanks:['kolegom']},
+// ── B1 — subordinate clauses, more cases ──
+{id:17,sr:'Mislim da je ovo dobra ideja.',en:'I think that this is a good idea.',lv:'B1',focus:'clause',blanks:['Mislim']},
+{id:18,sr:'Ne znam gde sam ostavio ključeve.',en:"I don't know where I left the keys.",lv:'B1',focus:'past',blanks:['ostavio']},
+{id:19,sr:'Ako budem imao vremena, doći ću.',en:'If I have time, I will come.',lv:'B1',focus:'fut',blanks:['imao']},
+{id:20,sr:'Knjiga koju čitam je veoma zanimljiva.',en:'The book I am reading is very interesting.',lv:'B1',focus:'rel',blanks:['čitam']},
+{id:21,sr:'Voleo bih da naučim italijanski.',en:'I would like to learn Italian.',lv:'B1',focus:'cond',blanks:['Voleo']},
+{id:22,sr:'On je rekao da će sutra biti hladno.',en:'He said it will be cold tomorrow.',lv:'B1',focus:'fut',blanks:['rekao']},
+// ── B2 — complex constructions ──
+{id:23,sr:'Što više učim, to više razumem.',en:'The more I learn, the more I understand.',lv:'B2',focus:'idiom',blanks:['razumem']},
+{id:24,sr:'Da sam znao, ne bih to uradio.',en:"If I had known, I wouldn't have done it.",lv:'B2',focus:'cond',blanks:['znao']},
+{id:25,sr:'Kao da nisam dovoljno spavao sinoć.',en:"It's as if I didn't sleep enough last night.",lv:'B2',focus:'comp',blanks:['spavao']}
+];
+
 // ═══════════════ LANGUAGE SYSTEM ═══════════════
 const LANG_DATA={
   sr:{name:'Serbian',flag:'rs',code:'sr',units:U_SR},
@@ -1859,6 +1945,7 @@ let curLang=localStorage.getItem('zeka_lang')||'sr';
 let UNITS,ALL_PH,ALL_W;
 let VERBS=[];
 let NOUNS=[];
+let SENTENCES=[];
 function langName(){return LANG_DATA[curLang].name;}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
@@ -1987,6 +2074,7 @@ function setLang(code){
   UNITS=buildUnits(ld.units);ALL_PH=UNITS.flatMap(u=>u.phrases);ALL_W=UNITS.flatMap(u=>u.words);
   VERBS=curLang==='sr'?V_SR:[];
   NOUNS=curLang==='sr'?N_SR:[];
+  SENTENCES=curLang==='sr'?SENT_SR:[];
 }
 setLang(curLang);// Initialize on load
 
@@ -2127,7 +2215,8 @@ function showSplashReady(){
 function getStateData(){
   return{elo:st.elo,xp:st.xp,streak:st.streak,lastDate:st.lastDate,
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
-    fcNewToday:st.fcNewToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode};
+    fcNewToday:st.fcNewToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
+    sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
@@ -2135,6 +2224,7 @@ function applyStateData(p){
   st.uacc=p.uacc||{};
   st.fcNewToday=p.fcNewToday||0;st.fcNewDate=p.fcNewDate||'';st.fcNewLimit=p.fcNewLimit||10;
   st.fcSourceMode=p.fcSourceMode||'all';
+  st.sentDoneToday=p.sentDoneToday||[];st.sentDoneDate=p.sentDoneDate||'';
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false},p.firsts||{});
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
@@ -2428,7 +2518,8 @@ let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},u
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
   vbVerbs:[],vbIdx:0,vbPhase:1,vbCorrect:0,vbTotal:0,
-  grammarMode:'verbs',csNouns:[],csIdx:0,csPhase:1,csSentIdx:0,csCorrect:0,csTotal:0};
+  grammarMode:'verbs',csNouns:[],csIdx:0,csPhase:1,csSentIdx:0,csCorrect:0,csTotal:0,
+  sentLv:'all',sentList:[],sentIdx:0,sentCorrect:0,sentTotal:0,sentDoneToday:[],sentDoneDate:''};
 
 function load(){try{
   // Migrate old single-language key to new per-language format
@@ -2626,7 +2717,7 @@ pk(a,n,ex=[]){return this.sh(a.filter(x=>!ex.includes(x))).slice(0,n)},
 
 goScr(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
   document.getElementById(id).classList.add('act');
-  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social'||id==='flashcard'||id==='verb-drill'||id==='case-drill');},
+  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social'||id==='flashcard'||id==='verb-drill'||id==='case-drill'||id==='sent-drill');},
 
 goHome(){this.updH();this.rPath();this.goScr('home');},
 
@@ -3014,7 +3105,7 @@ nextVerb(){
 exitVerb(){
   sCl();save();
   this.goHome();
-  this.setLearnMode('grammar');
+  this.setLearnMode('verbs');
   this.setGrammarMode('verbs');
 },
 
@@ -3188,7 +3279,7 @@ nextCase(){
 exitCase(){
   sCl();save();
   this.goHome();
-  this.setLearnMode('grammar');
+  this.setLearnMode('verbs');
   this.setGrammarMode('cases');
 },
 
@@ -3211,6 +3302,187 @@ finishCaseSession(){
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
   h+='</div>';
   h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitCase()">Done</button>';
+  h+='</div>';
+  el.innerHTML=h;
+},
+
+// ═══════════════ SENTENCES ═══════════════
+_sentDailyIdx(){
+  // Deterministic daily pick: day-of-epoch modulo bank size
+  if(!SENTENCES.length)return -1;
+  const daysSinceEpoch=Math.floor(Date.now()/86400000);
+  return daysSinceEpoch%SENTENCES.length;
+},
+
+_sentResetDayIfNeeded(){
+  const today=new Date().toDateString();
+  if(st.sentDoneDate!==today){st.sentDoneDate=today;st.sentDoneToday=[];}
+},
+
+renderSentHome(){
+  const el=document.getElementById('sentence-home');
+  if(!SENTENCES.length){
+    el.innerHTML='<div class="empty-state">'+zekaHtml('Sentences are only available for Serbian right now.')+'</div>';
+    return;
+  }
+  this._sentResetDayIfNeeded();
+  const dailyIdx=this._sentDailyIdx();
+  const daily=dailyIdx>=0?SENTENCES[dailyIdx]:null;
+  const dailyDone=daily&&st.sentDoneToday.includes(daily.id);
+  let h='';
+
+  // ── DAILY SENTENCE CARD ──
+  if(daily){
+    h+='<div class="sent-daily '+(dailyDone?'done':'')+'">';
+    h+='<div class="sent-daily-lbl">TODAY\'S SENTENCE · '+esc(daily.lv)+'</div>';
+    h+='<div class="sent-daily-sr">'+esc(daily.sr)+'</div>';
+    h+='<div class="sent-daily-en">'+esc(daily.en)+'</div>';
+    h+='<div class="sent-daily-actions">';
+    h+=spkBtn(daily.sr,'sr','spk-lg');
+    if(!dailyDone){
+      h+='<button class="sent-daily-btn" onclick="S.markDailySent('+daily.id+')">Mark as done</button>';
+    }else{
+      h+='<div class="sent-daily-done"><span data-icon="check"></span> Done for today</div>';
+    }
+    h+='</div></div>';
+  }
+
+  // ── LEVEL PICKER ──
+  const lvCounts={};
+  SENTENCES.forEach(s=>{lvCounts[s.lv]=(lvCounts[s.lv]||0)+1;});
+  const lvs=['all','A1','A2','B1','B2','C1'];
+  h+='<div class="sent-lv-row">';
+  lvs.forEach(lv=>{
+    const count=lv==='all'?SENTENCES.length:(lvCounts[lv]||0);
+    if(count===0)return;
+    const active=(st.sentLv||'all')===lv;
+    h+='<button class="sent-lv-chip '+(active?'act':'')+'" onclick="S.setSentLv(\''+lv+'\')">'+esc(lv)+'<span class="sent-lv-n">'+count+'</span></button>';
+  });
+  h+='</div>';
+
+  // ── SESSION PICKER ──
+  h+='<div style="text-align:center;margin-top:18px">';
+  h+='<div style="font-size:11px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:10px">Start a drill</div>';
+  h+='<div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">';
+  [5,10,15].forEach(n=>{
+    h+='<button style="padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;color:#fff;background:rgba(255,255,255,.12)" onclick="S.startSentSession('+n+')">'+n+' sentences</button>';
+  });
+  h+='</div>';
+  h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);margin-top:8px" onclick="S.startSentSession(10)">Random Session</button>';
+  h+='</div>';
+  el.innerHTML=h;
+  renderIcons(el);
+},
+
+setSentLv(lv){
+  st.sentLv=lv;
+  this.renderSentHome();
+},
+
+markDailySent(id){
+  this._sentResetDayIfNeeded();
+  if(!st.sentDoneToday.includes(id)){st.sentDoneToday.push(id);save();}
+  sCl();this.renderSentHome();
+},
+
+startSentSession(count){
+  let pool=SENTENCES;
+  if(st.sentLv&&st.sentLv!=='all')pool=SENTENCES.filter(s=>s.lv===st.sentLv);
+  if(!pool.length)return;
+  st.sentList=this.sh([...pool]).slice(0,Math.min(count,pool.length));
+  st.sentIdx=0;st.sentCorrect=0;st.sentTotal=0;
+  this.goScr('sent-drill');
+  this.renderSentDrill();
+},
+
+renderSentDrill(){
+  if(st.sentIdx>=st.sentList.length){this.finishSentSession();return;}
+  const s=st.sentList[st.sentIdx];
+  document.getElementById('sn-count').textContent=(st.sentIdx+1)+' / '+st.sentList.length;
+  // Build display: replace each blank word with input field
+  const words=s.sr.split(/(\s+)/);// keep separators
+  let inputIdx=0;
+  const inputs=[];
+  const display=words.map(tok=>{
+    // Strip trailing punctuation when matching blanks (e.g., "vodu." vs "vodu")
+    const cleaned=tok.replace(/[.,!?;:]/g,'');
+    const blankIdx=s.blanks.findIndex((b,i)=>b===cleaned&&!inputs.includes(i));
+    if(blankIdx>=0){
+      const trailing=tok.match(/[.,!?;:]+$/);
+      inputs.push(blankIdx);
+      const id='sn-i'+(inputIdx++);
+      const punct=trailing?trailing[0]:'';
+      return '<input class="sent-blank" id="'+id+'" data-answer="'+esc(cleaned)+'" autocomplete="off" autocapitalize="off" spellcheck="false"><span class="sent-punct">'+punct+'</span>';
+    }
+    return '<span class="sent-tok">'+esc(tok)+'</span>';
+  }).join('');
+  let h='<div class="sent-phase">';
+  h+='<div class="sent-lvl">'+esc(s.lv)+' · '+esc(s.focus)+'</div>';
+  h+='<div class="sent-en">'+esc(s.en)+'</div>';
+  h+='<div class="sent-display">'+display+'</div>';
+  h+=srKeysHtml();
+  h+='<div id="sn-fb"></div>';
+  h+='<button class="vd-next" id="sn-check-btn" onclick="S.checkSent()">Check</button>';
+  h+='</div>';
+  document.getElementById('sn-body').innerHTML=h;
+  const first=document.getElementById('sn-i0');
+  if(first)first.focus();
+  // Enter submits
+  document.querySelectorAll('.sent-blank').forEach(inp=>{
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){e.preventDefault();document.getElementById('sn-check-btn').click();}
+    });
+  });
+},
+
+checkSent(){
+  const s=st.sentList[st.sentIdx];
+  const btn=document.getElementById('sn-check-btn');
+  if(btn.textContent==='Next'){st.sentIdx++;this.renderSentDrill();return;}
+  const inputs=document.querySelectorAll('.sent-blank');
+  let allCorrect=true;
+  inputs.forEach(inp=>{
+    const val=(inp.value||'').trim().toLowerCase();
+    const ans=(inp.dataset.answer||'').toLowerCase();
+    st.sentTotal++;
+    if(val===ans){
+      st.sentCorrect++;inp.classList.add('cor');
+    }else{
+      inp.classList.add('inc');
+      inp.value=inp.dataset.answer;
+      allCorrect=false;
+    }
+    inp.disabled=true;
+  });
+  if(allCorrect){sCl();}else{sNo();}
+  // Read full sentence aloud after reveal
+  setTimeout(()=>{speak(s.sr,'sr');},300);
+  btn.textContent='Next';
+  // Mark today's daily as done if this was today's sentence
+  if(s.id===this._sentDailyIdx()+(SENTENCES[0]?SENTENCES[0].id-1:0)){/*no-op safety*/}
+  if(s.id===(SENTENCES[this._sentDailyIdx()]||{}).id){
+    this._sentResetDayIfNeeded();
+    if(!st.sentDoneToday.includes(s.id)){st.sentDoneToday.push(s.id);save();}
+  }
+},
+
+exitSent(){sCl();this.goHome();this.setLearnMode('sentences');},
+
+finishSentSession(){
+  sDn();save();
+  const el=document.getElementById('sn-body');
+  const pct=st.sentTotal>0?Math.round(st.sentCorrect/st.sentTotal*100):0;
+  const cat=pct===100?'perfect':pct>=70?'good':'rough';
+  const msg=zekaMsg(cat);
+  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  h+=zekaHtml(msg);
+  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center">';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.sentList.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">SENTENCES</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+st.sentCorrect+'/'+st.sentTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
+  h+='</div>';
+  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitSent()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
 },
@@ -3239,15 +3511,19 @@ finishVerbSession(){
 },
 
 setLearnMode(mode){
-  const modes=['lessons','flashcards','grammar'];
+  // Top-level tab "verbs" maps internally to the existing "grammar" container
+  // (which has its own Verbs/Cases sub-toggle inside it).
+  const modes=['lessons','flashcards','verbs','sentences'];
   document.querySelectorAll('#learn-toggle .seg-btn').forEach((b,i)=>{
     b.classList.toggle('seg-active',i===modes.indexOf(mode));
   });
   document.getElementById('hscr').style.display=mode==='lessons'?'':'none';
   document.getElementById('fc-home').style.display=mode==='flashcards'?'':'none';
-  document.getElementById('grammar-home').style.display=mode==='grammar'?'':'none';
+  document.getElementById('grammar-home').style.display=mode==='verbs'?'':'none';
+  document.getElementById('sentence-home').style.display=mode==='sentences'?'':'none';
   if(mode==='flashcards'&&typeof this.renderFcHome==='function')this.renderFcHome();
-  if(mode==='grammar')this.setGrammarMode(st.grammarMode||'verbs');
+  if(mode==='verbs')this.setGrammarMode(st.grammarMode||'verbs');
+  if(mode==='sentences')this.renderSentHome();
 },
 
 setGrammarMode(mode){

@@ -49,17 +49,20 @@ def _section(html, lang):
         start = html.find('const U_SR=')
         end = html.find('const U_IT=')
         chunk = html[start:end] if start >= 0 and end > start else ''
-        # Plus the SR-specific data (verbs + nouns)
+        # Plus the SR-specific data (verbs + nouns + sentences)
         v_start = html.find('const V_SR=')
         v_end = html.find('const N_SR=')
         n_start = html.find('const N_SR=')
-        # Find end of N_SR: the next `];\n` after `const N_SR=`
-        n_end_search = html.find('\n];', n_start)
-        n_end = n_end_search + 3 if n_end_search > 0 else len(html)
+        s_start = html.find('const SENT_SR=')
+        n_end = s_start if s_start > 0 else html.find('// ═', n_start)
+        s_end_search = html.find('\n];', s_start) if s_start > 0 else -1
+        s_end = s_end_search + 3 if s_end_search > 0 else len(html)
         if v_start >= 0 and v_end > v_start:
             chunk += '\n' + html[v_start:v_end]
         if n_start >= 0 and n_end > n_start:
             chunk += '\n' + html[n_start:n_end]
+        if s_start >= 0 and s_end > s_start:
+            chunk += '\n' + html[s_start:s_end]
         return chunk
     if lang == 'it':
         start = html.find('const U_IT=')
@@ -102,6 +105,9 @@ def extract_texts(lang):
         for m in re.finditer(r"cases:\{([^}]+)\}", section):
             for cm in re.finditer(r"\w+:'([^']+)'", m.group(1)):
                 texts.add(cm.group(1))
+        # 8) Full sentences from SENT_SR: {id:N,sr:'…',en:'…',…}
+        for m in re.finditer(r"\bsr:'((?:[^'\\]|\\.)+)'", section):
+            texts.add(m.group(1).replace("\\'", "'"))
         # 7) Sentence answer field: a:'školu'
         for m in re.finditer(r",a:'([^']+)',hint:", section):
             texts.add(m.group(1))
