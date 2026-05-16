@@ -393,6 +393,21 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fc-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
 .fc-count{font-size:14px;font-weight:700;color:rgba(255,255,255,.6)}
 .fc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+/* Flashcard source-mode toggle (All Vocabulary | Completed Lessons) */
+.fc-source-toggle{display:flex;gap:4px;padding:4px;background:rgba(255,255,255,.05);border:1px solid var(--divider);border-radius:12px;margin:8px 0 12px}
+.fc-source-toggle button{flex:1;border:none;padding:8px 6px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text-2);transition:.18s}
+.fc-source-toggle button.act{background:var(--sr-blue);color:#fff}
+/* INTRODUCTION view — shown first encounter, before any test */
+.fc-intro{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;width:100%;max-width:360px;padding:12px 4px;animation:fadeInUp .35s ease}
+.fc-intro-badge{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--green);background:rgba(88,204,2,.12);padding:5px 12px;border-radius:999px;border:1px solid rgba(88,204,2,.3)}
+.fc-intro-em{font-size:88px;line-height:1;margin-top:6px}
+.fc-intro-word{font-family:var(--font-display);font-size:44px;font-weight:900;letter-spacing:-.02em;color:#fff;line-height:1.1}
+.fc-intro-spk{margin-top:-4px}
+.fc-intro-spk .spk-btn{font-size:30px}
+.fc-intro-trans{font-size:20px;color:var(--text-2);font-weight:500;margin-top:-4px}
+.fc-intro-cta{width:100%;max-width:320px;padding:16px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);margin-top:8px;transition:.1s}
+.fc-intro-cta:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
+.fc-intro-hint{font-size:12px;color:var(--text-3);max-width:280px}
 .fc-card-wrap{width:100%;max-width:320px;perspective:1000px;cursor:pointer}
 .fc-card{position:relative;width:100%;min-height:280px;transition:transform .5s;transform-style:preserve-3d}
 .fc-card.flipped{transform:rotateY(180deg)}
@@ -2112,13 +2127,14 @@ function showSplashReady(){
 function getStateData(){
   return{elo:st.elo,xp:st.xp,streak:st.streak,lastDate:st.lastDate,
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
-    fcNewToday:st.fcNewToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit};
+    fcNewToday:st.fcNewToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
   st.completed=p.completed||[];st.ws=p.ws||{};st.hearts=p.hearts??5;st.fc=p.fc||{};
   st.uacc=p.uacc||{};
   st.fcNewToday=p.fcNewToday||0;st.fcNewDate=p.fcNewDate||'';st.fcNewLimit=p.fcNewLimit||10;
+  st.fcSourceMode=p.fcSourceMode||'all';
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false},p.firsts||{});
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
@@ -2407,7 +2423,7 @@ async function fbGetPendingRequests(){
 
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
-  fcNewToday:0,fcNewDate:'',fcNewLimit:10,
+  fcNewToday:0,fcNewDate:'',fcNewLimit:10,fcSourceMode:'all',
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -2501,13 +2517,24 @@ function fcIvlLabel(wordId,dir,rating){
 
 // Returns due cards split into reviews and new, capped by daily new-card limit.
 // {all: [...], reviews: [...], newAvailable: int, newShown: int, newRemaining: int}
+// fcSourceMode: 'all' = every word in the language (default — flashcards can introduce new vocab)
+//               'completed' = only words from completed lessons (classic review-only mode)
+function _fcSourceWords(){
+  if(st.fcSourceMode==='completed'){
+    return UNITS.filter(u=>st.completed.includes(u.id)).flatMap(u=>u.words);
+  }
+  return UNITS.flatMap(u=>u.words);
+}
+
 function fcDueBreakdown(){
   _fcResetDayIfNeeded();
   const now=Date.now();
   const reviews=[];
   const newPool=[];
-  const compWords=UNITS.filter(u=>st.completed.includes(u.id)).flatMap(u=>u.words);
-  compWords.forEach(w=>{
+  const sourceWords=_fcSourceWords();
+  // Shuffle order so new words from later units aren't always introduced last
+  const wordList=st.fcSourceMode==='completed'?sourceWords:_fcShuffleSeeded(sourceWords);
+  wordList.forEach(w=>{
     ['se','es'].forEach(dir=>{
       const k=fcKey(w.id,dir);
       const c=st.fc[k];
@@ -2531,11 +2558,25 @@ function fcDueBreakdown(){
   return{all,reviews,newAvailable:newPool.length,newShown,newRemaining};
 }
 
+// Deterministic daily shuffle so new-card order is stable within a day
+// (avoids the same word being "next" each time the home view is rendered)
+function _fcShuffleSeeded(arr){
+  const seed=new Date().toDateString();
+  let h=0;for(let i=0;i<seed.length;i++)h=((h<<5)-h)+seed.charCodeAt(i)|0;
+  const out=[...arr];
+  for(let i=out.length-1;i>0;i--){
+    h=(h*1103515245+12345)&0x7fffffff;
+    const j=h%(i+1);
+    [out[i],out[j]]=[out[j],out[i]];
+  }
+  return out;
+}
+
 function fcDueCards(){return fcDueBreakdown().all;}
 
 function fcTotalCards(){
-  const compWords=UNITS.filter(u=>st.completed.includes(u.id)).flatMap(u=>u.words);
-  let total=compWords.length*2;
+  const sourceWords=_fcSourceWords();
+  let total=sourceWords.length*2;
   VERBS.forEach(v=>{
     const vId='v_'+v.inf;
     if(st.fc[vId+'_se']||st.fc[vId+'_es'])total+=2;
@@ -2595,12 +2636,20 @@ renderFcHome(){
   const due=bd.all;
   const total=fcTotalCards();
   if(total===0){
+    // This only happens in 'completed' mode with no completed units
     el.innerHTML='<div class="empty-state">'+
-      zekaHtml('Finish a lesson to unlock flashcards! 🥕')+
-      '<button class="btn-primary" onclick="S.setLearnMode(\'lessons\')">Go to Lessons</button></div>';
+      zekaHtml('Switch to All Vocabulary or finish a lesson first! 🥕')+
+      '<button class="btn-primary" onclick="S.setFcSource(\'all\')">Use All Vocabulary</button></div>';
     return;
   }
-  let h='<div style="text-align:center;padding:20px 0">';
+  let h='';
+  // Source-mode toggle at top
+  const isAll=(st.fcSourceMode||'all')==='all';
+  h+='<div class="fc-source-toggle">';
+  h+='<button class="'+(isAll?'act':'')+'" onclick="S.setFcSource(\'all\')">All Vocabulary</button>';
+  h+='<button class="'+(!isAll?'act':'')+'" onclick="S.setFcSource(\'completed\')">Completed Lessons</button>';
+  h+='</div>';
+  h+='<div style="text-align:center;padding:14px 0 0">';
   h+='<div style="font-size:48px;margin-bottom:8px">'+(due.length>0?'📖':'🎉')+'</div>';
   h+='<div style="font-size:28px;font-weight:800;color:#fff">'+due.length+' card'+(due.length!==1?'s':'')+' due</div>';
   // Breakdown line
@@ -2639,7 +2688,8 @@ renderFcHome(){
   });
   h+='</div>';
   h+='</div>';
-  const compUnits=UNITS.filter(u=>st.completed.includes(u.id));
+  // "By Unit" breakdown — only shown in completed-lessons mode (less meaningful for all-vocab)
+  const compUnits=st.fcSourceMode==='completed'?UNITS.filter(u=>st.completed.includes(u.id)):[];
   if(compUnits.length>0){
     h+='<div style="margin-top:20px">';
     h+='<div style="font-size:14px;font-weight:800;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">By Unit</div>';
@@ -2666,6 +2716,11 @@ setFcNewLimit(n){
   this.renderFcHome();
 },
 
+setFcSource(mode){
+  st.fcSourceMode=mode;save();
+  this.renderFcHome();
+},
+
 startFcSession(){
   const due=fcDueCards();
   if(!due.length){return;}
@@ -2686,6 +2741,23 @@ renderFcCard(){
   const backText=isSE?w.e:w.l;
   const backLang=isSE?'en':curLang;
   document.getElementById('fc-count').textContent=(st.fcIdx+1)+' / '+st.fcCards.length;
+
+  // Brand-new card: show INTRODUCTION view (both sides, no test) — first encounter
+  if(card.isNew){
+    let h='<div class="fc-intro">';
+    h+='<div class="fc-intro-badge">NEW WORD · '+esc(dirLabel)+'</div>';
+    h+='<div class="fc-intro-em">'+w.em+'</div>';
+    h+='<div class="fc-intro-word">'+esc(w.l)+'</div>';
+    h+='<div class="fc-intro-spk">'+spkBtn(w.l,curLang)+'</div>';
+    h+='<div class="fc-intro-trans">'+esc(w.e)+'</div>';
+    h+='<button class="fc-intro-cta" onclick="S.gotItFc()">Got it · Continue</button>';
+    h+='<div class="fc-intro-hint">You\'ll see this card again in a few minutes to test recall.</div>';
+    h+='</div>';
+    document.getElementById('fc-body').innerHTML=h;
+    return;
+  }
+
+  // Review card: classic flip + rate flow
   let h='<div class="fc-card-wrap" onclick="S.flipFc()">';
   h+='<div class="fc-card" id="fc-card">';
   h+='<div class="fc-face fc-front">';
@@ -2708,6 +2780,17 @@ renderFcCard(){
   h+='</div>';
   document.getElementById('fc-body').innerHTML=h;
   st.fcFlipped=false;
+},
+
+gotItFc(){
+  // Mark the new card as introduced (graduates from "new" to first learning step)
+  // Apply a "Good" rating to put it in the SRS cycle
+  const card=st.fcCards[st.fcIdx];
+  fcRate(card.word.id,card.dir,2);
+  st.fcReviewed++;
+  st.fcCorrectCount++;
+  st.fcIdx++;
+  this.renderFcCard();
 },
 
 flipFc(){
@@ -3189,7 +3272,7 @@ switchLang(){
   setLang(next);
   // Reset state for new language
   st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};st.fc={};
-  st.uacc={};st.fcNewToday=0;st.fcNewDate='';st.fcNewLimit=10;
+  st.uacc={};st.fcNewToday=0;st.fcNewDate='';st.fcNewLimit=10;st.fcSourceMode='all';
   st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false};
   load();// Load saved progress for this language
   if(fbUser)fbLoad();
