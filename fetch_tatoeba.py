@@ -111,9 +111,15 @@ def choose_blank(sr_text):
     return max(candidates, key=len)
 
 
+CYRILLIC_RE = re.compile(r'[Ѐ-ӿ]')
+
+
 def filter_pair(sr, en, min_words, max_words):
     n = len(sr.split())
     if n < min_words or n > max_words:
+        return False
+    # Reject Cyrillic — we want Latin-script Serbian only
+    if CYRILLIC_RE.search(sr):
         return False
     # Skip sentences with quotation marks (often dialogue, hard to drill)
     if any(ch in sr for ch in '"“”'):
