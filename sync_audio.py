@@ -102,7 +102,10 @@ def extract_texts(lang):
 
 
 def safe_filename(text):
-    return urllib.parse.quote(text, safe='')
+    # MUST match JavaScript's encodeURIComponent exactly. JS leaves these
+    # unencoded but Python's quote(safe='') encodes them, causing 404s:
+    #   !  '  (  )  *
+    return urllib.parse.quote(text, safe="!'()*")
 
 
 def missing_files(texts, out_dir, regen=False):
