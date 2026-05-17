@@ -102,18 +102,34 @@ def extract_texts(lang):
 
 
 def safe_filename(text):
-    # MUST match JavaScript's encodeURIComponent exactly. JS leaves these
-    # unencoded but Python's quote(safe='') encodes them, causing 404s:
-    #   !  '  (  )  *
-    return urllib.parse.quote(text, safe="!'()*")
+    # Normalize to lowercase so case-only variants ("Knjiga" vs "knjiga")
+    # don't collide on Windows (case-insensitive FS). Pronunciation is
+    # identical regardless of capitalization. JS speak() does the same.
+    # safe="!'()*" matches encodeURIComponent's unencoded set.
+    return urllib.parse.quote(text.lower(), safe="!'()*")
+
+
+def synth_text_for(text):
+    """The text we send to Edge TTS — preserves original case for natural
+    pronunciation cues (some TTS engines use case to detect sentence starts)."""
+    return text
 
 
 def missing_files(texts, out_dir, regen=False):
-    if regen:
-        return list(texts)
-    todo = []
+    """Deduplicate by canonical filename — multiple texts (e.g. "Knjiga"
+    and "knjiga") that map to the same file are coalesced into one task.
+    Prefer the shorter/lowercase representative for pronunciation."""
+    by_filename = {}
     for t in texts:
-        fpath = os.path.join(out_dir, safe_filename(t) + '.mp3')
+        fn = safe_filename(t)
+        # Prefer lowercase-original entries for natural mid-sentence pronunciation
+        if fn not in by_filename or t == t.lower():
+            by_filename[fn] = t
+    if regen:
+        return list(by_filename.values())
+    todo = []
+    for fn, t in by_filename.items():
+        fpath = os.path.join(out_dir, fn + '.mp3')
         if not (os.path.exists(fpath) and os.path.getsize(fpath) > 100):
             todo.append(t)
     return todo

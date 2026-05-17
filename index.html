@@ -2228,7 +2228,10 @@ function speak(text,lang){
   const shortCode=code.split('-')[0];
   // Try pre-downloaded MP3 first for Lingva-supported languages
   if(LINGVA_LANGS.has(shortCode)){
-    const enc=encodeURIComponent(text);
+    // Lowercase filename so "Knjiga" (sentence start) and "knjiga" (mid-sentence)
+    // map to the same audio file. Windows is case-insensitive — we MUST lowercase
+    // here so the URL matches the canonical lowercase file actually generated.
+    const enc=encodeURIComponent(text.toLowerCase());
     const url=`audio/${shortCode}/${enc}.mp3`;
     if(_spkAudio){try{_spkAudio.pause();_spkAudio.currentTime=0;}catch(e){}}
     else{_spkAudio=new Audio();}
