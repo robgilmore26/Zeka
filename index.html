@@ -2222,52 +2222,15 @@ function _speakViaSynth(text,lang){
   try{speechSynthesis.speak(u);}catch(e){console.warn('[speak] synth failed',e);}
 }
 
-function speak(text,lang){
-  if(!text)return;
-  const code=lang||(LINGVA_LANGS.has(curLang)?curLang:'en');
-  const shortCode=code.split('-')[0];
-  // Try pre-downloaded MP3 first for Lingva-supported languages
-  if(LINGVA_LANGS.has(shortCode)){
-    // Lowercase filename so "Knjiga" (sentence start) and "knjiga" (mid-sentence)
-    // map to the same audio file. Windows is case-insensitive — we MUST lowercase
-    // here so the URL matches the canonical lowercase file actually generated.
-    const enc=encodeURIComponent(text.toLowerCase());
-    const url=`audio/${shortCode}/${enc}.mp3`;
-    if(_spkAudio){try{_spkAudio.pause();_spkAudio.currentTime=0;}catch(e){}}
-    else{_spkAudio=new Audio();}
-    let fallbackFired=false;
-    const fallback=()=>{
-      if(fallbackFired)return;fallbackFired=true;
-      _speakViaSynth(text,shortCode);
-    };
-    _spkAudio.onerror=fallback;
-    _spkAudio.src=url;
-    const playPromise=_spkAudio.play();
-    if(playPromise&&playPromise.catch){
-      playPromise.catch(err=>{
-        // Common errors: file missing (NotSupportedError), autoplay blocked, etc.
-        if(err&&err.name==='NotAllowedError'){
-          // Autoplay blocked by browser policy — can't recover this round
-          return;
-        }
-        fallback();
-      });
-    }
-    return;
-  }
-  // Non-Lingva languages (mostly English) go straight to synth
-  _speakViaSynth(text,shortCode);
-}
-function speakWord(w){speak(w.l);}
-function speakTL(text){speak(text);}
-function speakEN(text){speak(text,'en-US');}
-function spkBtn(text,lang,cls){
-  const c=cls?' '+cls:'';
-  const safe=text.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-  const args=lang?`'${safe}','${lang}'`:`'${safe}'`;
-  return `<button class="spk-btn${c}" onclick="event.stopPropagation();speak(${args})" title="Listen">🔊</button>`;
-}
-function spkWBtn(w,cls){return spkBtn(w.l,'',cls);}
+// Audio playback is disabled — TTS quality wasn't acceptable for Serbian.
+// Speak helpers are kept as no-ops so existing call sites don't break.
+// Speaker buttons in the UI are not rendered (spkBtn returns empty string).
+function speak(text,lang){/* disabled */}
+function speakWord(w){/* disabled */}
+function speakTL(text){/* disabled */}
+function speakEN(text){/* disabled */}
+function spkBtn(text,lang,cls){return '';}
+function spkWBtn(w,cls){return '';}
 
 function buildUnits(raw){
   return raw.map(u=>({...u,words:u.w.map((w,i)=>({id:u.id*100+i,s:w[0],l:w[1],e:w[2],em:w[3]})),phrases:(u.p||[]).map(p=>({tl:p[0],en:p[1]}))}));

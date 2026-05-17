@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-# Auto-fetch missing audio for any new words added to index.html.
-# Activated via: git config core.hooksPath .githooks
+# Pre-commit hook — audio sync is currently DISABLED.
+# Re-enable by uncommenting the block below if/when TTS quality improves.
 
+exit 0
+
+# --- previously enabled audio sync below (kept for reference) ---
 # Only run when index.html is staged
 if git diff --cached --name-only | grep -q '^index\.html$'; then
   echo "[zeka] index.html changed — checking for new audio strings..."
