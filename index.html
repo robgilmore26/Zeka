@@ -15,7 +15,13 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Zeka">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#7EC8E3">
+<meta name="theme-color" content="#0F1419">
+<script type="module">
+  // Motion One — modern animation engine (~5KB gzipped). Exposed globally as window.M
+  import {animate, stagger, spring, inView, scroll, timeline} from 'https://cdn.jsdelivr.net/npm/motion@10.18.0/+esm';
+  window.M = {animate, stagger, spring, inView, scroll, timeline};
+  window.dispatchEvent(new Event('motion-ready'));
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -44,6 +50,14 @@
   --t-micro:10px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
+/* View Transitions API — smooth fade/zoom between screens (Chrome + Safari support) */
+::view-transition-old(root){animation:vtOut .22s cubic-bezier(.4,0,.2,1) both}
+::view-transition-new(root){animation:vtIn .26s cubic-bezier(.22,.61,.36,1) both}
+@keyframes vtOut{to{opacity:0;transform:scale(.98)}}
+@keyframes vtIn{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
 /* Typography utility classes */
 .t-hero,.t-display{font-family:var(--font-display);letter-spacing:-.01em;font-feature-settings:'ss01' on,'ss02' on}
 .t-hero{font-size:var(--t-hero);font-weight:900;line-height:1.05}
@@ -60,7 +74,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 #scr{width:100%;height:100%;border-radius:44px;background:var(--w);overflow:hidden;position:relative}
 .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:126px;height:34px;background:#000;border-radius:0 0 22px 22px;z-index:200}
 .notch::after{content:'';position:absolute;top:10px;right:22px;width:12px;height:12px;border-radius:50%;background:#1a1a2e}
-.sbar{position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:150;font-size:14px;font-weight:600;color:#000}
+.sbar{display:none}
 .sbar.lt{color:#fff}
 .hind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;background:#000;border-radius:3px;z-index:200;pointer-events:none}
 .sc{position:absolute;top:0;left:0;right:0;bottom:0;display:none;flex-direction:column;overflow:hidden}
@@ -515,6 +529,17 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 @keyframes fadeInUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes heartShake{0%,100%{transform:scale(1)}20%{transform:scale(1.2) rotate(-8deg)}40%{transform:scale(.85) rotate(8deg)}60%{transform:scale(1.1) rotate(-4deg)}80%{transform:scale(.95) rotate(4deg)}}
 @keyframes unitBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes zekaBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+.zeka-face{animation:zekaBreathe 3.6s ease-in-out infinite}
+@keyframes heroShimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.chap-hero{background-size:120% 120%;animation:heroShimmer 14s ease-in-out infinite}
+@keyframes elocBadgeGlow{0%,100%{box-shadow:0 0 0 0 rgba(26,95,209,0)}50%{box-shadow:0 0 16px 2px rgba(26,95,209,.35)}}
+.elo-badge{animation:elocBadgeGlow 4s ease-in-out infinite}
+@keyframes statRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.cp-st{animation:statRise .5s ease both}
+.cp-stats .cp-st:nth-child(1){animation-delay:.3s}
+.cp-stats .cp-st:nth-child(2){animation-delay:.55s}
+.cp-stats .cp-st:nth-child(3){animation-delay:.8s}
 #hscr,#fc-home,#grammar-home{animation:fadeInUp .18s ease}
 .st-i.fire{display:inline-block;animation:flamePulse 1.6s ease-in-out infinite;transform-origin:center bottom}
 .heart-lost{animation:heartShake .5s ease}
@@ -2150,6 +2175,58 @@ let SENTENCES=[];
 function langName(){return LANG_DATA[curLang].name;}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
+// ═══════════════ MOTION + FEEL ═══════════════
+// Respect prefers-reduced-motion
+const REDUCED_MOTION=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Haptic feedback — uses Vibration API on Android, silent on iOS Web (iOS reserves haptics for installed apps)
+function haptic(kind){
+  if(REDUCED_MOTION||!navigator.vibrate)return;
+  const PATTERNS={tap:[10],light:[6],success:[14,40,14],error:[28,40,28],ping:[8,20,8],milestone:[40,30,40,30,60]};
+  try{navigator.vibrate(PATTERNS[kind]||[10]);}catch(e){}
+}
+
+// Animate helper that gracefully no-ops if Motion isn't loaded yet or reduced motion preferred
+function anim(target,keyframes,options){
+  if(REDUCED_MOTION||!window.M)return Promise.resolve();
+  try{return window.M.animate(target,keyframes,options||{}).finished;}catch(e){return Promise.resolve();}
+}
+
+// Count-up animation for numbers (used on completion screens)
+function countUp(el,from,to,duration){
+  if(!el)return;
+  if(REDUCED_MOTION){el.textContent=to;return;}
+  const start=performance.now();
+  const ease=t=>1-Math.pow(1-t,3);// easeOutCubic
+  function frame(now){
+    const t=Math.min(1,(now-start)/(duration||800));
+    const val=Math.round(from+(to-from)*ease(t));
+    el.textContent=val;
+    if(t<1)requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// Press feedback — quickly scales element on tap, with haptic
+function pressFeedback(el,kind){
+  haptic(kind||'tap');
+  if(REDUCED_MOTION||!el)return;
+  anim(el,{transform:['scale(1)','scale(0.94)','scale(1)']},{duration:.18,easing:'ease-out'});
+}
+
+// Global delegated touch listener — every button press gets a subtle tap response + haptic
+document.addEventListener('pointerdown',e=>{
+  const btn=e.target.closest('button,.node:not(.lock),.ob,.mb,.eopt,.spk-btn,.fc-rate-btn,.sr-key,.ni,.lang-flag,.seg-btn');
+  if(!btn)return;
+  haptic('tap');
+  if(REDUCED_MOTION)return;
+  btn.style.transition='transform .08s ease-out';
+  btn.style.transform='scale(.96)';
+  const release=()=>{btn.style.transform='';setTimeout(()=>{btn.style.transition='';},120);
+    btn.removeEventListener('pointerup',release);btn.removeEventListener('pointercancel',release);btn.removeEventListener('pointerleave',release);};
+  btn.addEventListener('pointerup',release);btn.addEventListener('pointercancel',release);btn.addEventListener('pointerleave',release);
+},{passive:true});
+
 // ═══════════════ SVG ICONS ═══════════════
 const ICONS={
   home:'<path d="M3 12L12 3l9 9v9a2 2 0 0 1-2 2h-4v-7H10v7H6a2 2 0 0 1-2-2v-9z"/>',
@@ -2882,9 +2959,18 @@ const S={
 sh(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r},
 pk(a,n,ex=[]){return this.sh(a.filter(x=>!ex.includes(x))).slice(0,n)},
 
-goScr(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
-  document.getElementById(id).classList.add('act');
-  document.getElementById('sbar').classList.toggle('lt',id==='splash'||id==='comp'||id==='home'||id==='social'||id==='flashcard'||id==='verb-drill'||id==='case-drill'||id==='sent-drill');},
+goScr(id){
+  const apply=()=>{
+    document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
+    document.getElementById(id).classList.add('act');
+  };
+  // Use View Transitions API when available for native-feeling cross-fade
+  if(document.startViewTransition&&!REDUCED_MOTION){
+    document.startViewTransition(apply);
+  }else{
+    apply();
+  }
+},
 
 goHome(){this.updH();this.rPath();this.goScr('home');},
 
@@ -3041,12 +3127,11 @@ renderFcCard(){
 },
 
 gotItFc(){
-  // Mark the new card as introduced (graduates from "new" to first learning step)
-  // Apply a "Good" rating to put it in the SRS cycle
   const card=st.fcCards[st.fcIdx];
   fcRate(card.word.id,card.dir,2);
   st.fcReviewed++;
   st.fcCorrectCount++;
+  haptic('light');
   st.fcIdx++;
   this.renderFcCard();
 },
@@ -3064,6 +3149,7 @@ rateFc(rating){
   const card=st.fcCards[st.fcIdx];
   fcRate(card.word.id,card.dir,rating);
   st.fcReviewed++;
+  haptic(rating===0?'error':rating===3?'success':'ping');
   if(rating===0){
     st.fcAgainCount++;
     const insertAt=Math.min(st.fcIdx+3+Math.floor(Math.random()*3),st.fcCards.length);
@@ -3621,9 +3707,7 @@ checkSent(){
     }
     inp.disabled=true;
   });
-  if(allCorrect){sCl();}else{sNo();}
-  // Read full sentence aloud after reveal
-  setTimeout(()=>{speak(s.sr,'sr');},300);
+  if(allCorrect){sCl();haptic('success');}else{sNo();haptic('error');}
   btn.textContent='Next';
   // Mark today's daily as done if this was today's sentence
   if(s.id===this._sentDailyIdx()+(SENTENCES[0]?SENTENCES[0].id-1:0)){/*no-op safety*/}
@@ -4047,8 +4131,8 @@ chk(){
   st.answered=true;st.ltot++;
   const diff=ELO.diff(st.unit.id),r=ELO.calc(st.elo,diff,ok);st.elo=r.newElo;st.lelo+=r.chg;
   if(ex.word){const ws=wstat(ex.word.id);ws.s++;if(ok)ws.c++;else ws.i++;ws.t=Date.now();}
-  if(ok){st.lcor++;st.lxp+=10;sOk();this.fb(true,ex,r.chg);}
-  else{st.hearts--;sNo();this.fb(false,ex,r.chg);this.updL();
+  if(ok){st.lcor++;st.lxp+=10;sOk();haptic('success');this.fb(true,ex,r.chg);}
+  else{st.hearts--;sNo();haptic('error');this.fb(false,ex,r.chg);this.updL();
     const hEl=document.getElementById('lhrt');if(hEl){const p=hEl.parentNode;if(p){p.classList.remove('heart-lost');void p.offsetWidth;p.classList.add('heart-lost');}}
     if(st.hearts<=0)setTimeout(()=>this.noH(),1000);}
   save();
@@ -4120,20 +4204,31 @@ showComp(){
       });
     }catch(e){}})();
   }
-  document.getElementById('cp-xp').textContent=st.lxp;
-  document.getElementById('cp-acc').textContent=acc+'%';
-  const es=st.lelo>=0?'+':'';document.getElementById('cp-elo').textContent=es+st.lelo;
-  document.getElementById('cp-elo').style.color=st.lelo>=0?'#d7ffb8':'#ffd6d6';
-  // Accuracy tier always shows; firstHit shown as suffix if it's the first time
+  // Pre-set stats to 0 so we can count up
+  const xpEl=document.getElementById('cp-xp');
+  const accEl=document.getElementById('cp-acc');
+  const eloEl=document.getElementById('cp-elo');
+  xpEl.textContent='0';accEl.textContent='0%';eloEl.textContent='+0';
+  eloEl.style.color=st.lelo>=0?'#A6E26A':'#FF9999';
   const accCat=acc===100?'perfect':acc>=70?'good':'rough';
   let subMsg=zekaMsg(accCat);
   if(firstHit)subMsg+=' · '+zekaMsg(firstHit);
   document.getElementById('cp-sub').textContent=subMsg;
-  // Gold border on 100% perfect
   const statsEl=document.getElementById('cp-stats');
   if(statsEl)statsEl.style.border=acc===100?'2px solid var(--gold)':'';
   this.goScr('comp');
-  if(acc===100)this.confetti();
+  haptic(acc===100?'milestone':acc>=70?'success':'ping');
+  // Choreographed reveal: title pops, Zeka bounces, stats count up sequentially
+  const zekaImg=document.getElementById('cp-zeka');
+  if(zekaImg){
+    zekaImg.style.opacity='0';zekaImg.style.transform='scale(.4) rotate(-12deg)';
+    anim(zekaImg,{opacity:[0,1],transform:['scale(.4) rotate(-12deg)','scale(1.08) rotate(4deg)','scale(1) rotate(0deg)']},{duration:.7,easing:'cubic-bezier(.34,1.56,.64,1)'});
+  }
+  // Stat numbers count up in sequence
+  setTimeout(()=>countUp(xpEl,0,st.lxp,650),400);
+  setTimeout(()=>{accEl.textContent='0%';let a=0;const acT=setInterval(()=>{a+=Math.max(1,Math.round(acc/30));if(a>=acc){a=acc;clearInterval(acT);}accEl.textContent=a+'%';},20);},650);
+  setTimeout(()=>{const v=st.lelo;let e=0;const eT=setInterval(()=>{e+=v>=0?Math.max(1,Math.ceil(v/20)):Math.min(-1,Math.floor(v/20));if((v>=0&&e>=v)||(v<0&&e<=v)){e=v;clearInterval(eT);}eloEl.textContent=(v>=0?'+':'')+e;},20);},900);
+  if(acc===100){setTimeout(()=>this.confetti(),700);}
   // Fire ELO pulse
   setTimeout(()=>{const e=document.getElementById('h-elo');if(e){e.classList.remove('pulse');void e.offsetWidth;e.classList.add('pulse');e.addEventListener('animationend',()=>e.classList.remove('pulse'),{once:true});}},50);
   // Streak milestone overlay fires after comp screen renders
