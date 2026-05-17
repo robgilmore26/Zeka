@@ -41,7 +41,7 @@ VOICES = {
     'it': 'it-IT-DiegoNeural',
 }
 RATE = '-5%'      # slightly slower than native — better for learners
-CONCURRENCY = 6   # parallel synth requests (Edge TTS handles this fine)
+CONCURRENCY = 1   # serial — edge-tts has shown text/audio swaps under concurrent requests
 
 
 def _section(html, lang):
