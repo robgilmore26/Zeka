@@ -102,11 +102,15 @@ def extract_texts(lang):
 
 
 def safe_filename(text):
-    # Normalize to lowercase so case-only variants ("Knjiga" vs "knjiga")
-    # don't collide on Windows (case-insensitive FS). Pronunciation is
-    # identical regardless of capitalization. JS speak() does the same.
-    # safe="!'()*" matches encodeURIComponent's unencoded set.
-    return urllib.parse.quote(text.lower(), safe="!'()*")
+    # IMPORTANT: store filename as RAW UTF-8, not URL-encoded. GitHub Pages
+    # URL-decodes paths before file lookup, so a file named "%C5%A1kola.mp3"
+    # (literal % chars) would never match the browser's request for
+    # "audio/sr/%C5%A1kola.mp3" which is URL-decoded server-side to
+    # "audio/sr/škola.mp3" before lookup.
+    #
+    # Lowercased so "Knjiga" and "knjiga" map to one file (pronunciation
+    # is identical regardless of case).
+    return text.lower()
 
 
 def synth_text_for(text):
