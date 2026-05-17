@@ -122,8 +122,39 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .elo-badge{background:var(--sr-blue);color:#fff;padding:3px 11px;border-radius:8px;font-size:14px;font-weight:800;font-family:var(--font-display);font-feature-settings:'tnum' on;letter-spacing:.2px}
 .elo-badge.pulse{animation:eloPulse .4s ease}
 @keyframes eloPulse{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
-.hscr{flex:1;overflow-y:auto;padding:0 0 100px;scroll-behavior:smooth}
+.hscr{flex:1;overflow-y:auto;padding:0 0 100px;scroll-behavior:smooth;overscroll-behavior-y:contain}
 .hscr::-webkit-scrollbar{display:none}
+/* Long-press unit preview sheet */
+.lp-sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:1000;display:flex;flex-direction:column;justify-content:flex-end}
+.lp-card{background:var(--surface);border-radius:24px 24px 0 0;padding:14px 18px 22px;max-height:80vh;overflow-y:auto;box-shadow:0 -8px 32px rgba(0,0,0,.4);will-change:transform}
+.lp-card::-webkit-scrollbar{display:none}
+.lp-handle{width:42px;height:5px;background:rgba(255,255,255,.18);border-radius:5px;margin:0 auto 14px}
+.lp-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.lp-em{font-size:42px;line-height:1}
+.lp-tit{font-family:var(--font-display);font-size:24px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1}
+.lp-sub{font-size:12px;color:var(--text-2);margin-top:4px}
+.lp-words{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.lp-w{display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:12px}
+.lp-w-em{font-size:24px;flex-shrink:0}
+.lp-w-info{flex:1;min-width:0}
+.lp-w-sr{font-family:var(--font-display);font-size:16px;font-weight:700;color:#fff}
+.lp-w-en{font-size:12px;color:var(--text-2);margin-top:2px}
+.lp-go{width:100%;padding:16px;border:none;border-radius:14px;font-size:14px;font-weight:800;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);text-transform:uppercase;letter-spacing:1px;cursor:pointer}
+.lp-go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
+
+/* Continue FAB on home */
+.cnt-fab{position:absolute;right:18px;bottom:96px;background:linear-gradient(135deg,var(--sr-blue),var(--sr-blue-d));color:#fff;border:none;border-radius:999px;padding:14px 20px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(26,95,209,.4),0 2px 8px rgba(0,0,0,.3);z-index:50;animation:fabRise .5s cubic-bezier(.22,.61,.36,1) both}
+.cnt-fab:active{transform:scale(.96)}
+.cnt-fab-i{font-size:18px;line-height:1}
+.cnt-fab-l{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.75;display:block;line-height:1.2}
+.cnt-fab-t{font-size:14px;font-weight:800;line-height:1.2;display:block;margin-top:1px}
+@keyframes fabRise{from{opacity:0;transform:translateY(20px) scale(.85)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Pull-to-refresh indicator */
+.ptr-ind{position:absolute;left:50%;transform:translateX(-50%) translateY(-44px);top:64px;width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--divider);display:flex;align-items:center;justify-content:center;font-size:18px;z-index:120;opacity:0;transition:opacity .15s,transform .15s;pointer-events:none}
+.ptr-ind.active{opacity:1}
+.ptr-ind.spin{animation:spin 800ms linear infinite}
+@keyframes spin{to{transform:translateX(-50%) translateY(-44px) rotate(360deg)}}
 
 /* Section banners */
 /* Chapter hero cards (per CEFR level) */
@@ -2179,9 +2210,24 @@ function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/<
 // Respect prefers-reduced-motion
 const REDUCED_MOTION=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Haptic feedback — uses Vibration API on Android, silent on iOS Web (iOS reserves haptics for installed apps)
+// Haptic feedback — prefers native Capacitor Haptics (iOS Taptic Engine, Android),
+// falls back to Web Vibration API on browser
+const _isNative=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 function haptic(kind){
-  if(REDUCED_MOTION||!navigator.vibrate)return;
+  if(REDUCED_MOTION)return;
+  // Native (iOS/Android via Capacitor) — best quality haptics
+  if(_isNative&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Haptics){
+    const H=window.Capacitor.Plugins.Haptics;
+    try{
+      if(kind==='success'){H.notification({type:'SUCCESS'});return;}
+      if(kind==='error'){H.notification({type:'ERROR'});return;}
+      if(kind==='milestone'){H.notification({type:'WARNING'});setTimeout(()=>H.impact({style:'HEAVY'}),100);return;}
+      if(kind==='light'){H.impact({style:'LIGHT'});return;}
+      H.impact({style:'MEDIUM'});return;
+    }catch(e){}
+  }
+  // Web fallback
+  if(!navigator.vibrate)return;
   const PATTERNS={tap:[10],light:[6],success:[14,40,14],error:[28,40,28],ping:[8,20,8],milestone:[40,30,40,30,60]};
   try{navigator.vibrate(PATTERNS[kind]||[10]);}catch(e){}
 }
@@ -2265,15 +2311,48 @@ function zekaHtml(msg,size){
   return '<img src="'+ZEKA_ICON+'" alt="Zeka" class="zeka-face '+cls+'">'+(msg?'<div class="zeka-speak">'+esc(msg)+'</div>':'');
 }
 const STREAK_MILES=[3,7,14,30,100];
+function fireworks(host,bursts){
+  const N=bursts||5;
+  const COLORS=['#FFD43B','#58CC02','#1A5FD1','#FF6B6B','#FFA54F','#A06CD5','#fff'];
+  for(let b=0;b<N;b++){
+    setTimeout(()=>{
+      const cx=20+Math.random()*60;// % horizontal
+      const cy=20+Math.random()*40;// % vertical
+      const burst=document.createElement('div');
+      burst.style.cssText='position:absolute;left:'+cx+'%;top:'+cy+'%;width:0;height:0;pointer-events:none;z-index:50';
+      const PARTICLES=18;
+      for(let p=0;p<PARTICLES;p++){
+        const angle=(p/PARTICLES)*Math.PI*2;
+        const dist=80+Math.random()*60;
+        const dx=Math.cos(angle)*dist;
+        const dy=Math.sin(angle)*dist;
+        const dot=document.createElement('div');
+        const sz=4+Math.random()*5;
+        dot.style.cssText=`position:absolute;left:0;top:0;width:${sz}px;height:${sz}px;border-radius:50%;background:${COLORS[Math.floor(Math.random()*COLORS.length)]};box-shadow:0 0 8px currentColor;transform:translate(-50%,-50%)`;
+        burst.appendChild(dot);
+        if(window.M){
+          window.M.animate(dot,{transform:[`translate(-50%,-50%) scale(.5)`,`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(0)`],opacity:[1,1,0]},{duration:1+Math.random()*.6,easing:'cubic-bezier(.16,1,.3,1)'});
+        }
+      }
+      host.appendChild(burst);
+      setTimeout(()=>burst.remove(),1800);
+    },b*180);
+  }
+}
+
 function showStreakMilestone(days){
   const msg=ZEKA_MSG.streakMilestone[days]||(days+' days!');
   const ov=document.createElement('div');
   ov.className='stk-milestone';
   ov.innerHTML='<img src="'+ZEKA_ICON+'" class="zeka-face lg" alt="Zeka"><div class="stk-flames">🔥</div><div class="stk-num">'+days+'</div><div class="stk-lbl">Day Streak!</div><div class="stk-msg">'+esc(msg)+'</div>';
   document.body.appendChild(ov);
-  const dismiss=()=>{if(ov.parentNode)ov.remove();};
+  haptic('milestone');
+  fireworks(ov,6);
+  // Periodic re-burst while overlay is up
+  const recur=setInterval(()=>fireworks(ov,1),900);
+  const dismiss=()=>{clearInterval(recur);if(ov.parentNode)ov.remove();};
   ov.addEventListener('click',dismiss);
-  setTimeout(dismiss,4200);
+  setTimeout(dismiss,4400);
 }
 function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLang].flag+'.png" style="height:18px;vertical-align:middle">';}
 
@@ -3762,19 +3841,31 @@ finishVerbSession(){
 },
 
 setLearnMode(mode){
-  // Top-level tab "verbs" maps internally to the existing "grammar" container
-  // (which has its own Verbs/Cases sub-toggle inside it).
   const modes=['lessons','flashcards','verbs','sentences'];
+  const prev=st._learnMode||'lessons';
+  const dir=modes.indexOf(mode)>modes.indexOf(prev)?1:-1;// 1 = slide left, -1 = slide right
+  st._learnMode=mode;
   document.querySelectorAll('#learn-toggle .seg-btn').forEach((b,i)=>{
     b.classList.toggle('seg-active',i===modes.indexOf(mode));
   });
-  document.getElementById('hscr').style.display=mode==='lessons'?'':'none';
-  document.getElementById('fc-home').style.display=mode==='flashcards'?'':'none';
-  document.getElementById('grammar-home').style.display=mode==='verbs'?'':'none';
-  document.getElementById('sentence-home').style.display=mode==='sentences'?'':'none';
-  if(mode==='flashcards'&&typeof this.renderFcHome==='function')this.renderFcHome();
-  if(mode==='verbs')this.setGrammarMode(st.grammarMode||'verbs');
-  if(mode==='sentences')this.renderSentHome();
+  const containers={lessons:document.getElementById('hscr'),flashcards:document.getElementById('fc-home'),verbs:document.getElementById('grammar-home'),sentences:document.getElementById('sentence-home')};
+  // Animate previous out, new in
+  const oldEl=containers[prev];
+  const newEl=containers[mode];
+  const renderNew=()=>{
+    Object.entries(containers).forEach(([k,el])=>{el.style.display=k===mode?'':'none';});
+    if(mode==='flashcards'&&typeof this.renderFcHome==='function')this.renderFcHome();
+    if(mode==='verbs')this.setGrammarMode(st.grammarMode||'verbs');
+    if(mode==='sentences')this.renderSentHome();
+    if(!REDUCED_MOTION&&prev!==mode){
+      anim(newEl,{opacity:[0,1],transform:[`translateX(${dir*48}px)`,'translateX(0)']},{duration:.28,easing:'cubic-bezier(.22,.61,.36,1)'});
+    }
+  };
+  if(prev!==mode&&oldEl&&!REDUCED_MOTION){
+    anim(oldEl,{opacity:[1,0],transform:['translateX(0)',`translateX(${-dir*48}px)`]},{duration:.16,easing:'cubic-bezier(.4,0,1,1)'}).then(renderNew);
+  }else{
+    renderNew();
+  }
 },
 
 setGrammarMode(mode){
@@ -3833,7 +3924,7 @@ rPath(){
     const done=st.completed.includes(u.id);
     const unlocked=ui===0||st.completed.includes(UNITS[ui-1].id);
     const cls=done?'done':(unlocked?'cur':'lock');
-    const clk=cls!=='lock'?`onclick="S.startL(${u.id})"`:'';
+    const clk=cls!=='lock'?`onclick="S.startL(${u.id})" data-uid="${u.id}"`:'';
     // Chapter hero card when level changes
     if(u.lv!==lastLv){
       if(lastLv)h+='</div>';// close prior chapter-units
@@ -3879,6 +3970,45 @@ rPath(){
   if(typeof renderIcons==='function')renderIcons(el);
   const curNode=el.querySelector('.node.cur');
   if(curNode)setTimeout(()=>curNode.scrollIntoView({block:'center',behavior:'smooth'}),100);
+  this.renderContinueFab();
+},
+
+renderContinueFab(){
+  const home=document.getElementById('home');
+  if(!home)return;
+  const old=home.querySelector('.cnt-fab');if(old)old.remove();
+  // Pick the highest-leverage next action
+  let action=null;
+  // Priority 1: due flashcards (10+ implies a backlog)
+  if(typeof fcDueBreakdown==='function'){
+    const bd=fcDueBreakdown();
+    if(bd&&bd.all&&bd.all.length>=5){
+      action={label:'Review due',title:bd.all.length+' cards',icon:'⚡',handler:()=>{this.setLearnMode('flashcards');setTimeout(()=>this.startFcSession(),350);}};
+    }
+  }
+  // Priority 2: the current (unlocked, not done) unit
+  if(!action){
+    const curIdx=UNITS.findIndex((u,i)=>!st.completed.includes(u.id)&&(i===0||st.completed.includes(UNITS[i-1].id)));
+    if(curIdx>=0){
+      const u=UNITS[curIdx];
+      action={label:'Continue lesson',title:u.t,icon:u.ic,handler:()=>this.startL(u.id)};
+    }
+  }
+  // Priority 3: daily sentence not yet done
+  if(!action&&typeof SENTENCES!=='undefined'&&SENTENCES.length){
+    const idx=this._sentDailyIdx?this._sentDailyIdx():-1;
+    const daily=idx>=0?SENTENCES[idx]:null;
+    this._sentResetDayIfNeeded&&this._sentResetDayIfNeeded();
+    if(daily&&!(st.sentDoneToday||[]).includes(daily.id)){
+      action={label:"Today's sentence",title:daily.lv,icon:'✦',handler:()=>this.setLearnMode('sentences')};
+    }
+  }
+  if(!action)return;
+  const fab=document.createElement('button');
+  fab.className='cnt-fab';
+  fab.innerHTML='<span class="cnt-fab-i">'+esc(action.icon)+'</span><span><span class="cnt-fab-l">'+esc(action.label)+'</span><span class="cnt-fab-t">'+esc(action.title)+'</span></span>';
+  fab.addEventListener('click',()=>{haptic('tap');action.handler();});
+  home.appendChild(fab);
 },
 
 // ── LESSON ──
@@ -3995,10 +4125,22 @@ nxt(){
 
 rEx(){
   const ex=st.exs[st.ei],b=document.getElementById('lbody');
-  if(ex.type==='mc')this.rMC(b,ex);else if(ex.type==='em')this.rEm(b,ex);
-  else if(ex.type==='ph')this.rPh(b,ex);
-  else if(ex.type==='ma')this.rMa(b,ex);else if(ex.type==='ty')this.rTy(b,ex);
-  else if(ex.type==='wb')this.rWB(b,ex);
+  const render=()=>{
+    if(ex.type==='mc')this.rMC(b,ex);else if(ex.type==='em')this.rEm(b,ex);
+    else if(ex.type==='ph')this.rPh(b,ex);
+    else if(ex.type==='ma')this.rMa(b,ex);else if(ex.type==='ty')this.rTy(b,ex);
+    else if(ex.type==='wb')this.rWB(b,ex);
+    // Slide in from the right
+    if(!REDUCED_MOTION){
+      anim(b,{opacity:[0,1],transform:['translateX(36px)','translateX(0)']},{duration:.32,easing:'cubic-bezier(.22,.61,.36,1)'});
+    }
+  };
+  // If there's already content, fade-slide it out first
+  if(b.children.length>0&&!REDUCED_MOTION){
+    anim(b,{opacity:[1,0],transform:['translateX(0)','translateX(-36px)']},{duration:.18,easing:'cubic-bezier(.4,0,1,1)'}).then(render);
+  }else{
+    render();
+  }
 },
 
 // MC
@@ -4702,10 +4844,135 @@ function renderIcons(root){
   });
 }
 renderIcons();
+
+// ═══════════════ LONG-PRESS UNIT PREVIEW ═══════════════
+(function setupLongPress(){
+  let timer=null,target=null,startX=0,startY=0,cancelled=false;
+  const PRESS_MS=420,MOVE_TOLERANCE=10;
+  const open=(unitId)=>{
+    const u=UNITS.find(x=>x.id===unitId);
+    if(!u)return;
+    haptic('milestone');
+    // Squelch the click that follows release so it doesn't start the lesson
+    cancelled=true;
+    setTimeout(()=>{cancelled=false;},600);
+    const sheet=document.createElement('div');
+    sheet.className='lp-sheet';
+    let h='<div class="lp-card"><div class="lp-handle"></div>';
+    h+='<div class="lp-head"><span class="lp-em">'+esc(u.ic)+'</span><div><div class="lp-tit">'+esc(u.t)+'</div><div class="lp-sub">'+esc(u.lv)+' · '+u.words.length+' words</div></div></div>';
+    h+='<div class="lp-words">';
+    u.words.forEach(w=>{
+      h+='<div class="lp-w"><span class="lp-w-em">'+w.em+'</span><div class="lp-w-info"><div class="lp-w-sr">'+esc(w.l)+'</div><div class="lp-w-en">'+esc(w.e)+'</div></div></div>';
+    });
+    h+='</div>';
+    h+='<button class="lp-go" data-uid="'+u.id+'">Start lesson →</button>';
+    h+='</div>';
+    sheet.innerHTML=h;
+    document.body.appendChild(sheet);
+    const close=()=>{
+      if(!sheet.parentNode)return;
+      anim(sheet.querySelector('.lp-card'),{transform:['translateY(0)','translateY(100%)']},{duration:.22,easing:'cubic-bezier(.4,0,1,1)'});
+      anim(sheet,{opacity:[1,0]},{duration:.2}).then(()=>{if(sheet.parentNode)sheet.remove();});
+    };
+    sheet.addEventListener('click',e=>{
+      if(e.target.classList.contains('lp-go')){
+        const uid=parseInt(e.target.dataset.uid);
+        close();
+        setTimeout(()=>S.startL(uid),220);
+      }else if(e.target===sheet){close();}
+    });
+    if(!REDUCED_MOTION){
+      anim(sheet,{opacity:[0,1]},{duration:.18});
+      anim(sheet.querySelector('.lp-card'),{transform:['translateY(100%)','translateY(0)']},{duration:.32,easing:'cubic-bezier(.22,.61,.36,1)'});
+    }
+  };
+  document.addEventListener('pointerdown',e=>{
+    const node=e.target.closest('.node[data-uid]');
+    if(!node)return;
+    target=node;
+    startX=e.clientX;startY=e.clientY;
+    cancelled=false;
+    timer=setTimeout(()=>{
+      const uid=parseInt(target.dataset.uid);
+      open(uid);
+      timer=null;
+    },PRESS_MS);
+  });
+  document.addEventListener('pointermove',e=>{
+    if(!timer)return;
+    if(Math.abs(e.clientX-startX)>MOVE_TOLERANCE||Math.abs(e.clientY-startY)>MOVE_TOLERANCE){
+      clearTimeout(timer);timer=null;
+    }
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>document.addEventListener(ev,()=>{if(timer){clearTimeout(timer);timer=null;}}));
+  // Intercept click on node if a long-press fired
+  document.addEventListener('click',e=>{
+    if(cancelled){e.stopPropagation();e.preventDefault();cancelled=false;}
+  },true);
+})();
+
+// ═══════════════ PULL-TO-REFRESH ═══════════════
+(function setupPTR(){
+  const scroller=document.getElementById('hscr');
+  if(!scroller)return;
+  const ind=document.createElement('div');
+  ind.className='ptr-ind';ind.textContent='↓';
+  scroller.parentElement.appendChild(ind);
+  let startY=0,delta=0,pulling=false,refreshing=false;
+  const THRESHOLD=80;
+  scroller.addEventListener('touchstart',e=>{
+    if(refreshing)return;
+    if(scroller.scrollTop<=0){startY=e.touches[0].clientY;pulling=true;}
+  },{passive:true});
+  scroller.addEventListener('touchmove',e=>{
+    if(!pulling||refreshing)return;
+    delta=Math.max(0,e.touches[0].clientY-startY);
+    if(delta>0){
+      ind.classList.add('active');
+      const pct=Math.min(1,delta/THRESHOLD);
+      ind.style.transform=`translateX(-50%) translateY(${-44+pct*50}px) scale(${.6+pct*.4})`;
+      ind.style.opacity=String(pct);
+      if(delta>THRESHOLD&&!ind.dataset.ready){ind.dataset.ready='1';ind.textContent='↑';haptic('tap');}
+      if(delta<=THRESHOLD&&ind.dataset.ready){ind.dataset.ready='';ind.textContent='↓';}
+    }
+  },{passive:true});
+  scroller.addEventListener('touchend',()=>{
+    if(!pulling)return;pulling=false;
+    if(delta>THRESHOLD&&!refreshing){
+      refreshing=true;
+      ind.classList.add('spin');ind.textContent='⟳';
+      haptic('success');
+      // Refresh: re-render the path with latest state
+      Promise.resolve().then(()=>{if(fbUser)return fbLoad();}).then(()=>{
+        S.rPath();
+        setTimeout(()=>{ind.classList.remove('spin','active');ind.style.opacity='0';ind.dataset.ready='';ind.textContent='↓';refreshing=false;},400);
+      });
+    }else{
+      ind.classList.remove('active');ind.style.opacity='0';ind.dataset.ready='';ind.textContent='↓';
+    }
+    delta=0;
+  },{passive:true});
+})();
+
 if(st.xp>0||st.completed.length>0)S.goHome();
 
-// SERVICE WORKER
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+// CAPACITOR — initialize native features when wrapped in iOS/Android shell
+(function initNative(){
+  if(!window.Capacitor||!window.Capacitor.isNativePlatform||!window.Capacitor.isNativePlatform())return;
+  const P=window.Capacitor.Plugins||{};
+  try{
+    // Hide native splash screen once the page is interactive
+    if(P.SplashScreen)P.SplashScreen.hide();
+    // Match the system status bar to our dark theme
+    if(P.StatusBar){P.StatusBar.setStyle({style:'DARK'});P.StatusBar.setBackgroundColor({color:'#0F1419'});}
+    // Note: Push notifications require user prompt — wire this when notifications are designed
+  }catch(e){console.warn('[capacitor init]',e);}
+})();
+
+// SERVICE WORKER (skipped inside native Capacitor — the app IS the bundle)
+if('serviceWorker' in navigator&&!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,35 @@
+{
+  "appId": "one.zeka.app",
+  "appName": "Zeka",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "https"
+  },
+  "ios": {
+    "contentInset": "always",
+    "scrollEnabled": true
+  },
+  "android": {
+    "backgroundColor": "#0F1419",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#0F1419",
+      "showSpinner": false,
+      "androidSplashResourceName": "splash",
+      "iosSpinnerStyle": "small"
+    },
+    "StatusBar": {
+      "style": "dark",
+      "backgroundColor": "#0F1419"
+    },
+    "Haptics": {},
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
+}

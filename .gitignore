@@ -5,3 +5,7 @@ italian-vocab-temp.js
 tatoeba_tmp/
 __pycache__/
 audio/
+# Capacitor (commit native projects only after they're set up + signed)
+node_modules/
+ios/App/App/public/
+android/app/src/main/assets/public/
