@@ -424,23 +424,6 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .pg-mile-t{flex:1;font-size:13px;font-weight:700;color:#fff}
 .pg-mile-d{font-size:11px;color:var(--g5)}
 .pg-empty{text-align:center;color:var(--g4);font-size:13px;padding:30px 18px;font-style:italic}
-/* Friend profile overlay */
-.fp-ov{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn .2s}
-.fp-card{background:#fff;border-radius:20px;padding:28px;margin:20px;width:100%;max-width:340px;animation:popIn .3s ease;position:relative;text-align:center}
-.fp-x{position:absolute;top:12px;right:16px;font-size:20px;color:var(--g4);cursor:pointer;border:none;background:none;line-height:1}
-.fp-av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--sr-blue),var(--sr-blue-d));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 10px;color:#fff;font-weight:800}
-.fp-name{font-size:20px;font-weight:800;color:var(--g7)}
-.fp-name::before{content:'@';opacity:.5}
-.fp-lang{font-size:13px;color:var(--g5);margin-top:4px;display:flex;align-items:center;justify-content:center;gap:6px}
-.fp-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:16px 0}
-.fp-st{padding:10px;border:2px solid var(--g2);border-radius:12px}
-.fp-st-v{font-size:18px;font-weight:800;color:var(--g7)}
-.fp-st-l{font-size:10px;color:var(--g5);font-weight:700;text-transform:uppercase;margin-top:2px}
-.fp-ach{text-align:left;margin-top:12px}
-.fp-ach-t{font-size:13px;font-weight:800;color:var(--g7);margin-bottom:8px}
-.fp-ach-row{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
-.fp-ach-row .fp-ach-i{font-size:20px}
-.fp-ach-row .fp-ach-n{font-weight:700;color:var(--g6)}
 
 /* SAVE */
 .save-ind{position:absolute;top:58px;right:20px;font-size:11px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;z-index:300}
@@ -4465,19 +4448,6 @@ showComp(){
   let firstHit=null;
   if(!st.firsts.lesson){st.firsts.lesson=true;firstHit='firstLesson';}
   save();
-  // Log activity to Firestore for the social feed
-  if(wasNew&&fbUser){
-    (async()=>{try{
-      const uDoc=await fbUserDoc().get();
-      const uData=uDoc.exists?uDoc.data():{};
-      fbDb.collection('activities').add({
-        uid:fbUser.uid,username:uData.username||'user',
-        type:'unit_complete',unitId:st.unit.id,unitTitle:st.unit.t,
-        unitIcon:st.unit.ic,lang:curLang,
-        timestamp:firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }catch(e){}})();
-  }
   // Pre-set stats to 0 so we can count up
   const xpEl=document.getElementById('cp-xp');
   const accEl=document.getElementById('cp-acc');
