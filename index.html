@@ -3275,7 +3275,7 @@ finishFcSession(){
   const el=document.getElementById('fc-body');
   const pct=st.fcReviewed>0?Math.round(st.fcCorrectCount/st.fcReviewed*100):0;
   const streakHit=(st.fcReviewed>0)?bumpStreak():null;
-  if(streakHit)save();
+  if(st.fcReviewed>0)save();
   let firstMsg='';
   if(!st.firsts.flashcard){st.firsts.flashcard=true;save();firstMsg=zekaMsg('firstFlashcard');}
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
@@ -3833,7 +3833,7 @@ finishSentSession(){
   const el=document.getElementById('sn-body');
   const pct=st.sentTotal>0?Math.round(st.sentCorrect/st.sentTotal*100):0;
   const streakHit=(st.sentTotal>0)?bumpStreak():null;
-  if(streakHit)save();
+  if(st.sentTotal>0)save();
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
   const msg=zekaMsg(cat);
   let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
