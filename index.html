@@ -724,7 +724,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   <div id="sentence-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
-    <button class="ni" onclick="S.goSocial()"><span class="ni-i" data-icon="users"></span><span class="ni-l">Social</span></button>
+    <button class="ni" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
     <button class="ni" onclick="S.goProfile()"><span class="ni-i" data-icon="user"></span><span class="ni-l">Profile</span></button>
   </div>
 </div>
@@ -786,18 +786,17 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   <div class="vd-body" id="sn-body"></div>
 </div>
 
-<div class="sc" id="social">
-  <div class="soc-top">
-    <div class="soc-tit">👥 Social</div>
-    <div class="soc-sub">See what your friends are up to</div>
+<div class="sc" id="progress">
+  <div class="pg-head">
+    <h2>📈 Progress</h2>
+    <div class="pg-lang" id="pg-lang"></div>
   </div>
-  <div class="soc-body" id="soc-body"></div>
+  <div id="pg-body"></div>
   <div class="bnav bnav-lt">
     <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
-    <button class="ni ni-lt act" onclick="S.goSocial()"><span class="ni-i" data-icon="users"></span><span class="ni-l">Social</span></button>
+    <button class="ni ni-lt act" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
     <button class="ni ni-lt" onclick="S.goProfile()"><span class="ni-i" data-icon="user"></span><span class="ni-l">Profile</span></button>
   </div>
-  <div id="fp-modal-wrap"></div>
 </div>
 
 <div class="sc" id="prof">
@@ -829,7 +828,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   </div>
   <div class="bnav bnav-lt">
     <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
-    <button class="ni ni-lt" onclick="S.goSocial()"><span class="ni-i" data-icon="users"></span><span class="ni-l">Social</span></button>
+    <button class="ni ni-lt" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
     <button class="ni ni-lt act" onclick="S.goProfile()"><span class="ni-i" data-icon="user"></span><span class="ni-l">Profile</span></button>
   </div>
   <div id="friend-modal-wrap"></div>
