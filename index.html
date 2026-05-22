@@ -461,6 +461,8 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fc-front{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 8px 30px rgba(102,126,234,.3)}
 .fc-back{background:#fff;border:2px solid var(--g2);transform:rotateY(180deg)}
 .fc-dir{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.7;margin-bottom:12px}
+.fc-seen{position:absolute;top:12px;right:14px;font-size:10px;font-weight:700;letter-spacing:.5px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.18);color:rgba(255,255,255,.85);backdrop-filter:blur(4px)}
+.fc-back .fc-seen{background:rgba(0,0,0,.06);color:var(--g7)}
 .fc-word{font-size:32px;font-weight:800;line-height:1.3}
 .fc-em{font-size:40px;margin-bottom:8px}
 .fc-trans{font-size:24px;font-weight:800;color:var(--g7);margin-top:8px}
@@ -2869,7 +2871,9 @@ function fcKey(wordId,dir){return wordId+'_'+dir;}
 
 function fcGet(wordId,dir){
   const k=fcKey(wordId,dir);
-  if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0};
+  if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0,views:0};
+  // Migrate older cards that lack the views counter
+  if(typeof st.fc[k].views!=='number')st.fc[k].views=st.fc[k].reps||0;
   return st.fc[k];
 }
 
@@ -2888,6 +2892,7 @@ function fcRate(wordId,dir,rating){
   const c=fcGet(wordId,dir);
   const now=Date.now();
   const wasBrandNew=(c.due===0&&c.reps===0);
+  c.views=(c.views||0)+1;
   if(rating===0){
     c.reps=0;c.ivl=1/(24*60);
     c.ease=Math.max(1.3,c.ease-0.2);
@@ -3181,15 +3186,20 @@ renderFcCard(){
   }
 
   // Review card: classic flip + rate flow
+  const cardState=st.fc[card.key]||{views:0};
+  const seenN=cardState.views||0;
+  const seenBadge=seenN>0?'<div class="fc-seen">Seen '+seenN+'×</div>':'';
   let h='<div class="fc-card-wrap" onclick="S.flipFc()">';
   h+='<div class="fc-card" id="fc-card">';
   h+='<div class="fc-face fc-front">';
+  h+=seenBadge;
   h+='<div class="fc-dir">'+esc(dirLabel)+'</div>';
   h+='<div class="fc-word">'+esc(frontText)+'</div>';
   h+=spkBtn(frontText,frontLang);
   h+='<div class="fc-hint">Tap to flip</div>';
   h+='</div>';
   h+='<div class="fc-face fc-back">';
+  h+=seenBadge;
   h+='<div class="fc-em">'+w.em+'</div>';
   h+='<div class="fc-trans">'+esc(backText)+'</div>';
   h+=spkBtn(backText,backLang);
