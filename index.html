@@ -3018,6 +3018,96 @@ function fcTotalCards(){
   return total;
 }
 
+// ═══════════════ PROGRESS VIEW DERIVATIONS ═══════════════
+
+// Bucket each (word,dir) card by SRS state.
+// Returns {mastered, familiar, learning, notSeen, total, pctKnown}
+function getMasteryBuckets(){
+  const sourceWords=UNITS.flatMap(u=>u.words);
+  let mastered=0,familiar=0,learning=0,notSeen=0;
+  sourceWords.forEach(w=>{
+    ['se','es'].forEach(dir=>{
+      const c=st.fc[fcKey(w.id,dir)];
+      if(!c||(c.due===0&&c.reps===0))notSeen++;
+      else if(c.reps>=2&&c.ivl>=21)mastered++;
+      else if(c.reps>=2)familiar++;
+      else learning++;
+    });
+  });
+  const total=sourceWords.length*2;
+  const pctKnown=total>0?Math.round((mastered+familiar)/total*100):0;
+  return{mastered,familiar,learning,notSeen,total,pctKnown};
+}
+
+// Cards with ≥2 lapses and ≤1 current correct streak. Sorted hardest-first.
+// Each entry: {word, dir, key, lapses, streak, views, ease, accuracy}
+function getWeakCards(limit){
+  const out=[];
+  UNITS.flatMap(u=>u.words).forEach(w=>{
+    ['se','es'].forEach(dir=>{
+      const c=st.fc[fcKey(w.id,dir)];
+      if(!c||c.reps===0)return;
+      const lapses=c.lapses||0;
+      const streak=c.streak||0;
+      if(lapses>=2&&streak<=1){
+        const views=c.views||0;
+        const accuracy=views>0?Math.round((views-lapses)/views*100):0;
+        out.push({word:w,dir,key:fcKey(w.id,dir),lapses,streak,views,ease:c.ease,accuracy});
+      }
+    });
+  });
+  out.sort((a,b)=>b.lapses-a.lapses||a.streak-b.streak||a.ease-b.ease);
+  return limit?out.slice(0,limit):out;
+}
+
+// Cards that struggled (≥2 lapses) but are now on a streak (≥3 correct).
+function getBouncingBackCards(limit){
+  const out=[];
+  UNITS.flatMap(u=>u.words).forEach(w=>{
+    ['se','es'].forEach(dir=>{
+      const c=st.fc[fcKey(w.id,dir)];
+      if(!c)return;
+      const lapses=c.lapses||0;
+      const streak=c.streak||0;
+      if(lapses>=2&&streak>=3){
+        out.push({word:w,dir,key:fcKey(w.id,dir),lapses,streak});
+      }
+    });
+  });
+  out.sort((a,b)=>b.streak-a.streak);
+  return limit?out.slice(0,limit):out;
+}
+
+// Recent milestones derived from current state.
+// Returns array of {icon, title, when, sortKey} where `when` is a string or '' if undatable.
+function getRecentWins(buckets){
+  const wins=[];
+  // Word-mastered milestones (no dates available)
+  [10,50,100,250,500].forEach(n=>{
+    if(buckets.mastered>=n)wins.push({icon:'✨',title:n+' words mastered',when:'',sortKey:n});
+  });
+  // Streak milestones the user has actually passed; derive relative date
+  STREAK_MILES.forEach(n=>{
+    if(st.streak>=n){
+      let when='';
+      if(st.lastDate){
+        const daysAgo=Math.max(0,st.streak-n);
+        when=daysAgo===0?'today':daysAgo===1?'yesterday':daysAgo+'d ago';
+      }
+      wins.push({icon:'⭐',title:n+'-day streak',when,sortKey:1000+n});
+    }
+  });
+  // Latest unit completed
+  if(st.completed&&st.completed.length>0){
+    const latestId=st.completed[st.completed.length-1];
+    const u=UNITS.find(x=>x.id===latestId);
+    if(u)wins.push({icon:'🎯',title:'Completed: '+u.t,when:'',sortKey:500});
+  }
+  // Top 3 by sortKey desc
+  wins.sort((a,b)=>b.sortKey-a.sortKey);
+  return wins.slice(0,3);
+}
+
 function srKeysHtml(){
   if(curLang!=='sr')return '';
   return '<div class="sr-keys">'+'šžčćđ'.split('').map(c=>'<button class="sr-key" onclick="S.insertSrKey(\''+c+'\')">'+c+'</button>').join('')+'</div>';
