@@ -2551,7 +2551,7 @@ function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
   st.completed=p.completed||[];st.ws=p.ws||{};st.hearts=p.hearts??5;st.fc=p.fc||{};
   st.uacc=p.uacc||{};
-  st.fcNewToday=p.fcNewToday||0;st.fcNewDate=p.fcNewDate||'';st.fcNewLimit=p.fcNewLimit||10;
+  st.fcNewToday=p.fcNewToday||0;st.fcNewDate=p.fcNewDate||'';st.fcNewLimit=p.fcNewLimit||FC_NEW_LIMIT_DEFAULT;
   st.fcReviewedToday=p.fcReviewedToday||0;
   st.fcSourceMode=p.fcSourceMode||'all';
   st.sentDoneToday=p.sentDoneToday||[];st.sentDoneDate=p.sentDoneDate||'';
@@ -2843,7 +2843,7 @@ async function fbGetPendingRequests(){
 
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
-  fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:10,fcSourceMode:'all',
+  fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -2885,7 +2885,7 @@ function fcGet(wordId,dir){
 }
 
 // Daily new-card limit (Anki-style)
-const FC_NEW_LIMIT_DEFAULT=10;
+const FC_NEW_LIMIT_DEFAULT=30;
 function _fcResetDayIfNeeded(){
   const today=new Date().toDateString();
   if(st.fcNewDate!==today){st.fcNewDate=today;st.fcNewToday=0;st.fcReviewedToday=0;}
@@ -3186,7 +3186,7 @@ renderFcHome(){
   if(bd.reviews.length>0)parts.push('<span style="color:var(--blue)">'+bd.reviews.length+' review'+(bd.reviews.length!==1?'s':'')+'</span>');
   if(bd.newShown>0)parts.push('<span style="color:var(--green)">'+bd.newShown+' new</span>');
   if(parts.length>0)h+='<div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:4px;font-weight:700">'+parts.join(' · ')+'</div>';
-  h+='<div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:6px">'+total+' total cards · '+bd.newRemaining+'/'+(st.fcNewLimit||10)+' new today</div>';
+  h+='<div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:6px">'+total+' total cards · '+bd.newRemaining+'/'+(st.fcNewLimit||FC_NEW_LIMIT_DEFAULT)+' new today</div>';
   if(bd.newAvailable>bd.newShown){
     h+='<div style="font-size:11px;color:var(--orange);margin-top:4px">'+(bd.newAvailable-bd.newShown)+' new card'+(bd.newAvailable-bd.newShown!==1?'s':'')+' waiting (daily limit)</div>';
   }
@@ -3212,7 +3212,7 @@ renderFcHome(){
   h+='<div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:rgba(255,255,255,.45)">';
   h+='<span>New cards/day:</span>';
   [10,20,30,50].forEach(n=>{
-    const active=(st.fcNewLimit||10)===n;
+    const active=(st.fcNewLimit||FC_NEW_LIMIT_DEFAULT)===n;
     h+='<button onclick="S.setFcNewLimit('+n+')" style="border:none;padding:4px 8px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;background:'+(active?'var(--sr-blue)':'rgba(255,255,255,.08)')+';color:'+(active?'#fff':'rgba(255,255,255,.55)')+'">'+n+'</button>';
   });
   h+='</div>';
@@ -4011,7 +4011,7 @@ switchLang(){
   setLang(next);
   // Reset state for new language
   st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};st.fc={};
-  st.uacc={};st.fcNewToday=0;st.fcReviewedToday=0;st.fcNewDate='';st.fcNewLimit=10;st.fcSourceMode='all';
+  st.uacc={};st.fcNewToday=0;st.fcReviewedToday=0;st.fcNewDate='';st.fcNewLimit=FC_NEW_LIMIT_DEFAULT;st.fcSourceMode='all';
   st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false};
   load();// Load saved progress for this language
   if(fbUser)fbLoad();
