@@ -392,42 +392,38 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sync-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #3367D6}
 .sync-status{text-align:center;font-size:12px;font-weight:600;color:var(--g5);margin-top:10px}
 
-/* SOCIAL */
-#social{background:var(--bg)}
-.soc-top{padding:58px 22px 18px;background:linear-gradient(180deg,var(--sr-blue),var(--sr-blue-d));color:#fff;text-align:center}
-.soc-tit{font-size:24px;font-weight:800}
-.soc-sub{font-size:13px;opacity:.85;margin-top:4px}
-.soc-body{flex:1;overflow-y:auto;padding:14px 22px 100px}
-.soc-body::-webkit-scrollbar{display:none}
-.act-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--divider);background:var(--surface);border-radius:14px;margin-bottom:8px;transition:background .15s;color:var(--text-1)}
-.act-item:active{background:var(--surface-raised)}
-.act-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--sr-blue),var(--sr-blue-d));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:#fff;font-weight:800}
-.act-inf{flex:1;min-width:0}
-.act-user{font-size:14px;font-weight:800;color:var(--blue);cursor:pointer}
-.act-user::before{content:'@';opacity:.5}
-.act-desc{font-size:13px;color:var(--text-2);margin-top:2px}
-.act-desc .act-unit{font-weight:700;color:var(--text-1)}
-.act-time{font-size:11px;color:var(--text-3);margin-top:4px}
-.act-ic{font-size:28px;flex-shrink:0}
-.soc-load{width:100%;margin-top:12px;padding:14px;border:1px solid var(--divider);border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;background:var(--surface);color:var(--sr-blue);text-align:center;transition:.15s}
-.soc-load:active{transform:translateY(2px);background:var(--surface-raised)}
-/* Friend profile overlay */
-.fp-ov{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn .2s}
-.fp-card{background:#fff;border-radius:20px;padding:28px;margin:20px;width:100%;max-width:340px;animation:popIn .3s ease;position:relative;text-align:center}
-.fp-x{position:absolute;top:12px;right:16px;font-size:20px;color:var(--g4);cursor:pointer;border:none;background:none;line-height:1}
-.fp-av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--sr-blue),var(--sr-blue-d));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 10px;color:#fff;font-weight:800}
-.fp-name{font-size:20px;font-weight:800;color:var(--g7)}
-.fp-name::before{content:'@';opacity:.5}
-.fp-lang{font-size:13px;color:var(--g5);margin-top:4px;display:flex;align-items:center;justify-content:center;gap:6px}
-.fp-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:16px 0}
-.fp-st{padding:10px;border:2px solid var(--g2);border-radius:12px}
-.fp-st-v{font-size:18px;font-weight:800;color:var(--g7)}
-.fp-st-l{font-size:10px;color:var(--g5);font-weight:700;text-transform:uppercase;margin-top:2px}
-.fp-ach{text-align:left;margin-top:12px}
-.fp-ach-t{font-size:13px;font-weight:800;color:var(--g7);margin-bottom:8px}
-.fp-ach-row{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
-.fp-ach-row .fp-ach-i{font-size:20px}
-.fp-ach-row .fp-ach-n{font-weight:700;color:var(--g6)}
+/* PROGRESS */
+#progress{background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px}
+.pg-head{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 16px}
+.pg-head h2{margin:0;font-size:22px;font-weight:800;color:#fff}
+.pg-head .pg-lang{font-size:13px;font-weight:700;opacity:.6}
+.pg-hero{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 14px 18px}
+.pg-stat{background:var(--surface);border-radius:14px;padding:14px 6px;text-align:center}
+.pg-stat-i{font-size:22px;margin-bottom:4px}
+.pg-stat-v{font-size:24px;font-weight:800;line-height:1;color:#fff;font-feature-settings:'tnum' on}
+.pg-stat-l{font-size:10px;color:var(--g5);text-transform:uppercase;letter-spacing:1px;margin-top:4px;font-weight:700}
+.pg-section-l{font-size:11px;font-weight:800;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1.5px;margin:6px 18px 10px}
+.pg-card{background:var(--surface);border-radius:14px;padding:14px;margin:0 14px 18px}
+.pg-card.glow{box-shadow:0 0 0 1px rgba(88,204,2,.25),0 0 30px rgba(88,204,2,.07)}
+.pg-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid rgba(255,255,255,.06)}
+.pg-item:first-of-type{border-top:none}
+.pg-word{font-size:15px;font-weight:800;color:#fff}
+.pg-trans{font-size:12px;color:var(--g4);margin-top:2px}
+.pg-meta{font-size:11px;font-weight:700;text-align:right;line-height:1.4}
+.pg-meta.bad{color:var(--red)}
+.pg-meta.good{color:var(--green)}
+.pg-cta{display:block;width:100%;margin-top:14px;padding:12px;border:none;border-radius:12px;color:#fff;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:1px;cursor:pointer;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)}
+.pg-cta:active{transform:translateY(2px);box-shadow:0 1px 0 var(--sr-blue-d)}
+.pg-master-bar{height:10px;border-radius:5px;background:var(--surface-raised);overflow:hidden;display:flex;margin-bottom:8px}
+.pg-master-bar > div{height:100%}
+.pg-master-pct{font-size:13px;font-weight:700;color:var(--green);text-align:right;margin-bottom:8px}
+.pg-bucket-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;font-weight:700;color:#fff}
+.pg-bucket-row .pg-dot{display:inline-block;width:8px;height:8px;border-radius:4px;margin-right:8px;vertical-align:middle}
+.pg-mile-row{display:flex;align-items:center;gap:12px;padding:6px 0}
+.pg-mile-i{font-size:22px}
+.pg-mile-t{flex:1;font-size:13px;font-weight:700;color:#fff}
+.pg-mile-d{font-size:11px;color:var(--g5)}
+.pg-empty{text-align:center;color:var(--g4);font-size:13px;padding:30px 18px;font-style:italic}
 
 /* SAVE */
 .save-ind{position:absolute;top:58px;right:20px;font-size:11px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;z-index:300}
@@ -461,6 +457,8 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fc-front{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 8px 30px rgba(102,126,234,.3)}
 .fc-back{background:#fff;border:2px solid var(--g2);transform:rotateY(180deg)}
 .fc-dir{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.7;margin-bottom:12px}
+.fc-seen{position:absolute;top:12px;right:14px;font-size:10px;font-weight:700;letter-spacing:.5px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.18);color:rgba(255,255,255,.85);backdrop-filter:blur(4px)}
+.fc-back .fc-seen{background:rgba(0,0,0,.06);color:var(--g7)}
 .fc-word{font-size:32px;font-weight:800;line-height:1.3}
 .fc-em{font-size:40px;margin-bottom:8px}
 .fc-trans{font-size:24px;font-weight:800;color:var(--g7);margin-top:8px}
@@ -599,7 +597,6 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   .ltop{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .sbar{padding-top:env(safe-area-inset-top,20px)}
   .ptop{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
-  .soc-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .fc-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .vd-top{padding-top:calc(env(safe-area-inset-top,20px) + 10px)}
   .bnav{padding-bottom:env(safe-area-inset-bottom,8px);height:calc(82px + env(safe-area-inset-bottom,8px))}
@@ -710,7 +707,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   <div id="sentence-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
-    <button class="ni" onclick="S.goSocial()"><span class="ni-i" data-icon="users"></span><span class="ni-l">Social</span></button>
+    <button class="ni" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
     <button class="ni" onclick="S.goProfile()"><span class="ni-i" data-icon="user"></span><span class="ni-l">Profile</span></button>
   </div>
 </div>
@@ -772,18 +769,17 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   <div class="vd-body" id="sn-body"></div>
 </div>
 
-<div class="sc" id="social">
-  <div class="soc-top">
-    <div class="soc-tit">👥 Social</div>
-    <div class="soc-sub">See what your friends are up to</div>
+<div class="sc" id="progress">
+  <div class="pg-head">
+    <h2>📈 Progress</h2>
+    <div class="pg-lang" id="pg-lang"></div>
   </div>
-  <div class="soc-body" id="soc-body"></div>
+  <div id="pg-body"></div>
   <div class="bnav bnav-lt">
     <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
-    <button class="ni ni-lt act" onclick="S.goSocial()"><span class="ni-i" data-icon="users"></span><span class="ni-l">Social</span></button>
+    <button class="ni ni-lt act" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
     <button class="ni ni-lt" onclick="S.goProfile()"><span class="ni-i" data-icon="user"></span><span class="ni-l">Profile</span></button>
   </div>
-  <div id="fp-modal-wrap"></div>
 </div>
 
 <div class="sc" id="prof">
@@ -815,7 +811,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   </div>
   <div class="bnav bnav-lt">
     <button class="ni ni-lt" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
-    <button class="ni ni-lt" onclick="S.goSocial()"><span class="ni-i" data-icon="users"></span><span class="ni-l">Social</span></button>
+    <button class="ni ni-lt" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
     <button class="ni ni-lt act" onclick="S.goProfile()"><span class="ni-i" data-icon="user"></span><span class="ni-l">Profile</span></button>
   </div>
   <div id="friend-modal-wrap"></div>
@@ -2277,6 +2273,7 @@ document.addEventListener('pointerdown',e=>{
 const ICONS={
   home:'<path d="M3 12L12 3l9 9v9a2 2 0 0 1-2 2h-4v-7H10v7H6a2 2 0 0 1-2-2v-9z"/>',
   users:'<path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-6 2-6 5v2h12v-2c0-3-2.7-5-6-5zm9-3a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-1.3 0-2.5.4-3.4 1A6 6 0 0 1 17 18h5v-2c0-2.5-2-4-4-4z"/>',
+  chart:'<path d="M4 20V10m6 10V4m6 16v-7m6 7V8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/>',
   user:'<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4 0-7 2.5-7 6v1h14v-1c0-3.5-3-6-7-6z"/>',
   x:'<path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/>',
   lock:'<path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1zm2 0h6V8a3 3 0 0 0-6 0v2z"/>',
@@ -2311,6 +2308,14 @@ function zekaHtml(msg,size){
   return '<img src="'+ZEKA_ICON+'" alt="Zeka" class="zeka-face '+cls+'">'+(msg?'<div class="zeka-speak">'+esc(msg)+'</div>':'');
 }
 const STREAK_MILES=[3,7,14,30,100];
+function bumpStreak(){
+  const today=new Date().toDateString();
+  if(st.lastDate===today)return null;
+  const prev=st.streak;
+  st.streak++;
+  st.lastDate=today;
+  return STREAK_MILES.includes(st.streak)&&st.streak>prev?st.streak:null;
+}
 function fireworks(host,bursts){
   const N=bursts||5;
   const COLORS=['#FFD43B','#58CC02','#1A5FD1','#FF6B6B','#FFA54F','#A06CD5','#fff'];
@@ -2538,7 +2543,7 @@ function showSplashReady(){
 function getStateData(){
   return{elo:st.elo,xp:st.xp,streak:st.streak,lastDate:st.lastDate,
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
-    fcNewToday:st.fcNewToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
+    fcNewToday:st.fcNewToday,fcReviewedToday:st.fcReviewedToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
     sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate};
 }
 function applyStateData(p){
@@ -2546,6 +2551,7 @@ function applyStateData(p){
   st.completed=p.completed||[];st.ws=p.ws||{};st.hearts=p.hearts??5;st.fc=p.fc||{};
   st.uacc=p.uacc||{};
   st.fcNewToday=p.fcNewToday||0;st.fcNewDate=p.fcNewDate||'';st.fcNewLimit=p.fcNewLimit||10;
+  st.fcReviewedToday=p.fcReviewedToday||0;
   st.fcSourceMode=p.fcSourceMode||'all';
   st.sentDoneToday=p.sentDoneToday||[];st.sentDoneDate=p.sentDoneDate||'';
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false},p.firsts||{});
@@ -2836,7 +2842,7 @@ async function fbGetPendingRequests(){
 
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
-  fcNewToday:0,fcNewDate:'',fcNewLimit:10,fcSourceMode:'all',
+  fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:10,fcSourceMode:'all',
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -2869,7 +2875,11 @@ function fcKey(wordId,dir){return wordId+'_'+dir;}
 
 function fcGet(wordId,dir){
   const k=fcKey(wordId,dir);
-  if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0};
+  if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0,views:0,lapses:0,streak:0};
+  // Migrate older cards that lack newer counters
+  if(typeof st.fc[k].views!=='number')st.fc[k].views=st.fc[k].reps||0;
+  if(typeof st.fc[k].lapses!=='number')st.fc[k].lapses=0;
+  if(typeof st.fc[k].streak!=='number')st.fc[k].streak=0;
   return st.fc[k];
 }
 
@@ -2877,7 +2887,7 @@ function fcGet(wordId,dir){
 const FC_NEW_LIMIT_DEFAULT=10;
 function _fcResetDayIfNeeded(){
   const today=new Date().toDateString();
-  if(st.fcNewDate!==today){st.fcNewDate=today;st.fcNewToday=0;}
+  if(st.fcNewDate!==today){st.fcNewDate=today;st.fcNewToday=0;st.fcReviewedToday=0;}
 }
 function fcNewLimitRemaining(){
   _fcResetDayIfNeeded();
@@ -2888,6 +2898,11 @@ function fcRate(wordId,dir,rating){
   const c=fcGet(wordId,dir);
   const now=Date.now();
   const wasBrandNew=(c.due===0&&c.reps===0);
+  c.views=(c.views||0)+1;
+  if(rating===0){c.lapses=(c.lapses||0)+1;c.streak=0;}
+  else{c.streak=(c.streak||0)+1;}
+  _fcResetDayIfNeeded();
+  st.fcReviewedToday=(st.fcReviewedToday||0)+1;
   if(rating===0){
     c.reps=0;c.ivl=1/(24*60);
     c.ease=Math.max(1.3,c.ease-0.2);
@@ -2996,6 +3011,96 @@ function fcTotalCards(){
     if(st.fc[vId+'_se']||st.fc[vId+'_es'])total+=2;
   });
   return total;
+}
+
+// ═══════════════ PROGRESS VIEW DERIVATIONS ═══════════════
+
+// Bucket each (word,dir) card by SRS state.
+// Returns {mastered, familiar, learning, notSeen, total, pctKnown}
+function getMasteryBuckets(){
+  const sourceWords=UNITS.flatMap(u=>u.words);
+  let mastered=0,familiar=0,learning=0,notSeen=0;
+  sourceWords.forEach(w=>{
+    ['se','es'].forEach(dir=>{
+      const c=st.fc[fcKey(w.id,dir)];
+      if(!c||(c.due===0&&c.reps===0))notSeen++;
+      else if(c.reps>=2&&c.ivl>=21)mastered++;
+      else if(c.reps>=2)familiar++;
+      else learning++;
+    });
+  });
+  const total=sourceWords.length*2;
+  const pctKnown=total>0?Math.round((mastered+familiar)/total*100):0;
+  return{mastered,familiar,learning,notSeen,total,pctKnown};
+}
+
+// Cards with ≥2 lapses and ≤1 current correct streak. Sorted hardest-first.
+// Each entry: {word, dir, key, lapses, streak, views, ease, accuracy}
+function getWeakCards(limit){
+  const out=[];
+  UNITS.flatMap(u=>u.words).forEach(w=>{
+    ['se','es'].forEach(dir=>{
+      const c=st.fc[fcKey(w.id,dir)];
+      if(!c||c.reps===0)return;
+      const lapses=c.lapses||0;
+      const streak=c.streak||0;
+      if(lapses>=2&&streak<=1){
+        const views=c.views||0;
+        const accuracy=views>0?Math.round((views-lapses)/views*100):0;
+        out.push({word:w,dir,key:fcKey(w.id,dir),lapses,streak,views,ease:c.ease,accuracy});
+      }
+    });
+  });
+  out.sort((a,b)=>b.lapses-a.lapses||a.streak-b.streak||a.ease-b.ease);
+  return limit?out.slice(0,limit):out;
+}
+
+// Cards that struggled (≥2 lapses) but are now on a streak (≥3 correct).
+function getBouncingBackCards(limit){
+  const out=[];
+  UNITS.flatMap(u=>u.words).forEach(w=>{
+    ['se','es'].forEach(dir=>{
+      const c=st.fc[fcKey(w.id,dir)];
+      if(!c)return;
+      const lapses=c.lapses||0;
+      const streak=c.streak||0;
+      if(lapses>=2&&streak>=3){
+        out.push({word:w,dir,key:fcKey(w.id,dir),lapses,streak});
+      }
+    });
+  });
+  out.sort((a,b)=>b.streak-a.streak);
+  return limit?out.slice(0,limit):out;
+}
+
+// Recent milestones derived from current state.
+// Returns array of {icon, title, when, sortKey} where `when` is a string or '' if undatable.
+function getRecentWins(buckets){
+  const wins=[];
+  // Word-mastered milestones (no dates available)
+  [10,50,100,250,500].forEach(n=>{
+    if(buckets.mastered>=n)wins.push({icon:'✨',title:n+' words mastered',when:'',sortKey:n});
+  });
+  // Streak milestones the user has actually passed; derive relative date
+  STREAK_MILES.forEach(n=>{
+    if(st.streak>=n){
+      let when='';
+      if(st.lastDate){
+        const daysAgo=Math.max(0,st.streak-n);
+        when=daysAgo===0?'today':daysAgo===1?'yesterday':daysAgo+'d ago';
+      }
+      wins.push({icon:'⭐',title:n+'-day streak',when,sortKey:1000+n});
+    }
+  });
+  // Latest unit completed
+  if(st.completed&&st.completed.length>0){
+    const latestId=st.completed[st.completed.length-1];
+    const u=UNITS.find(x=>x.id===latestId);
+    if(u)wins.push({icon:'🎯',title:'Completed: '+u.t,when:'',sortKey:500});
+  }
+  // Top 3 by sortKey desc
+  wins.sort((a,b)=>b.sortKey-a.sortKey);
+  return wins.slice(0,3);
 }
 
 function srKeysHtml(){
@@ -3181,15 +3286,20 @@ renderFcCard(){
   }
 
   // Review card: classic flip + rate flow
+  const cardState=st.fc[card.key]||{views:0};
+  const seenN=cardState.views||0;
+  const seenBadge=seenN>0?'<div class="fc-seen">Seen '+seenN+'×</div>':'';
   let h='<div class="fc-card-wrap" onclick="S.flipFc()">';
   h+='<div class="fc-card" id="fc-card">';
   h+='<div class="fc-face fc-front">';
+  h+=seenBadge;
   h+='<div class="fc-dir">'+esc(dirLabel)+'</div>';
   h+='<div class="fc-word">'+esc(frontText)+'</div>';
   h+=spkBtn(frontText,frontLang);
   h+='<div class="fc-hint">Tap to flip</div>';
   h+='</div>';
   h+='<div class="fc-face fc-back">';
+  h+=seenBadge;
   h+='<div class="fc-em">'+w.em+'</div>';
   h+='<div class="fc-trans">'+esc(backText)+'</div>';
   h+=spkBtn(backText,backLang);
@@ -3249,6 +3359,8 @@ exitFc(){
 finishFcSession(){
   const el=document.getElementById('fc-body');
   const pct=st.fcReviewed>0?Math.round(st.fcCorrectCount/st.fcReviewed*100):0;
+  const streakHit=(st.fcReviewed>0)?bumpStreak():null;
+  if(st.fcReviewed>0)save();
   let firstMsg='';
   if(!st.firsts.flashcard){st.firsts.flashcard=true;save();firstMsg=zekaMsg('firstFlashcard');}
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
@@ -3265,6 +3377,7 @@ finishFcSession(){
   h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
   sDn();
 },
 
@@ -3617,6 +3730,7 @@ exitCase(){
 
 finishCaseSession(){
   sDn();
+  const streakHit=(st.csTotal>0)?bumpStreak():null;
   let firstMsg='';
   if(!st.firsts.caseDrill){st.firsts.caseDrill=true;firstMsg=zekaMsg('firstCase');}
   save();
@@ -3636,6 +3750,7 @@ finishCaseSession(){
   h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitCase()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
 },
 
 // ═══════════════ SENTENCES ═══════════════
@@ -3802,6 +3917,8 @@ finishSentSession(){
   sDn();save();
   const el=document.getElementById('sn-body');
   const pct=st.sentTotal>0?Math.round(st.sentCorrect/st.sentTotal*100):0;
+  const streakHit=(st.sentTotal>0)?bumpStreak():null;
+  if(st.sentTotal>0)save();
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
   const msg=zekaMsg(cat);
   let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
@@ -3815,10 +3932,12 @@ finishSentSession(){
   h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitSent()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
 },
 
 finishVerbSession(){
   sDn();
+  const streakHit=(st.vbTotal>0)?bumpStreak():null;
   let firstMsg='';
   if(!st.firsts.verb){st.firsts.verb=true;firstMsg=zekaMsg('firstVerb');}
   save();
@@ -3838,6 +3957,7 @@ finishVerbSession(){
   h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitVerb()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
 },
 
 setLearnMode(mode){
@@ -3890,7 +4010,7 @@ switchLang(){
   setLang(next);
   // Reset state for new language
   st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};st.fc={};
-  st.uacc={};st.fcNewToday=0;st.fcNewDate='';st.fcNewLimit=10;st.fcSourceMode='all';
+  st.uacc={};st.fcNewToday=0;st.fcReviewedToday=0;st.fcNewDate='';st.fcNewLimit=10;st.fcSourceMode='all';
   st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false};
   load();// Load saved progress for this language
   if(fbUser)fbLoad();
@@ -4320,12 +4440,7 @@ showComp(){
   if(wasNew){st.completed.push(st.unit.id);
     st.unit.words.forEach(w=>{['se','es'].forEach(dir=>{const k=fcKey(w.id,dir);if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0};});});
   }
-  const today=new Date().toDateString();
-  let streakHit=null;
-  if(st.lastDate!==today){
-    const prevStreak=st.streak;st.streak++;st.lastDate=today;
-    if(STREAK_MILES.includes(st.streak)&&st.streak>prevStreak)streakHit=st.streak;
-  }
+  const streakHit=bumpStreak();
   // Track per-unit best accuracy for star ratings
   const prevAcc=st.uacc[st.unit.id]||0;
   if(acc>prevAcc)st.uacc[st.unit.id]=acc;
@@ -4333,19 +4448,6 @@ showComp(){
   let firstHit=null;
   if(!st.firsts.lesson){st.firsts.lesson=true;firstHit='firstLesson';}
   save();
-  // Log activity to Firestore for the social feed
-  if(wasNew&&fbUser){
-    (async()=>{try{
-      const uDoc=await fbUserDoc().get();
-      const uData=uDoc.exists?uDoc.data():{};
-      fbDb.collection('activities').add({
-        uid:fbUser.uid,username:uData.username||'user',
-        type:'unit_complete',unitId:st.unit.id,unitTitle:st.unit.t,
-        unitIcon:st.unit.ic,lang:curLang,
-        timestamp:firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }catch(e){}})();
-  }
   // Pre-set stats to 0 so we can count up
   const xpEl=document.getElementById('cp-xp');
   const accEl=document.getElementById('cp-acc');
@@ -4655,170 +4757,119 @@ copyFriendCode(code){
   }
 },
 
-// ── SOCIAL TAB ──
-// Firestore security rules note:
-// The `activities` collection needs:
-//   - read access for any authenticated user (friends query their friends' activities)
-//   - write access only for the activity owner (uid === request.auth.uid)
+// ── PROGRESS TAB ──
 
-_socCursor:null,
-_socActivities:[],
-
-async goSocial(){
-  this._socCursor=null;
-  this._socActivities=[];
-  const el=document.getElementById('soc-body');
-  el.innerHTML='<div style="text-align:center;color:var(--g4);font-size:13px;padding:40px 20px">Loading activity feed...</div>';
-  this.goScr('social');
-  if(!fbUser){
-    el.innerHTML='<div class="empty-state">'+zekaHtml('Sign in and add friends to see activity!')+'</div>';
-    return;
-  }
-  try{
-    const doc=await fbUserDoc().get();
-    const data=doc.exists?doc.data():{};
-    const friendUids=data.friends||[];
-    if(!friendUids.length){
-      el.innerHTML='<div class="empty-state">'+zekaHtml("It's quiet here. Invite a friend to start seeing activity!")+'</div>';
-      return;
-    }
-    this._socFriendUids=friendUids;
-    await this._loadActivities(true);
-  }catch(e){
-    console.error('[goSocial]',e);
-    el.innerHTML='<div class="empty-state">'+zekaHtml('Could not load feed: '+(e.code||e.message||'unknown error'))+'</div>';
-  }
+goProgress(){
+  document.getElementById('pg-lang').innerHTML=langFlag()+' '+esc(langName());
+  this.renderProgress();
+  this.goScr('progress');
 },
 
-async _loadActivities(fresh){
-  const el=document.getElementById('soc-body');
-  const uids=this._socFriendUids||[];
-  if(!uids.length)return;
-  // Firestore 'in' queries support max 30 elements; chunk if needed
-  const chunks=[];
-  for(let i=0;i<uids.length;i+=30)chunks.push(uids.slice(i,i+30));
-  let allDocs=[];
-  for(const chunk of chunks){
-    let q=fbDb.collection('activities').where('uid','in',chunk).orderBy('timestamp','desc').limit(20);
-    if(this._socCursor)q=q.startAfter(this._socCursor);
-    const snap=await q.get();
-    snap.forEach(d=>allDocs.push({id:d.id,...d.data(),_snap:d}));
-  }
-  // Sort combined results by timestamp desc and take 20
-  allDocs.sort((a,b)=>{
-    const ta=a.timestamp?a.timestamp.toMillis?a.timestamp.toMillis():a.timestamp:0;
-    const tb=b.timestamp?b.timestamp.toMillis?b.timestamp.toMillis():b.timestamp:0;
-    return tb-ta;
-  });
-  allDocs=allDocs.slice(0,20);
-  if(allDocs.length)this._socCursor=allDocs[allDocs.length-1]._snap;
-  this._socActivities=this._socActivities.concat(allDocs);
-  this._renderFeed(allDocs.length>=20);
-},
-
-_renderFeed(hasMore){
-  const el=document.getElementById('soc-body');
-  const acts=this._socActivities;
-  if(!acts.length){
-    el.innerHTML='<div class="empty-state">'+zekaHtml("Your friends haven't finished any lessons yet. Nudge them! 🥕")+'</div>';
-    return;
-  }
+renderProgress(){
+  const el=document.getElementById('pg-body');
+  const buckets=getMasteryBuckets();
+  const weak=getWeakCards(5);
+  const weakTotal=getWeakCards().length;
+  const bouncing=getBouncingBackCards(3);
+  const bouncingTotal=getBouncingBackCards().length;
+  const wins=getRecentWins(buckets);
+  const reviewedToday=st.fcReviewedToday||0;
   let h='';
-  for(const a of acts){
-    const ts=a.timestamp?(a.timestamp.toDate?a.timestamp.toDate():new Date(a.timestamp)):new Date();
-    const timeStr=this._relTime(ts);
-    const icon=esc(a.unitIcon||'📚');
-    const safeUser=esc(a.username||'user');
-    const initial=safeUser[0].toUpperCase();
-    h+=`<div class="act-item">
-      <div class="act-av">${initial}</div>
-      <div class="act-inf">
-        <span class="act-user" onclick="S.showFriendProfile('${esc(a.uid)}')">${safeUser}</span>
-        <div class="act-desc">Completed <span class="act-unit">${esc(a.unitTitle||'a lesson')}</span> 🎉</div>
-        <div class="act-time">${timeStr}${a.lang?' · '+esc((LANG_DATA[a.lang]&&LANG_DATA[a.lang].name)||a.lang):''}</div>
-      </div>
-      <div class="act-ic">${icon}</div>
-    </div>`;
+
+  // Hero row
+  h+='<div class="pg-hero">';
+  h+='<div class="pg-stat"><div class="pg-stat-i">🔥</div><div class="pg-stat-v">'+(st.streak||0)+'</div><div class="pg-stat-l">Streak</div></div>';
+  h+='<div class="pg-stat"><div class="pg-stat-i">🏆</div><div class="pg-stat-v">'+buckets.mastered+'</div><div class="pg-stat-l">Words</div></div>';
+  h+='<div class="pg-stat"><div class="pg-stat-i">⚡</div><div class="pg-stat-v">'+reviewedToday+'</div><div class="pg-stat-l">Today</div></div>';
+  h+='</div>';
+
+  const totallyEmpty=buckets.mastered+buckets.familiar+buckets.learning===0;
+
+  // Needs work
+  h+='<div class="pg-section-l">Needs work'+(weakTotal>0?' · '+weakTotal+' card'+(weakTotal!==1?'s':''):'')+'</div>';
+  h+='<div class="pg-card">';
+  if(weak.length===0){
+    h+='<div class="pg-empty">'+(totallyEmpty?'Start grading flashcards — tough ones will appear here.':'No tough cards right now. 🎉')+'</div>';
+  }else{
+    weak.forEach(item=>{
+      h+='<div class="pg-item">';
+      h+='<div><div class="pg-word">'+esc(item.word.l)+'</div><div class="pg-trans">'+esc(item.word.e)+'</div></div>';
+      h+='<div class="pg-meta bad">Failed '+item.lapses+'×<br>'+item.accuracy+'% accuracy</div>';
+      h+='</div>';
+    });
+    h+='<button class="pg-cta" onclick="S.startWeakCardSession()">Practice weak cards →</button>';
   }
-  if(hasMore){
-    h+=`<button class="soc-load" onclick="S._loadMoreActivities()">Load More</button>`;
+  h+='</div>';
+
+  // Bouncing back
+  h+='<div class="pg-section-l">📈 Bouncing back'+(bouncingTotal>0?' · '+bouncingTotal+' card'+(bouncingTotal!==1?'s':''):'')+'</div>';
+  h+='<div class="pg-card'+(bouncing.length>0?' glow':'')+'">';
+  if(bouncing.length===0){
+    h+='<div class="pg-empty">Cards you recover from will appear here.</div>';
+  }else{
+    bouncing.forEach(item=>{
+      h+='<div class="pg-item">';
+      h+='<div><div class="pg-word">'+esc(item.word.l)+'</div><div class="pg-trans">'+esc(item.word.e)+'</div></div>';
+      h+='<div class="pg-meta good">Was failing<br>'+item.streak+' in a row ✓</div>';
+      h+='</div>';
+    });
   }
+  h+='</div>';
+
+  // Mastery
+  h+='<div class="pg-section-l">Mastery</div>';
+  h+='<div class="pg-card">';
+  if(buckets.total===0){
+    h+='<div class="pg-empty">No vocabulary loaded for this language yet.</div>';
+  }else{
+    const pctM=buckets.total>0?(buckets.mastered/buckets.total*100):0;
+    const pctF=buckets.total>0?(buckets.familiar/buckets.total*100):0;
+    const pctL=buckets.total>0?(buckets.learning/buckets.total*100):0;
+    h+='<div class="pg-master-bar">';
+    h+='<div style="background:var(--green);width:'+pctM+'%"></div>';
+    h+='<div style="background:var(--blue);width:'+pctF+'%"></div>';
+    h+='<div style="background:var(--orange);width:'+pctL+'%"></div>';
+    h+='</div>';
+    h+='<div class="pg-master-pct">'+buckets.pctKnown+'% known</div>';
+    h+='<div class="pg-bucket-row"><span><span class="pg-dot" style="background:var(--green)"></span>Mastered</span><span>'+buckets.mastered+'</span></div>';
+    h+='<div class="pg-bucket-row"><span><span class="pg-dot" style="background:var(--blue)"></span>Familiar</span><span>'+buckets.familiar+'</span></div>';
+    h+='<div class="pg-bucket-row"><span><span class="pg-dot" style="background:var(--orange)"></span>Learning</span><span>'+buckets.learning+'</span></div>';
+    h+='<div class="pg-bucket-row"><span><span class="pg-dot" style="background:var(--g6)"></span>Not yet seen</span><span>'+buckets.notSeen+'</span></div>';
+  }
+  h+='</div>';
+
+  // Recent wins
+  h+='<div class="pg-section-l">Recent wins</div>';
+  h+='<div class="pg-card">';
+  if(wins.length===0){
+    h+='<div class="pg-empty">Your milestones will appear here.</div>';
+  }else{
+    wins.forEach(w=>{
+      h+='<div class="pg-mile-row">';
+      h+='<div class="pg-mile-i">'+w.icon+'</div>';
+      h+='<div class="pg-mile-t">'+esc(w.title)+'</div>';
+      h+='<div class="pg-mile-d">'+esc(w.when||'')+'</div>';
+      h+='</div>';
+    });
+  }
+  h+='</div>';
+
   el.innerHTML=h;
 },
 
-async _loadMoreActivities(){
-  const btn=document.querySelector('.soc-load');
-  if(btn)btn.textContent='Loading...';
-  try{await this._loadActivities(false);}catch(e){if(btn)btn.textContent='Load More';}
-},
-
-_relTime(date){
-  const now=Date.now();
-  const diff=now-date.getTime();
-  const mins=Math.floor(diff/60000);
-  if(mins<1)return'just now';
-  if(mins<60)return mins+'m ago';
-  const hrs=Math.floor(mins/60);
-  if(hrs<24)return hrs+'h ago';
-  const days=Math.floor(hrs/24);
-  if(days===1)return'yesterday';
-  if(days<7)return days+'d ago';
-  const weeks=Math.floor(days/7);
-  if(weeks<5)return weeks+'w ago';
-  return date.toLocaleDateString();
-},
-
-async showFriendProfile(uid){
-  const wrap=document.getElementById('fp-modal-wrap');
-  wrap.innerHTML=`<div class="fp-ov" onclick="if(event.target===this)S.closeFriendProfile()">
-    <div class="fp-card"><button class="fp-x" onclick="S.closeFriendProfile()"><span data-icon="x"></span></button>
-    <div style="color:var(--g4);font-size:13px;padding:20px">Loading...</div></div></div>`;
-  try{
-    const doc=await fbDb.collection('users').doc(uid).get();
-    if(!doc.exists){wrap.innerHTML='';this.toast('User not found');return;}
-    const d=doc.data();
-    const username=esc(d.username||'user');
-    const initial=username[0].toUpperCase();
-    // Find most active language
-    let topLang=curLang,topXp=0;
-    if(d.langs){for(const[lk,lv] of Object.entries(d.langs)){if(lv.xp>topXp){topXp=lv.xp;topLang=lk;}}}
-    const langData=d.langs&&d.langs[topLang]?d.langs[topLang]:{};
-    const elo=langData.elo||1000;
-    const xp=langData.xp||0;
-    const streak=langData.streak||0;
-    const completed=langData.completed||[];
-    const flagImg=LANG_DATA[topLang]?`<img src="https://flagcdn.com/w40/${LANG_DATA[topLang].flag}.png" style="height:14px;vertical-align:middle">`:'';
-    const langLabel=esc(LANG_DATA[topLang]?LANG_DATA[topLang].name:topLang);
-    // Achievements
-    const achs=[{i:'🎯',n:'First Lesson',u:completed.length>=1},{i:'🔥',n:'On Fire',u:streak>=3},
-      {i:'💯',n:'Century',u:xp>=100},{i:'📚',n:'Scholar',u:completed.length>=10},
-      {i:'🏆',n:'Polyglot',u:completed.length>=20},{i:'⚡',n:'Lightning',u:xp>=500},
-      {i:'🧠',n:'Big Brain',u:elo>=1500},{i:'🌟',n:'Expert',u:elo>=1900}];
-    const unlockedAchs=achs.filter(a=>a.u);
-    let achH='';
-    if(unlockedAchs.length){
-      achH=`<div class="fp-ach"><div class="fp-ach-t">Achievements</div>`;
-      unlockedAchs.forEach(a=>{achH+=`<div class="fp-ach-row"><span class="fp-ach-i">${a.i}</span><span class="fp-ach-n">${a.n}</span></div>`;});
-      achH+='</div>';
-    }
-    wrap.innerHTML=`<div class="fp-ov" onclick="if(event.target===this)S.closeFriendProfile()">
-      <div class="fp-card">
-        <button class="fp-x" onclick="S.closeFriendProfile()"><span data-icon="x"></span></button>
-        <div class="fp-av">${initial}</div>
-        <div class="fp-name">${username}</div>
-        <div class="fp-lang">${flagImg} ${langLabel}</div>
-        <div class="fp-stats">
-          <div class="fp-st"><div class="fp-st-v">${elo}</div><div class="fp-st-l">ELO</div></div>
-          <div class="fp-st"><div class="fp-st-v">${streak}</div><div class="fp-st-l">Streak</div></div>
-          <div class="fp-st"><div class="fp-st-v">${xp}</div><div class="fp-st-l">XP</div></div>
-        </div>
-        ${achH}
-      </div></div>`;
-  }catch(e){wrap.innerHTML='';this.toast('Could not load profile');}
-},
-
-closeFriendProfile(){
-  document.getElementById('fp-modal-wrap').innerHTML='';
+startWeakCardSession(){
+  const weak=getWeakCards();
+  if(weak.length===0)return;
+  st.fcCards=this.sh(weak.map(item=>({
+    word:item.word,
+    dir:item.dir,
+    key:item.key,
+    isNew:false
+  })));
+  st.fcIdx=0;st.fcFlipped=false;st.fcReviewed=0;st.fcAgainCount=0;st.fcCorrectCount=0;
+  this.setLearnMode('flashcards');
+  this.goScr('flashcard');
+  this.renderFcCard();
 }
 };
 
