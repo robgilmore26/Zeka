@@ -3468,7 +3468,13 @@ finishFcSession(){
   h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">RECALLED</div></div>';
   if(st.fcAgainCount>0)h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--orange)">'+st.fcAgainCount+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">REPEATED</div></div>';
   h+='</div>';
-  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
+  h+='<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:8px">';
+  // Show Match CTA if there are enough eligible cards
+  if(typeof _mcEligibleCards==='function'&&_mcEligibleCards().length>=10){
+    h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'match\');S.startMatchSession();},300)">🧩 Try matching →</button>';
+  }
+  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
+  h+='</div>';
   h+='</div>';
   el.innerHTML=h;
   if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
