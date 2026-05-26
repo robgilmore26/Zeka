@@ -2567,7 +2567,7 @@ function applyStateData(p){
   st.fcReviewedToday=p.fcReviewedToday||0;
   st.fcSourceMode=p.fcSourceMode||'all';
   st.sentDoneToday=p.sentDoneToday||[];st.sentDoneDate=p.sentDoneDate||'';
-  st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false},p.firsts||{});
+  st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},p.firsts||{});
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
 }
@@ -2856,7 +2856,7 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
   fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
-  firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false},
+  firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
   vbVerbs:[],vbIdx:0,vbPhase:1,vbCorrect:0,vbTotal:0,
@@ -3197,6 +3197,66 @@ function buildMatchSession(){
   return rounds;
 }
 
+// Build a "Keep going" overflow session of up to 15 cards, mixing:
+// - More new cards beyond today's daily limit (up to 7)
+// - Preview reviews — cards due within the next 24h, pulled forward (up to 8)
+// - Weak cards from getWeakCards() (up to 4)
+// Returns {cards:[...], breakdown:{new,preview,weak}} or null if nothing to add.
+function buildOverflowSession(){
+  const now=Date.now();
+
+  // Pool 1: more new cards (beyond today's limit), in CEFR/unit order
+  const moreNew=[];
+  const sourceWords=_fcSourceWords();
+  for(const w of sourceWords){
+    if(moreNew.length>=7)break;
+    for(const dir of ['se','es']){
+      if(moreNew.length>=7)break;
+      const k=fcKey(w.id,dir);
+      const c=st.fc[k];
+      const isNew=!c||(c.due===0&&c.reps===0);
+      if(isNew)moreNew.push({word:w,dir,key:k,isNew:true});
+    }
+  }
+
+  // Pool 2: preview reviews — cards due in the next 24h but not yet due
+  const previewReviews=[];
+  const next24h=now+24*3600*1000;
+  sourceWords.forEach(w=>{
+    ['se','es'].forEach(dir=>{
+      const k=fcKey(w.id,dir);
+      const c=st.fc[k];
+      if(c&&c.reps>=1&&c.due>now&&c.due<=next24h){
+        previewReviews.push({word:w,dir,key:k,isNew:false,_due:c.due});
+      }
+    });
+  });
+  previewReviews.sort((a,b)=>a._due-b._due);
+
+  // Pool 3: top weak cards (already filtered by getWeakCards)
+  const weak=getWeakCards(4).map(item=>({word:item.word,dir:item.dir,key:item.key,isNew:false}));
+
+  // Compose, cap at 15
+  const newCount=Math.min(moreNew.length,7);
+  const previewCount=Math.min(previewReviews.length,8);
+  const weakCount=Math.min(weak.length,4);
+  const session=[
+    ...moreNew.slice(0,newCount),
+    ...previewReviews.slice(0,previewCount),
+    ...weak.slice(0,weakCount)
+  ].slice(0,15);
+
+  if(session.length===0)return null;
+
+  // Shuffle for variety
+  for(let i=session.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [session[i],session[j]]=[session[j],session[i]];
+  }
+
+  return{cards:session,breakdown:{new:newCount,preview:previewCount,weak:weakCount}};
+}
+
 // ═══════════════ AUDIO (effects only) ═══════════════
 let actx=null;
 function ac(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
@@ -3275,6 +3335,22 @@ renderFcHome(){
     if(bd.newAvailable>0)h+=zekaHtml("Reviews done! 🎉 "+bd.newAvailable+" new card"+(bd.newAvailable!==1?'s':'')+" will unlock tomorrow.",'sm');
     else h+=zekaHtml('All caught up! 🎉 Come back '+when+' for more cards.','sm');
     h+='</div>';
+    // "Keep going" overflow — secondary, only if there's actually something to practice
+    const overflow=buildOverflowSession();
+    if(overflow&&overflow.cards.length>0){
+      const b=overflow.breakdown;
+      const parts=[];
+      if(b.new>0)parts.push(b.new+' new');
+      if(b.preview>0)parts.push(b.preview+' preview');
+      if(b.weak>0)parts.push(b.weak+' weak');
+      h+='<div style="margin-top:18px;text-align:center">';
+      h+='<button style="width:100%;max-width:320px;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)" onclick="S.startOverflowSession()">Keep going · '+overflow.cards.length+' card'+(overflow.cards.length!==1?'s':'')+'</button>';
+      h+='<div style="font-size:11px;color:var(--g5);margin-top:6px;font-weight:700">'+parts.join(' · ')+'</div>';
+      if(!st.firsts.keepGoing){
+        h+='<div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:10px;font-style:italic;line-height:1.4;max-width:280px;margin-left:auto;margin-right:auto">Extra practice — overdoing it can shift your SRS schedule. Use sparingly.</div>';
+      }
+      h+='</div>';
+    }
   }
   // Daily new-card limit picker
   h+='<div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:rgba(255,255,255,.45)">';
@@ -3347,6 +3423,16 @@ startFcSession(){
   const due=fcDueCards();
   if(!due.length){return;}
   st.fcCards=this.sh(due);
+  st.fcIdx=0;st.fcFlipped=false;st.fcReviewed=0;st.fcAgainCount=0;st.fcCorrectCount=0;
+  this.goScr('flashcard');
+  this.renderFcCard();
+},
+
+startOverflowSession(){
+  const session=buildOverflowSession();
+  if(!session||session.cards.length===0){this.toast('Nothing extra to practice right now');return;}
+  if(!st.firsts.keepGoing){st.firsts.keepGoing=true;save();}
+  st.fcCards=session.cards;
   st.fcIdx=0;st.fcFlipped=false;st.fcReviewed=0;st.fcAgainCount=0;st.fcCorrectCount=0;
   this.goScr('flashcard');
   this.renderFcCard();
@@ -4112,7 +4198,7 @@ switchLang(){
   // Reset state for new language
   st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};st.fc={};
   st.uacc={};st.fcNewToday=0;st.fcReviewedToday=0;st.fcNewDate='';st.fcNewLimit=FC_NEW_LIMIT_DEFAULT;st.fcSourceMode='all';
-  st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false};
+  st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false};
   load();// Load saved progress for this language
   if(fbUser)fbLoad();
   this.goHome();
