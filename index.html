@@ -2962,8 +2962,9 @@ function fcDueBreakdown(){
   const reviews=[];
   const newPool=[];
   const sourceWords=_fcSourceWords();
-  // Shuffle order so new words from later units aren't always introduced last
-  const wordList=st.fcSourceMode==='completed'?sourceWords:_fcShuffleSeeded(sourceWords);
+  // Introduce new words in CEFR/unit order (A1 → C1) so beginners build foundation vocab first.
+  // sourceWords already comes from UNITS in unit order; no shuffle needed.
+  const wordList=sourceWords;
   wordList.forEach(w=>{
     ['se','es'].forEach(dir=>{
       const k=fcKey(w.id,dir);
