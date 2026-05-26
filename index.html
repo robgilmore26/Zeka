@@ -4392,6 +4392,100 @@ selE(i){if(st.answered)return;sCl();st.selIdx=i;
   document.getElementById('ckb').className='cbtn en';document.getElementById('ckb').textContent='CHECK';
 },
 
+// ── CROSS-SUBJECT MATCH ──
+
+startMatchSession(){
+  const rounds=buildMatchSession();
+  if(!rounds||rounds.length===0){this.toast('Not enough cards yet');return;}
+  st.mcRounds=rounds;
+  st.mcIdx=0;
+  st.mcCorrect=0;
+  st.mcReviewed=0;
+  st.mcXp=0;
+  this.goScr('match-game');
+  this.renderMatchRound();
+},
+
+renderMatchRound(){
+  if(st.mcIdx>=st.mcRounds.length){this.finishMatchSession();return;}
+  const round=st.mcRounds[st.mcIdx];
+  document.getElementById('mc-count').textContent=(st.mcIdx+1)+' / '+st.mcRounds.length;
+  st.matchSt={sel:null,selT:null,matched:[],err:0};
+  // Direction: 'se' = source words on left, english on right (tap source first then english)
+  //            'es' = english on left, source on right (tap english first then source)
+  const isSE=round.dir==='se';
+  const leftText=isSE?'l':'e';
+  const rightText=isSE?'e':'l';
+  const leftType='s';// keep matching the existing mTap logic: first column = type 's'
+  const rightType='e';// second column = type 'e'
+  const sC=this.sh(round.pairs.map(p=>({t:p[leftText],k:p.id})));
+  const eC=this.sh(round.pairs.map(p=>({t:p[rightText],k:p.id})));
+  const dirLabel=isSE?(langName()+' → English'):('English → '+langName());
+  let h=`<div class="lcont"><div class="exq">Match the pairs</div>
+    <div class="exsub">${esc(dirLabel)}</div><div class="mcon">`;
+  sC.forEach(it=>{h+=`<button class="mb" data-t="${leftType}" data-k="${it.k}" onclick="S.mcTap(this)">${esc(it.t)}</button>`;});
+  eC.forEach(it=>{h+=`<button class="mb" data-t="${rightType}" data-k="${it.k}" onclick="S.mcTap(this)">${esc(it.t)}</button>`;});
+  h+=`</div></div><div class="fbar" id="fbar" style="display:none"></div>`;
+  document.getElementById('mc-body').innerHTML=h;
+},
+
+mcTap(el){
+  const ms=st.matchSt;if(!ms)return;
+  const t=el.dataset.t,k=+el.dataset.k;
+  if(ms.matched.includes(k))return;sCl();
+  if(!ms.sel){ms.sel=el;ms.selT=t;el.classList.add('sel');}
+  else if(ms.selT===t){ms.sel.classList.remove('sel');ms.sel=el;ms.selT=t;el.classList.add('sel');}
+  else{
+    if(+ms.sel.dataset.k===k){
+      sMa();
+      ms.matched.push(k);
+      ms.sel.classList.remove('sel');ms.sel.classList.add('ok');el.classList.add('ok');
+      ms.sel=null;ms.selT=null;
+      const round=st.mcRounds[st.mcIdx];
+      if(ms.matched.length===round.pairs.length){
+        // Round complete
+        const perf=ms.err===0;
+        const xp=perf?15:8;
+        st.mcXp+=xp;
+        st.mcReviewed+=round.pairs.length;
+        if(perf)st.mcCorrect++;
+        sOk();
+        setTimeout(()=>{st.mcIdx++;this.renderMatchRound();},700);
+      }
+    }else{
+      ms.err++;el.classList.add('bad');ms.sel.classList.add('bad');ms.sel.classList.remove('sel');sNo();
+      const prev=ms.sel;setTimeout(()=>{el.classList.remove('bad');prev.classList.remove('bad');},350);
+      ms.sel=null;ms.selT=null;
+    }
+  }
+},
+
+finishMatchSession(){
+  let streakHit=null;
+  if(st.mcReviewed>0){streakHit=bumpStreak();st.xp+=st.mcXp;save();}
+  const totalRounds=st.mcRounds.length;
+  const perfectRounds=st.mcCorrect;
+  const xpEarned=st.mcXp;
+  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  h+=zekaHtml(perfectRounds===totalRounds?'Flawless!':perfectRounds>=totalRounds*0.7?'Nice work!':'Keep going!');
+  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center">';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+perfectRounds+'/'+totalRounds+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">PERFECT ROUNDS</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">+'+xpEarned+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">XP</div></div>';
+  h+='</div>';
+  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitMatch()">Done</button>';
+  h+='</div>';
+  document.getElementById('mc-body').innerHTML=h;
+  sDn();
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
+},
+
+exitMatch(){
+  sCl();
+  this.goHome();
+  this.setLearnMode('match');
+},
+
 // MATCH
 rMa(b,ex){
   st.matchSt={sel:null,selT:null,matched:[],err:0};
