@@ -3308,6 +3308,31 @@ renderFcHome(){
   el.innerHTML=h;
 },
 
+renderMatchHome(){
+  const el=document.getElementById('match-home');
+  const eligible=_mcEligibleCards();
+  const count=eligible.length;
+  let h='<div style="text-align:center;padding:14px 0 0">';
+  h+='<div style="font-size:48px;margin-bottom:8px">🧩</div>';
+  h+='<div style="font-size:22px;font-weight:800;color:#fff">Match the words</div>';
+  h+='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-top:6px">Pair words with their translations across your full vocabulary.</div>';
+  if(count<10){
+    h+='<div style="margin-top:24px;padding:24px;background:var(--surface);border-radius:14px;color:rgba(255,255,255,.7);font-size:13px;line-height:1.6">';
+    h+='Finish a few flashcards first to unlock matching.<br><span style="color:var(--g5);font-size:12px">You have '+count+' card'+(count!==1?'s':'')+' ready · need at least 10.</span>';
+    h+='</div>';
+    h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 4px 0 var(--sr-blue-d)" onclick="S.setLearnMode(\'flashcards\')">Go to flashcards →</button>';
+  }else{
+    h+='<div style="margin-top:24px;padding:18px;background:var(--surface);border-radius:14px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.6">';
+    h+='<div style="font-size:28px;font-weight:800;color:#fff;line-height:1">'+count+'</div>';
+    h+='<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700;color:var(--g5);margin-top:4px">Words ready</div>';
+    h+='<div style="margin-top:14px">Each session: <strong style="color:#fff">5 rounds × 5 pairs</strong>, weighted toward words you\'ve struggled with.</div>';
+    h+='</div>';
+    h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startMatchSession()">Start matching</button>';
+  }
+  h+='</div>';
+  el.innerHTML=h;
+},
+
 setFcNewLimit(n){
   st.fcNewLimit=n;save();
   this.renderFcHome();
@@ -4030,20 +4055,21 @@ finishVerbSession(){
 },
 
 setLearnMode(mode){
-  const modes=['lessons','flashcards','verbs','sentences'];
+  const modes=['lessons','flashcards','match','verbs','sentences'];
   const prev=st._learnMode||'lessons';
   const dir=modes.indexOf(mode)>modes.indexOf(prev)?1:-1;// 1 = slide left, -1 = slide right
   st._learnMode=mode;
   document.querySelectorAll('#learn-toggle .seg-btn').forEach((b,i)=>{
     b.classList.toggle('seg-active',i===modes.indexOf(mode));
   });
-  const containers={lessons:document.getElementById('hscr'),flashcards:document.getElementById('fc-home'),verbs:document.getElementById('grammar-home'),sentences:document.getElementById('sentence-home')};
+  const containers={lessons:document.getElementById('hscr'),flashcards:document.getElementById('fc-home'),match:document.getElementById('match-home'),verbs:document.getElementById('grammar-home'),sentences:document.getElementById('sentence-home')};
   // Animate previous out, new in
   const oldEl=containers[prev];
   const newEl=containers[mode];
   const renderNew=()=>{
     Object.entries(containers).forEach(([k,el])=>{el.style.display=k===mode?'':'none';});
     if(mode==='flashcards'&&typeof this.renderFcHome==='function')this.renderFcHome();
+    if(mode==='match'&&typeof this.renderMatchHome==='function')this.renderMatchHome();
     if(mode==='verbs')this.setGrammarMode(st.grammarMode||'verbs');
     if(mode==='sentences')this.renderSentHome();
     if(!REDUCED_MOTION&&prev!==mode){
