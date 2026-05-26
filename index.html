@@ -3035,7 +3035,7 @@ function getMasteryBuckets(){
   return{mastered,familiar,learning,notSeen,total,pctKnown};
 }
 
-// Cards with ≥2 lapses and ≤1 current correct streak. Sorted hardest-first.
+// Cards with ≥2 lapses and ≤2 current correct streak. Sorted hardest-first.
 // Each entry: {word, dir, key, lapses, streak, views, ease, accuracy}
 function getWeakCards(limit){
   const out=[];
@@ -3045,7 +3045,7 @@ function getWeakCards(limit){
       if(!c||c.reps===0)return;
       const lapses=c.lapses||0;
       const streak=c.streak||0;
-      if(lapses>=2&&streak<=1){
+      if(lapses>=2&&streak<=2){
         const views=c.views||0;
         const accuracy=views>0?Math.round((views-lapses)/views*100):0;
         out.push({word:w,dir,key:fcKey(w.id,dir),lapses,streak,views,ease:c.ease,accuracy});
@@ -3056,7 +3056,7 @@ function getWeakCards(limit){
   return limit?out.slice(0,limit):out;
 }
 
-// Cards that struggled (≥2 lapses) but are now on a streak (≥3 correct).
+// Cards that struggled (≥2 lapses) but are now on a streak (≥4 correct).
 function getBouncingBackCards(limit){
   const out=[];
   UNITS.flatMap(u=>u.words).forEach(w=>{
@@ -3065,7 +3065,7 @@ function getBouncingBackCards(limit){
       if(!c)return;
       const lapses=c.lapses||0;
       const streak=c.streak||0;
-      if(lapses>=2&&streak>=3){
+      if(lapses>=2&&streak>=4){
         out.push({word:w,dir,key:fcKey(w.id,dir),lapses,streak});
       }
     });
@@ -4769,9 +4769,9 @@ goProgress(){
 renderProgress(){
   const el=document.getElementById('pg-body');
   const buckets=getMasteryBuckets();
-  const weak=getWeakCards(5);
+  const weak=getWeakCards(8);
   const weakTotal=getWeakCards().length;
-  const bouncing=getBouncingBackCards(3);
+  const bouncing=getBouncingBackCards(5);
   const bouncingTotal=getBouncingBackCards().length;
   const wins=getRecentWins(buckets);
   const reviewedToday=st.fcReviewedToday||0;
