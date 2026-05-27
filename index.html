@@ -2465,6 +2465,7 @@ function setLang(code){
   VERBS=curLang==='sr'?V_SR:[];
   NOUNS=curLang==='sr'?N_SR:[];
   SENTENCES=curLang==='sr'?SENT_SR:[];
+  _SX_CACHE=null;
 }
 setLang(curLang);// Initialize on load
 
@@ -5141,6 +5142,107 @@ goProgress(){
   document.getElementById('pg-lang').innerHTML=langFlag()+' '+esc(langName());
   this.renderProgress();
   this.goScr('progress');
+},
+
+goSearch(){
+  this.goScr('search');
+  // Re-render results to refresh mastery state, then focus input
+  const input=document.getElementById('sx-input');
+  this.renderSearchResults(input.value||'');
+  setTimeout(()=>{if(input)input.focus();},50);
+},
+
+clearSearch(){
+  const input=document.getElementById('sx-input');
+  input.value='';
+  document.getElementById('sx-clear').style.display='none';
+  this.renderSearchResults('');
+  input.focus();
+},
+
+_sxDebounce:null,
+_sxExpanded:null,
+
+onSearchInput(){
+  const v=document.getElementById('sx-input').value;
+  document.getElementById('sx-clear').style.display=v?'':'none';
+  clearTimeout(this._sxDebounce);
+  this._sxDebounce=setTimeout(()=>this.renderSearchResults(v),120);
+},
+
+renderSearchResults(query){
+  const el=document.getElementById('sx-body');
+  const q=(query||'').trim();
+  if(!q){
+    const idx=sxIndex();
+    el.innerHTML='<div class="sx-empty">Type a word in '+esc(langName())+' or English to look it up.<br><span style="color:var(--g5);font-size:12px">'+idx.length+' entries available</span></div>';
+    this._sxExpanded=null;
+    return;
+  }
+  const results=sxSearch(q);
+  if(results.length===0){
+    el.innerHTML='<div class="sx-empty">No results for "<strong style="color:var(--text-2)">'+esc(q)+'</strong>".</div>';
+    this._sxExpanded=null;
+    return;
+  }
+  // Cap to a reasonable number for performance — 80 is plenty
+  const shown=results.slice(0,80);
+  let h='';
+  shown.forEach((r,i)=>{
+    const e=r.entry;
+    const isExpanded=this._sxExpanded===i;
+    h+='<div class="sx-row'+(isExpanded?' expanded':'')+'" onclick="S.toggleSearchExpand('+i+')">';
+    h+='<div class="sx-row-collapsed">';
+    h+='<div class="sx-source'+(e.type==='verb'?' verb-tag':'')+'">'+esc(e.source)+'</div>';
+    h+='<div class="sx-trans">'+esc(e.english)+'</div>';
+    h+='</div>';
+    if(isExpanded){h+=this._renderSearchExpansion(e);}
+    h+='</div>';
+  });
+  el.innerHTML=h;
+  // Store the result list for click handlers
+  this._sxLastResults=shown;
+},
+
+toggleSearchExpand(i){
+  this._sxExpanded=(this._sxExpanded===i)?null:i;
+  const q=document.getElementById('sx-input').value;
+  this.renderSearchResults(q);
+},
+
+_renderSearchExpansion(e){
+  let h='<div class="sx-expand">';
+  h+='<div class="sx-expand-word">'+esc(e.source)+spkBtn(e.source,curLang)+'</div>';
+  h+='<div class="sx-expand-trans">'+esc(e.english)+'</div>';
+  // Meta chips
+  const chips=[];
+  if(e.type==='word'){
+    if(e.unit.lv)chips.push('<span class="sx-meta-chip lvl">'+esc(e.unit.lv)+'</span>');
+    chips.push('<span class="sx-meta-chip">'+esc(e.unit.ic||'')+' '+esc(e.unit.t)+'</span>');
+    // Mastery state for this word (use 'se' direction as canonical)
+    const c=st.fc[fcKey(e.word.id,'se')];
+    let mast='new',label='Not yet seen';
+    if(c&&c.reps>=2&&c.ivl>=21){mast='mastered';label='Mastered';}
+    else if(c&&c.reps>=2){mast='familiar';label='Familiar';}
+    else if(c&&c.reps>=1){mast='learning';label='Learning';}
+    chips.push('<span class="sx-meta-chip mast-'+mast+'">'+label+'</span>');
+  }else{
+    chips.push('<span class="sx-meta-chip">Verb · base form</span>');
+  }
+  h+='<div class="sx-expand-meta">'+chips.join('')+'</div>';
+  // Verb conjugation table — keys are ja/ti/on/mi/vi/oni
+  if(e.type==='verb'&&e.verb.conj){
+    h+='<div class="sx-conj">';
+    const PRON_LABEL={ja:'ja',ti:'ti',on:'on/ona',mi:'mi',vi:'vi',oni:'oni'};
+    ['ja','ti','on','mi','vi','oni'].forEach(k=>{
+      if(e.verb.conj[k]){
+        h+='<div class="sx-conj-p">'+(PRON_LABEL[k]||k)+'</div><div class="sx-conj-v">'+esc(e.verb.conj[k])+'</div>';
+      }
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+  return h;
 },
 
 renderProgress(){
