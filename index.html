@@ -2465,7 +2465,10 @@ function setLang(code){
   VERBS=curLang==='sr'?V_SR:[];
   NOUNS=curLang==='sr'?N_SR:[];
   SENTENCES=curLang==='sr'?SENT_SR:[];
-  _SX_CACHE=null;
+  // Note: search-index cache invalidates automatically on next sxIndex() call
+  // when curLang changes (the cache stores _SX_LANG and compares). No explicit
+  // clear needed — and clearing here would crash at init since _SX_CACHE is
+  // declared later in the file (temporal dead zone).
 }
 setLang(curLang);// Initialize on load
 
