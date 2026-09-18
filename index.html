@@ -469,6 +469,10 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sx-meta-chip.mast-familiar{background:rgba(28,176,246,.16);color:var(--blue)}
 .sx-meta-chip.mast-learning{background:rgba(255,165,79,.16);color:var(--orange)}
 .sx-meta-chip.mast-new{background:rgba(255,255,255,.06);color:var(--g4)}
+.sx-meta-chip.gn{background:rgba(206,130,255,.16);color:var(--purple);text-transform:none;letter-spacing:0}
+.sx-ctx{margin-top:4px;font-size:13px;color:var(--text-2);line-height:1.45}
+.sx-ctx b{color:var(--blue);font-weight:700}
+.sx-ctx-en{font-size:12px;color:var(--text-3);margin-top:2px}
 .sx-conj{margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
 .sx-conj-p{color:var(--g5);font-weight:700}
 .sx-conj-v{color:var(--text-1);font-weight:600}
@@ -500,6 +504,12 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fc-em{font-size:40px;margin-bottom:8px}
 .fc-trans{font-size:24px;font-weight:800;color:var(--g7);margin-top:8px}
 .fc-hint{font-size:12px;color:rgba(255,255,255,.6);margin-top:20px}
+.fc-gn{margin-top:10px;font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--sr-blue);background:rgba(26,95,209,.1);padding:4px 10px;border-radius:999px;display:inline-block}
+.fc-ctx{margin-top:12px;padding:10px 12px;background:rgba(0,0,0,.05);border-radius:10px;width:100%;text-align:left}
+.fc-ctx-sr{font-size:14px;font-weight:600;color:var(--g7);line-height:1.4}
+.fc-ctx-sr b{color:var(--sr-blue)}
+.fc-ctx-en{font-size:12px;color:var(--g5);margin-top:3px}
+.fc-intro .fc-ctx{background:rgba(255,255,255,.1)}.fc-intro .fc-ctx-sr{color:#fff}.fc-intro .fc-ctx-sr b{color:#A6E26A}.fc-intro .fc-ctx-en{color:rgba(255,255,255,.6)}.fc-intro .fc-gn{background:rgba(255,255,255,.15);color:#fff}
 .fc-ratings{display:flex;gap:6px;margin-top:20px;width:100%;max-width:320px}
 .fc-rate-btn{flex:1;padding:12px 4px;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.15);transition:.1s}
 .fc-rate-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.15)}
@@ -989,12 +999,12 @@ p:[["Volim proleće","I love spring"],["Zima je hladna","Winter is cold"],["Rođ
 ["Деведесет","Devedeset","Ninety","9️⃣"],["Сто","Sto","One hundred","💯"]],
 p:[["Imam dvadeset godina","I am twenty years old"],["To košta pedeset dinara","That costs fifty dinars"],["Sto ljudi je tu","A hundred people are here"],["Ona ima trideset pet godina","She is thirty-five years old"]]},
 {id:49,t:"Prepositions",d:"Common Serbian prepositions",lv:"A1",ic:"📍",co:"#00CD9C",w:[
-["У","U","In","📦"],["На","Na","On","📌"],["Испод","Ispod","Under","⬇️"],["Изнад","Iznad","Above","⬆️"],
-["Поред","Pored","Next to","↔️"],["Испред","Ispred","In front of","⏩"],["Иза","Iza","Behind","⏪"],["Између","Između","Between","↔️"],
-["Кроз","Kroz","Through","🚪"],["Око","Oko","Around","🔄"],
-["Са","Sa","With","🤝"],["Од","Od","From","↩️"],["До","Do","To / Until","➡️"],["Код","Kod","At / By","🏠"],
-["Из","Iz","From / Out of","📤"],["За","Za","For","🎁"],["Пре","Pre","Before","⏮️"],["После","Posle","After","⏭️"],
-["Без","Bez","Without","🚫"],["Преко","Preko","Over / Across","🌉"],["Према","Prema","Toward","↗️"],["Против","Protiv","Against","🛡️"]],
+["У","U","In","📦","+ loc (where) · + acc (motion)"],["На","Na","On","📌","+ loc (where) · + acc (motion)"],["Испод","Ispod","Under","⬇️","+ gen"],["Изнад","Iznad","Above","⬆️","+ gen"],
+["Поред","Pored","Next to","↔️","+ gen"],["Испред","Ispred","In front of","⏩","+ gen"],["Иза","Iza","Behind","⏪","+ gen"],["Између","Između","Between","↔️","+ gen"],
+["Кроз","Kroz","Through","🚪","+ acc"],["Око","Oko","Around","🔄","+ gen"],
+["Са","Sa","With","🤝","+ ins"],["Од","Od","From","↩️","+ gen"],["До","Do","To / Until","➡️","+ gen"],["Код","Kod","At / By","🏠","+ gen"],
+["Из","Iz","From / Out of","📤","+ gen"],["За","Za","For","🎁","+ acc"],["Пре","Pre","Before","⏮️","+ gen"],["После","Posle","After","⏭️","+ gen"],
+["Без","Bez","Without","🚫","+ gen"],["Преко","Preko","Over / Across","🌉","+ gen"],["Према","Prema","Toward","↗️","+ dat"],["Против","Protiv","Against","🛡️","+ gen"]],
 p:[["Knjiga je na stolu","The book is on the table"],["Mačka je ispod kreveta","The cat is under the bed"],["Idem sa prijateljem","I am going with a friend"],["Doći ću posle ručka","I will come after lunch"],["Idemo do parka","We are going to the park"],["Ovo je za tebe","This is for you"]]},
 {id:80,t:"Communication Verbs",d:"Talking, thinking, remembering",lv:"A1",ic:"💬",co:"#9B59B6",w:[
 ["Причати","Pričati","To chat","💬"],["Мислити","Misliti","To think","🤔"],["Питати","Pitati","To ask","❓"],["Одговарати","Odgovarati","To answer","💡"],
@@ -1332,23 +1342,23 @@ p:[["Moramo da recikliramo više","We must recycle more"],["Obnovljiva energija 
 ["Методологија","Metodologija","Methodology","📋"],["Цитат","Citat","Citation","📝"],["Истраживач","Istraživač","Researcher","🔍"],["Дисертација","Disertacija","Dissertation","📕"],
 ["Рецензија","Recenzija","Peer review","👁️"],["Научни рад","Naučni rad","Scientific paper","📄"]],
 p:[["Hipoteza je potvrđena","The hypothesis was confirmed"],["Analiza podataka je završena","The data analysis is complete"],["Metodologija je jasna","The methodology is clear"],["Zaključak sledi iz dokaza","The conclusion follows from the evidence"]]},
-{id:80,t:"Complex Verb Forms",d:"Advanced conjugation",lv:"C1",ic:"📝",co:"#FF9600",w:[
+{id:89,t:"Complex Verb Forms",d:"Advanced conjugation",lv:"C1",ic:"📝",co:"#FF9600",w:[
 ["Био бих","Bio bih","I would be","🤔"],["Да сам знао","Da sam znao","Had I known","💭"],["Нека буде","Neka bude","Let it be","🙏"],
 ["Да би могао","Da bi mogao","So that he could","💡"],["Кад бих имао","Kad bih imao","If I had","🌟"],["Желео бих","Želeo bih","I would like","⭐"],
 ["Требало би","Trebalo bi","It should","👆"],["Могло би","Moglo bi","It could","🤷"],["Рекло би се","Reklo bi se","One would say","🗣️"],
 ["Чини ми се","Čini mi se","It seems to me","🧐"]],
 p:[["Bio bih srećan da dođeš","I would be happy if you came"],["Da sam znao, ne bih to uradio","Had I known, I wouldn't have done it"],["Želeo bih da naučim više","I would like to learn more"],["Trebalo bi da razgovaramo","We should talk"]]},
-{id:81,t:"Literature & Writing",d:"Books and authors",lv:"C1",ic:"📚",co:"#1CB0F6",w:[
+{id:90,t:"Literature & Writing",d:"Books and authors",lv:"C1",ic:"📚",co:"#1CB0F6",w:[
 ["Роман","Roman","Novel","📖"],["Поезија","Poezija","Poetry","📜"],["Приповетка","Pripovetka","Short story","📝"],["Песник","Pesnik","Poet","✍️"],
 ["Писац","Pisac","Writer","🖊️"],["Издавач","Izdavač","Publisher","🏢"],["Превод","Prevod","Translation","🔄"],["Наратив","Narativ","Narrative","📖"],
 ["Жанр","Žanr","Genre","📂"],["Рукопис","Rukopis","Manuscript","📜"]],
 p:[["Čitam srpski roman","I am reading a Serbian novel"],["Poezija me inspiriše","Poetry inspires me"],["Prevod je veran originalu","The translation is faithful to the original"],["Pisac je dobio nagradu","The writer won an award"]]},
-{id:82,t:"Philosophy & Ethics",d:"Deep thinking",lv:"C1",ic:"🤔",co:"#00CD9C",w:[
+{id:91,t:"Philosophy & Ethics",d:"Deep thinking",lv:"C1",ic:"🤔",co:"#00CD9C",w:[
 ["Морал","Moral","Morality","⚖️"],["Етика","Etika","Ethics","📋"],["Дужност","Dužnost","Duty","✊"],["Врлина","Vrlina","Virtue","⭐"],
 ["Слободна воља","Slobodna volja","Free will","🕊️"],["Разум","Razum","Reason","🧠"],["Бивствовање","Bivstvovanje","Existence","🌌"],
 ["Суштина","Suština","Essence","💎"],["Парадокс","Paradoks","Paradox","🔄"],["Дијалектика","Dijalektika","Dialectics","💬"]],
 p:[["Šta je smisao života?","What is the meaning of life?"],["Moral i etika su različiti","Morality and ethics are different"],["Razum vodi ka istini","Reason leads to truth"],["To je filozofski paradoks","That is a philosophical paradox"]]},
-{id:83,t:"Serbian Folklore",d:"Myths and tradition",lv:"C1",ic:"🧚",co:"#FF4B4B",w:[
+{id:92,t:"Serbian Folklore",d:"Myths and tradition",lv:"C1",ic:"🧚",co:"#FF4B4B",w:[
 ["Вила","Vila","Fairy","🧚"],["Вампир","Vampir","Vampire","🧛"],["Гусле","Gusle","Gusle (instrument)","🎻"],["Епска песма","Epska pesma","Epic poem","📜"],
 ["Јунак","Junak","Hero","🦸"],["Легенда","Legenda","Legend","📖"],["Обред","Obred","Ritual","🕯️"],["Коло","Kolo","Circle dance","💃"],
 ["Задруга","Zadruga","Extended family","👨‍👩‍👧‍👦"],["Гост","Gost","Guest","🤝"]],
@@ -1931,6 +1941,20 @@ const V_SR=[
 {inf:'gubiti',en:'to lose',em:'📉',conj:{ja:'gubim',ti:'gubiš',on:'gubi',mi:'gubimo',vi:'gubite',oni:'gube'}}
 ];
 
+// Imperfective → perfective partners. Shown as a hint on the dictionary card so
+// learners see both halves of the aspect pair; not separate flashcards.
+const V_SR_ASPECT={
+  kupovati:'kupiti',davati:'dati',pisati:'napisati',čitati:'pročitati',jesti:'pojesti',piti:'popiti',
+  učiti:'naučiti',govoriti:'reći',raditi:'uraditi',kuvati:'skuvati',
+  dolaziti:'doći',odlaziti:'otići',odgovarati:'odgovoriti',pomagati:'pomoći',zvati:'pozvati',
+  pitati:'upitati',gledati:'pogledati',slušati:'poslušati',nositi:'poneti',
+  stavljati:'staviti',donositi:'doneti',zaboravljati:'zaboraviti',slati:'poslati',birati:'izabrati',
+  praviti:'napraviti',plakati:'zaplakati',prati:'oprati',
+  'buditi se':'probuditi se','oblačiti se':'obući se','vraćati se':'vratiti se',
+  otvarati:'otvoriti',zatvarati:'zatvoriti',gubiti:'izgubiti',objašnjavati:'objasniti',
+  bacati:'baciti',hvatati:'uhvatiti',ljubiti:'poljubiti',grliti:'zagrliti'
+};
+
 // ═══════════════ NOUNS (for case drill) ═══════════════
 // cases: nom, gen, dat, acc, voc, ins, loc (singular)
 const N_SR=[
@@ -2461,6 +2485,10 @@ const STREAK_MILES=[3,7,14,30,100];
 function bumpStreak(){
   const today=new Date().toDateString();
   if(st.lastDate===today)return null;
+  // Missed a full day (or more) since the last activity → streak restarts.
+  // Previously this check only ran at load, so a session that stayed open
+  // across a skipped day kept incrementing a stale streak.
+  if(st.lastDate){const gap=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(gap>1)st.streak=0;}
   const prev=st.streak;
   st.streak++;
   st.lastDate=today;
@@ -2544,7 +2572,16 @@ function spkBtn(text,lang,cls){return '';}
 function spkWBtn(w,cls){return '';}
 
 function buildUnits(raw){
-  return raw.map(u=>({...u,words:u.w.map((w,i)=>({id:u.id*100+i,s:w[0],l:w[1],e:w[2],em:w[3]})),phrases:(u.p||[]).map(p=>({tl:p[0],en:p[1]}))}));
+  const units=raw.map(u=>({...u,words:u.w.map((w,i)=>({id:u.id*100+i,s:w[0],l:w[1],e:w[2],em:w[3],gn:w[4]||''})),phrases:(u.p||[]).map(p=>({tl:p[0],en:p[1]}))}));
+  // Word ids are unit.id*100+position, so a duplicate unit id (or a unit with
+  // >99 words) silently merges SRS state across different words. Warn loudly.
+  const seen=new Set();
+  units.forEach(u=>{
+    if(seen.has(u.id))console.warn('[Zeka] duplicate unit id',u.id,u.t);
+    seen.add(u.id);
+    if(u.words.length>99)console.warn('[Zeka] unit',u.id,'has >99 words; word ids will collide');
+  });
+  return units;
 }
 function setLang(code){
   curLang=code;localStorage.setItem('zeka_lang',code);
@@ -2580,6 +2617,35 @@ function normEN(s){
   s=s.replace(/\blicence\b/g,'license');s=s.replace(/\bpractise\b/g,'practice');
   s=s.replace(/\bmum\b/g,'mom');s=s.replace(/\bflat\b/g,'apartment');
   return s;
+}
+
+// ═══════════════ SERBIAN NORMALIZATION + CONTEXT ═══════════════
+// Lowercase and strip diacritics (č/ć→c, š→s, ž→z) plus đ→d (đ has no
+// combining-mark decomposition) so a learner typing without accents isn't
+// marked wrong.
+function normSR(s){return(s||'').toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');}
+
+// Stem key for matching a headword against its declined/conjugated forms in a
+// sentence. Short words (≤3 letters) must match exactly to avoid false hits.
+function _fcStemKey(l){const w=normSR((l||'').split(' ')[0]).replace(/[^a-z]/g,'');if(w.length<=3)return{k:w,exact:true};return{k:w.slice(0,w.length>=5?4:3),exact:false};}
+function _fcTokHit(core,sk){if(!sk.k)return false;return sk.exact?core===sk.k:core.startsWith(sk.k);}
+
+// One example sentence that uses this word: the word's own unit phrases first,
+// then the sentence bank. Returns {tl,en} or null.
+function fcContextFor(word){
+  if(!word||!word.l)return null;
+  const sk=_fcStemKey(word.l);if(!sk.k||sk.k.length<2)return null;
+  const hit=txt=>normSR(txt).split(/\s+/).some(t=>_fcTokHit(t.replace(/[^a-z]/g,''),sk));
+  const unit=UNITS.find(u=>u.words.some(x=>x.id===word.id));
+  if(unit&&unit.phrases){const p=unit.phrases.find(p=>hit(p.tl));if(p)return{tl:p.tl,en:p.en};}
+  if(typeof SENTENCES!=='undefined'&&SENTENCES.length){const s=SENTENCES.find(s=>hit(s.sr));if(s)return{tl:s.sr,en:s.en};}
+  return null;
+}
+
+// Bold the token(s) in a sentence that belong to the headword.
+function fcHighlight(sentence,wordL){
+  const sk=_fcStemKey(wordL);
+  return sentence.split(/(\s+)/).map(tok=>{const core=normSR(tok).replace(/[^a-z]/g,'');return _fcTokHit(core,sk)?'<b>'+esc(tok)+'</b>':esc(tok);}).join('');
 }
 
 // ═══════════════ ELO SYSTEM ═══════════════
@@ -3041,7 +3107,7 @@ function fcGet(wordId,dir){
 const FC_NEW_LIMIT_DEFAULT=30;
 function _fcResetDayIfNeeded(){
   const today=new Date().toDateString();
-  if(st.fcNewDate!==today){st.fcNewDate=today;st.fcNewToday=0;st.fcReviewedToday=0;}
+  if(st.fcNewDate!==today){st.fcNewDate=today;st.fcNewToday=0;st.fcReviewedToday=0;save();}
 }
 function fcNewLimitRemaining(){
   _fcResetDayIfNeeded();
@@ -3074,6 +3140,7 @@ function fcRate(wordId,dir,rating){
     else if(rating===3){c.ivl=Math.max(1,c.ivl*c.ease*1.3);c.ease+=0.15;}
     c.reps++;
   }
+  c.ease=Math.min(3,c.ease);// SM-2 style cap: unbounded ease produces multi-year intervals
   c.due=now+c.ivl*86400000;
   // Count this introduction toward today's new-card budget
   if(wasBrandNew){_fcResetDayIfNeeded();st.fcNewToday++;}
@@ -3241,7 +3308,9 @@ function getRecentWins(buckets){
     if(st.streak>=n){
       let when='';
       if(st.lastDate){
-        const daysAgo=Math.max(0,st.streak-n);
+        // Milestone was hit (streak-n) days before the last activity; add the days since then
+        const sinceLast=Math.max(0,Math.floor((new Date(new Date().toDateString())-new Date(st.lastDate))/864e5));
+        const daysAgo=Math.max(0,st.streak-n)+sinceLast;
         when=daysAgo===0?'today':daysAgo===1?'yesterday':daysAgo+'d ago';
       }
       wins.push({icon:'⭐',title:n+'-day streak',when,sortKey:1000+n});
@@ -3281,6 +3350,26 @@ function casePrefix(n){
     if(!pre)return '';
   }
   return pre;
+}
+
+// Weak-spot analysis: per-unit accuracy and recognition-vs-production gap,
+// derived from flashcard views/lapses. Returns null until enough data exists.
+function getWeakAreas(){
+  const MIN_UNIT_VIEWS=8,MIN_TOTAL=40;
+  let total=0;const dir={se:{v:0,l:0},es:{v:0,l:0}};const units=[];
+  UNITS.forEach(u=>{
+    let v=0,l=0;
+    u.words.forEach(w=>{['se','es'].forEach(d=>{
+      const c=st.fc[fcKey(w.id,d)];if(!c||!c.views)return;
+      v+=c.views;l+=c.lapses||0;dir[d].v+=c.views;dir[d].l+=c.lapses||0;
+    });});
+    total+=v;
+    if(v>=MIN_UNIT_VIEWS)units.push({unit:u,views:v,acc:Math.round((v-l)/v*100)});
+  });
+  if(total<MIN_TOTAL)return null;
+  units.sort((a,b)=>a.acc-b.acc||b.views-a.views);
+  const pct=o=>o.v?Math.round((o.v-o.l)/o.v*100):null;
+  return{units:units.slice(0,3),se:pct(dir.se),es:pct(dir.es),total};
 }
 
 // ═══════════════ MATCH (cross-subject) ═══════════════
@@ -3377,31 +3466,22 @@ function buildOverflowSession(){
   // Pool 3: top weak cards (already filtered by getWeakCards)
   const weak=getWeakCards(4).map(item=>({word:item.word,dir:item.dir,key:item.key,isNew:false}));
 
-  // Compose, cap at 15
-  const newCount=Math.min(moreNew.length,7);
-  const previewCount=Math.min(previewReviews.length,8);
-  const weakCount=Math.min(weak.length,4);
-  const session=[
-    ...moreNew.slice(0,newCount),
-    ...previewReviews.slice(0,previewCount),
-    ...weak.slice(0,weakCount)
-  ].slice(0,15);
-
+  // Compose, dedupe by card key (a weak card can also be due soon), cap at 15
+  const seen=new Set();const session=[];
+  const take=(arr,n,tag)=>{for(const c of arr){if(session.length>=15||n<=0)break;if(seen.has(c.key))continue;seen.add(c.key);session.push({...c,_pool:tag});n--;}};
+  take(moreNew,7,'new');take(previewReviews,8,'preview');take(weak,4,'weak');
   if(session.length===0)return null;
-
+  // Breakdown reflects what actually made the cut, not the pool sizes
+  const breakdown={new:0,preview:0,weak:0};session.forEach(c=>breakdown[c._pool]++);
   // Shuffle for variety
-  for(let i=session.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [session[i],session[j]]=[session[j],session[i]];
-  }
-
-  return{cards:session,breakdown:{new:newCount,preview:previewCount,weak:weakCount}};
+  for(let i=session.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[session[i],session[j]]=[session[j],session[i]];}
+  return{cards:session,breakdown};
 }
 
 // ═══════════════ DICTIONARY SEARCH ═══════════════
 
 // Normalize for matching: lowercase + strip diacritics (ć→c, ž→z, etc.)
-function _sxNorm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+function _sxNorm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\u0111/g,'d');}
 
 // Build the flat searchable index for the current language.
 // Returns array of {type, word, source, english, normSource, normEnglish}
@@ -3647,6 +3727,9 @@ renderFcCard(){
     h+='<div class="fc-intro-word">'+esc(w.l)+'</div>';
     h+='<div class="fc-intro-spk">'+spkBtn(w.l,curLang)+'</div>';
     h+='<div class="fc-intro-trans">'+esc(w.e)+'</div>';
+    if(w.gn)h+='<div class="fc-gn">'+esc(w.gn)+'</div>';
+    const introCtx=fcContextFor(w);
+    if(introCtx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(introCtx.tl,w.l)+'</div><div class="fc-ctx-en">'+esc(introCtx.en)+'</div></div>';
     h+='<button class="fc-intro-cta" onclick="S.gotItFc()">Got it · Continue</button>';
     h+='<div class="fc-intro-hint">You\'ll see this card again in a few minutes to test recall.</div>';
     h+='</div>';
@@ -3672,6 +3755,9 @@ renderFcCard(){
   h+='<div class="fc-em">'+w.em+'</div>';
   h+='<div class="fc-trans">'+esc(backText)+'</div>';
   h+=spkBtn(backText,backLang);
+  if(w.gn)h+='<div class="fc-gn">'+esc(w.gn)+'</div>';
+  const ctx=fcContextFor(w);
+  if(ctx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(ctx.tl,w.l)+'</div><div class="fc-ctx-en">'+esc(ctx.en)+'</div></div>';
   h+='</div>';
   h+='</div></div>';
   h+='<div class="fc-ratings" id="fc-ratings" style="display:none">';
@@ -4264,8 +4350,8 @@ checkSent(){
   const inputs=document.querySelectorAll('.sent-blank');
   let allCorrect=true;
   inputs.forEach(inp=>{
-    const val=(inp.value||'').trim().toLowerCase();
-    const ans=(inp.dataset.answer||'').toLowerCase();
+    const val=normSR(inp.value);
+    const ans=normSR(inp.dataset.answer);
     st.sentTotal++;
     if(val===ans){
       st.sentCorrect++;inp.classList.add('cor');
@@ -4279,7 +4365,6 @@ checkSent(){
   if(allCorrect){sCl();haptic('success');}else{sNo();haptic('error');}
   btn.textContent='Next';
   // Mark today's daily as done if this was today's sentence
-  if(s.id===this._sentDailyIdx()+(SENTENCES[0]?SENTENCES[0].id-1:0)){/*no-op safety*/}
   if(s.id===(SENTENCES[this._sentDailyIdx()]||{}).id){
     this._sentResetDayIfNeeded();
     if(!st.sentDoneToday.includes(s.id)){st.sentDoneToday.push(s.id);save();}
@@ -4289,7 +4374,7 @@ checkSent(){
 exitSent(){sCl();this.goHome();this.setLearnMode('sentences');},
 
 finishSentSession(){
-  sDn();save();
+  sDn();
   const el=document.getElementById('sn-body');
   const pct=st.sentTotal>0?Math.round(st.sentCorrect/st.sentTotal*100):0;
   const streakHit=(st.sentTotal>0)?bumpStreak():null;
@@ -4367,31 +4452,31 @@ setLearnMode(mode){
   }
 },
 
+_ofHandler:null,
 toggleOverflowMenu(e){
   if(e&&e.stopPropagation)e.stopPropagation();
   const m=document.getElementById('overflow-menu');
   if(!m)return;
-  const isOpen=m.style.display!=='none';
-  if(isOpen){m.style.display='none';return;}
+  if(m.style.display!=='none'){this.closeOverflowMenu();return;}
   m.style.display='flex';
-  // Click-outside to close (next tick so this same click doesn't close it)
+  // Click-outside to close (next tick so this same click doesn't close it).
+  // The handler is stored so closeOverflowMenu can always detach it — an item
+  // click closes the menu from inside, which previously left the listener attached.
   setTimeout(()=>{
-    const handler=(ev)=>{
-      if(!m.contains(ev.target)){
-        m.style.display='none';
-        document.removeEventListener('click',handler,true);
-      }
-    };
-    document.addEventListener('click',handler,true);
+    if(this._ofHandler)document.removeEventListener('click',this._ofHandler,true);
+    this._ofHandler=(ev)=>{if(!m.contains(ev.target))this.closeOverflowMenu();};
+    document.addEventListener('click',this._ofHandler,true);
   },0);
 },
 
 closeOverflowMenu(){
   const m=document.getElementById('overflow-menu');
   if(m)m.style.display='none';
+  if(this._ofHandler){document.removeEventListener('click',this._ofHandler,true);this._ofHandler=null;}
 },
 
 setGrammarMode(mode){
+  if(mode==='cases'&&curLang!=='sr')mode='verbs';// normalise before persisting
   st.grammarMode=mode;
   // Hide Cases tab for non-Serbian languages
   const casesBtn=document.getElementById('gr-cases-btn');
@@ -5309,7 +5394,7 @@ renderSearchResults(query){
   let h='';
   shown.forEach((r,i)=>{
     const e=r.entry;
-    const isExpanded=this._sxExpanded===i;
+    const isExpanded=this._sxExpanded===(e.type+'|'+e.source);
     h+='<div class="sx-row'+(isExpanded?' expanded':'')+'" onclick="S.toggleSearchExpand('+i+')">';
     h+='<div class="sx-row-collapsed">';
     h+='<div class="sx-source'+(e.type==='verb'?' verb-tag':'')+'">'+esc(e.source)+'</div>';
@@ -5324,7 +5409,9 @@ renderSearchResults(query){
 },
 
 toggleSearchExpand(i){
-  this._sxExpanded=(this._sxExpanded===i)?null:i;
+  // Key by entry identity, not list index — typing re-sorts results and an index would drift
+  const r=(this._sxLastResults||[])[i];const k=r?(r.entry.type+'|'+r.entry.source):null;
+  this._sxExpanded=(k&&this._sxExpanded===k)?null:k;
   const q=document.getElementById('sx-input').value;
   this.renderSearchResults(q);
 },
@@ -5338,6 +5425,7 @@ _renderSearchExpansion(e){
   if(e.type==='word'){
     if(e.unit.lv)chips.push('<span class="sx-meta-chip lvl">'+esc(e.unit.lv)+'</span>');
     chips.push('<span class="sx-meta-chip">'+esc(e.unit.ic||'')+' '+esc(e.unit.t)+'</span>');
+    if(e.word.gn)chips.push('<span class="sx-meta-chip gn">'+esc(e.word.gn)+'</span>');
     // Mastery state for this word (use 'se' direction as canonical)
     const c=st.fc[fcKey(e.word.id,'se')];
     let mast='new',label='Not yet seen';
@@ -5346,9 +5434,15 @@ _renderSearchExpansion(e){
     else if(c&&c.reps>=1){mast='learning';label='Learning';}
     chips.push('<span class="sx-meta-chip mast-'+mast+'">'+label+'</span>');
   }else{
-    chips.push('<span class="sx-meta-chip">Verb · base form</span>');
+    const ap=(typeof V_SR_ASPECT!=='undefined')?V_SR_ASPECT[e.verb.inf]:null;
+    chips.push('<span class="sx-meta-chip">'+(ap?'Verb · imperfective':'Verb')+'</span>');
+    if(ap)chips.push('<span class="sx-meta-chip gn">perfective: '+esc(ap)+'</span>');
   }
   h+='<div class="sx-expand-meta">'+chips.join('')+'</div>';
+  if(e.type==='word'){
+    const ctx=fcContextFor(e.word);
+    if(ctx)h+='<div class="sx-ctx">'+fcHighlight(ctx.tl,e.word.l)+'<div class="sx-ctx-en">'+esc(ctx.en)+'</div></div>';
+  }
   // Verb conjugation table — keys are ja/ti/on/mi/vi/oni
   if(e.type==='verb'&&e.verb.conj){
     h+='<div class="sx-conj">';
@@ -5416,6 +5510,31 @@ renderProgress(){
   h+='</div>';
 
   // Mastery
+  // Weak spots
+  const wa=getWeakAreas();
+  h+='<div class="pg-section-l">Weak spots</div>';
+  h+='<div class="pg-card">';
+  if(!wa){
+    h+='<div class="pg-empty">Grade ~40 more cards to unlock weak-spot analysis.</div>';
+  }else{
+    if(wa.se!==null&&wa.es!==null){
+      const gap=wa.se-wa.es;
+      let note='Balanced — recognition and production are keeping pace.';
+      if(gap>=12)note='Production is lagging — you recognise more than you can produce. Lean on English → '+langName()+' cards.';
+      else if(gap<=-12)note='Recognition is lagging — you can produce but stumble reading. Lean on '+langName()+' → English cards.';
+      h+='<div class="pg-bucket-row"><span>Recognition · '+esc(langName())+' → English</span><span>'+wa.se+'%</span></div>';
+      h+='<div class="pg-bucket-row"><span>Production · English → '+esc(langName())+'</span><span>'+wa.es+'%</span></div>';
+      h+='<div style="font-size:12px;color:var(--g4);margin:6px 0 10px;line-height:1.4">'+esc(note)+'</div>';
+    }
+    if(wa.units.length){
+      h+='<div style="font-size:11px;font-weight:800;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;margin:4px 0 2px">Lowest-accuracy topics</div>';
+      wa.units.forEach(x=>{
+        h+='<div class="pg-item"><div><div class="pg-word">'+esc(x.unit.ic||'')+' '+esc(x.unit.t)+'</div><div class="pg-trans">'+x.views+' reviews</div></div><div class="pg-meta '+(x.acc<70?'bad':'good')+'">'+x.acc+'% accuracy</div></div>';
+      });
+    }
+  }
+  h+='</div>';
+
   h+='<div class="pg-section-l">Mastery</div>';
   h+='<div class="pg-card">';
   if(buckets.total===0){
