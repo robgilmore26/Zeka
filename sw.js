@@ -1,4 +1,4 @@
-const CACHE='zeka-v61';
+const CACHE='zeka-v62';
 const ASSETS=[
   'index.html',
   'manifest.json',
@@ -27,10 +27,12 @@ self.addEventListener('fetch',e=>{
      url.includes('gsi/client')||url.includes('gsi/status')){
     return;// Let the browser handle these normally
   }
-  // Network-first for HTML pages (prevents stale cache)
+  // Network-first for HTML pages. cache:'no-cache' revalidates with the server
+  // (ETag/304) instead of trusting the browser's HTTP cache, so a fresh deploy
+  // shows up on the next load without a hard refresh.
   if(e.request.mode==='navigate'||url.endsWith('.html')){
     e.respondWith(
-      fetch(e.request).then(res=>{
+      fetch(e.request.url,{cache:'no-cache',credentials:'same-origin'}).then(res=>{
         if(res.ok){const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));}
         return res;
       }).catch(()=>caches.match(e.request).then(r=>r||caches.match('index.html')))

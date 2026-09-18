@@ -124,7 +124,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .elo-badge{background:var(--sr-blue);color:#fff;padding:3px 11px;border-radius:8px;font-size:14px;font-weight:800;font-family:var(--font-display);font-feature-settings:'tnum' on;letter-spacing:.2px}
 .elo-badge.pulse{animation:eloPulse .4s ease}
 @keyframes eloPulse{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
-.hscr{flex:1;overflow-y:auto;padding:0 0 100px;scroll-behavior:smooth;overscroll-behavior-y:contain}
+.hscr{flex:1;overflow-y:auto;padding:0 0 calc(110px + env(safe-area-inset-bottom,0px));scroll-behavior:smooth;overscroll-behavior-y:contain}
 .hscr::-webkit-scrollbar{display:none}
 /* Long-press unit preview sheet */
 .lp-sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:1000;display:flex;flex-direction:column;justify-content:flex-end}
@@ -398,7 +398,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 
 /* PROGRESS */
 #progress{background:var(--bg)}
-#pg-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px}
+#pg-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
 .pg-head{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,20px) + 18px) 18px 16px}
 .pg-head h2{margin:0;font-size:22px;font-weight:800;color:#fff}
 .pg-head .pg-lang{font-size:13px;font-weight:700;opacity:.6}
@@ -455,8 +455,11 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sx-input::placeholder{color:var(--text-3)}
 .sx-clear{background:none;border:none;color:var(--g4);font-size:18px;cursor:pointer;padding:6px 10px;border-radius:8px}
 .sx-clear:active{background:rgba(255,255,255,.06)}
-.sx-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0 100px}
+.sx-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0 calc(110px + env(safe-area-inset-bottom,0px))}
 .sx-empty{text-align:center;padding:60px 24px;color:var(--g4);font-size:14px;line-height:1.5}
+.sx-fuzzy{padding:10px 18px 4px;font-size:12px;color:var(--orange);font-weight:700}
+.upd-pill{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:2000;border:none;border-radius:999px;padding:11px 18px;font-size:13px;font-weight:600;color:#fff;background:var(--sr-blue);box-shadow:0 8px 24px rgba(0,0,0,.4);cursor:pointer;white-space:nowrap}
+.upd-pill b{font-weight:800}
 .sx-row{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .12s}
 .sx-row:active,.sx-row.expanded{background:rgba(255,255,255,.03)}
 .sx-row-collapsed{display:flex;align-items:center;justify-content:space-between;gap:14px}
@@ -853,9 +856,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <button class="overflow-item" onclick="S.setLearnMode('sentences');S.closeOverflowMenu()">Sentences</button>
   </div>
   <div class="hscr" id="hscr" style="display:none"></div>
-  <div id="fc-home" style="flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
-  <div id="match-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
-  <div id="grammar-home" style="display:none;flex:1;overflow-y:auto;padding:0 22px 100px">
+  <div id="fc-home" style="flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
+  <div id="match-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
+  <div id="grammar-home" style="display:none;flex:1;overflow-y:auto;padding:0 22px calc(110px + env(safe-area-inset-bottom,0px))">
     <div class="seg-toggle" id="grammar-toggle" style="margin-top:12px">
       <button class="seg-btn seg-active" onclick="S.setGrammarMode('verbs')">Verbs</button>
       <button class="seg-btn" onclick="S.setGrammarMode('cases')" id="gr-cases-btn">Cases</button>
@@ -863,7 +866,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div id="verb-home"></div>
     <div id="case-home" style="display:none"></div>
   </div>
-  <div id="sentence-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px 100px"></div>
+  <div id="sentence-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
     <button class="ni" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
@@ -977,13 +980,13 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div class="pelbl">ELO Rating</div>
     <div id="p-fcode-display"></div>
   </div>
-  <div style="flex:1;overflow-y:auto;padding-bottom:80px;-webkit-overflow-scrolling:touch">
+  <div style="flex:1;overflow-y:auto;padding-bottom:calc(110px + env(safe-area-inset-bottom,0px));-webkit-overflow-scrolling:touch">
   <div id="p-set-user"></div>
   <div class="psg">
     <div class="psc"><div class="psc-i">🔥</div><div class="psc-v" id="p-str">0</div><div class="psc-l">Streak</div></div>
     <div class="psc"><div class="psc-i">⚡</div><div class="psc-v" id="p-xp">0</div><div class="psc-l">Total XP</div></div>
     <div class="psc"><div class="psc-i">📚</div><div class="psc-v" id="p-les">0</div><div class="psc-l">Lessons</div></div>
-    <div class="psc"><div class="psc-i">🏆</div><div class="psc-v" id="p-wrd">0</div><div class="psc-l">Words</div></div>
+    <div class="psc"><div class="psc-i">🏆</div><div class="psc-v" id="p-wrd">0</div><div class="psc-l">Words learned</div></div>
   </div>
   <div id="p-friends"></div>
   <div class="pach" id="p-ach"></div>
@@ -2053,7 +2056,8 @@ const V_SR=[
 {inf:'objašnjavati',en:'to explain',em:'📝',conj:{ja:'objašnjavam',ti:'objašnjavaš',on:'objašnjava',mi:'objašnjavamo',vi:'objašnjavate',oni:'objašnjavaju'}},
 {inf:'otvarati',en:'to open (ongoing)',em:'🚪',conj:{ja:'otvaram',ti:'otvaraš',on:'otvara',mi:'otvaramo',vi:'otvarate',oni:'otvaraju'}},
 {inf:'zatvarati',en:'to close (ongoing)',em:'🔒',conj:{ja:'zatvaram',ti:'zatvaraš',on:'zatvara',mi:'zatvaramo',vi:'zatvarate',oni:'zatvaraju'}},
-{inf:'gubiti',en:'to lose',em:'📉',conj:{ja:'gubim',ti:'gubiš',on:'gubi',mi:'gubimo',vi:'gubite',oni:'gube'}}
+{inf:'gubiti',en:'to lose',em:'📉',conj:{ja:'gubim',ti:'gubiš',on:'gubi',mi:'gubimo',vi:'gubite',oni:'gube'}},
+{inf:'doći',en:'to come (once)',em:'🚪',conj:{ja:'dođem',ti:'dođeš',on:'dođe',mi:'dođemo',vi:'dođete',oni:'dođu'}}
 ];
 
 // Imperfective → perfective partners. Shown as a hint on the dictionary card so
@@ -2738,7 +2742,7 @@ function normEN(s){
 // Lowercase and strip diacritics (č/ć→c, š→s, ž→z) plus đ→d (đ has no
 // combining-mark decomposition) so a learner typing without accents isn't
 // marked wrong.
-function normSR(s){return(s||'').toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');}
+function normSR(s){return(s||'').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\u0111/g,'d').replace(/dj/g,'d');}
 
 // Stem key for matching a headword against its declined/conjugated forms in a
 // sentence. Short words (≤3 letters) must match exactly to avoid false hits.
@@ -3476,6 +3480,18 @@ function fcTotalCards(){
 
 // ═══════════════ PROGRESS VIEW DERIVATIONS ═══════════════
 
+// Distinct words with any evidence of learning: graded at least once as a
+// flashcard (either direction) or answered correctly in a lesson. Used for the
+// "Words learned" figure on both Profile and Progress so the two agree.
+function learnedWordCount(){
+  let n=0;
+  UNITS.forEach(u=>u.words.forEach(w=>{
+    const a=st.fc[fcKey(w.id,'se')],b=st.fc[fcKey(w.id,'es')],ws=st.ws[w.id];
+    if((a&&a.reps>=1)||(b&&b.reps>=1)||(ws&&ws.c>0))n++;
+  }));
+  return n;
+}
+
 // Bucket each (word,dir) card by SRS state.
 // Returns {mastered, familiar, learning, notSeen, total, pctKnown}
 function getMasteryBuckets(){
@@ -3654,10 +3670,11 @@ function buildMatchSession(){
   const groupCount=Math.floor(picked.length/groupSize);
   if(groupCount===0)return null;
   const rounds=[];
+  const startSE=Math.random()<0.5;
   for(let i=0;i<groupCount;i++){
     const group=picked.slice(i*groupSize,(i+1)*groupSize);
-    // Random direction per round: 'se' = source→english, 'es' = english→source
-    const dir=Math.random()<0.5?'se':'es';
+    // Directions alternate round to round (random start): 'se' = source→english, 'es' = english→source
+    const dir=(i%2===0)===(startSE)?'se':'es';
     rounds.push({
       pairs:group.map(g=>({id:g.word.id,l:g.word.l,e:g.word.e})),
       dir
@@ -3720,19 +3737,28 @@ function buildOverflowSession(){
 // ═══════════════ DICTIONARY SEARCH ═══════════════
 
 // Normalize for matching: lowercase + strip diacritics (ć→c, ž→z, etc.)
-function _sxNorm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\u0111/g,'d');}
+// đ has no decomposition and is typed as "dj" on keyboards without it, so both
+// spellings fold to "d" (on the query and the index alike).
+function _sxNorm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\u0111/g,'d').replace(/dj/g,'d');}
+// Levenshtein with an early exit, for the close-match fallback.
+function _sxLev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let prev=[];for(let j=0;j<=b.length;j++)prev[j]=j;for(let i=1;i<=a.length;i++){const cur=[i];let rowMin=i;for(let j=1;j<=b.length;j++){const v=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));cur[j]=v;if(v<rowMin)rowMin=v;}if(rowMin>max)return max+1;prev=cur;}return prev[b.length];}
 
 // Build the flat searchable index for the current language.
 // Returns array of {type, word, source, english, normSource, normEnglish}
 function _sxIndex(){
   const idx=[];
+  // alt: extra searchable tokens — Cyrillic spelling for words; aspect partner and
+  // present-tense forms for verbs — so "dolazim", "doći" or a Cyrillic query resolve.
   UNITS.forEach(u=>{
     u.words.forEach(w=>{
-      idx.push({type:'word',word:w,unit:u,source:w.l,english:w.e,normSource:_sxNorm(w.l),normEnglish:_sxNorm(w.e)});
+      idx.push({type:'word',word:w,unit:u,source:w.l,english:w.e,normSource:_sxNorm(w.l),normEnglish:_sxNorm(w.e),alt:_sxNorm(w.s||'').split(/\s+/).filter(Boolean)});
     });
   });
+  const ASP=(typeof V_SR_ASPECT!=='undefined')?V_SR_ASPECT:{};
   VERBS.forEach(v=>{
-    idx.push({type:'verb',verb:v,source:v.inf,english:v.en,normSource:_sxNorm(v.inf),normEnglish:_sxNorm(v.en)});
+    const partner=ASP[v.inf]||Object.keys(ASP).find(k=>ASP[k]===v.inf)||'';
+    const alt=[partner,...Object.values(v.conj||{})].filter(Boolean).map(_sxNorm).flatMap(t=>t.split(/\s+/)).filter(Boolean);
+    idx.push({type:'verb',verb:v,source:v.inf,english:v.en,normSource:_sxNorm(v.inf),normEnglish:_sxNorm(v.en),alt});
   });
   return idx;
 }
@@ -3758,9 +3784,22 @@ function sxSearch(query){
   idx.forEach(e=>{
     const sS=_sxScore(e.normSource,q);
     const sE=_sxScore(e.normEnglish,q);
-    const score=Math.max(sS,sE);
+    // Alias hits (present forms, aspect partner, Cyrillic) rank below a headword exact match
+    let sA=0;(e.alt||[]).forEach(t=>{sA=Math.max(sA,Math.min(2,_sxScore(t,q)));});
+    const score=Math.max(sS,sE,sA);
     if(score>0)results.push({entry:e,score});
   });
+  if(!results.length&&q.length>=4){
+    // Close-match fallback: one edit away (two for longer queries) from a headword or alias token
+    const max=q.length>=7?2:1;
+    idx.forEach(e=>{
+      const toks=[e.normSource,...(e.alt||[])];
+      let best=max+1;toks.forEach(t=>{if(t.length>=3){const d=_sxLev(q,t,max);if(d<best)best=d;}});
+      if(best<=max)results.push({entry:e,score:0.5,fuzzy:true,dist:best});
+    });
+    results.sort((a,b)=>a.dist-b.dist||a.entry.source.localeCompare(b.entry.source));
+    return results;
+  }
   results.sort((a,b)=>b.score-a.score||a.entry.source.localeCompare(b.entry.source));
   return results;
 }
@@ -3924,7 +3963,8 @@ renderMatchHome(){
     h+='<div style="margin-top:24px;padding:18px;background:var(--surface);border-radius:14px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.6">';
     h+='<div style="font-size:28px;font-weight:800;color:#fff;line-height:1">'+count+'</div>';
     h+='<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700;color:var(--g5);margin-top:4px">Words ready</div>';
-    h+='<div style="margin-top:14px">Each session: <strong style="color:#fff">5 rounds × 5 pairs</strong>, weighted toward words you\'ve struggled with.</div>';
+    const rounds=Math.min(5,Math.floor(Math.min(count,25)/5));
+    h+='<div style="margin-top:14px">This session: <strong style="color:#fff">'+rounds+' round'+(rounds!==1?'s':'')+' × 5 pairs</strong>, directions alternating, weighted toward words you\'ve struggled with.'+(rounds<5?' <span style="color:var(--g5)">Five rounds once 25+ words are ready.</span>':'')+'</div>';
     h+='</div>';
     h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startMatchSession()">Start matching</button>';
   }
@@ -5392,7 +5432,7 @@ async goProfile(){
   document.getElementById('p-str').textContent=st.streak;
   document.getElementById('p-xp').textContent=st.xp;
   document.getElementById('p-les').textContent=st.completed.length;
-  document.getElementById('p-wrd').textContent=Object.keys(st.ws).filter(k=>st.ws[k].c>0).length;
+  document.getElementById('p-wrd').textContent=learnedWordCount();
 
   // Username + friend code display
   const usrDisp=document.getElementById('p-username-display');
@@ -5694,13 +5734,14 @@ renderSearchResults(query){
   }
   const results=sxSearch(q);
   if(results.length===0){
-    el.innerHTML='<div class="sx-empty">No results for "<strong style="color:var(--text-2)">'+esc(q)+'</strong>".</div>';
+    el.innerHTML='<div class="sx-empty">No results for "<strong style="color:var(--text-2)">'+esc(q)+'</strong>".<br><span style="font-size:12px;color:var(--g5)">The dictionary lists base forms — infinitives, nominative nouns — plus present-tense verb forms. Try the base form.</span></div>';
     this._sxExpanded=null;
     return;
   }
   // Cap to a reasonable number for performance — 80 is plenty
   const shown=results.slice(0,80);
   let h='';
+  if(shown[0]&&shown[0].fuzzy)h+='<div class="sx-fuzzy">No exact match for "'+esc(q)+'" — showing close matches</div>';
   shown.forEach((r,i)=>{
     const e=r.entry;
     const isExpanded=this._sxExpanded===(e.type+'|'+e.source);
@@ -5743,9 +5784,12 @@ _renderSearchExpansion(e){
     else if(c&&c.reps>=1){mast='learning';label='Learning';}
     chips.push('<span class="sx-meta-chip mast-'+mast+'">'+label+'</span>');
   }else{
-    const ap=(typeof V_SR_ASPECT!=='undefined')?V_SR_ASPECT[e.verb.inf]:null;
-    chips.push('<span class="sx-meta-chip">'+(ap?'Verb · imperfective':'Verb')+'</span>');
+    const ASP=(typeof V_SR_ASPECT!=='undefined')?V_SR_ASPECT:{};
+    const ap=ASP[e.verb.inf]||null;
+    const ip=ap?null:(Object.keys(ASP).find(k=>ASP[k]===e.verb.inf)||null);
+    chips.push('<span class="sx-meta-chip">'+(ap?'Verb · imperfective':ip?'Verb · perfective':'Verb')+'</span>');
     if(ap)chips.push('<span class="sx-meta-chip gn">perfective: '+esc(ap)+'</span>');
+    if(ip)chips.push('<span class="sx-meta-chip gn">imperfective: '+esc(ip)+'</span>');
   }
   h+='<div class="sx-expand-meta">'+chips.join('')+'</div>';
   if(e.type==='word'){
@@ -5781,7 +5825,7 @@ renderProgress(){
   // Hero row
   h+='<div class="pg-hero">';
   h+='<div class="pg-stat"><div class="pg-stat-i">🔥</div><div class="pg-stat-v">'+(st.streak||0)+'</div><div class="pg-stat-l">Streak</div></div>';
-  h+='<div class="pg-stat"><div class="pg-stat-i">🏆</div><div class="pg-stat-v">'+buckets.mastered+'</div><div class="pg-stat-l">Words</div></div>';
+  h+='<div class="pg-stat"><div class="pg-stat-i">🏆</div><div class="pg-stat-v">'+learnedWordCount()+'</div><div class="pg-stat-l">Words learned</div></div>';
   h+='<div class="pg-stat"><div class="pg-stat-i">⚡</div><div class="pg-stat-v">'+reviewedToday+'</div><div class="pg-stat-l">Today</div></div>';
   h+='</div>';
 
@@ -6047,9 +6091,22 @@ if(st.xp>0||st.completed.length>0)S.goHome();
   }catch(e){console.warn('[capacitor init]',e);}
 })();
 
+function showUpdatePill(){
+  if(document.getElementById('upd-pill'))return;
+  const p=document.createElement('button');p.id='upd-pill';p.className='upd-pill';
+  p.innerHTML='Zeka updated · <b>Tap to reload</b>';
+  p.onclick=()=>location.reload();
+  document.body.appendChild(p);
+}
 // SERVICE WORKER (skipped inside native Capacitor — the app IS the bundle)
 if('serviceWorker' in navigator&&!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
+  // A new worker taking control of an already-open page means a new build is live
+  let _swHadController=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(_swHadController)showUpdatePill();
+    _swHadController=true;
+  });
 }
 </script>
 </body>
