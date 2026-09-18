@@ -91,19 +91,21 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .elo-float.pos{color:var(--green)}.elo-float.neg{color:var(--red)}
 
 /* SPLASH */
-#splash{background:radial-gradient(ellipse at 50% 30%,#1F3556 0%,#0A0E13 70%);align-items:center;justify-content:center;gap:18px;position:relative;overflow:hidden}
+#splash{background:radial-gradient(ellipse at 50% 30%,#1F3556 0%,#0A0E13 70%);overflow:hidden}
+.sp-scroll{flex:1;min-height:0;width:100%;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;justify-content:safe center;gap:18px;padding:24px 0;position:relative;z-index:1;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.sp-scroll::-webkit-scrollbar{display:none}
 #splash::before{content:'';position:absolute;inset:-100px;pointer-events:none;background-image:radial-gradient(circle at 30% 30%,rgba(26,95,209,.18),transparent 35%),radial-gradient(circle at 70% 70%,rgba(255,165,79,.12),transparent 40%);animation:splashGlow 2s ease-out}
 #splash::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 0%,transparent 60%,rgba(0,0,0,.4) 100%);animation:vignetteIn 1.2s ease-out;animation-fill-mode:both}
-#splash > *{position:relative;z-index:1;animation:splashRise .9s cubic-bezier(.22,.61,.36,1);animation-fill-mode:both;opacity:0;transform:translateY(20px)}
-#splash > *:nth-child(1){animation-delay:.1s}
-#splash > *:nth-child(2){animation-delay:.35s}
-#splash > *:nth-child(3){animation-delay:.55s}
-#splash > *:nth-child(4){animation-delay:.7s}
-#splash > *:nth-child(5){animation-delay:.85s}
+.sp-scroll > *{animation:splashRise .9s cubic-bezier(.22,.61,.36,1);animation-fill-mode:both;opacity:0;transform:translateY(20px)}
+.sp-scroll > *:nth-child(1){animation-delay:.1s}
+.sp-scroll > *:nth-child(2){animation-delay:.35s}
+.sp-scroll > *:nth-child(3){animation-delay:.55s}
+.sp-scroll > *:nth-child(4){animation-delay:.7s}
+.sp-scroll > *:nth-child(5){animation-delay:.85s}
 @keyframes splashRise{0%{opacity:0;transform:translateY(24px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes splashGlow{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1)}}
 @keyframes vignetteIn{0%{opacity:0}100%{opacity:1}}
-.sp-icon{animation:zekaHop 1s cubic-bezier(.34,1.56,.64,1)!important;animation-delay:.05s;animation-fill-mode:both}
+.sp-scroll > .sp-icon{animation:zekaHop 1s cubic-bezier(.34,1.56,.64,1) .1s both}
 .sp-icon img{filter:drop-shadow(0 12px 30px rgba(26,95,209,.4))}
 @keyframes zekaHop{0%{opacity:0;transform:translateY(60px) scale(.5) rotate(-12deg)}55%{transform:translateY(-12px) scale(1.08) rotate(3deg)}75%{transform:translateY(4px) scale(.96) rotate(-1deg)}100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}}
 .sp-t{color:#fff;font-family:var(--font-display);font-size:var(--t-hero);font-weight:900;text-align:center;letter-spacing:-.02em;line-height:1}
@@ -484,6 +486,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .auth-btn:active{transform:translateY(2px)}
 .auth-msg{font-size:12px;margin-top:10px;min-height:16px;color:rgba(255,255,255,.7);line-height:1.4;max-width:280px;margin-left:auto;margin-right:auto;text-align:center}
 #prof .auth-in{background:var(--surface);border-color:var(--divider)}
+.auth-link{display:block;margin:12px auto 0;background:none;border:none;color:rgba(255,255,255,.55);font-size:12px;font-weight:700;letter-spacing:.3px;cursor:pointer;padding:6px 10px;text-decoration:underline;text-underline-offset:3px}
+.auth-link:active{color:#fff}
+.auth-more{margin-top:6px}
 .sx-conj{margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
 .sx-conj-p{color:var(--g5);font-weight:700}
 .sx-conj-v{color:var(--text-1);font-weight:600}
@@ -730,6 +735,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 <div class="sbar" id="sbar"><span id="stime">9:41</span><div style="display:flex;gap:5px;align-items:center;font-size:12px"><span>&#9679;&#9679;&#9679;&#9679;</span><span>&#128267;</span></div></div>
 
 <div class="sc act" id="splash">
+<div class="sp-scroll">
   <div class="sp-icon"><img src="icon-192.png" style="width:120px;height:120px;border-radius:28px;box-shadow:0 10px 30px rgba(0,0,0,.4)" alt="Zeka"></div>
   <div class="sp-t" style="margin-top:12px">Zeka</div>
   <div class="sp-s" id="sp-sub">Learn a language &middot; A1 to C1</div>
@@ -738,20 +744,24 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <button class="lang-flag" onclick="pickLang('it')" title="Italian"><img src="https://flagcdn.com/w40/it.png" alt="🇮🇹" style="height:28px"></button>
   </div>
   <div id="sp-loading" style="color:rgba(255,255,255,.7);font-size:14px;font-weight:600;margin-top:30px">Loading...</div>
-  <div id="sp-auth" style="display:none;margin-top:26px">
+  <div id="sp-auth" style="display:none;margin-top:22px">
     <div id="g-signin-btn"></div>
-    <div class="auth-or">or</div>
-    <div class="auth-form">
-      <input class="auth-in" id="sp-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off">
-      <input class="auth-in" id="sp-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
-      <button class="auth-btn" onclick="emailAuth('sp')">Sign in / Create account</button>
-    </div>
-    <div class="auth-form" style="margin-top:10px">
-      <input class="auth-in" id="sp-guest" type="text" placeholder="Guest name (no account needed)" autocomplete="off" autocapitalize="off">
-      <button class="auth-btn sec" onclick="enterGuest('sp')">Continue as guest</button>
+    <button class="auth-link" id="sp-more-link" onclick="toggleAuthMore('sp')">Other ways to sign in</button>
+    <div id="sp-more" class="auth-more" style="display:none">
+      <div class="auth-form">
+        <input class="auth-in" id="sp-guest" type="text" placeholder="Guest name (no account needed)" autocomplete="off" autocapitalize="off">
+        <button class="auth-btn sec" onclick="enterGuest('sp')">Continue as guest</button>
+      </div>
+      <div class="auth-or">or</div>
+      <div class="auth-form">
+        <input class="auth-in" id="sp-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off">
+        <input class="auth-in" id="sp-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
+        <button class="auth-btn" onclick="emailAuth('sp')">Sign in / Create account</button>
+      </div>
     </div>
     <div class="auth-msg" id="sp-auth-msg"></div>
   </div>
+</div>
 </div>
 
 <div class="sc" id="home">
@@ -2830,6 +2840,12 @@ function enterGuest(prefix){
   if(fbUser){fbSignOut();return;}
   load();S.goHome();updateSyncUI();
 }
+function toggleAuthMore(prefix){
+  const m=document.getElementById(prefix+'-more'),l=document.getElementById(prefix+'-more-link');if(!m)return;
+  const open=m.style.display!=='none';m.style.display=open?'none':'';
+  if(l)l.textContent=open?'Other ways to sign in':'Hide other options';
+  if(!open){const g=document.getElementById(prefix+'-guest');if(g)setTimeout(()=>g.focus(),50);}
+}
 function exitGuest(){
   GUEST=null;localStorage.removeItem('zeka_guest');
   location.reload();
@@ -3653,7 +3669,7 @@ goScr(id){
   }
 },
 
-goHome(){this.updH();this.rPath();this.goScr('home');},
+goHome(){this.updH();this.rPath();this.goScr('home');this.setLearnMode(st._learnMode||'flashcards');},
 
 renderFcHome(){
   const el=document.getElementById('fc-home');
