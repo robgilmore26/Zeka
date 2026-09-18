@@ -473,6 +473,17 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sx-ctx{margin-top:4px;font-size:13px;color:var(--text-2);line-height:1.45}
 .sx-ctx b{color:var(--blue);font-weight:700}
 .sx-ctx-en{font-size:12px;color:var(--text-3);margin-top:2px}
+/* AUTH (email / guest) */
+.auth-or{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:14px 0 10px}
+.auth-form{display:flex;flex-direction:column;gap:8px;width:280px;max-width:100%;margin:0 auto}
+.auth-in{padding:11px 14px;border:1.5px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;font-size:14px;font-weight:600;font-family:var(--font);outline:none}
+.auth-in::placeholder{color:rgba(255,255,255,.45)}
+.auth-in:focus{border-color:var(--sr-blue)}
+.auth-btn{padding:11px 14px;border:none;border-radius:12px;font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)}
+.auth-btn.sec{background:rgba(255,255,255,.12);box-shadow:none;color:rgba(255,255,255,.85)}
+.auth-btn:active{transform:translateY(2px)}
+.auth-msg{font-size:12px;margin-top:10px;min-height:16px;color:rgba(255,255,255,.7);line-height:1.4;max-width:280px;margin-left:auto;margin-right:auto;text-align:center}
+#prof .auth-in{background:var(--surface);border-color:var(--divider)}
 .sx-conj{margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
 .sx-conj-p{color:var(--g5);font-weight:700}
 .sx-conj-v{color:var(--text-1);font-weight:600}
@@ -727,7 +738,20 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <button class="lang-flag" onclick="pickLang('it')" title="Italian"><img src="https://flagcdn.com/w40/it.png" alt="🇮🇹" style="height:28px"></button>
   </div>
   <div id="sp-loading" style="color:rgba(255,255,255,.7);font-size:14px;font-weight:600;margin-top:30px">Loading...</div>
-  <div id="g-signin-btn" style="display:none;margin-top:30px"></div>
+  <div id="sp-auth" style="display:none;margin-top:26px">
+    <div id="g-signin-btn"></div>
+    <div class="auth-or">or</div>
+    <div class="auth-form">
+      <input class="auth-in" id="sp-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off">
+      <input class="auth-in" id="sp-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
+      <button class="auth-btn" onclick="emailAuth('sp')">Sign in / Create account</button>
+    </div>
+    <div class="auth-form" style="margin-top:10px">
+      <input class="auth-in" id="sp-guest" type="text" placeholder="Guest name (no account needed)" autocomplete="off" autocapitalize="off">
+      <button class="auth-btn sec" onclick="enterGuest('sp')">Continue as guest</button>
+    </div>
+    <div class="auth-msg" id="sp-auth-msg"></div>
+  </div>
 </div>
 
 <div class="sc" id="home">
@@ -883,6 +907,14 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   <div class="sync-sec">
     <button class="sync-btn" id="sync-btn" onclick="fbSignOut()" style="display:none">Sign Out</button>
     <div id="g-signin-prof" style="display:flex;justify-content:center"></div>
+    <div id="pf-auth" class="auth-form" style="margin-top:12px">
+      <input class="auth-in" id="pf-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off">
+      <input class="auth-in" id="pf-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
+      <button class="auth-btn" onclick="emailAuth('pf')">Sign in / Create account</button>
+      <input class="auth-in" id="pf-guest" type="text" placeholder="Guest name (no account needed)" autocomplete="off" autocapitalize="off" style="margin-top:8px">
+      <button class="auth-btn sec" onclick="enterGuest('pf')">Continue as guest</button>
+      <div class="auth-msg" id="pf-auth-msg"></div>
+    </div>
     <div class="sync-status" id="sync-status"></div>
   </div>
   </div>
@@ -2690,6 +2722,8 @@ const fbDb=firebase.firestore();
 const googleProvider=new firebase.auth.GoogleAuthProvider();
 let fbUser=null;
 let _fbSaveTimer=null;
+// Local guest profile (no Firebase). Persisted so a reload stays signed in as guest.
+let GUEST=localStorage.getItem('zeka_guest')||null;
 
 // Keep user signed in across sessions
 fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
@@ -2753,11 +2787,59 @@ function fbSignOut(){
   }
 }
 
+// ═══════════════ EMAIL / GUEST SIGN-IN ═══════════════
+// Google One Tap stays the primary path. Email+password lets testers (and
+// bots) in without a Google account; it needs the Email/Password provider
+// switched on in Firebase Console → Authentication → Sign-in method.
+// Guest mode is fully local: progress is stored in localStorage under the
+// guest name and never touches Firestore.
+function _lsKey(){return 'zeka_'+(GUEST?'g_'+GUEST+'_':'')+curLang;}
+function _authMsg(txt,err){['sp-auth-msg','pf-auth-msg'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=txt||'';el.style.color=err?'var(--red)':'rgba(255,255,255,.7)';}});}
+function _authErr(e){
+  const c=(e&&e.code)||'';
+  if(c==='auth/operation-not-allowed')return 'Email sign-in is not enabled yet (Firebase Console → Authentication → Sign-in method → Email/Password).';
+  if(c==='auth/wrong-password')return 'Wrong password.';
+  if(c==='auth/invalid-email')return 'That email address looks invalid.';
+  if(c==='auth/weak-password')return 'Password must be at least 6 characters.';
+  if(c==='auth/email-already-in-use')return 'That email is already registered — check the password.';
+  if(c==='auth/too-many-requests')return 'Too many attempts — wait a minute and try again.';
+  return (e&&e.message)||'Sign-in failed.';
+}
+async function emailAuth(prefix){
+  const email=((document.getElementById(prefix+'-email')||{}).value||'').trim();
+  const pw=(document.getElementById(prefix+'-pw')||{}).value||'';
+  if(!email||pw.length<6){_authMsg('Enter an email and a password of 6+ characters.',true);return;}
+  _authMsg('Signing in…');
+  try{
+    await fbAuth.signInWithEmailAndPassword(email,pw);
+  }catch(e){
+    const c=e&&e.code;
+    if(c==='auth/user-not-found'||c==='auth/invalid-credential'||c==='auth/invalid-login-credentials'){
+      try{await fbAuth.createUserWithEmailAndPassword(email,pw);_authMsg('Account created — welcome!');}
+      catch(e2){_authMsg(_authErr(e2),true);}
+    }else{_authMsg(_authErr(e),true);}
+  }
+}
+function enterGuest(prefix){
+  const raw=(document.getElementById(prefix+'-guest')||{}).value||'';
+  const name=raw.trim().toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20);
+  if(name.length<2){_authMsg('Pick a guest name — letters/numbers, at least 2 characters.',true);return;}
+  GUEST=name;localStorage.setItem('zeka_guest',name);
+  // If a Firebase user is signed in, signing out fires onAuthStateChanged(null),
+  // which sees GUEST and enters guest mode; otherwise enter directly.
+  if(fbUser){fbSignOut();return;}
+  load();S.goHome();updateSyncUI();
+}
+function exitGuest(){
+  GUEST=null;localStorage.removeItem('zeka_guest');
+  location.reload();
+}
+
 function showSplashReady(){
   const ld=document.getElementById('sp-loading');
-  const btnDiv=document.getElementById('g-signin-btn');
+  const auth=document.getElementById('sp-auth');
   if(ld)ld.style.display='none';
-  if(btnDiv)btnDiv.style.display='';
+  if(auth)auth.style.display='';
 }
 
 function getStateData(){
@@ -2825,8 +2907,14 @@ fbAuth.onAuthStateChanged(async user=>{
   fbUser=user;
   _authResolved=true;
   if(user){
+    // A real account supersedes any guest profile
+    if(GUEST){GUEST=null;localStorage.removeItem('zeka_guest');}
     load();// Load local state for current language first
     await fbLoad();
+    S.goHome();
+  }else if(GUEST){
+    // Local guest profile — no cloud, no Google
+    load();
     S.goHome();
   }else{
     document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
@@ -2850,9 +2938,11 @@ function updateSyncUI(){
   const nameEl=document.getElementById('p-name');
   const emailEl=document.getElementById('p-email');
   const profGBtn=document.getElementById('g-signin-prof');
+  const pfAuth=document.getElementById('pf-auth');
   if(fbUser){
     if(btn){btn.style.display='';btn.textContent='Sign Out';btn.onclick=fbSignOut;}
     if(profGBtn)profGBtn.style.display='none';
+    if(pfAuth)pfAuth.style.display='none';
     if(status)status.textContent='☁️ Synced as '+fbUser.email;
     if(avatar&&fbUser.photoURL){
       avatar.innerHTML='<img src="'+esc(fbUser.photoURL)+'" style="width:60px;height:60px;border-radius:50%;object-fit:cover" alt="Profile" referrerpolicy="no-referrer" onerror="this.src=\'icon-192.png\';this.style.borderRadius=\'16px\'">';
@@ -2861,9 +2951,18 @@ function updateSyncUI(){
     const hasUsername=document.getElementById('p-username-display')&&document.getElementById('p-username-display').textContent.trim();
     if(nameEl){nameEl.style.display=hasUsername?'none':'';if(fbUser.displayName)nameEl.textContent=fbUser.displayName;}
     if(emailEl){emailEl.style.display=hasUsername?'none':'';emailEl.textContent=fbUser.email;}
+  }else if(GUEST){
+    if(btn){btn.style.display='';btn.textContent='Exit guest';btn.onclick=exitGuest;}
+    if(profGBtn)profGBtn.style.display='none';
+    if(pfAuth)pfAuth.style.display='none';
+    if(status)status.textContent='👤 Guest · @'+GUEST+' — progress is saved on this device only';
+    if(avatar)avatar.innerHTML='<img src="icon-192.png" style="width:60px;height:60px;border-radius:16px" alt="Zeka">';
+    if(nameEl)nameEl.textContent='';
+    if(emailEl)emailEl.textContent='';
   }else{
     if(btn)btn.style.display='none';
     if(profGBtn)profGBtn.style.display='flex';
+    if(pfAuth)pfAuth.style.display='';
     if(status)status.innerHTML='';
     if(avatar)avatar.innerHTML='<img src="icon-192.png" style="width:60px;height:60px;border-radius:16px" alt="Zeka">';
     if(nameEl)nameEl.textContent='';
@@ -3074,16 +3173,16 @@ function load(){try{
   // Migrate old single-language key to new per-language format
   const old=localStorage.getItem('srb_v2');
   if(old&&!localStorage.getItem('zeka_sr')){localStorage.setItem('zeka_sr',old);localStorage.removeItem('srb_v2');}
-  const s=localStorage.getItem('zeka_'+curLang);if(s){
+  const s=localStorage.getItem(_lsKey());if(s){
   applyStateData(JSON.parse(s));
 }}catch(e){}}
 
-function saveLocal(){try{localStorage.setItem('zeka_'+curLang,JSON.stringify(getStateData()));
+function saveLocal(){try{localStorage.setItem(_lsKey(),JSON.stringify(getStateData()));
 }catch(e){}}
 
 function save(){
   saveLocal();
-  fbSaveCloud();
+  if(!GUEST)fbSaveCloud();// guest profiles never write to Firestore
   try{const i=document.getElementById('save-ind');if(i){i.classList.add('show');setTimeout(()=>i.classList.remove('show'),1200);}
   }catch(e){}
 }
