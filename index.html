@@ -678,7 +678,41 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   .fbar{padding-bottom:env(safe-area-inset-bottom,8px)}
   .cp-btn{margin-bottom:env(safe-area-inset-bottom,8px)}
 }
-@media(max-height:750px){#phone{transform:scale(.85);transform-origin:center}}
+@media(max-height:750px) and (max-width:899px){#phone{transform:scale(.85);transform-origin:center}}
+/* Large screens: taller shell, readable type, marketing column beside it while on the splash */
+@media(min-width:900px){
+  :root{--app-zoom:1.06}
+  body{gap:64px;padding:16px;align-items:safe center;overflow-y:auto}
+  #phone{width:min(450px,100vw - 32px);height:min(100vh - 32px,1000px);border-radius:44px;transform:none!important;flex-shrink:0}
+  #scr{zoom:var(--app-zoom);width:calc(100% / var(--app-zoom));height:calc(100% / var(--app-zoom))}
+}
+#landing{display:none}
+@media(min-width:1000px){
+  body.on-splash #landing{display:block}
+}
+@media(display-mode:standalone){#landing{display:none!important}}
+#landing{width:min(460px,42vw);color:#fff;font-family:var(--font)}
+.ld-eyebrow{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:14px}
+.ld-h1{font-family:var(--font-display);font-size:clamp(30px,3vw,40px);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin:0 0 12px}
+.ld-sub{font-size:15px;line-height:1.5;color:rgba(255,255,255,.78);margin:0 0 18px}
+.ld-list{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;gap:10px}
+.ld-list li{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.4;color:rgba(255,255,255,.85)}
+.ld-list .ld-ic{flex:0 0 34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:18px}
+.ld-list b{color:#fff}
+.ld-demo{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 14px;margin-bottom:20px}
+@media(max-height:860px){.ld-demo{display:none}}
+.ld-demo-q{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px}
+.ld-demo-w{font-family:var(--font-display);font-size:22px;font-weight:800;margin-bottom:10px}
+.ld-opt{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;border:1.5px solid rgba(255,255,255,.12);font-size:13.5px;font-weight:600;margin-bottom:4px;color:rgba(255,255,255,.8)}
+.ld-opt.ok{border-color:var(--green);background:rgba(88,204,2,.14);color:#fff}
+.ld-opt .ld-dot{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.3);flex-shrink:0}
+.ld-opt.ok .ld-dot{border-color:var(--green);background:var(--green)}
+.ld-demo-fb{font-size:13px;font-weight:800;color:var(--green);margin-top:8px}
+.ld-cta{display:inline-block;padding:15px 26px;border:none;border-radius:14px;font-size:15px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)}
+.ld-cta:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
+.ld-alt{font-size:13px;color:rgba(255,255,255,.6);margin-top:12px}
+.ld-foot{font-size:12px;color:rgba(255,255,255,.45);margin-top:18px;display:flex;gap:14px;flex-wrap:wrap}
+.ld-foot a{color:rgba(255,255,255,.7)}
 
 /* USERNAME & FRIENDS */
 .prof-user{font-size:22px;font-weight:800;color:#fff;margin-top:6px}
@@ -741,7 +775,28 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fm-msg.inf{background:#ddf4ff;color:var(--blue-d)}
 </style>
 </head>
-<body>
+<body class="on-splash">
+<aside id="landing" aria-label="About Zeka">
+  <div class="ld-eyebrow">Zeka · Serbian &amp; Italian</div>
+  <h1 class="ld-h1">Learn Serbian the way memory actually works.</h1>
+  <p class="ld-sub">Short lessons from A1 to C1, flashcards that resurface a word right before you'd forget it, and drills for the grammar that trips learners up: cases, verbs and real sentences.</p>
+  <ul class="ld-list">
+    <li><span class="ld-ic">📚</span><span><b>Lessons, A1 → C1.</b> 90+ topical units of about ten words each, tested with multiple choice, matching and typing.</span></li>
+    <li><span class="ld-ic">⚡</span><span><b>Spaced-repetition flashcards.</b> Every card shows the word in a real sentence, with case tags and aspect pairs.</span></li>
+    <li><span class="ld-ic">🧩</span><span><b>Match, verbs, cases, sentences.</b> 80 conjugated verbs, all seven cases, and a daily sentence drill.</span></li>
+  </ul>
+  <div class="ld-demo">
+    <div class="ld-demo-q">What a lesson feels like</div>
+    <div class="ld-demo-w">Dobar dan</div>
+    <div class="ld-opt"><span class="ld-dot"></span>Good night</div>
+    <div class="ld-opt ok"><span class="ld-dot"></span>Good day</div>
+    <div class="ld-opt"><span class="ld-dot"></span>Thank you</div>
+    <div class="ld-demo-fb">✓ Correct! +10 XP</div>
+  </div>
+  <button class="ld-cta" onclick="enterGuest('sp')">Try without an account →</button>
+  <div class="ld-alt">Progress stays on this device. Sign in on the right to sync across devices and add friends.</div>
+  <div class="ld-foot"><span>Free · no ads</span><a href="help/">Help &amp; FAQ</a><a href="https://github.com/robgilmore26/Zeka" rel="noopener">Source</a></div>
+</aside>
 <div id="phone"><div id="scr">
 <div class="notch"></div>
 <div class="sbar" id="sbar"><span id="stime">9:41</span><div style="display:flex;gap:5px;align-items:center;font-size:12px"><span>&#9679;&#9679;&#9679;&#9679;</span><span>&#128267;</span></div></div>
@@ -2948,6 +3003,7 @@ fbAuth.onAuthStateChanged(async user=>{
   }else{
     document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
     document.getElementById('splash').classList.add('act');
+    document.body.classList.add('on-splash');
     showSplashReady();
     // Highlight current language on splash
     document.querySelectorAll('.lang-flag').forEach(b=>{b.classList.toggle('sel',b.title===langName());});
@@ -3670,6 +3726,7 @@ sh(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.rando
 pk(a,n,ex=[]){return this.sh(a.filter(x=>!ex.includes(x))).slice(0,n)},
 
 goScr(id){
+  document.body.classList.toggle('on-splash',id==='splash');
   const apply=()=>{
     document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
     document.getElementById(id).classList.add('act');
