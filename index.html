@@ -695,7 +695,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   :root{--app-zoom:1.06}
   body{gap:64px;padding:16px;align-items:safe center;overflow-y:auto}
   #phone{width:min(450px,100vw - 32px);height:min(100vh - 32px,1000px);border-radius:44px;transform:none!important;flex-shrink:0}
-  #scr{zoom:var(--app-zoom);width:calc(100% / var(--app-zoom));height:calc(100% / var(--app-zoom))}
+  #scr{width:calc(100% / var(--app-zoom));height:calc(100% / var(--app-zoom));transform:scale(var(--app-zoom));transform-origin:0 0}
 }
 #landing{display:none}
 @media(min-width:1000px){
