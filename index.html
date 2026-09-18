@@ -502,6 +502,14 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .fc-help-link{background:none;border:none;color:rgba(255,255,255,.5);font-size:11px;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-top:8px;padding:4px 8px}
 .fc-help{margin-top:8px;font-size:12px;color:rgba(255,255,255,.72);line-height:1.5;text-align:left;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 12px}
 .fc-help b{color:#fff}
+.fc-backlog{margin:10px 0 4px;padding:14px 16px;border-radius:16px;background:linear-gradient(135deg,rgba(26,95,209,.28),rgba(26,95,209,.10));border:1px solid rgba(28,176,246,.35);text-align:left}
+.fc-backlog-t{font-size:15px;font-weight:800;color:#fff}
+.fc-backlog-s{font-size:12.5px;color:rgba(255,255,255,.78);line-height:1.5;margin-top:6px}
+.fc-backlog-btns{display:flex;gap:8px;margin-top:12px}
+.fc-backlog-go{flex:1;padding:11px 10px;border:none;border-radius:12px;font-size:13px;font-weight:800;cursor:pointer;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)}
+.fc-backlog-skip{padding:11px 12px;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.75);background:rgba(255,255,255,.1)}
+.fc-session-note{margin-top:10px;font-size:12px;font-weight:700;color:rgba(255,255,255,.7)}
+.fc-session-note b{color:#fff}
 .fc-source-toggle button.act{background:var(--sr-blue);color:#fff}
 /* INTRODUCTION view — shown first encounter, before any test */
 .fc-intro{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;width:100%;max-width:360px;padding:12px 4px;animation:fadeInUp .35s ease}
@@ -3289,6 +3297,53 @@ function fcGet(wordId,dir){
 
 // Daily new-card limit (Anki-style)
 const FC_NEW_LIMIT_DEFAULT=30;
+// Backlog handling for returning learners: sessions are capped so a pile of
+// overdue reviews is chipped away 30 at a time, and a large pile can be
+// spread over the coming days instead of all landing today.
+const FC_SESSION_CAP=30;      // max cards per session
+const FC_SESSION_NEW_SLICE=5; // new cards kept in a capped session
+const FC_BACKLOG_THRESHOLD=60;// reviews due before the welcome-back offer appears
+const FC_SMOOTH_PER_DAY=40;   // reviews left due per day when spreading a backlog
+
+// How overdue a review is relative to its own interval — cards with short
+// intervals that are long past due are the most likely to have been forgotten.
+function _fcOverdueRatio(c,now){const ivlMs=Math.max(c.ivl||0,1/24)*86400000;return (now-(c.due||now))/ivlMs;}
+
+// Compose one session from the due breakdown: most-overdue reviews first,
+// a small slice of new cards, capped at FC_SESSION_CAP.
+// Returns {cards, reviews, news, capped, remaining}
+function fcBuildSession(bd){
+  bd=bd||fcDueBreakdown();
+  const now=Date.now();
+  const reviews=[...bd.reviews].sort((a,b)=>{
+    const ca=st.fc[a.key]||{},cb=st.fc[b.key]||{};
+    return _fcOverdueRatio(cb,now)-_fcOverdueRatio(ca,now)||(cb.lapses||0)-(ca.lapses||0)||(ca.due||0)-(cb.due||0);
+  });
+  const news=bd.all.filter(c=>c.isNew);
+  const capped=reviews.length+news.length>FC_SESSION_CAP;
+  let takeNew=news.length,takeRev=reviews.length;
+  if(capped){
+    takeNew=Math.min(news.length,FC_SESSION_NEW_SLICE);
+    takeRev=Math.min(reviews.length,FC_SESSION_CAP-takeNew);
+    takeNew=Math.min(news.length,FC_SESSION_CAP-takeRev);
+  }
+  const cards=[...reviews.slice(0,takeRev),...news.slice(0,takeNew)];
+  return{cards,reviews:takeRev,news:takeNew,capped,remaining:reviews.length-takeRev+(news.length-takeNew)};
+}
+
+// Spread today's review backlog: the most at-risk FC_SMOOTH_PER_DAY stay due
+// now; each following chunk of the same size is pushed one more day out.
+// Intervals, ease and lapses are untouched — only the due dates move.
+function fcSmoothBacklog(){
+  const now=Date.now();
+  const due=fcDueBreakdown().reviews.sort((a,b)=>_fcOverdueRatio(st.fc[b.key]||{},now)-_fcOverdueRatio(st.fc[a.key]||{},now));
+  due.forEach((card,i)=>{
+    const dayOffset=Math.floor(i/FC_SMOOTH_PER_DAY);
+    if(dayOffset>0){const c=st.fc[card.key];if(c)c.due=now+dayOffset*86400000+Math.floor(Math.random()*3600000);}
+  });
+  save();
+  return Math.ceil(due.length/FC_SMOOTH_PER_DAY);
+}
 function _fcResetDayIfNeeded(){
   const today=new Date().toDateString();
   if(st.fcNewDate!==today){st.fcNewDate=today;st.fcNewToday=0;st.fcReviewedToday=0;save();}
@@ -3760,6 +3815,16 @@ renderFcHome(){
   h+='<button class="'+(isAll?'act':'')+'" onclick="S.setFcSource(\'all\')">All Vocabulary</button>';
   h+='<button class="'+(!isAll?'act':'')+'" onclick="S.setFcSource(\'completed\')">Completed Lessons</button>';
   h+='</div>';
+  // Welcome back: a big review backlog gets an offer to spread it out
+  if(bd.reviews.length>FC_BACKLOG_THRESHOLD&&!this._backlogHidden){
+    const away=st.lastDate?Math.floor((new Date(new Date().toDateString())-new Date(st.lastDate))/864e5):0;
+    const days=Math.ceil(bd.reviews.length/FC_SMOOTH_PER_DAY);
+    h+='<div class="fc-backlog">';
+    h+='<div class="fc-backlog-t">👋 Welcome back'+(away>1?' — you were away '+away+' days':'')+'</div>';
+    h+='<div class="fc-backlog-s">'+bd.reviews.length+' reviews piled up. Spread them out and about '+FC_SMOOTH_PER_DAY+' will come due each day for the next '+days+' day'+(days!==1?'s':'')+'. Nothing is reset — only the due dates move.</div>';
+    h+='<div class="fc-backlog-btns"><button class="fc-backlog-go" onclick="S.smoothBacklog()">Spread over '+days+' day'+(days!==1?'s':'')+'</button><button class="fc-backlog-skip" onclick="S.hideBacklog()">Keep them all due</button></div>';
+    h+='</div>';
+  }
   h+='<div style="text-align:center;padding:14px 0 0">';
   h+='<div style="font-size:48px;margin-bottom:8px">'+(due.length>0?'📖':'🎉')+'</div>';
   h+='<div style="font-size:28px;font-weight:800;color:#fff">'+due.length+' card'+(due.length!==1?'s':'')+' due</div>';
@@ -3774,6 +3839,8 @@ renderFcHome(){
   }
   h+='<button class="fc-help-link" onclick="S.toggleFcHelp()">What do due · new · limit mean?</button>';
   h+='<div id="fc-help" class="fc-help" style="display:none"><b>Due</b> — cards whose next review is scheduled for now.<br><b>New</b> — words you haven\'t seen yet, introduced in course order (A1 first).<br><b>Daily limit</b> — caps new words per day so tomorrow\'s reviews stay manageable. Adjust it below.</div>';
+  const sess=fcBuildSession(bd);
+  if(sess.capped)h+='<div class="fc-session-note">This session: <b>'+sess.cards.length+'</b> cards · '+sess.reviews+' review'+(sess.reviews!==1?'s':'')+(sess.news?' · '+sess.news+' new':'')+' · '+sess.remaining+' more after</div>';
   if(due.length>0){
     h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Start Review</button>';
   }else{
@@ -3865,6 +3932,16 @@ renderMatchHome(){
   el.innerHTML=h;
 },
 
+smoothBacklog(){
+  const days=fcSmoothBacklog();
+  this._backlogHidden=true;
+  haptic('success');
+  this.toast('Spread over '+days+' day'+(days!==1?'s':'')+' — '+FC_SMOOTH_PER_DAY+' or so due each day');
+  this.renderFcHome();
+},
+
+hideBacklog(){this._backlogHidden=true;this.renderFcHome();},
+
 toggleFcHelp(){const e=document.getElementById('fc-help');if(e)e.style.display=e.style.display==='none'?'':'none';},
 
 setFcNewLimit(n){
@@ -3878,9 +3955,9 @@ setFcSource(mode){
 },
 
 startFcSession(){
-  const due=fcDueCards();
-  if(!due.length){return;}
-  st.fcCards=this.sh(due);
+  const sess=fcBuildSession();
+  if(!sess.cards.length){return;}
+  st.fcCards=this.sh(sess.cards);
   st.fcIdx=0;st.fcFlipped=false;st.fcReviewed=0;st.fcAgainCount=0;st.fcCorrectCount=0;
   this.goScr('flashcard');
   this.renderFcCard();
@@ -4020,10 +4097,19 @@ finishFcSession(){
   h+='</div>';
   h+='<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:8px">';
   // Show Match CTA if there are enough eligible cards
+  let matchBtn='';
   if(typeof _mcEligibleCards==='function'&&_mcEligibleCards().length>=10){
-    h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'match\');S.startMatchSession();},300)">🧩 Try matching →</button>';
+    matchBtn='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'match\');S.startMatchSession();},300)">🧩 Try matching →</button>';
   }
-  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
+  const left=fcDueBreakdown().all.length;
+  if(left>0){
+    h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Next '+Math.min(left,FC_SESSION_CAP)+' cards → <span style="font-weight:600;opacity:.8;text-transform:none;letter-spacing:0">('+left+' still due)</span></button>';
+    h+=matchBtn;
+    h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)" onclick="S.exitFc()">Done for now</button>';
+  }else{
+    h+=matchBtn;
+    h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
+  }
   h+='</div>';
   h+='</div>';
   el.innerHTML=h;
