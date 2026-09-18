@@ -764,7 +764,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .prof-btn.sec{background:var(--blue);box-shadow:0 3px 0 var(--blue-d)}
 .friend-modal{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:300;animation:fadeIn .2s}
 .friend-modal-c{background:#fff;border-radius:20px;padding:24px;margin:20px;width:100%;max-width:340px;animation:popIn .3s ease;position:relative}
-.friend-modal-x{position:absolute;top:12px;right:16px;font-size:20px;color:var(--g4);cursor:pointer;border:none;background:none;line-height:1}
+.friend-modal-x{position:absolute;top:8px;right:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--g5);cursor:pointer;border:none;background:none;border-radius:10px}
+.friend-modal-x:active{background:rgba(0,0,0,.06)}
+.friend-modal-cancel{display:block;width:100%;margin-top:12px;padding:10px;border:none;border-radius:12px;background:var(--g2);color:var(--g6);font-size:13px;font-weight:800;cursor:pointer}
 .friend-modal-t{font-size:18px;font-weight:800;color:var(--g7);text-align:center;margin-bottom:14px}
 .friend-tabs{display:flex;border-radius:12px;overflow:hidden;border:2px solid var(--g2);margin-bottom:16px}
 .friend-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:800;cursor:pointer;border:none;background:var(--w);color:var(--g5);transition:.2s}
@@ -2868,6 +2870,7 @@ window.addEventListener('load',()=>{
 });
 
 function fbSignOut(){
+  _clearAuthForms();
   fbAuth.signOut();
   if(window.google&&google.accounts&&google.accounts.id){
     google.accounts.id.disableAutoSelect();
@@ -2890,7 +2893,26 @@ function _authErr(e){
   if(c==='auth/weak-password')return 'Password must be at least 6 characters.';
   if(c==='auth/email-already-in-use')return 'That email is already registered — check the password.';
   if(c==='auth/too-many-requests')return 'Too many attempts — wait a minute and try again.';
+  if(c==='auth/network-request-failed')return "Couldn't reach the sign-in service. Check your connection, and that an ad/privacy blocker or a strict private-browsing cookie setting isn't blocking google.com — then try again.";
   return (e&&e.message)||'Sign-in failed.';
+}
+// Clear every sign-in field, collapse the email section and reset the status line.
+// Called on sign-out, on successful sign-in, and whenever the splash is shown, so a
+// password is never left sitting in the DOM.
+function _clearAuthForms(){
+  ['sp-email','sp-pw','pf-email','pf-pw'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const m=document.getElementById('sp-more'),l=document.getElementById('sp-more-link');
+  if(m)m.style.display='none';if(l)l.textContent='Use email instead';
+  _authMsg('');
+}
+// Firebase does not retry: a transient network-request-failed on a cold start is
+// common enough (first attempt after a hard refresh) to warrant one automatic retry.
+async function _authWithRetry(fn){
+  try{return await fn();}
+  catch(e){
+    if(e&&e.code==='auth/network-request-failed'){_authMsg('Connection hiccup — retrying…');await new Promise(r=>setTimeout(r,900));return await fn();}
+    throw e;
+  }
 }
 async function emailAuth(prefix){
   const email=((document.getElementById(prefix+'-email')||{}).value||'').trim();
@@ -2898,11 +2920,12 @@ async function emailAuth(prefix){
   if(!email||pw.length<6){_authMsg('Enter an email and a password of 6+ characters.',true);return;}
   _authMsg('Signing in…');
   try{
-    await fbAuth.signInWithEmailAndPassword(email,pw);
+    await _authWithRetry(()=>fbAuth.signInWithEmailAndPassword(email,pw));
+    _clearAuthForms();
   }catch(e){
     const c=e&&e.code;
     if(c==='auth/user-not-found'||c==='auth/invalid-credential'||c==='auth/invalid-login-credentials'){
-      try{await fbAuth.createUserWithEmailAndPassword(email,pw);_authMsg('Account created — welcome!');}
+      try{await _authWithRetry(()=>fbAuth.createUserWithEmailAndPassword(email,pw));_clearAuthForms();_authMsg('Account created — welcome!');}
       catch(e2){_authMsg(_authErr(e2),true);}
     }else{_authMsg(_authErr(e),true);}
   }
@@ -3016,6 +3039,7 @@ fbAuth.onAuthStateChanged(async user=>{
     document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
     document.getElementById('splash').classList.add('act');
     document.body.classList.add('on-splash');
+    _clearAuthForms();
     showSplashReady();
     // Highlight current language on splash
     document.querySelectorAll('.lang-flag').forEach(b=>{b.classList.toggle('sel',b.title===langName());});
@@ -5567,15 +5591,17 @@ showAddFriend(){
   const wrap=document.getElementById('friend-modal-wrap');
   wrap.innerHTML=`<div class="friend-modal" onclick="if(event.target===this)S.closeAddFriend()">
     <div class="friend-modal-c">
-      <button class="friend-modal-x" onclick="S.closeAddFriend()"><span data-icon="x"></span></button>
+      <button class="friend-modal-x" onclick="S.closeAddFriend()" aria-label="Close"><span data-icon="x"></span></button>
       <div class="friend-modal-t">Add a Friend</div>
       <div class="friend-tabs">
         <button class="friend-tab act" id="ft-search" onclick="S.switchFriendTab('search')">Search</button>
         <button class="friend-tab" id="ft-code" onclick="S.switchFriendTab('code')">Friend Code</button>
       </div>
       <div id="fm-content"></div>
+      <button class="friend-modal-cancel" onclick="S.closeAddFriend()">Cancel</button>
     </div>
   </div>`;
+  renderIcons(wrap);// the modal is built after load, so its data-icon needs rendering here
   this.switchFriendTab('search');
 },
 
