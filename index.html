@@ -143,6 +143,8 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .lp-w-en{font-size:12px;color:var(--text-2);margin-top:2px}
 .lp-go{width:100%;padding:16px;border:none;border-radius:14px;font-size:14px;font-weight:800;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);text-transform:uppercase;letter-spacing:1px;cursor:pointer}
 .lp-go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
+.lock-msg{font-size:14px;color:var(--text-2);line-height:1.5;margin:0 0 16px}
+.lock-msg b{color:#fff}
 
 /* Continue FAB on home */
 .cnt-fab{position:absolute;right:18px;bottom:96px;background:linear-gradient(135deg,var(--sr-blue),var(--sr-blue-d));color:#fff;border:none;border-radius:999px;padding:14px 20px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(26,95,209,.4),0 2px 8px rgba(0,0,0,.3);z-index:50;animation:fabRise .5s cubic-bezier(.22,.61,.36,1) both}
@@ -483,6 +485,8 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .auth-in:focus{border-color:var(--sr-blue)}
 .auth-btn{padding:11px 14px;border:none;border-radius:12px;font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)}
 .auth-btn.sec{background:rgba(255,255,255,.12);box-shadow:none;color:rgba(255,255,255,.85)}
+.auth-btn.primary{display:block;width:280px;max-width:100%;margin:0 auto;padding:14px;font-size:14px;background:var(--green);box-shadow:0 4px 0 var(--green-d)}
+.auth-note{font-size:11.5px;color:rgba(255,255,255,.55);line-height:1.45;max-width:280px;margin:10px auto 0;text-align:center}
 .auth-btn:active{transform:translateY(2px)}
 .auth-msg{font-size:12px;margin-top:10px;min-height:16px;color:rgba(255,255,255,.7);line-height:1.4;max-width:280px;margin-left:auto;margin-right:auto;text-align:center}
 #prof .auth-in{background:var(--surface);border-color:var(--divider)}
@@ -495,6 +499,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 /* Flashcard source-mode toggle (All Vocabulary | Completed Lessons) */
 .fc-source-toggle{display:flex;gap:4px;padding:4px;background:rgba(255,255,255,.05);border:1px solid var(--divider);border-radius:12px;margin:8px 0 12px}
 .fc-source-toggle button{flex:1;border:none;padding:8px 6px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text-2);transition:.18s}
+.fc-help-link{background:none;border:none;color:rgba(255,255,255,.5);font-size:11px;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-top:8px;padding:4px 8px}
+.fc-help{margin-top:8px;font-size:12px;color:rgba(255,255,255,.72);line-height:1.5;text-align:left;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 12px}
+.fc-help b{color:#fff}
 .fc-source-toggle button.act{background:var(--sr-blue);color:#fff}
 /* INTRODUCTION view — shown first encounter, before any test */
 .fc-intro{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;width:100%;max-width:360px;padding:12px 4px;animation:fadeInUp .35s ease}
@@ -545,6 +552,11 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .vd-input:focus{border-color:var(--blue)}
 .vd-input.correct{border-color:var(--green);background:rgba(88,204,2,.1)}
 .vd-input.wrong{border-color:var(--red);background:rgba(255,75,75,.1)}
+.vd-fb{margin-top:12px;font-size:14px;font-weight:700;text-align:center;line-height:1.4}
+.vd-fb.ok{color:var(--green)}
+.vd-fb.bad{color:var(--red)}
+.vd-fb b{color:#fff}
+.vd-fb small{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-top:3px}
 .vd-correction{font-size:14px;color:var(--red);font-weight:700;text-align:center;margin-top:6px}
 .vd-conj{width:100%;max-width:360px;margin-top:16px}
 .vd-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
@@ -745,14 +757,12 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   </div>
   <div id="sp-loading" style="color:rgba(255,255,255,.7);font-size:14px;font-weight:600;margin-top:30px">Loading...</div>
   <div id="sp-auth" style="display:none;margin-top:22px">
+    <button class="auth-btn primary" onclick="enterGuest('sp')">Try without an account</button>
+    <div class="auth-note">Guest progress is saved on this device only. An account syncs across devices and unlocks a username and friends.</div>
+    <div class="auth-or">or sign in</div>
     <div id="g-signin-btn"></div>
-    <button class="auth-link" id="sp-more-link" onclick="toggleAuthMore('sp')">Other ways to sign in</button>
+    <button class="auth-link" id="sp-more-link" onclick="toggleAuthMore('sp')">Use email instead</button>
     <div id="sp-more" class="auth-more" style="display:none">
-      <div class="auth-form">
-        <input class="auth-in" id="sp-guest" type="text" placeholder="Guest name (no account needed)" autocomplete="off" autocapitalize="off">
-        <button class="auth-btn sec" onclick="enterGuest('sp')">Continue as guest</button>
-      </div>
-      <div class="auth-or">or</div>
       <div class="auth-form">
         <input class="auth-in" id="sp-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off">
         <input class="auth-in" id="sp-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
@@ -918,11 +928,11 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <button class="sync-btn" id="sync-btn" onclick="fbSignOut()" style="display:none">Sign Out</button>
     <div id="g-signin-prof" style="display:flex;justify-content:center"></div>
     <div id="pf-auth" class="auth-form" style="margin-top:12px">
-      <input class="auth-in" id="pf-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off">
+      <button class="auth-btn primary" onclick="enterGuest('pf')">Try without an account</button>
+      <div class="auth-note">Guest progress is saved on this device only. An account syncs across devices and unlocks a username and friends.</div>
+      <input class="auth-in" id="pf-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off" style="margin-top:8px">
       <input class="auth-in" id="pf-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
       <button class="auth-btn" onclick="emailAuth('pf')">Sign in / Create account</button>
-      <input class="auth-in" id="pf-guest" type="text" placeholder="Guest name (no account needed)" autocomplete="off" autocapitalize="off" style="margin-top:8px">
-      <button class="auth-btn sec" onclick="enterGuest('pf')">Continue as guest</button>
       <div class="auth-msg" id="pf-auth-msg"></div>
     </div>
     <div class="sync-status" id="sync-status"></div>
@@ -2831,8 +2841,11 @@ async function emailAuth(prefix){
   }
 }
 function enterGuest(prefix){
+  // Optional name field (not shown on the splash): fall back to a single
+  // shared 'guest' profile so leaving and coming back resumes the same progress.
   const raw=(document.getElementById(prefix+'-guest')||{}).value||'';
-  const name=raw.trim().toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20);
+  let name=raw.trim().toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,20);
+  if(!name)name='guest';
   if(name.length<2){_authMsg('Pick a guest name — letters/numbers, at least 2 characters.',true);return;}
   GUEST=name;localStorage.setItem('zeka_guest',name);
   // If a Firebase user is signed in, signing out fires onAuthStateChanged(null),
@@ -2843,8 +2856,8 @@ function enterGuest(prefix){
 function toggleAuthMore(prefix){
   const m=document.getElementById(prefix+'-more'),l=document.getElementById(prefix+'-more-link');if(!m)return;
   const open=m.style.display!=='none';m.style.display=open?'none':'';
-  if(l)l.textContent=open?'Other ways to sign in':'Hide other options';
-  if(!open){const g=document.getElementById(prefix+'-guest');if(g)setTimeout(()=>g.focus(),50);}
+  if(l)l.textContent=open?'Use email instead':'Hide email sign-in';
+  if(!open){const g=document.getElementById(prefix+'-email');if(g)setTimeout(()=>g.focus(),50);}
 }
 function exitGuest(){
   GUEST=null;localStorage.removeItem('zeka_guest');
@@ -3702,6 +3715,8 @@ renderFcHome(){
   if(bd.newAvailable>bd.newShown){
     h+='<div style="font-size:11px;color:var(--orange);margin-top:4px">'+(bd.newAvailable-bd.newShown)+' new card'+(bd.newAvailable-bd.newShown!==1?'s':'')+' waiting (daily limit)</div>';
   }
+  h+='<button class="fc-help-link" onclick="S.toggleFcHelp()">What do due · new · limit mean?</button>';
+  h+='<div id="fc-help" class="fc-help" style="display:none"><b>Due</b> — cards whose next review is scheduled for now.<br><b>New</b> — words you haven\'t seen yet, introduced in course order (A1 first).<br><b>Daily limit</b> — caps new words per day so tomorrow\'s reviews stay manageable. Adjust it below.</div>';
   if(due.length>0){
     h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Start Review</button>';
   }else{
@@ -3792,6 +3807,8 @@ renderMatchHome(){
   h+='</div>';
   el.innerHTML=h;
 },
+
+toggleFcHelp(){const e=document.getElementById('fc-help');if(e)e.style.display=e.style.display==='none'?'':'none';},
 
 setFcNewLimit(n){
   st.fcNewLimit=n;save();
@@ -4037,6 +4054,7 @@ renderVerbP1(v){
   h+='</div>';
   document.getElementById('vd-body').innerHTML=h;
   document.getElementById('vd-inf-input').dataset.answer=answer;
+  document.getElementById('vd-inf-input').dataset.pair=v.inf+' — '+v.en;
   const inp=document.getElementById('vd-inf-input');
   inp.focus();
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('vd-p1-btn').click();}});
@@ -4046,16 +4064,18 @@ checkVerbP1(){
   const inp=document.getElementById('vd-inf-input');
   const btn=document.getElementById('vd-p1-btn');
   if(btn.textContent==='Next'){st.vbPhase=2;this.renderVerbPhase();return;}
-  const val=inp.value.trim().toLowerCase();
+  const val=normSR(inp.value);
   const answer=inp.dataset.answer;
-  const correct=answer.toLowerCase();
+  const correct=normSR(answer);
   const correctBase=correct.replace(/^to /,'');
+  const pair=inp.dataset.pair||'';
   st.vbTotal++;
   if(val===correct||val===correctBase){
-    st.vbCorrect++;inp.classList.add('correct');sCl();
+    st.vbCorrect++;inp.classList.add('correct');sCl();haptic('success');
+    document.getElementById('vd-inf-fb').innerHTML='<div class="vd-fb ok">✅ Correct!<small>'+esc(pair)+'</small></div>';
   }else{
-    inp.classList.add('wrong');
-    document.getElementById('vd-inf-fb').innerHTML='<div class="vd-correction">'+esc(answer)+'</div>';
+    inp.classList.add('wrong');sNo();haptic('error');
+    document.getElementById('vd-inf-fb').innerHTML='<div class="vd-fb bad">❌ Not quite — the answer is <b>'+esc(answer)+'</b><small>'+esc(pair)+'</small></div>';
   }
   inp.disabled=true;
   btn.textContent='Next';
@@ -4279,14 +4299,15 @@ checkCaseSent(){
   const inp=document.getElementById('cs-sent-input');
   const btn=document.getElementById('cs-sent-btn');
   if(btn.textContent==='Next'){st.csSentIdx++;this.renderCasePhase();return;}
-  const val=inp.value.trim().toLowerCase();
-  const answer=inp.dataset.answer.toLowerCase();
+  const val=normSR(inp.value);
+  const answer=normSR(inp.dataset.answer);
   st.csTotal++;
   if(val===answer){
-    st.csCorrect++;inp.classList.add('correct');sCl();
+    st.csCorrect++;inp.classList.add('correct');sCl();haptic('success');
+    document.getElementById('cs-sent-fb').innerHTML='<div class="vd-fb ok">✅ Correct!</div>';
   }else{
-    inp.classList.add('wrong');
-    document.getElementById('cs-sent-fb').innerHTML='<div class="vd-correction">'+esc(inp.dataset.answer)+'</div>';
+    inp.classList.add('wrong');sNo();haptic('error');
+    document.getElementById('cs-sent-fb').innerHTML='<div class="vd-fb bad">❌ Not quite — the form is <b>'+esc(inp.dataset.answer)+'</b></div>';
   }
   inp.disabled=true;
   btn.textContent='Next';
@@ -4478,6 +4499,8 @@ checkSent(){
     inp.disabled=true;
   });
   if(allCorrect){sCl();haptic('success');}else{sNo();haptic('error');}
+  const fb=document.getElementById('sn-fb');
+  if(fb)fb.innerHTML=allCorrect?'<div class="vd-fb ok">✅ All correct!</div>':'<div class="vd-fb bad">❌ Not quite — the correct forms are filled in above</div>';
   btn.textContent='Next';
   // Mark today's daily as done if this was today's sentence
   if(s.id===(SENTENCES[this._sentDailyIdx()]||{}).id){
@@ -4607,7 +4630,7 @@ setGrammarMode(mode){
   if(mode==='cases')this.renderCaseHome();
 },
 
-switchLang(){
+async switchLang(){
   const codes=Object.keys(LANG_DATA);
   const next=codes[(codes.indexOf(curLang)+1)%codes.length];
   setLang(next);
@@ -4615,8 +4638,15 @@ switchLang(){
   st.elo=1000;st.xp=0;st.streak=0;st.lastDate=null;st.hearts=5;st.completed=[];st.ws={};st.fc={};
   st.uacc={};st.fcNewToday=0;st.fcReviewedToday=0;st.fcNewDate='';st.fcNewLimit=FC_NEW_LIMIT_DEFAULT;st.fcSourceMode='all';
   st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false};
+  if(st.grammarMode==='cases'&&next!=='sr')st.grammarMode='verbs';
+  // Drop every language-scoped pane so nothing from the previous language lingers
+  ['hscr','fc-home','match-home','verb-home','case-home','sentence-home','pg-body','sx-body'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML='';});
+  const sx=document.getElementById('sx-input');if(sx)sx.value='';this._sxExpanded=null;
+  document.querySelectorAll('.lp-sheet').forEach(x=>x.remove());
+  this.closeOverflowMenu();
+  this.updH();
   load();// Load saved progress for this language
-  if(fbUser)fbLoad();
+  if(fbUser){try{await fbLoad();}catch(e){}}
   this.goHome();
 },
 
@@ -4647,7 +4677,7 @@ rPath(){
     const done=st.completed.includes(u.id);
     const unlocked=ui===0||st.completed.includes(UNITS[ui-1].id);
     const cls=done?'done':(unlocked?'cur':'lock');
-    const clk=cls!=='lock'?`onclick="S.startL(${u.id})" data-uid="${u.id}"`:'';
+    const clk=cls!=='lock'?`onclick="S.startL(${u.id})" data-uid="${u.id}"`:`onclick="S.lockedTap(${u.id})"`;
     // Chapter hero card when level changes
     if(u.lv!==lastLv){
       if(lastLv)h+='</div>';// close prior chapter-units
@@ -4736,6 +4766,27 @@ renderContinueFab(){
 },
 
 // ── LESSON ──
+// Locked node tapped: explain the unlock rule and offer the next actionable lesson.
+lockedTap(uid){
+  const ui=UNITS.findIndex(u=>u.id===uid);if(ui<0)return;
+  const u=UNITS[ui];
+  const curIdx=UNITS.findIndex((x,i)=>i<ui&&!st.completed.includes(x.id));
+  const req=curIdx>=0?UNITS[curIdx]:UNITS[ui-1];
+  const between=curIdx>=0?ui-curIdx:1;
+  haptic('tap');sCl();
+  document.querySelectorAll('.lp-sheet').forEach(x=>x.remove());
+  const sheet=document.createElement('div');sheet.className='lp-sheet';
+  let h='<div class="lp-card"><div class="lp-handle"></div>';
+  h+='<div class="lp-head"><span class="lp-em">🔒</span><div><div class="lp-tit">'+esc(u.t)+'</div><div class="lp-sub">'+esc(u.lv)+' · Locked</div></div></div>';
+  h+='<div class="lock-msg">Lessons unlock in order. Finish <b>'+esc(req.t)+'</b>'+(between>1?' and the '+(between-1)+' lesson'+(between>2?'s':'')+' after it':'')+' to unlock <b>'+esc(u.t)+'</b>.</div>';
+  h+='<button class="lp-go" id="lock-go">Go to '+esc(req.t)+' →</button>';
+  h+='</div>';
+  sheet.innerHTML=h;document.body.appendChild(sheet);
+  const close=()=>{if(sheet.parentNode)sheet.remove();};
+  sheet.addEventListener('click',e=>{if(e.target.id==='lock-go'){close();S.startL(req.id);}else if(e.target===sheet)close();});
+  if(!REDUCED_MOTION){anim(sheet,{opacity:[0,1]},{duration:.18});anim(sheet.querySelector('.lp-card'),{transform:['translateY(100%)','translateY(0)']},{duration:.32,easing:'cubic-bezier(.22,.61,.36,1)'});}
+},
+
 startL(uid){
   sCl();const u=UNITS.find(x=>x.id===uid);if(!u)return;
   st.unit=u;st.hearts=5;st.ei=-1;st.lxp=0;st.lcor=0;st.ltot=0;st.lelo=0;
