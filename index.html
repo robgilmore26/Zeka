@@ -395,6 +395,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sync-btn{width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;color:#fff;background:#4285F4;box-shadow:0 4px 0 #3367D6;transition:.1s;text-transform:uppercase;letter-spacing:.5px}
 .sync-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #3367D6}
 .sync-status{text-align:center;font-size:12px;font-weight:600;color:var(--g5);margin-top:10px}
+.build-stamp{text-align:center;font-size:11px;color:rgba(255,255,255,.3);margin-top:14px;font-variant-numeric:tabular-nums}
 
 /* PROGRESS */
 #progress{background:var(--bg)}
@@ -830,13 +831,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div class="auth-or">or sign in</div>
     <div id="g-signin-btn"></div>
     <button class="auth-link" id="sp-more-link" onclick="toggleAuthMore('sp')">Use email instead</button>
-    <div id="sp-more" class="auth-more" style="display:none">
-      <div class="auth-form">
-        <input class="auth-in" id="sp-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off">
-        <input class="auth-in" id="sp-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
-        <button class="auth-btn" onclick="emailAuth('sp')">Sign in / Create account</button>
-      </div>
-    </div>
+    <div id="sp-more" class="auth-more" style="display:none"></div>
     <div class="auth-msg" id="sp-auth-msg"></div>
   </div>
 </div>
@@ -998,12 +993,11 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div id="pf-auth" class="auth-form" style="margin-top:12px">
       <button class="auth-btn primary" onclick="enterGuest('pf')">Try without an account</button>
       <div class="auth-note">Guest progress is saved on this device only. An account syncs across devices and unlocks a username and friends.</div>
-      <input class="auth-in" id="pf-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off" style="margin-top:8px">
-      <input class="auth-in" id="pf-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">
-      <button class="auth-btn" onclick="emailAuth('pf')">Sign in / Create account</button>
+      <div id="pf-auth-form" style="margin-top:8px"></div>
       <div class="auth-msg" id="pf-auth-msg"></div>
     </div>
     <div class="sync-status" id="sync-status"></div>
+    <div class="build-stamp" id="build-stamp"></div>
   </div>
   </div>
   <div class="bnav bnav-lt">
@@ -2899,8 +2893,22 @@ function _authErr(e){
 // Clear every sign-in field, collapse the email section and reset the status line.
 // Called on sign-out, on successful sign-in, and whenever the splash is shown, so a
 // password is never left sitting in the DOM.
+// The email/password inputs are created only while the form is open and removed
+// again on collapse, sign-out, sign-in and screen change. A browser password
+// manager can refill inputs after a value is cleared; it cannot fill inputs that
+// do not exist — so nothing credential-shaped sits in the DOM once you leave.
+const _AUTH_HOST={sp:'sp-more',pf:'pf-auth-form'};
+function _authFormHtml(p){
+  return '<div class="auth-form">'+
+    '<input class="auth-in" id="'+p+'-email" type="email" placeholder="Email" autocomplete="username" autocapitalize="off">'+
+    '<input class="auth-in" id="'+p+'-pw" type="password" placeholder="Password (6+ characters)" autocomplete="current-password">'+
+    '<button class="auth-btn" onclick="emailAuth(\''+p+'\')">Sign in / Create account</button>'+
+  '</div>';
+}
+function _mountAuthForm(p){const h=document.getElementById(_AUTH_HOST[p]);if(h&&!h.firstChild)h.innerHTML=_authFormHtml(p);}
+function _unmountAuthForm(p){const h=document.getElementById(_AUTH_HOST[p]);if(h)h.innerHTML='';}
 function _clearAuthForms(){
-  ['sp-email','sp-pw','pf-email','pf-pw'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  _unmountAuthForm('sp');_unmountAuthForm('pf');
   const m=document.getElementById('sp-more'),l=document.getElementById('sp-more-link');
   if(m)m.style.display='none';if(l)l.textContent='Use email instead';
   _authMsg('');
@@ -2945,7 +2953,9 @@ function enterGuest(prefix){
 }
 function toggleAuthMore(prefix){
   const m=document.getElementById(prefix+'-more'),l=document.getElementById(prefix+'-more-link');if(!m)return;
-  const open=m.style.display!=='none';m.style.display=open?'none':'';
+  const open=m.style.display!=='none';
+  if(open){_unmountAuthForm(prefix);m.style.display='none';}
+  else{_mountAuthForm(prefix);m.style.display='';}
   if(l)l.textContent=open?'Use email instead':'Hide email sign-in';
   if(!open){const g=document.getElementById(prefix+'-email');if(g)setTimeout(()=>g.focus(),50);}
 }
@@ -3084,6 +3094,7 @@ function updateSyncUI(){
     if(btn)btn.style.display='none';
     if(profGBtn)profGBtn.style.display='flex';
     if(pfAuth)pfAuth.style.display='';
+    if(document.getElementById('prof').classList.contains('act'))_mountAuthForm('pf');
     if(status)status.innerHTML='';
     if(avatar)avatar.innerHTML='<img src="icon-192.png" style="width:60px;height:60px;border-radius:16px" alt="Zeka">';
     if(nameEl)nameEl.textContent='';
@@ -3845,6 +3856,9 @@ pk(a,n,ex=[]){return this.sh(a.filter(x=>!ex.includes(x))).slice(0,n)},
 
 goScr(id){
   document.body.classList.toggle('on-splash',id==='splash');
+  if(id!=='prof')_unmountAuthForm('pf');
+  if(id!=='splash')_unmountAuthForm('sp');
+  if(id==='prof'&&!fbUser&&!GUEST)_mountAuthForm('pf');
   const apply=()=>{
     document.querySelectorAll('.sc').forEach(s=>s.classList.remove('act'));
     document.getElementById(id).classList.add('act');
@@ -5972,6 +5986,11 @@ startWeakCardSession(){
 
 // KEYBOARD
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.querySelector('.friend-modal')){S.closeAddFriend();return;}
+    const sheet=document.querySelector('.lp-sheet');if(sheet){sheet.remove();return;}
+    const om=document.getElementById('overflow-menu');if(om&&om.style.display!=='none'){S.closeOverflowMenu();return;}
+  }
   if(e.key==='Enter'){const b=document.getElementById('ckb');if(b&&!b.classList.contains('dis'))b.click();
     const c=document.querySelector('.cc,.ci');if(c)c.click();}
   if('1234'.includes(e.key)&&!st.answered){const i=+e.key-1;
@@ -5992,6 +6011,9 @@ function renderIcons(root){
   });
 }
 renderIcons();
+// Build stamp: the page's own Last-Modified header (set by the host on deploy) —
+// zero maintenance, and lets QA confirm they are looking at the current build.
+(function(){const b=document.getElementById('build-stamp');const when=document.lastModified||'';if(b)b.textContent='Build '+when;console.log('[Zeka] build',when);})();
 
 // ═══════════════ LONG-PRESS UNIT PREVIEW ═══════════════
 (function setupLongPress(){
