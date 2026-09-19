@@ -650,6 +650,43 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .cz-switch{display:block;margin:14px auto 0;background:none;border:none;color:rgba(255,255,255,.45);font-size:13px;font-weight:700;cursor:pointer;text-decoration:underline}
 #cloze-drill .vd-input{margin-top:14px}
 
+/* READING */
+.rd-lv{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin:18px 0 8px}
+.rd-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid rgba(255,255,255,.1);border-radius:14px;margin-bottom:8px;cursor:pointer;transition:.15s}
+.rd-row:active{transform:translateY(1px)}
+.rd-row.done{border-color:rgba(88,204,2,.35)}
+.rd-row-em{font-size:26px}
+.rd-row-b{flex:1;min-width:0}
+.rd-row-t{font-size:15px;font-weight:700;color:#fff}
+.rd-row-m{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px}
+.rd-row-ar{color:rgba(255,255,255,.3);font-size:18px}
+.rd-row-ck{color:var(--green);width:20px;height:20px;display:inline-flex}
+.rd-row-ck svg{width:20px;height:20px}
+.rd-body{flex:1;overflow-y:auto;padding:8px 22px calc(130px + env(safe-area-inset-bottom,0px));background:var(--bg)}
+.rd-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.rd-head-em{font-size:28px}
+.rd-head-t{font-family:var(--font-display);font-size:24px;font-weight:700;color:#fff}
+.rd-hint{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:12px}
+.rd-text{background:var(--surface);border:1px solid var(--divider);border-radius:16px;padding:6px 16px}
+.rd-sent{padding:10px 0;border-bottom:1px solid var(--divider)}
+.rd-sent:last-child{border-bottom:none}
+.rd-sr{font-family:var(--font-display);font-size:20px;line-height:1.7;color:var(--text-1)}
+.rd-w{cursor:pointer;border-radius:5px;padding:0 1px;transition:background .15s}
+.rd-w:hover{background:rgba(26,95,209,.15)}
+.rd-w.hi{background:rgba(26,95,209,.35);color:#fff}
+.rd-punct{color:var(--text-2)}
+.rd-en-btn{margin-left:8px;vertical-align:middle;font-family:var(--font-body,inherit);font-size:10px;font-weight:800;letter-spacing:1px;color:var(--text-3);background:rgba(255,255,255,.06);border:1px solid var(--divider);border-radius:6px;padding:2px 6px;cursor:pointer}
+.rd-en-btn:hover{color:var(--text-1)}
+.rd-en{font-size:14px;color:var(--text-2);font-style:italic;line-height:1.5;margin-top:4px}
+.rd-actions{margin-top:16px}
+.rd-all{width:100%;padding:12px;border:1px solid var(--divider);border-radius:14px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);font-size:13px;font-weight:700;cursor:pointer}
+.rd-done-note{text-align:center;color:var(--green);font-weight:800;margin-top:12px}
+.rd-bar{position:absolute;left:14px;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--surface-raised);border:1px solid var(--divider);border-radius:16px;padding:12px 16px;box-shadow:0 10px 30px rgba(0,0,0,.45);animation:fadeIn .15s ease;z-index:5}
+.rd-bar-w{font-family:var(--font-display);font-size:18px;font-weight:700;color:#fff}
+.rd-bar-g{font-size:14px;color:var(--text-2);margin-top:3px;line-height:1.4}
+.rd-looked{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:360px}
+.rd-looked-w{font-size:13px;font-weight:700;color:var(--text-2);background:rgba(255,255,255,.08);padding:4px 10px;border-radius:999px}
+
 /* ═══════════════ ZEKA PERSONALITY ═══════════════ */
 .zeka-face{width:100px;height:100px;border-radius:24px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:block}
 .zeka-face.sm{width:60px;height:60px;border-radius:16px}
@@ -978,6 +1015,16 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div style="width:32px"></div>
   </div>
   <div class="vd-body" id="cz-body"></div>
+</div>
+
+<div class="sc" id="reading">
+  <div class="vd-top">
+    <button class="xbtn" onclick="S.exitReading()"><span data-icon="x"></span></button>
+    <div class="vd-count" id="rd-title"></div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="rd-body" id="rd-body"></div>
+  <div class="rd-bar" id="rd-bar" style="display:none"></div>
 </div>
 
 <div class="sc" id="progress">
@@ -2576,6 +2623,95 @@ const SENT_SR=[
 {id:299,sr:'Infracrveni i ultraljubičasti zraci su vrste svetlosti nevidljive ljudskom oku.',en:'Infrared and ultra-violet rays are types of light invisible to the human eye.',lv:'B2',focus:'tatoeba',blanks:['ultraljubičasti']}
 ];
 
+// ═══════════════ READING TEXTS ═══════════════
+// Graded texts for comprehensible input. g glosses every token of the text in
+// the form it appears (inflected), keyed by the lowercase word without
+// punctuation, so tap-to-translate never has to guess a headword.
+const READ_SR=[
+{id:1,lv:"A1",t:"Moj dan",em:"🌅",
+ s:[
+  {sr:"Zovem se Marko i živim u Beogradu.",en:"My name is Marko and I live in Belgrade."},
+  {sr:"Svaki dan ustajem u sedam sati.",en:"Every day I get up at seven o'clock."},
+  {sr:"Pijem kafu i jedem hleb sa sirom.",en:"I drink coffee and eat bread with cheese."},
+  {sr:"Posle doručka idem na posao autobusom.",en:"After breakfast I go to work by bus."},
+  {sr:"Radim u kancelariji do pet sati.",en:"I work in an office until five o'clock."},
+  {sr:"Uveče gledam televiziju ili čitam knjigu.",en:"In the evening I watch TV or read a book."},
+  {sr:"Idem na spavanje oko ponoći.",en:"I go to bed around midnight."}],
+ g:{"zovem":"I call — zovem se = my name is","se":"myself / oneself (reflexive particle)","marko":"Marko (a name)","i":"and","živim":"I live (živeti)","u":"in (+ loc.) · to (+ acc.)","beogradu":"Belgrade (loc. of Beograd)","svaki":"every","dan":"day","ustajem":"I get up (ustajati)","sedam":"seven","sati":"o'clock, hours (gen. pl. of sat)","pijem":"I drink (piti)","kafu":"coffee (acc. of kafa)","jedem":"I eat (jesti)","hleb":"bread","sa":"with (+ instr.)","sirom":"cheese (instr. of sir)","posle":"after (+ gen.)","doručka":"breakfast (gen. of doručak)","idem":"I go (ići)","na":"to / on","posao":"work, job","autobusom":"by bus (instr. of autobus)","radim":"I work (raditi)","kancelariji":"office (loc. of kancelarija)","do":"until (+ gen.)","pet":"five","uveče":"in the evening","gledam":"I watch (gledati)","televiziju":"television (acc. of televizija)","ili":"or","čitam":"I read (čitati)","knjigu":"book (acc. of knjiga)","spavanje":"sleeping — na spavanje = to bed","oko":"around (+ gen.)","ponoći":"midnight (gen. of ponoć)"}},
+{id:2,lv:"A1",t:"Moja porodica",em:"👨‍👩‍👦",
+ s:[
+  {sr:"Moja porodica nije velika.",en:"My family is not big."},
+  {sr:"Imam mamu, tatu i jednog brata.",en:"I have a mom, a dad and one brother."},
+  {sr:"Moja mama se zove Jelena i ona je učiteljica.",en:"My mom is called Jelena and she is a teacher."},
+  {sr:"Tata radi kao lekar u bolnici.",en:"Dad works as a doctor in a hospital."},
+  {sr:"Moj brat Nikola ima petnaest godina i voli fudbal.",en:"My brother Nikola is fifteen and loves football."},
+  {sr:"Imamo i psa. On se zove Reks.",en:"We also have a dog. His name is Reks."},
+  {sr:"Vikendom svi zajedno ručamo kod bake.",en:"On weekends we all have lunch together at grandma's."}],
+ g:{"moja":"my (fem.)","porodica":"family","nije":"is not","velika":"big (fem.)","imam":"I have (imati)","mamu":"mom (acc. of mama)","tatu":"dad (acc. of tata)","i":"and · also","jednog":"one (acc. masc. of jedan)","brata":"brother (acc. of brat)","mama":"mom","se":"(reflexive) — se zove = is called","zove":"calls (zvati) — se zove = is called","jelena":"Jelena (a name)","ona":"she","je":"is","učiteljica":"teacher (female)","tata":"dad","radi":"works (raditi)","kao":"as, like","lekar":"doctor","u":"in (+ loc.)","bolnici":"hospital (loc. of bolnica)","moj":"my (masc.)","brat":"brother","nikola":"Nikola (a name)","ima":"has (imati) — ima … godina = is … years old","petnaest":"fifteen","godina":"years (gen. pl. of godina)","voli":"loves, likes (voleti)","fudbal":"football","imamo":"we have (imati)","psa":"dog (acc. of pas)","on":"he","reks":"Reks (the dog's name)","vikendom":"on weekends (instr. of vikend)","svi":"all, everyone","zajedno":"together","ručamo":"we have lunch (ručati)","kod":"at (someone's place) (+ gen.)","bake":"grandma (gen. of baka)"}},
+{id:3,lv:"A1",t:"U prodavnici",em:"🛒",
+ s:[
+  {sr:"Danas idem u prodavnicu.",en:"Today I am going to the shop."},
+  {sr:"Treba mi mleko, jaja i hleb.",en:"I need milk, eggs and bread."},
+  {sr:"Prodavačica je ljubazna i pita: „Izvolite?“",en:"The shop assistant is friendly and asks: \"Can I help you?\""},
+  {sr:"Kažem: „Dobar dan. Jedno mleko i šest jaja, molim.“",en:"I say: \"Good day. One milk and six eggs, please.\""},
+  {sr:"Hleb je svež i još topao.",en:"The bread is fresh and still warm."},
+  {sr:"Sve košta trista dinara.",en:"Everything costs three hundred dinars."},
+  {sr:"Plaćam karticom i kažem: „Hvala, doviđenja!“",en:"I pay by card and say: \"Thank you, goodbye!\""}],
+ g:{"danas":"today","idem":"I go, I am going (ići)","u":"to (+ acc., motion)","prodavnicu":"shop (acc. of prodavnica)","treba":"is needed — treba mi = I need","mi":"to me (dat. of ja)","mleko":"milk","jaja":"eggs (pl. of jaje; gen. pl. after a number)","i":"and","hleb":"bread","prodavačica":"shop assistant (female)","je":"is","ljubazna":"kind, friendly (fem.)","pita":"asks (pitati)","izvolite":"here you are / can I help you? (polite)","kažem":"I say (kazati)","dobar":"good (masc.)","dan":"day","jedno":"one (neut.)","šest":"six","molim":"please","svež":"fresh (masc.)","još":"still · more","topao":"warm (masc.)","sve":"everything","košta":"costs (koštati)","trista":"three hundred","dinara":"dinars (gen. pl. of dinar)","plaćam":"I pay (plaćati)","karticom":"by card (instr. of kartica)","hvala":"thank you","doviđenja":"goodbye"}},
+{id:4,lv:"A2",t:"Vikend u Beogradu",em:"🏰",
+ s:[
+  {sr:"Prošlog vikenda moja drugarica Ana je došla u Beograd.",en:"Last weekend my friend Ana came to Belgrade."},
+  {sr:"U subotu ujutru smo šetale po Kalemegdanu.",en:"On Saturday morning we walked around Kalemegdan."},
+  {sr:"Odatle se vidi mesto gde se Sava uliva u Dunav.",en:"From there you can see the place where the Sava flows into the Danube."},
+  {sr:"Posle šetnje smo popile kafu u Knez Mihailovoj ulici.",en:"After the walk we had coffee on Knez Mihailova Street."},
+  {sr:"Uveče smo otišle u restoran na Skadarliji i jele ćevape.",en:"In the evening we went to a restaurant in Skadarlija and ate ćevapi."},
+  {sr:"U nedelju je padala kiša, pa smo ostale kod kuće i gledale film.",en:"On Sunday it rained, so we stayed home and watched a film."},
+  {sr:"Ana kaže da će sigurno opet doći.",en:"Ana says she will definitely come again."}],
+ g:{"prošlog":"last (gen. masc. of prošli)","vikenda":"weekend (gen. of vikend) — prošlog vikenda = last weekend","moja":"my (fem.)","drugarica":"friend (female)","ana":"Ana (a name)","je":"is (auxiliary of the past tense)","došla":"came (fem. participle of doći, pf.)","u":"to (+ acc.) · in (+ loc.)","beograd":"Belgrade (acc.)","subotu":"Saturday (acc. of subota) — u subotu = on Saturday","ujutru":"in the morning","smo":"we are (auxiliary of the past tense)","šetale":"walked (fem. pl. participle of šetati)","po":"around, along (+ loc.)","kalemegdanu":"Kalemegdan, Belgrade's fortress park (loc.)","odatle":"from there","se":"(reflexive) — se vidi = can be seen","vidi":"sees (videti) — se vidi = is visible","mesto":"place","gde":"where","sava":"the Sava (river)","uliva":"flows into (ulivati se)","dunav":"the Danube (acc.)","posle":"after (+ gen.)","šetnje":"walk (gen. of šetnja)","popile":"drank (fem. pl. participle of popiti, pf.)","kafu":"coffee (acc. of kafa)","knez":"prince — Knez Mihailova = Prince Michael (street)","mihailovoj":"Mihailova (loc. fem. adjective)","ulici":"street (loc. of ulica)","uveče":"in the evening","otišle":"went, left (fem. pl. participle of otići, pf.)","restoran":"restaurant (acc.)","na":"on, at","skadarliji":"Skadarlija, Belgrade's old bohemian street (loc.)","i":"and","jele":"ate (fem. pl. participle of jesti)","ćevape":"ćevapi, grilled minced-meat rolls (acc. pl.)","nedelju":"Sunday (acc. of nedelja) — u nedelju = on Sunday","padala":"fell (fem. participle of padati) — padala je kiša = it rained","kiša":"rain","pa":"so, and then","ostale":"stayed (fem. pl. participle of ostati, pf.)","kod":"at (+ gen.) — kod kuće = at home","kuće":"house (gen. of kuća)","gledale":"watched (fem. pl. participle of gledati)","film":"film (acc.)","kaže":"says (kazati)","da":"that","će":"will (future auxiliary, 3rd sg.)","sigurno":"definitely, surely","opet":"again","doći":"to come (pf.)"}},
+{id:5,lv:"A2",t:"Na pijaci",em:"🍅",
+ s:[
+  {sr:"Subotom rano ujutru idem na pijacu.",en:"On Saturdays, early in the morning, I go to the market."},
+  {sr:"Volim pijacu jer je sve sveže i jeftinije nego u prodavnici.",en:"I like the market because everything is fresh and cheaper than in the shop."},
+  {sr:"Kupujem paradajz, krastavce, papriku i luk.",en:"I buy tomatoes, cucumbers, peppers and onions."},
+  {sr:"Jedan prodavac uvek daje jabuku mom sinu besplatno.",en:"One vendor always gives my son an apple for free."},
+  {sr:"Pitam ga koliko košta kilogram šljiva.",en:"I ask him how much a kilogram of plums costs."},
+  {sr:"„Sto pedeset dinara, ali za vas sto“, kaže on i smeje se.",en:"\"One hundred and fifty dinars, but for you one hundred,\" he says and laughs."},
+  {sr:"Kući se vraćam sa punim kesama i praznim novčanikom.",en:"I return home with full bags and an empty wallet."}],
+ g:{"subotom":"on Saturdays (instr. of subota)","rano":"early","ujutru":"in the morning","idem":"I go (ići)","na":"to (+ acc.) · at (+ loc.)","pijacu":"market (acc. of pijaca)","volim":"I love, I like (voleti)","jer":"because","je":"is","sve":"everything","sveže":"fresh (neut.)","i":"and","jeftinije":"cheaper (comparative of jeftino)","nego":"than","u":"in (+ loc.)","prodavnici":"shop (loc. of prodavnica)","kupujem":"I buy (kupovati)","paradajz":"tomato(es) (acc.)","krastavce":"cucumbers (acc. pl. of krastavac)","papriku":"pepper (acc. of paprika)","luk":"onion(s) (acc.)","jedan":"one (masc.)","prodavac":"vendor, seller","uvek":"always","daje":"gives (davati)","jabuku":"apple (acc. of jabuka)","mom":"my (dat. masc. of moj)","sinu":"son (dat. of sin)","besplatno":"for free","pitam":"I ask (pitati)","ga":"him (acc. of on)","koliko":"how much, how many","košta":"costs (koštati)","kilogram":"kilogram","šljiva":"plums (gen. pl. of šljiva)","sto":"a hundred","pedeset":"fifty","dinara":"dinars (gen. pl. of dinar)","ali":"but","za":"for (+ acc.)","vas":"you (acc. pl. / polite)","kaže":"says (kazati)","on":"he","smeje":"laughs (smejati se)","se":"(reflexive) — smeje se = laughs","kući":"home, homeward (dat. of kuća)","vraćam":"I return (vraćati se)","sa":"with (+ instr.)","punim":"full (instr. pl. of pun)","kesama":"bags (instr. pl. of kesa)","praznim":"empty (instr. of prazan)","novčanikom":"wallet (instr. of novčanik)"}},
+{id:6,lv:"A2",t:"Pismo prijatelju",em:"✉️",
+ s:[
+  {sr:"Dragi Stefane,",en:"Dear Stefan,"},
+  {sr:"Kako si? Ja sam dobro, ali imam mnogo posla.",en:"How are you? I am well, but I have a lot of work."},
+  {sr:"Prošle nedelje sam počeo da učim srpski jezik.",en:"Last week I started learning Serbian."},
+  {sr:"Gramatika je teška, posebno padeži, ali mi se sviđa.",en:"The grammar is hard, especially the cases, but I like it."},
+  {sr:"Svaki dan učim nove reči i slušam srpsku muziku.",en:"Every day I learn new words and listen to Serbian music."},
+  {sr:"Sledećeg meseca dolazim u Novi Sad na nekoliko dana.",en:"Next month I am coming to Novi Sad for a few days."},
+  {sr:"Nadam se da ćemo se videti. Piši mi uskoro!",en:"I hope we will see each other. Write to me soon!"},
+  {sr:"Tvoj Marko",en:"Yours, Marko"}],
+ g:{"dragi":"dear (masc.)","stefane":"Stefan (vocative of Stefan)","kako":"how","si":"you are (2nd sg. of biti)","ja":"I","sam":"I am (1st sg. of biti)","dobro":"well, good","ali":"but","imam":"I have (imati)","mnogo":"a lot, many (+ gen.)","posla":"work (gen. of posao)","prošle":"last (gen. fem. of prošli)","nedelje":"week (gen. of nedelja) — prošle nedelje = last week","počeo":"started (masc. participle of početi, pf.)","da":"to · that (introduces a verb clause)","učim":"I learn, I study (učiti)","srpski":"Serbian (masc. adjective)","jezik":"language","gramatika":"grammar","je":"is","teška":"hard, difficult (fem.)","posebno":"especially","padeži":"(grammatical) cases (pl. of padež)","mi":"to me (dat.) — mi se sviđa = I like it","se":"(reflexive)","sviđa":"pleases (sviđati se) — mi se sviđa = I like it","svaki":"every","dan":"day","nove":"new (acc. pl. fem.)","reči":"words (acc. pl. of reč)","i":"and","slušam":"I listen to (slušati)","srpsku":"Serbian (acc. fem.)","muziku":"music (acc. of muzika)","sledećeg":"next (gen. masc. of sledeći)","meseca":"month (gen. of mesec) — sledećeg meseca = next month","dolazim":"I come, I am coming (dolaziti)","u":"to (+ acc.)","novi":"new (masc.) — Novi Sad, Serbia's second city","sad":"Novi Sad (the city); on its own sad = now","na":"for (a period of time)","nekoliko":"a few, several (+ gen.)","dana":"days (gen. pl. of dan)","nadam":"I hope (nadati se)","ćemo":"we will (future auxiliary)","videti":"to see — videti se = to see each other","piši":"write! (imperative of pisati)","uskoro":"soon","tvoj":"your (masc.)","marko":"Marko (a name)"}},
+{id:7,lv:"B1",t:"Zima na selu",em:"❄️",
+ s:[
+  {sr:"Kada sam bio mali, svake zime smo išli kod dede na selo.",en:"When I was little, every winter we went to grandpa's in the countryside."},
+  {sr:"Kuća je bila stara, ali topla, jer je deda uvek ložio vatru u peći.",en:"The house was old but warm, because grandpa always kept a fire going in the stove."},
+  {sr:"Ujutru bi nas budio miris kafe i domaćeg hleba.",en:"In the morning the smell of coffee and homemade bread would wake us."},
+  {sr:"Napolju je sve bilo belo, a sneg je škripao pod čizmama.",en:"Outside everything was white, and the snow creaked under our boots."},
+  {sr:"Sa bratom sam pravio Sneška Belića i grudvali smo se do mraka.",en:"With my brother I built a snowman and we had snowball fights until dark."},
+  {sr:"Uveče je baka pričala priče o vukovima koji su nekada silazili do sela.",en:"In the evening grandma told stories about wolves that once used to come down to the village."},
+  {sr:"Danas, kad god vidim sneg, setim se tih zima i osetim miris dedine peći.",en:"Today, whenever I see snow, I remember those winters and smell grandpa's stove."}],
+ g:{"kada":"when","sam":"I am (past-tense auxiliary)","bio":"was (masc. participle of biti)","mali":"little, small (masc.)","svake":"every (gen. fem. of svaki)","zime":"winter (gen. of zima) — svake zime = every winter","smo":"we are (past-tense auxiliary)","išli":"went (masc. pl. participle of ići)","kod":"at, to (someone's place) (+ gen.)","dede":"grandpa (gen. of deda)","na":"to · in","selo":"village, countryside (acc.)","kuća":"house","je":"is (past-tense auxiliary)","bila":"was (fem. participle of biti)","stara":"old (fem.)","ali":"but","topla":"warm (fem.)","jer":"because","deda":"grandpa","uvek":"always","ložio":"stoked, kept burning (masc. participle of ložiti)","vatru":"fire (acc. of vatra)","u":"in (+ loc.)","peći":"stove (loc./gen. of peć)","ujutru":"in the morning","bi":"would (conditional auxiliary)","nas":"us (acc. of mi)","budio":"woke (masc. participle of buditi)","miris":"smell, scent","kafe":"coffee (gen. of kafa)","i":"and","domaćeg":"homemade (gen. masc. of domaći)","hleba":"bread (gen. of hleb)","napolju":"outside","sve":"everything","bilo":"was (neut. participle of biti)","belo":"white (neut.)","a":"and, while (contrast)","sneg":"snow","škripao":"creaked (masc. participle of škripati)","pod":"under (+ instr.)","čizmama":"boots (instr. pl. of čizma)","sa":"with (+ instr.)","bratom":"brother (instr. of brat)","pravio":"made, built (masc. participle of praviti)","sneška":"Sneško Belić = snowman (acc.)","belića":"(second half of Sneško Belić, acc.)","grudvali":"had snowball fights (masc. pl. participle of grudvati se)","se":"(reflexive)","do":"until (+ gen.)","mraka":"dark, darkness (gen. of mrak)","uveče":"in the evening","baka":"grandma","pričala":"told (fem. participle of pričati)","priče":"stories (acc. pl. of priča)","o":"about (+ loc.)","vukovima":"wolves (loc. pl. of vuk)","koji":"who, which (masc. pl.)","su":"are (past-tense auxiliary, 3rd pl.)","nekada":"once, in the past","silazili":"came down (masc. pl. participle of silaziti)","sela":"village (gen. of selo)","danas":"today","kad":"when — kad god = whenever","god":"(with kad) -ever","vidim":"I see (videti)","setim":"I remember (setiti se, pf.)","tih":"those (gen. pl. of taj)","zima":"winters (gen. pl. of zima)","osetim":"I feel, I sense (osetiti, pf.)","dedine":"grandpa's (gen. fem. possessive adjective)"}},
+{id:8,lv:"B1",t:"Razgovor u kafiću",em:"☕",
+ s:[
+  {sr:"— Izvinite, da li je ovo mesto slobodno?",en:"\"Excuse me, is this seat free?\""},
+  {sr:"— Jeste, izvolite. Čekate nekoga?",en:"\"It is, go ahead. Are you waiting for someone?\""},
+  {sr:"— Ne, samo sam došao da popijem kafu i malo čitam.",en:"\"No, I just came to have a coffee and read a bit.\""},
+  {sr:"— Odlična knjiga. Pročitala sam je prošle godine, kraj me je iznenadio.",en:"\"Great book. I read it last year; the ending surprised me.\""},
+  {sr:"— Nemojte mi reći kako se završava! Tek sam na pola.",en:"\"Don't tell me how it ends! I'm only halfway.\""},
+  {sr:"— Neću, obećavam. Odakle ste? Imate mali naglasak.",en:"\"I won't, I promise. Where are you from? You have a slight accent.\""},
+  {sr:"— Iz Amerike sam, ali već dve godine živim u Beogradu i učim srpski.",en:"\"I'm from America, but I've been living in Belgrade for two years and learning Serbian.\""},
+  {sr:"— Odlično govorite! Ja sam Milica, drago mi je.",en:"\"You speak excellently! I'm Milica, nice to meet you.\""}],
+ g:{"izvinite":"excuse me (polite)","da":"(question particle) — da li = is…?","li":"(question particle) — da li = is…?","je":"is · also it/her (acc. of ona) — Pročitala sam je = I read it","ovo":"this (neut.)","mesto":"seat, place","slobodno":"free (neut.)","jeste":"it is (emphatic yes)","izvolite":"go ahead, please (polite)","čekate":"you are waiting (čekati, 2nd pl. / polite)","nekoga":"someone (acc. of neko)","ne":"no · not","samo":"only, just","sam":"I am (past-tense auxiliary)","došao":"came (masc. participle of doći, pf.)","popijem":"I drink up (popiti, pf.) — da popijem = to have a drink","kafu":"coffee (acc. of kafa)","i":"and","malo":"a little","čitam":"I read (čitati)","odlična":"excellent (fem.)","knjiga":"book","pročitala":"read (fem. participle of pročitati, pf.)","prošle":"last (gen. fem. of prošli)","godine":"year (gen. of godina) — prošle godine = last year","kraj":"end, ending","me":"me (acc. of ja)","iznenadio":"surprised (masc. participle of iznenaditi, pf.)","nemojte":"don't (polite negative imperative)","mi":"to me (dat.)","reći":"to say, to tell (pf.)","kako":"how","se":"(reflexive) — završava se = it ends","završava":"ends (završavati se)","tek":"only, just (barely)","na":"on, at","pola":"half — na pola = halfway","neću":"I won't (negative future of hteti)","obećavam":"I promise (obećavati)","odakle":"from where","ste":"you are (2nd pl. / polite of biti)","imate":"you have (imati, 2nd pl. / polite)","mali":"small, slight (masc.)","naglasak":"accent","iz":"from (+ gen.)","amerike":"America (gen. of Amerika)","ali":"but","već":"already — već dve godine = for two years now","dve":"two (fem.)","živim":"I live (živeti)","u":"in (+ loc.)","beogradu":"Belgrade (loc.)","učim":"I learn, I study (učiti)","srpski":"Serbian","odlično":"excellently, great","govorite":"you speak (govoriti, 2nd pl. / polite)","ja":"I","milica":"Milica (a name)","drago":"dear, glad — drago mi je = nice to meet you"}}
+];
+
 // ═══════════════ LANGUAGE SYSTEM ═══════════════
 const LANG_DATA={
   sr:{name:'Serbian',flag:'rs',code:'sr',units:U_SR},
@@ -2586,6 +2722,7 @@ let UNITS,ALL_PH,ALL_W;
 let VERBS=[];
 let NOUNS=[];
 let SENTENCES=[];
+let READINGS=[];
 function langName(){return LANG_DATA[curLang].name;}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
@@ -2804,6 +2941,7 @@ function setLang(code){
   VERBS=curLang==='sr'?V_SR:[];
   NOUNS=curLang==='sr'?N_SR:[];
   SENTENCES=curLang==='sr'?SENT_SR:[];
+  READINGS=curLang==='sr'?READ_SR:[];
   // Note: search-index cache invalidates automatically on next sxIndex() call
   // when curLang changes (the cache stores _SX_LANG and compares). No explicit
   // clear needed — and clearing here would crash at init since _SX_CACHE is
@@ -3905,6 +4043,21 @@ function _sxLev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let pre
 
 // Build the flat searchable index for the current language.
 // Returns array of {type, word, source, english, normSource, normEnglish}
+// ═══════════════ READING ═══════════════
+function _rdCore(tok){return tok.replace(/[„“”"'.,!?;:()—–-]/g,'').trim();}
+// Gloss for a tapped word: the text's own gloss map (inflected forms) first,
+// then a dictionary headword/alias match, then a stem match on course words.
+function rdGloss(r,tok){
+  const k=tok.toLowerCase();
+  if(r.g&&r.g[k])return r.g[k];
+  const n=_sxNorm(k);
+  const e=sxIndex().find(x=>x.normSource===n||(x.alt||[]).includes(n));
+  if(e)return e.english+(e.type==='verb'?' ('+e.source+')':'');
+  const c=normSR(k).replace(/[^a-z]/g,'');
+  const w=c.length>=4?ALL_W.find(x=>{const sk=_fcStemKey(x.l);return sk.k.length>=3&&_fcTokHit(c,sk);}):null;
+  return w?w.e+' ('+w.l+')':'';
+}
+
 // ═══════════════ CLOZE DRILL ═══════════════
 // One Serbian sentence, one word missing. Items come from every sentence-bank
 // blank plus every unit phrase that contains one of the unit's own words, so
@@ -4868,6 +5021,119 @@ _sentResetDayIfNeeded(){
   if(st.sentDoneDate!==today){st.sentDoneDate=today;st.sentDoneToday=[];}
 },
 
+renderReadingHome(){
+  const el=document.getElementById('reading-home');
+  if(!READINGS.length){el.innerHTML='<div class="empty-state">'+zekaHtml('Reading is only available for Serbian right now.')+'</div>';return;}
+  const done=st.readDone||[];
+  let h='<div class="cz-hero"><div class="cz-hero-i">📖</div><div class="cz-hero-t">Reading</div>';
+  h+='<div class="cz-hero-d">Short texts at your level. Tap any word for its meaning; reveal a sentence\'s English only when you need it.</div>';
+  h+='<div class="cz-hero-n">'+done.length+' of '+READINGS.length+' read</div></div>';
+  ['A1','A2','B1','B2','C1'].forEach(lv=>{
+    const list=READINGS.filter(r=>r.lv===lv);if(!list.length)return;
+    h+='<div class="rd-lv">'+lv+'</div>';
+    list.forEach(r=>{
+      const isDone=done.includes(r.id);
+      const words=r.s.reduce((a,x)=>a+x.sr.split(/\s+/).filter(t=>_rdCore(t)).length,0);
+      h+='<div class="rd-row'+(isDone?' done':'')+'" onclick="S.openReading('+r.id+')">';
+      h+='<span class="rd-row-em">'+r.em+'</span>';
+      h+='<div class="rd-row-b"><div class="rd-row-t">'+esc(r.t)+'</div><div class="rd-row-m">'+r.s.length+' sentences · '+words+' words</div></div>';
+      h+=isDone?'<span class="rd-row-ck" data-icon="check"></span>':'<span class="rd-row-ar">›</span>';
+      h+='</div>';
+    });
+  });
+  el.innerHTML=h;
+  renderIcons(el);
+},
+
+openReading(id){
+  const r=READINGS.find(x=>x.id===id);if(!r)return;
+  st.rdId=id;st.rdTapped=new Set();st.rdShown=new Set();
+  this.goScr('reading');
+  this.renderReading();
+},
+
+renderReading(){
+  const r=READINGS.find(x=>x.id===st.rdId);if(!r)return;
+  document.getElementById('rd-title').textContent=r.lv+' · '+r.t;
+  let h='<div class="rd-head"><span class="rd-head-em">'+r.em+'</span><span class="rd-head-t">'+esc(r.t)+'</span></div>';
+  h+='<div class="rd-hint">Tap a word for its meaning · EN shows a sentence in English</div>';
+  h+='<div class="rd-text">';
+  r.s.forEach((sen,si)=>{
+    h+='<div class="rd-sent">';
+    h+='<div class="rd-sr">'+sen.sr.split(/(\s+)/).map(tok=>{
+      if(!tok.trim())return tok;
+      const c=_rdCore(tok);
+      if(!c)return '<span class="rd-punct">'+esc(tok)+'</span>';
+      return '<span class="rd-w" data-t="'+esc(c)+'" onclick="S.rdTap(this)">'+esc(tok)+'</span>';
+    }).join('')+'<button class="rd-en-btn" onclick="S.rdToggleEn('+si+')" aria-label="Show this sentence in English">EN</button></div>';
+    h+='<div class="rd-en" id="rd-en'+si+'" style="display:none">'+esc(sen.en)+'</div>';
+    h+='</div>';
+  });
+  h+='</div>';
+  const done=(st.readDone||[]).includes(r.id);
+  h+='<div class="rd-actions">';
+  h+='<button class="rd-all" onclick="S.rdToggleAll()">Show all translations</button>';
+  h+=done?'<div class="rd-done-note">✓ You have read this one</div>':'<button class="cz-start" style="margin-top:10px" onclick="S.rdMarkDone()">Mark as read</button>';
+  h+='</div>';
+  const body=document.getElementById('rd-body');
+  body.innerHTML=h;body.scrollTop=0;
+  document.getElementById('rd-bar').style.display='none';
+},
+
+rdTap(el){
+  const r=READINGS.find(x=>x.id===st.rdId);if(!r)return;
+  const t=el.dataset.t;
+  document.querySelectorAll('.rd-w.hi').forEach(x=>x.classList.remove('hi'));
+  el.classList.add('hi');
+  const g=rdGloss(r,t);
+  st.rdTapped.add(t.toLowerCase());
+  const bar=document.getElementById('rd-bar');
+  bar.innerHTML='<div class="rd-bar-w">'+esc(t)+'</div><div class="rd-bar-g">'+esc(g||'No gloss for this word yet')+'</div>';
+  bar.style.display='';
+  sCl();
+},
+
+rdToggleEn(si){
+  const e=document.getElementById('rd-en'+si);if(!e)return;
+  const show=e.style.display==='none';
+  e.style.display=show?'':'none';
+  if(show)st.rdShown.add(si);
+},
+
+rdToggleAll(){
+  const all=[...document.querySelectorAll('.rd-en')];
+  const anyHidden=all.some(e=>e.style.display==='none');
+  all.forEach((e,i)=>{e.style.display=anyHidden?'':'none';if(anyHidden)st.rdShown.add(i);});
+  const b=document.querySelector('.rd-all');if(b)b.textContent=anyHidden?'Hide translations':'Show all translations';
+},
+
+rdMarkDone(){
+  const r=READINGS.find(x=>x.id===st.rdId);if(!r)return;
+  if(!st.readDone.includes(r.id))st.readDone.push(r.id);
+  const streakHit=bumpStreak();save();sDn();
+  const looked=st.rdTapped.size,shown=st.rdShown.size;
+  const el=document.getElementById('rd-body');
+  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  h+=zekaHtml(looked<=3?'Read like a local — hardly any lookups!':looked<=8?'Good reading. The words you tapped are worth a second look.':'A tough one, but you got through it. Come back to it in a few days.');
+  h+='<div style="font-size:22px;font-weight:800;color:#fff">'+esc(r.t)+'</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center">';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+r.s.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">SENTENCES</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+looked+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">LOOKED UP</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+shown+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">TRANSLATED</div></div>';
+  h+='</div>';
+  if(looked)h+='<div class="rd-looked">'+[...st.rdTapped].map(t=>'<span class="rd-looked-w">'+esc(t)+'</span>').join('')+'</div>';
+  h+='<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:8px">';
+  const next=READINGS.find(x=>!st.readDone.includes(x.id));
+  if(next)h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.openReading('+next.id+')">Next: '+esc(next.t)+' →</button>';
+  h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)" onclick="S.exitReading()">Done</button>';
+  h+='</div></div>';
+  el.innerHTML=h;el.scrollTop=0;
+  document.getElementById('rd-bar').style.display='none';
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
+},
+
+exitReading(){sCl();this.goHome();this.setLearnMode('reading');},
+
 renderClozeHome(){
   const el=document.getElementById('cloze-home');
   if(curLang!=='sr'){el.innerHTML='<div class="empty-state">'+zekaHtml('Cloze is only available for Serbian right now.')+'</div>';return;}
@@ -5280,7 +5546,8 @@ async switchLang(){
   st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false};
   if(st.grammarMode==='cases'&&next!=='sr')st.grammarMode='verbs';
   // Drop every language-scoped pane so nothing from the previous language lingers
-  ['hscr','fc-home','match-home','verb-home','case-home','sentence-home','pg-body','sx-body'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML='';});
+  st.readDone=[];
+  ['hscr','fc-home','match-home','verb-home','case-home','sentence-home','cloze-home','reading-home','pg-body','sx-body'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML='';});
   const sx=document.getElementById('sx-input');if(sx)sx.value='';this._sxExpanded=null;
   document.querySelectorAll('.lp-sheet').forEach(x=>x.remove());
   this.closeOverflowMenu();
