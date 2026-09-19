@@ -3659,6 +3659,12 @@ function fcSmoothBacklog(){
   save();
   return Math.ceil(due.length/FC_SMOOTH_PER_DAY);
 }
+// Overlays (sheets, modals) mount inside #scr, not <body>: on the desktop shell
+// #scr is transform-scaled, which makes position:fixed descendants size to the
+// phone frame instead of the whole browser window. On a phone #scr fills the
+// viewport, so nothing changes there.
+function _overlayHost(){return document.getElementById('scr')||document.body;}
+
 // Which of the "also today" activities (match / cloze / reading) are done today
 function _todayFlags(){const d=new Date().toDateString();if(!st.today||st.today.d!==d)st.today={d,m:0,c:0,r:0};return st.today;}
 function markToday(k){const t=_todayFlags();if(!t[k]){t[k]=1;save();}}
@@ -5594,7 +5600,7 @@ openModesSheet(e){
     h+='</button>';
   });
   h+='</div>';
-  sheet.innerHTML=h;document.body.appendChild(sheet);
+  sheet.innerHTML=h;_overlayHost().appendChild(sheet);
   sheet.addEventListener('click',ev=>{if(ev.target===sheet)S.closeOverflowMenu();});
   if(!REDUCED_MOTION){anim(sheet,{opacity:[0,1]},{duration:.18});anim(sheet.querySelector('.lp-card'),{transform:['translateY(100%)','translateY(0)']},{duration:.32,easing:'cubic-bezier(.22,.61,.36,1)'});}
 },
@@ -5777,7 +5783,7 @@ lockedTap(uid){
   h+='<div class="lock-msg">Lessons unlock in order. Finish <b>'+esc(req.t)+'</b>'+(between>1?' and the '+(between-1)+' lesson'+(between>2?'s':'')+' after it':'')+' to unlock <b>'+esc(u.t)+'</b>.</div>';
   h+='<button class="lp-go" id="lock-go">Go to '+esc(req.t)+' →</button>';
   h+='</div>';
-  sheet.innerHTML=h;document.body.appendChild(sheet);
+  sheet.innerHTML=h;_overlayHost().appendChild(sheet);
   const close=()=>{if(sheet.parentNode)sheet.remove();};
   sheet.addEventListener('click',e=>{if(e.target.id==='lock-go'){close();S.startL(req.id);}else if(e.target===sheet)close();});
   if(!REDUCED_MOTION){anim(sheet,{opacity:[0,1]},{duration:.18});anim(sheet.querySelector('.lp-card'),{transform:['translateY(100%)','translateY(0)']},{duration:.32,easing:'cubic-bezier(.22,.61,.36,1)'});}
@@ -6818,7 +6824,7 @@ renderIcons();
     h+='<button class="lp-go" data-uid="'+u.id+'">Start lesson →</button>';
     h+='</div>';
     sheet.innerHTML=h;
-    document.body.appendChild(sheet);
+    _overlayHost().appendChild(sheet);
     const close=()=>{
       if(!sheet.parentNode)return;
       anim(sheet.querySelector('.lp-card'),{transform:['translateY(0)','translateY(100%)']},{duration:.22,easing:'cubic-bezier(.4,0,1,1)'});
