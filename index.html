@@ -436,12 +436,9 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .save-ind.show{opacity:1}
 .seg-toggle{display:flex;margin:8px 20px;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;gap:2px}
 .seg-btn{flex:1;padding:8px 0;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:rgba(255,255,255,.5);transition:.2s}
-.seg-toggle-4 .seg-btn{font-size:11px;padding:8px 2px;letter-spacing:.2px}
+.seg-toggle-4 .seg-btn{font-size:12px;padding:8px 2px;letter-spacing:.1px}
 .seg-toggle-5 .seg-btn{font-size:10px;padding:8px 1px;letter-spacing:0}
 .seg-toggle .seg-more{flex:0 0 36px;font-size:18px;font-weight:700;letter-spacing:0;padding:8px 0}
-.overflow-menu{position:absolute;top:120px;right:22px;background:var(--surface-raised);border:1px solid var(--divider);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:2px;z-index:200;box-shadow:0 8px 28px rgba(0,0,0,.4);min-width:140px}
-.overflow-item{background:none;border:none;color:var(--text-1);font-size:14px;font-weight:600;text-align:left;padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .15s}
-.overflow-item:hover,.overflow-item:active{background:rgba(255,255,255,.08)}
 .seg-btn.seg-active{background:rgba(255,255,255,.15);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .fc-top{padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
 .fc-count{font-size:14px;font-weight:700;color:rgba(255,255,255,.6)}
@@ -628,6 +625,49 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sent-blank.inc{border-bottom-color:var(--red);background:rgba(255,107,107,.15);color:#FF9999}
 .sent-punct{display:inline}
 
+/* SHARED: session-complete screens + CTA buttons */
+.done-wrap{text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.done-title{font-size:22px;font-weight:800;color:#fff}
+.done-stats{display:flex;gap:20px;justify-content:center}
+.done-stat{text-align:center}
+.done-stat-v{font-size:28px;font-weight:800;font-family:var(--font-display);font-feature-settings:'tnum' on;line-height:1.1}
+.done-stat-l{font-size:11px;color:rgba(255,255,255,.5);font-weight:700;margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.done-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:8px}
+.btn-cta{display:block;width:100%;max-width:360px;margin-left:auto;margin-right:auto;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);transition:transform .1s,box-shadow .1s}
+.btn-cta:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
+.btn-cta.blue{background:var(--sr-blue);box-shadow:0 4px 0 var(--sr-blue-d)}
+.btn-cta.blue:active{box-shadow:0 2px 0 var(--sr-blue-d)}
+.btn-cta.purple{background:#8B5CD6;box-shadow:0 4px 0 #5F3AA6}
+.btn-cta.purple:active{box-shadow:0 2px 0 #5F3AA6}
+.btn-cta.sm{padding:14px;font-size:14px;border-radius:14px;box-shadow:0 3px 0 var(--green-d)}
+.btn-cta.sm.blue{box-shadow:0 3px 0 var(--sr-blue-d)}
+.btn-cta.sm.purple{box-shadow:0 3px 0 #5F3AA6}
+.btn-soft{display:block;width:100%;max-width:360px;margin-left:auto;margin-right:auto;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)}
+.btn-soft:active{background:rgba(255,255,255,.18)}
+
+/* MODES SHEET (⋯) */
+.modes-sheet .lp-card{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
+.ms-title{font-family:var(--font-display);font-size:20px;font-weight:700;color:#fff;margin:0 4px 12px}
+.ms-row{display:flex;align-items:center;gap:14px;width:100%;padding:12px;border:none;border-radius:14px;background:rgba(255,255,255,.04);color:#fff;text-align:left;cursor:pointer;margin-bottom:8px;transition:background .15s;font-family:var(--font)}
+.ms-row:hover,.ms-row:active{background:rgba(255,255,255,.09)}
+.ms-row.act{background:rgba(26,95,209,.18);box-shadow:inset 0 0 0 1.5px rgba(26,95,209,.6)}
+.ms-em{font-size:26px;width:36px;text-align:center;flex-shrink:0}
+.ms-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ms-t{font-size:15px;font-weight:800}
+.ms-s{font-size:12px;color:var(--text-2)}
+.ms-ar{color:rgba(255,255,255,.3);font-size:20px}
+
+/* ALSO TODAY strip (Flashcards home) */
+.today-l{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:24px 0 8px;text-align:center}
+.today-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.today-tile{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 6px;border:2px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.04);color:#fff;cursor:pointer;transition:.15s;min-width:0;font-family:var(--font)}
+.today-tile:active{transform:translateY(1px)}
+.today-tile.done{border-color:rgba(88,204,2,.45);background:rgba(88,204,2,.08)}
+.today-tile.dis{opacity:.55}
+.today-em{font-size:24px}
+.today-t{font-size:13px;font-weight:800}
+.today-s{font-size:11px;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
 /* CLOZE */
 .cz-hero{text-align:center;padding:18px 6px 6px}
 .cz-hero-i{font-size:44px;margin-bottom:6px}
@@ -675,7 +715,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .rd-w:hover{background:rgba(26,95,209,.15)}
 .rd-w.hi{background:rgba(26,95,209,.35);color:#fff}
 .rd-punct{color:var(--text-2)}
-.rd-en-btn{margin-left:8px;vertical-align:middle;font-family:var(--font-body,inherit);font-size:10px;font-weight:800;letter-spacing:1px;color:var(--text-3);background:rgba(255,255,255,.06);border:1px solid var(--divider);border-radius:6px;padding:2px 6px;cursor:pointer}
+.rd-en-btn{margin-left:8px;vertical-align:middle;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:1px;color:var(--text-3);background:rgba(255,255,255,.06);border:1px solid var(--divider);border-radius:6px;padding:2px 6px;cursor:pointer}
 .rd-en-btn:hover{color:var(--text-1)}
 .rd-en{font-size:14px;color:var(--text-2);font-style:italic;line-height:1.5;margin-top:4px}
 .rd-actions{margin-top:16px}
@@ -913,12 +953,6 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <button class="seg-btn" onclick="S.setLearnMode('lessons')">Lessons</button>
     <button class="seg-btn" onclick="S.setLearnMode('match')">Match</button>
     <button class="seg-btn seg-more" onclick="S.toggleOverflowMenu(event)" aria-label="More modes">⋯</button>
-  </div>
-  <div id="overflow-menu" class="overflow-menu" style="display:none">
-    <button class="overflow-item" onclick="S.setLearnMode('verbs');S.closeOverflowMenu()">Verbs</button>
-    <button class="overflow-item" onclick="S.setLearnMode('sentences');S.closeOverflowMenu()">Sentences</button>
-    <button class="overflow-item" onclick="S.setLearnMode('cloze');S.closeOverflowMenu()">Cloze</button>
-    <button class="overflow-item" onclick="S.setLearnMode('reading');S.closeOverflowMenu()">Reading</button>
   </div>
   <div class="hscr" id="hscr" style="display:none"></div>
   <div id="fc-home" style="flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
@@ -3213,7 +3247,7 @@ function getStateData(){
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
     fcNewToday:st.fcNewToday,fcReviewedToday:st.fcReviewedToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
     sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate,
-    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone};
+    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
@@ -3225,6 +3259,7 @@ function applyStateData(p){
   st.sentDoneToday=p.sentDoneToday||[];st.sentDoneDate=p.sentDoneDate||'';
   st.vbTense=p.vbTense==='past'?'past':'present';st.clozeMode=p.clozeMode==='type'?'type':'tap';
   st.readDone=Array.isArray(p.readDone)?p.readDone:[];
+  st.today=(p.today&&typeof p.today==='object')?p.today:{d:'',m:0,c:0,r:0};
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},p.firsts||{});
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
@@ -3534,7 +3569,7 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
   fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
-  vbTense:'present',clozeMode:'tap',readDone:[],
+  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -3624,6 +3659,9 @@ function fcSmoothBacklog(){
   save();
   return Math.ceil(due.length/FC_SMOOTH_PER_DAY);
 }
+// Which of the "also today" activities (match / cloze / reading) are done today
+function _todayFlags(){const d=new Date().toDateString();if(!st.today||st.today.d!==d)st.today={d,m:0,c:0,r:0};return st.today;}
+function markToday(k){const t=_todayFlags();if(!t[k]){t[k]=1;save();}}
 function _fcResetDayIfNeeded(){
   const today=new Date().toDateString();
   if(st.fcNewDate!==today){st.fcNewDate=today;st.fcNewToday=0;st.fcReviewedToday=0;save();}
@@ -4265,12 +4303,6 @@ renderFcHome(){
     return;
   }
   let h='';
-  // Source-mode toggle at top
-  const isAll=(st.fcSourceMode||'all')==='all';
-  h+='<div class="fc-source-toggle">';
-  h+='<button class="'+(isAll?'act':'')+'" onclick="S.setFcSource(\'all\')">All Vocabulary</button>';
-  h+='<button class="'+(!isAll?'act':'')+'" onclick="S.setFcSource(\'completed\')">Completed Lessons</button>';
-  h+='</div>';
   // Welcome back: a big review backlog gets an offer to spread it out
   if(bd.reviews.length>FC_BACKLOG_THRESHOLD&&!this._backlogHidden){
     const away=st.lastDate?Math.floor((new Date(new Date().toDateString())-new Date(st.lastDate))/864e5):0;
@@ -4298,7 +4330,7 @@ renderFcHome(){
   const sess=fcBuildSession(bd);
   if(sess.capped)h+='<div class="fc-session-note">This session: <b>'+sess.cards.length+'</b> cards · '+sess.reviews+' review'+(sess.reviews!==1?'s':'')+(sess.news?' · '+sess.news+' new':'')+' · '+sess.remaining+' more after</div>';
   if(due.length>0){
-    h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Start Review</button>';
+    h+='<button class="btn-cta" style="margin-top:20px" onclick="S.startFcSession()">Start Review</button>';
   }else{
     // Find next due time
     const now=Date.now();let nextDue=Infinity;
@@ -4323,7 +4355,7 @@ renderFcHome(){
       if(b.preview>0)parts.push(b.preview+' preview');
       if(b.weak>0)parts.push(b.weak+' weak');
       h+='<div style="margin-top:18px;text-align:center">';
-      h+='<button style="width:100%;max-width:320px;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)" onclick="S.startOverflowSession()">Keep going · '+overflow.cards.length+' card'+(overflow.cards.length!==1?'s':'')+'</button>';
+      h+='<button class="btn-cta blue sm" onclick="S.startOverflowSession()">Keep going · '+overflow.cards.length+' card'+(overflow.cards.length!==1?'s':'')+'</button>';
       h+='<div style="font-size:11px;color:var(--g5);margin-top:6px;font-weight:700">'+parts.join(' · ')+'</div>';
       if(!st.firsts.keepGoing){
         h+='<div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:10px;font-style:italic;line-height:1.4;max-width:280px;margin-left:auto;margin-right:auto">Extra practice — overdoing it can shift your SRS schedule. Use sparingly.</div>';
@@ -4331,8 +4363,32 @@ renderFcHome(){
       h+='</div>';
     }
   }
+  // "Also today" — the rest of the daily routine, one tap away
+  if(curLang==='sr'){
+    const t=_todayFlags();
+    const elig=_mcEligibleCards().length;
+    const nextRead=READINGS.find(x=>!(st.readDone||[]).includes(x.id));
+    const tiles=[
+      {k:'m',em:'🧩',t:'Match',s:elig>=10?Math.min(5,Math.floor(Math.min(elig,25)/5))+' rounds':'Needs 10 cards',on:"S.setLearnMode('match')",dis:elig<10},
+      {k:'c',em:'✏️',t:'Cloze',s:'10 sentences',on:"S.startClozeSession(10)"},
+      {k:'r',em:'📖',t:'Read',s:nextRead?nextRead.t:'All texts read',on:nextRead?'S.openReading('+nextRead.id+')':"S.setLearnMode('reading')"}
+    ];
+    h+='<div class="today-l">Also today</div><div class="today-strip">';
+    tiles.forEach(x=>{
+      h+='<button class="today-tile'+(t[x.k]?' done':'')+(x.dis?' dis':'')+'" onclick="'+x.on+'">';
+      h+='<span class="today-em">'+x.em+'</span><span class="today-t">'+x.t+(t[x.k]?' ✓':'')+'</span><span class="today-s">'+esc(x.s)+'</span>';
+      h+='</button>';
+    });
+    h+='</div>';
+  }
+  // Card source
+  const isAll=(st.fcSourceMode||'all')==='all';
+  h+='<div class="fc-source-toggle" style="margin-top:22px">';
+  h+='<button class="'+(isAll?'act':'')+'" onclick="S.setFcSource(\'all\')">All Vocabulary</button>';
+  h+='<button class="'+(!isAll?'act':'')+'" onclick="S.setFcSource(\'completed\')">Completed Lessons</button>';
+  h+='</div>';
   // Daily new-card limit picker
-  h+='<div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:rgba(255,255,255,.45)">';
+  h+='<div style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:rgba(255,255,255,.45)">';
   h+='<span>New cards/day:</span>';
   [10,20,30,50].forEach(n=>{
     const active=(st.fcNewLimit||FC_NEW_LIMIT_DEFAULT)===n;
@@ -4375,7 +4431,7 @@ renderMatchHome(){
     h+='<div style="margin-top:24px;padding:24px;background:var(--surface);border-radius:14px;color:rgba(255,255,255,.7);font-size:13px;line-height:1.6">';
     h+='Finish a few flashcards first to unlock matching.<br><span style="color:var(--g5);font-size:12px">You have '+count+' card'+(count!==1?'s':'')+' ready · need at least 10.</span>';
     h+='</div>';
-    h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 4px 0 var(--sr-blue-d)" onclick="S.setLearnMode(\'flashcards\')">Go to flashcards →</button>';
+    h+='<button class="btn-cta blue" style="margin-top:20px" onclick="S.setLearnMode(\'flashcards\')">Go to flashcards →</button>';
   }else{
     h+='<div style="margin-top:24px;padding:18px;background:var(--surface);border-radius:14px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.6">';
     h+='<div style="font-size:28px;font-weight:800;color:#fff;line-height:1">'+count+'</div>';
@@ -4383,7 +4439,7 @@ renderMatchHome(){
     const rounds=Math.min(5,Math.floor(Math.min(count,25)/5));
     h+='<div style="margin-top:14px">This session: <strong style="color:#fff">'+rounds+' round'+(rounds!==1?'s':'')+' × 5 pairs</strong>, directions alternating, weighted toward words you\'ve struggled with.'+(rounds<5?' <span style="color:var(--g5)">Five rounds once 25+ words are ready.</span>':'')+'</div>';
     h+='</div>';
-    h+='<button style="margin-top:20px;width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startMatchSession()">Start matching</button>';
+    h+='<button class="btn-cta" style="margin-top:20px" onclick="S.startMatchSession()">Start matching</button>';
   }
   h+='</div>';
   el.innerHTML=h;
@@ -4544,34 +4600,34 @@ finishFcSession(){
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
   let msg=zekaMsg(cat);
   if(firstMsg)msg+=' · '+firstMsg;
-  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  let h='<div class="done-wrap">';
   h+=zekaHtml(msg);
-  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center">';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.fcReviewed+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">REVIEWED</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">RECALLED</div></div>';
-  if(st.fcAgainCount>0)h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--orange)">'+st.fcAgainCount+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">REPEATED</div></div>';
+  h+='<div class="done-title">Session Complete!</div>';
+  h+='<div class="done-stats">';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--green)">'+st.fcReviewed+'</div><div class="done-stat-l">REVIEWED</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--blue)">'+pct+'%</div><div class="done-stat-l">RECALLED</div></div>';
+  if(st.fcAgainCount>0)h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--orange)">'+st.fcAgainCount+'</div><div class="done-stat-l">REPEATED</div></div>';
   h+='</div>';
-  h+='<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:8px">';
+  h+='<div class="done-btns">';
   // Show Match CTA if there are enough eligible cards
   let matchBtn='';
   if(typeof _mcEligibleCards==='function'&&_mcEligibleCards().length>=10){
-    matchBtn='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'match\');S.startMatchSession();},300)">🧩 Try matching →</button>';
+    matchBtn='<button class="btn-cta blue sm" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'match\');S.startMatchSession();},300)">🧩 Try matching →</button>';
   }
   let clozeBtn='';
   if(curLang==='sr'&&typeof czItems==='function'&&czItems().length>=10){
-    clozeBtn='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:rgba(206,130,255,.3);box-shadow:0 3px 0 rgba(120,60,180,.55)" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'cloze\');S.startClozeSession(10);},50)">✏️ Practice in context</button>';
+    clozeBtn='<button class="btn-cta purple sm" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'cloze\');S.startClozeSession(10);},50)">✏️ Practice in context</button>';
   }
   const left=fcDueBreakdown().all.length;
   if(left>0){
-    h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Next '+Math.min(left,FC_SESSION_CAP)+' cards → <span style="font-weight:600;opacity:.8;text-transform:none;letter-spacing:0">('+left+' still due)</span></button>';
+    h+='<button class="btn-cta" onclick="S.startFcSession()">Next '+Math.min(left,FC_SESSION_CAP)+' cards → <span style="font-weight:600;opacity:.8;text-transform:none;letter-spacing:0">('+left+' still due)</span></button>';
     h+=matchBtn;
     h+=clozeBtn;
-    h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)" onclick="S.exitFc()">Done for now</button>';
+    h+='<button class="btn-soft" onclick="S.exitFc()">Done for now</button>';
   }else{
     h+=matchBtn;
     h+=clozeBtn;
-    h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
+    h+='<button class="btn-cta" onclick="S.exitFc()">Done</button>';
   }
   h+='</div>';
   h+='</div>';
@@ -4619,8 +4675,19 @@ renderVerbHome(){
   h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);margin-top:8px" onclick="S.startVerbSession('+Math.min(5,VERBS.length)+')">Random Session</button>';
   h+='</div>';
   h+='<div style="margin-top:20px">';
+  const vf=this._vbFilter||'all';
+  const nPf=VERBS.filter(v=>v.pf).length;
   h+='<div style="font-size:14px;font-weight:800;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">All Verbs</div>';
+  if(nPf){
+    h+='<div class="sent-lv-row" style="margin:0 0 12px;justify-content:flex-start">';
+    [['all','All',VERBS.length],['impf','Imperfective',VERBS.length-nPf],['pf','Perfective',nPf]].forEach(([k,l,n])=>{
+      h+='<button class="sent-lv-chip'+(vf===k?' act':'')+'" onclick="S.setVerbFilter(\''+k+'\')">'+l+'<span class="sent-lv-n">'+n+'</span></button>';
+    });
+    h+='</div>';
+  }
   VERBS.forEach((v,i)=>{
+    if(vf==='pf'&&!v.pf)return;
+    if(vf==='impf'&&v.pf)return;
     h+='<div style="display:flex;align-items:center;gap:10px;padding:12px;border:2px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:6px;cursor:pointer" onclick="S.startVerbSession(1,'+i+')">';
     h+='<span style="font-size:24px">'+v.em+'</span>';
     h+='<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">'+esc(v.inf)+(v.pf?' <span class="vd-pf">pf</span>':'')+'</div>';
@@ -4631,6 +4698,9 @@ renderVerbHome(){
   h+='</div>';
   el.innerHTML=h;
 },
+
+_vbFilter:'all',
+setVerbFilter(k){this._vbFilter=k;this.renderVerbHome();},
 
 setVerbTense(t){
   st.vbTense=t==='past'?'past':'present';save();
@@ -4994,15 +5064,15 @@ finishCaseSession(){
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
   let msg=zekaMsg(cat);
   if(firstMsg)msg+=' · '+firstMsg;
-  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  let h='<div class="done-wrap">';
   h+=zekaHtml(msg);
-  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center">';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.csNouns.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">NOUNS</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+st.csCorrect+'/'+st.csTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
+  h+='<div class="done-title">Session Complete!</div>';
+  h+='<div class="done-stats">';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--green)">'+st.csNouns.length+'</div><div class="done-stat-l">NOUNS</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--blue)">'+st.csCorrect+'/'+st.csTotal+'</div><div class="done-stat-l">CORRECT</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--gold)">'+pct+'%</div><div class="done-stat-l">ACCURACY</div></div>';
   h+='</div>';
-  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitCase()">Done</button>';
+  h+='<button class="btn-cta" onclick="S.exitCase()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
   if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
@@ -5110,22 +5180,23 @@ rdToggleAll(){
 rdMarkDone(){
   const r=READINGS.find(x=>x.id===st.rdId);if(!r)return;
   if(!st.readDone.includes(r.id))st.readDone.push(r.id);
+  markToday('r');
   const streakHit=bumpStreak();save();sDn();
   const looked=st.rdTapped.size,shown=st.rdShown.size;
   const el=document.getElementById('rd-body');
-  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  let h='<div class="done-wrap">';
   h+=zekaHtml(looked<=3?'Read like a local — hardly any lookups!':looked<=8?'Good reading. The words you tapped are worth a second look.':'A tough one, but you got through it. Come back to it in a few days.');
   h+='<div style="font-size:22px;font-weight:800;color:#fff">'+esc(r.t)+'</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center">';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+r.s.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">SENTENCES</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+looked+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">LOOKED UP</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+shown+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">TRANSLATED</div></div>';
+  h+='<div class="done-stats">';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--green)">'+r.s.length+'</div><div class="done-stat-l">SENTENCES</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--blue)">'+looked+'</div><div class="done-stat-l">LOOKED UP</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--gold)">'+shown+'</div><div class="done-stat-l">TRANSLATED</div></div>';
   h+='</div>';
   if(looked)h+='<div class="rd-looked">'+[...st.rdTapped].map(t=>'<span class="rd-looked-w">'+esc(t)+'</span>').join('')+'</div>';
-  h+='<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:8px">';
+  h+='<div class="done-btns">';
   const next=READINGS.find(x=>!st.readDone.includes(x.id));
-  if(next)h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.openReading('+next.id+')">Next: '+esc(next.t)+' →</button>';
-  h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)" onclick="S.exitReading()">Done</button>';
+  if(next)h+='<button class="btn-cta" onclick="S.openReading('+next.id+')">Next: '+esc(next.t)+' →</button>';
+  h+='<button class="btn-soft" onclick="S.exitReading()">Done</button>';
   h+='</div></div>';
   el.innerHTML=h;el.scrollTop=0;
   document.getElementById('rd-bar').style.display='none';
@@ -5247,21 +5318,21 @@ finishClozeSession(){
   const el=document.getElementById('cz-body');
   const pct=st.czTotal>0?Math.round(st.czCorrect/st.czTotal*100):0;
   const streakHit=(st.czTotal>0)?bumpStreak():null;
-  if(st.czTotal>0)save();
+  if(st.czTotal>0){markToday('c');save();}
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
-  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  let h='<div class="done-wrap">';
   h+=zekaHtml(zekaMsg(cat));
-  h+='<div style="font-size:22px;font-weight:800;color:#fff">Round Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center">';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.czItems.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">SENTENCES</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+st.czCorrect+'/'+st.czTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
+  h+='<div class="done-title">Round Complete!</div>';
+  h+='<div class="done-stats">';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--green)">'+st.czItems.length+'</div><div class="done-stat-l">SENTENCES</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--blue)">'+st.czCorrect+'/'+st.czTotal+'</div><div class="done-stat-l">CORRECT</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--gold)">'+pct+'%</div><div class="done-stat-l">ACCURACY</div></div>';
   h+='</div>';
   const nudged=(st.czNudged||[]).length;
   if(nudged)h+='<div class="cz-note" style="margin-top:0">'+nudged+' flashcard'+(nudged!==1?'s':'')+' moved back into your next session.</div>';
-  h+='<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:8px">';
-  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startClozeSession('+st.czItems.length+')">Another round</button>';
-  h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)" onclick="S.exitCloze()">Done</button>';
+  h+='<div class="done-btns">';
+  h+='<button class="btn-cta" onclick="S.startClozeSession('+st.czItems.length+')">Another round</button>';
+  h+='<button class="btn-soft" onclick="S.exitCloze()">Done</button>';
   h+='</div></div>';
   el.innerHTML=h;
   if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
@@ -5423,15 +5494,15 @@ finishSentSession(){
   if(st.sentTotal>0)save();
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
   const msg=zekaMsg(cat);
-  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  let h='<div class="done-wrap">';
   h+=zekaHtml(msg);
-  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center">';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.sentList.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">SENTENCES</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+st.sentCorrect+'/'+st.sentTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
+  h+='<div class="done-title">Session Complete!</div>';
+  h+='<div class="done-stats">';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--green)">'+st.sentList.length+'</div><div class="done-stat-l">SENTENCES</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--blue)">'+st.sentCorrect+'/'+st.sentTotal+'</div><div class="done-stat-l">CORRECT</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--gold)">'+pct+'%</div><div class="done-stat-l">ACCURACY</div></div>';
   h+='</div>';
-  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitSent()">Done</button>';
+  h+='<button class="btn-cta" onclick="S.exitSent()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
   if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
@@ -5448,15 +5519,15 @@ finishVerbSession(){
   const cat=pct===100?'perfect':pct>=70?'good':'rough';
   let msg=zekaMsg(cat);
   if(firstMsg)msg+=' · '+firstMsg;
-  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  let h='<div class="done-wrap">';
   h+=zekaHtml(msg);
-  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center">';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.vbVerbs.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">VERBS</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--orange)">'+st.vbCorrect+'/'+st.vbTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
+  h+='<div class="done-title">Session Complete!</div>';
+  h+='<div class="done-stats">';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--green)">'+st.vbVerbs.length+'</div><div class="done-stat-l">VERBS</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--blue)">'+pct+'%</div><div class="done-stat-l">ACCURACY</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--orange)">'+st.vbCorrect+'/'+st.vbTotal+'</div><div class="done-stat-l">CORRECT</div></div>';
   h+='</div>';
-  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitVerb()">Done</button>';
+  h+='<button class="btn-cta" onclick="S.exitVerb()">Done</button>';
   h+='</div>';
   el.innerHTML=h;
   if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
@@ -5496,27 +5567,45 @@ setLearnMode(mode){
   }
 },
 
-_ofHandler:null,
-toggleOverflowMenu(e){
+// The ⋯ segment opens a bottom sheet listing every practice mode that is not
+// on the main toggle, with a one-line status each. Escape and a backdrop tap
+// close it (it shares the .lp-sheet class the Escape handler already knows).
+toggleOverflowMenu(e){this.openModesSheet(e);},
+openModesSheet(e){
   if(e&&e.stopPropagation)e.stopPropagation();
-  const m=document.getElementById('overflow-menu');
-  if(!m)return;
-  if(m.style.display!=='none'){this.closeOverflowMenu();return;}
-  m.style.display='flex';
-  // Click-outside to close (next tick so this same click doesn't close it).
-  // The handler is stored so closeOverflowMenu can always detach it — an item
-  // click closes the menu from inside, which previously left the listener attached.
-  setTimeout(()=>{
-    if(this._ofHandler)document.removeEventListener('click',this._ofHandler,true);
-    this._ofHandler=(ev)=>{if(!m.contains(ev.target))this.closeOverflowMenu();};
-    document.addEventListener('click',this._ofHandler,true);
-  },0);
+  if(document.querySelector('.modes-sheet')){this.closeOverflowMenu();return;}
+  haptic('tap');sCl();
+  const sr=curLang==='sr',t=_todayFlags();
+  const rows=[
+    {k:'verbs',em:'🔤',t:'Verbs',s:VERBS.length?VERBS.length+' verbs · present & past tense':'Not available for '+langName()},
+    {k:'cases',em:'🏛️',t:'Cases',s:sr?'All 7 cases · '+NOUNS.length+' nouns':'Serbian only'},
+    {k:'sentences',em:'💬',t:'Sentences',s:sr?'Today\'s sentence · fill the blanks':'Serbian only'},
+    {k:'cloze',em:'✏️',t:'Cloze',s:sr?'One word missing · '+czItems().length+' sentences'+(t.c?' · done today ✓':''):'Serbian only'},
+    {k:'reading',em:'📖',t:'Reading',s:sr?(st.readDone||[]).length+' of '+READINGS.length+' texts read'+(t.r?' · read today ✓':''):'Serbian only'}
+  ];
+  const cur=st._learnMode||'flashcards';
+  const activeKey=cur==='verbs'?(st.grammarMode==='cases'?'cases':'verbs'):cur;
+  const sheet=document.createElement('div');sheet.className='lp-sheet modes-sheet';
+  let h='<div class="lp-card"><div class="lp-handle"></div>';
+  h+='<div class="ms-title">More ways to practice</div>';
+  rows.forEach(r=>{
+    h+='<button class="ms-row'+(r.k===activeKey?' act':'')+'" onclick="S.pickMode(\''+r.k+'\')">';
+    h+='<span class="ms-em">'+r.em+'</span><span class="ms-b"><span class="ms-t">'+r.t+'</span><span class="ms-s">'+esc(r.s)+'</span></span><span class="ms-ar">›</span>';
+    h+='</button>';
+  });
+  h+='</div>';
+  sheet.innerHTML=h;document.body.appendChild(sheet);
+  sheet.addEventListener('click',ev=>{if(ev.target===sheet)S.closeOverflowMenu();});
+  if(!REDUCED_MOTION){anim(sheet,{opacity:[0,1]},{duration:.18});anim(sheet.querySelector('.lp-card'),{transform:['translateY(100%)','translateY(0)']},{duration:.32,easing:'cubic-bezier(.22,.61,.36,1)'});}
 },
-
+pickMode(k){
+  this.closeOverflowMenu();
+  if(k==='cases'){st.grammarMode='cases';this.setLearnMode('verbs');return;}
+  if(k==='verbs')st.grammarMode='verbs';
+  this.setLearnMode(k);
+},
 closeOverflowMenu(){
-  const m=document.getElementById('overflow-menu');
-  if(m)m.style.display='none';
-  if(this._ofHandler){document.removeEventListener('click',this._ofHandler,true);this._ofHandler=null;}
+  document.querySelectorAll('.modes-sheet').forEach(x=>x.remove());
 },
 
 setGrammarMode(mode){
@@ -5929,18 +6018,18 @@ mcTap(el){
 
 finishMatchSession(){
   let streakHit=null;
-  if(st.mcReviewed>0){streakHit=bumpStreak();st.xp+=st.mcXp;save();}
+  if(st.mcReviewed>0){streakHit=bumpStreak();st.xp+=st.mcXp;markToday('m');save();}
   const totalRounds=st.mcRounds.length;
   const perfectRounds=st.mcCorrect;
   const xpEarned=st.mcXp;
-  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  let h='<div class="done-wrap">';
   h+=zekaHtml(perfectRounds===totalRounds?'Flawless!':perfectRounds>=totalRounds*0.7?'Nice work!':'Keep going!');
-  h+='<div style="font-size:22px;font-weight:800;color:#fff">Session Complete!</div>';
-  h+='<div style="display:flex;gap:20px;justify-content:center">';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+perfectRounds+'/'+totalRounds+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">PERFECT ROUNDS</div></div>';
-  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">+'+xpEarned+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">XP</div></div>';
+  h+='<div class="done-title">Session Complete!</div>';
+  h+='<div class="done-stats">';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--green)">'+perfectRounds+'/'+totalRounds+'</div><div class="done-stat-l">PERFECT ROUNDS</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--gold)">+'+xpEarned+'</div><div class="done-stat-l">XP</div></div>';
   h+='</div>';
-  h+='<button style="width:100%;max-width:360px;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitMatch()">Done</button>';
+  h+='<button class="btn-cta" onclick="S.exitMatch()">Done</button>';
   h+='</div>';
   document.getElementById('mc-body').innerHTML=h;
   sDn();
@@ -6681,7 +6770,6 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     if(document.querySelector('.friend-modal')){S.closeAddFriend();return;}
     const sheet=document.querySelector('.lp-sheet');if(sheet){sheet.remove();return;}
-    const om=document.getElementById('overflow-menu');if(om&&om.style.display!=='none'){S.closeOverflowMenu();return;}
   }
   if(e.key==='Enter'){const b=document.getElementById('ckb');if(b&&!b.classList.contains('dis'))b.click();
     const c=document.querySelector('.cc,.ci');if(c)c.click();}
