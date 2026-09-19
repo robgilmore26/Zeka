@@ -570,6 +570,13 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .vd-fb b{color:#fff}
 .vd-fb small{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-top:3px}
 .vd-correction{font-size:14px;color:var(--red);font-weight:700;text-align:center;margin-top:6px}
+.vd-aux{font-size:15px;font-weight:700;color:rgba(255,255,255,.55);flex-shrink:0;min-width:34px}
+.vd-note{font-size:12px;color:rgba(255,255,255,.5);text-align:center;margin:-2px 0 8px;line-height:1.4}
+.vd-pf{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.5px;color:var(--purple);background:rgba(206,130,255,.16);padding:1px 6px;border-radius:999px;vertical-align:middle;text-transform:uppercase}
+.sx-past{margin-top:8px;font-size:13px;color:var(--text-1);font-weight:600}
+.sx-past-l{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--g5);margin-right:8px}
+.sx-past-se{color:var(--text-3);font-weight:600}
+.sx-note{margin-top:6px;font-size:12px;color:var(--text-3);line-height:1.4}
 .vd-conj{width:100%;max-width:360px;margin-top:16px}
 .vd-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .vd-pronoun{font-size:14px;font-weight:800;color:rgba(255,255,255,.6);width:90px;text-align:right;flex-shrink:0}
@@ -1973,15 +1980,15 @@ p:[["Il giornalista fa un reportage dal luogo","The journalist reports from the 
 ];
 
 const V_SR=[
-{inf:'biti',en:'to be',em:'🔄',conj:{ja:'sam',ti:'si',on:'je',mi:'smo',vi:'ste',oni:'su'}},
+{inf:'biti',en:'to be',em:'🔄',conj:{ja:'sam',ti:'si',on:'je',mi:'smo',vi:'ste',oni:'su'},pp:['bio','bila']},
 {inf:'imati',en:'to have',em:'🤲',conj:{ja:'imam',ti:'imaš',on:'ima',mi:'imamo',vi:'imate',oni:'imaju'}},
 {inf:'hteti',en:'to want',em:'💭',conj:{ja:'hoću',ti:'hoćeš',on:'hoće',mi:'hoćemo',vi:'hoćete',oni:'hoće'}},
-{inf:'moći',en:'to be able',em:'💪',conj:{ja:'mogu',ti:'možeš',on:'može',mi:'možemo',vi:'možete',oni:'mogu'}},
-{inf:'ići',en:'to go',em:'🚶',conj:{ja:'idem',ti:'ideš',on:'ide',mi:'idemo',vi:'idete',oni:'idu'}},
+{inf:'moći',en:'to be able',em:'💪',conj:{ja:'mogu',ti:'možeš',on:'može',mi:'možemo',vi:'možete',oni:'mogu'},pp:['mogao','mogla']},
+{inf:'ići',en:'to go',em:'🚶',conj:{ja:'idem',ti:'ideš',on:'ide',mi:'idemo',vi:'idete',oni:'idu'},pp:['išao','išla']},
 {inf:'raditi',en:'to work',em:'💼',conj:{ja:'radim',ti:'radiš',on:'radi',mi:'radimo',vi:'radite',oni:'rade'}},
 {inf:'znati',en:'to know',em:'🧠',conj:{ja:'znam',ti:'znaš',on:'zna',mi:'znamo',vi:'znate',oni:'znaju'}},
 {inf:'videti',en:'to see',em:'👀',conj:{ja:'vidim',ti:'vidiš',on:'vidi',mi:'vidimo',vi:'vidite',oni:'vide'}},
-{inf:'jesti',en:'to eat',em:'🍽️',conj:{ja:'jedem',ti:'jedeš',on:'jede',mi:'jedemo',vi:'jedete',oni:'jedu'}},
+{inf:'jesti',en:'to eat',em:'🍽️',conj:{ja:'jedem',ti:'jedeš',on:'jede',mi:'jedemo',vi:'jedete',oni:'jedu'},pp:['jeo','jela']},
 {inf:'piti',en:'to drink',em:'🥤',conj:{ja:'pijem',ti:'piješ',on:'pije',mi:'pijemo',vi:'pijete',oni:'piju'}},
 {inf:'govoriti',en:'to speak',em:'🗣️',conj:{ja:'govorim',ti:'govoriš',on:'govori',mi:'govorimo',vi:'govorite',oni:'govore'}},
 {inf:'razumeti',en:'to understand',em:'💡',conj:{ja:'razumem',ti:'razumeš',on:'razume',mi:'razumemo',vi:'razumete',oni:'razumeju'}},
@@ -2053,7 +2060,47 @@ const V_SR=[
 {inf:'otvarati',en:'to open (ongoing)',em:'🚪',conj:{ja:'otvaram',ti:'otvaraš',on:'otvara',mi:'otvaramo',vi:'otvarate',oni:'otvaraju'}},
 {inf:'zatvarati',en:'to close (ongoing)',em:'🔒',conj:{ja:'zatvaram',ti:'zatvaraš',on:'zatvara',mi:'zatvaramo',vi:'zatvarate',oni:'zatvaraju'}},
 {inf:'gubiti',en:'to lose',em:'📉',conj:{ja:'gubim',ti:'gubiš',on:'gubi',mi:'gubimo',vi:'gubite',oni:'gube'}},
-{inf:'doći',en:'to come (once)',em:'🚪',conj:{ja:'dođem',ti:'dođeš',on:'dođe',mi:'dođemo',vi:'dođete',oni:'dođu'}}
+{inf:'doći',en:'to come (once)',em:'🚪',conj:{ja:'dođem',ti:'dođeš',on:'dođe',mi:'dođemo',vi:'dođete',oni:'dođu'},pf:true,pp:['došao','došla']},
+// ── Perfective partners (see V_SR_ASPECT). pf:true marks the aspect; the
+// present tense of a perfective verb refers to a single completed action
+// (usually future: "Kupim hleb" = I'll buy the bread). pp = irregular participle.
+{inf:'kupiti',en:'to buy (once)',em:'🛒',pf:true,conj:{ja:'kupim',ti:'kupiš',on:'kupi',mi:'kupimo',vi:'kupite',oni:'kupe'}},
+{inf:'dati',en:'to give (once)',em:'🎁',pf:true,conj:{ja:'dam',ti:'daš',on:'da',mi:'damo',vi:'date',oni:'daju'}},
+{inf:'napisati',en:'to write (once)',em:'✍️',pf:true,conj:{ja:'napišem',ti:'napišeš',on:'napiše',mi:'napišemo',vi:'napišete',oni:'napišu'}},
+{inf:'pročitati',en:'to read (once)',em:'📕',pf:true,conj:{ja:'pročitam',ti:'pročitaš',on:'pročita',mi:'pročitamo',vi:'pročitate',oni:'pročitaju'}},
+{inf:'pojesti',en:'to eat (once)',em:'🍽️',pf:true,pp:['pojeo','pojela'],conj:{ja:'pojedem',ti:'pojedeš',on:'pojede',mi:'pojedemo',vi:'pojedete',oni:'pojedu'}},
+{inf:'popiti',en:'to drink (once)',em:'🥤',pf:true,conj:{ja:'popijem',ti:'popiješ',on:'popije',mi:'popijemo',vi:'popijete',oni:'popiju'}},
+{inf:'naučiti',en:'to learn (once)',em:'🎓',pf:true,conj:{ja:'naučim',ti:'naučiš',on:'nauči',mi:'naučimo',vi:'naučite',oni:'nauče'}},
+{inf:'reći',en:'to say (once)',em:'🗣️',pf:true,pp:['rekao','rekla'],note:'Present forms are borrowed from kazati (kažem); reći itself lives in the past and future.',conj:{ja:'kažem',ti:'kažeš',on:'kaže',mi:'kažemo',vi:'kažete',oni:'kažu'}},
+{inf:'uraditi',en:'to do (once)',em:'✅',pf:true,conj:{ja:'uradim',ti:'uradiš',on:'uradi',mi:'uradimo',vi:'uradite',oni:'urade'}},
+{inf:'skuvati',en:'to cook (once)',em:'🍲',pf:true,conj:{ja:'skuvam',ti:'skuvaš',on:'skuva',mi:'skuvamo',vi:'skuvate',oni:'skuvaju'}},
+{inf:'otići',en:'to leave (once)',em:'🚶',pf:true,pp:['otišao','otišla'],conj:{ja:'odem',ti:'odeš',on:'ode',mi:'odemo',vi:'odete',oni:'odu'}},
+{inf:'odgovoriti',en:'to answer (once)',em:'💬',pf:true,conj:{ja:'odgovorim',ti:'odgovoriš',on:'odgovori',mi:'odgovorimo',vi:'odgovorite',oni:'odgovore'}},
+{inf:'pomoći',en:'to help (once)',em:'🤝',pf:true,pp:['pomogao','pomogla'],conj:{ja:'pomognem',ti:'pomogneš',on:'pomogne',mi:'pomognemo',vi:'pomognete',oni:'pomognu'}},
+{inf:'pozvati',en:'to call / invite (once)',em:'📞',pf:true,conj:{ja:'pozovem',ti:'pozoveš',on:'pozove',mi:'pozovemo',vi:'pozovete',oni:'pozovu'}},
+{inf:'upitati',en:'to ask (once)',em:'❓',pf:true,conj:{ja:'upitam',ti:'upitaš',on:'upita',mi:'upitamo',vi:'upitate',oni:'upitaju'}},
+{inf:'pogledati',en:'to look / watch (once)',em:'👀',pf:true,conj:{ja:'pogledam',ti:'pogledaš',on:'pogleda',mi:'pogledamo',vi:'pogledate',oni:'pogledaju'}},
+{inf:'poslušati',en:'to listen (once)',em:'🎧',pf:true,conj:{ja:'poslušam',ti:'poslušaš',on:'posluša',mi:'poslušamo',vi:'poslušate',oni:'poslušaju'}},
+{inf:'poneti',en:'to take along (once)',em:'🎒',pf:true,conj:{ja:'ponesem',ti:'poneseš',on:'ponese',mi:'ponesemo',vi:'ponesete',oni:'ponesu'}},
+{inf:'staviti',en:'to put (once)',em:'📥',pf:true,conj:{ja:'stavim',ti:'staviš',on:'stavi',mi:'stavimo',vi:'stavite',oni:'stave'}},
+{inf:'doneti',en:'to bring (once)',em:'📦',pf:true,conj:{ja:'donesem',ti:'doneseš',on:'donese',mi:'donesemo',vi:'donesete',oni:'donesu'}},
+{inf:'zaboraviti',en:'to forget (once)',em:'🙈',pf:true,conj:{ja:'zaboravim',ti:'zaboraviš',on:'zaboravi',mi:'zaboravimo',vi:'zaboravite',oni:'zaborave'}},
+{inf:'poslati',en:'to send (once)',em:'📨',pf:true,conj:{ja:'pošaljem',ti:'pošalješ',on:'pošalje',mi:'pošaljemo',vi:'pošaljete',oni:'pošalju'}},
+{inf:'izabrati',en:'to choose (once)',em:'☑️',pf:true,conj:{ja:'izaberem',ti:'izabereš',on:'izabere',mi:'izaberemo',vi:'izaberete',oni:'izaberu'}},
+{inf:'napraviti',en:'to make (once)',em:'🛠️',pf:true,conj:{ja:'napravim',ti:'napraviš',on:'napravi',mi:'napravimo',vi:'napravite',oni:'naprave'}},
+{inf:'zaplakati',en:'to burst into tears',em:'😢',pf:true,conj:{ja:'zaplačem',ti:'zaplačeš',on:'zaplače',mi:'zaplačemo',vi:'zaplačete',oni:'zaplaču'}},
+{inf:'oprati',en:'to wash (once)',em:'🧼',pf:true,conj:{ja:'operem',ti:'opereš',on:'opere',mi:'operemo',vi:'operete',oni:'operu'}},
+{inf:'probuditi se',en:'to wake up (once)',em:'⏰',pf:true,conj:{ja:'se probudim',ti:'se probudiš',on:'se probudi',mi:'se probudimo',vi:'se probudite',oni:'se probude'}},
+{inf:'obući se',en:'to get dressed (once)',em:'👔',pf:true,pp:['obukao','obukla'],conj:{ja:'se obučem',ti:'se obučeš',on:'se obuče',mi:'se obučemo',vi:'se obučete',oni:'se obuku'}},
+{inf:'vratiti se',en:'to return (once)',em:'↩️',pf:true,conj:{ja:'se vratim',ti:'se vratiš',on:'se vrati',mi:'se vratimo',vi:'se vratite',oni:'se vrate'}},
+{inf:'otvoriti',en:'to open (once)',em:'🔓',pf:true,conj:{ja:'otvorim',ti:'otvoriš',on:'otvori',mi:'otvorimo',vi:'otvorite',oni:'otvore'}},
+{inf:'zatvoriti',en:'to close (once)',em:'🔐',pf:true,conj:{ja:'zatvorim',ti:'zatvoriš',on:'zatvori',mi:'zatvorimo',vi:'zatvorite',oni:'zatvore'}},
+{inf:'izgubiti',en:'to lose (once)',em:'📉',pf:true,conj:{ja:'izgubim',ti:'izgubiš',on:'izgubi',mi:'izgubimo',vi:'izgubite',oni:'izgube'}},
+{inf:'objasniti',en:'to explain (once)',em:'💡',pf:true,conj:{ja:'objasnim',ti:'objasniš',on:'objasni',mi:'objasnimo',vi:'objasnite',oni:'objasne'}},
+{inf:'baciti',en:'to throw (once)',em:'🏀',pf:true,conj:{ja:'bacim',ti:'baciš',on:'baci',mi:'bacimo',vi:'bacite',oni:'bace'}},
+{inf:'uhvatiti',en:'to catch (once)',em:'🧤',pf:true,conj:{ja:'uhvatim',ti:'uhvatiš',on:'uhvati',mi:'uhvatimo',vi:'uhvatite',oni:'uhvate'}},
+{inf:'poljubiti',en:'to kiss (once)',em:'😘',pf:true,conj:{ja:'poljubim',ti:'poljubiš',on:'poljubi',mi:'poljubimo',vi:'poljubite',oni:'poljube'}},
+{inf:'zagrliti',en:'to hug (once)',em:'🤗',pf:true,conj:{ja:'zagrlim',ti:'zagrliš',on:'zagrli',mi:'zagrlimo',vi:'zagrlite',oni:'zagrle'}}
 ];
 
 // Imperfective → perfective partners. Shown as a hint on the dictionary card so
@@ -2975,7 +3022,8 @@ function getStateData(){
   return{elo:st.elo,xp:st.xp,streak:st.streak,lastDate:st.lastDate,
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
     fcNewToday:st.fcNewToday,fcReviewedToday:st.fcReviewedToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
-    sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate};
+    sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate,
+    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
@@ -2985,6 +3033,8 @@ function applyStateData(p){
   st.fcReviewedToday=p.fcReviewedToday||0;
   st.fcSourceMode=p.fcSourceMode||'all';
   st.sentDoneToday=p.sentDoneToday||[];st.sentDoneDate=p.sentDoneDate||'';
+  st.vbTense=p.vbTense==='past'?'past':'present';st.clozeMode=p.clozeMode==='type'?'type':'tap';
+  st.readDone=Array.isArray(p.readDone)?p.readDone:[];
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},p.firsts||{});
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
@@ -3294,6 +3344,7 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
   fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
+  vbTense:'present',clozeMode:'tap',readDone:[],
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -3632,6 +3683,28 @@ function verbPrefix(v){
   return pre;
 }
 
+// ═══════════════ PAST TENSE (perfekt) ═══════════════
+// The l-participle follows from the infinitive for almost every verb:
+// raditi → radi+o / radi+la. Verbs whose participle is not predictable
+// (ići → išao/išla, moći → mogao/mogla) carry pp:[masc,fem]; the remaining
+// four forms always come from the feminine stem (išla → išlo, išli, išle, išla).
+function verbPast(v){
+  const refl=/ se$/.test(v.inf);
+  const inf=v.inf.replace(/ se$/,'');
+  let m,f;
+  if(v.pp){m=v.pp[0];f=v.pp[1];}
+  else{const stem=inf.replace(/ti$/,'');m=stem+'o';f=stem+'la';}
+  const fs=f.replace(/a$/,'');
+  return{m,f,n:fs+'o',mp:fs+'i',fp:fs+'e',np:fs+'a',refl};
+}
+// Drill / dictionary rows: [label, auxiliary (+se), participle]. Six rows cover
+// every distinct form except neuter plural (= feminine singular).
+// With a reflexive the 3rd-person "je" is dropped: "On se budio".
+function verbPastRows(v){
+  const p=verbPast(v);const se=p.refl?' se':'';
+  return[['Ja (m)','sam'+se,p.m],['Ti (f)','si'+se,p.f],['Ono',p.refl?'se':'je',p.n],['Mi','smo'+se,p.mp],['Vi','ste'+se,p.mp],['One','su'+se,p.fp]];
+}
+
 function casePrefix(n){
   const forms=Object.values(n.cases);
   let pre=forms[0];
@@ -3792,7 +3865,8 @@ function _sxIndex(){
   const ASP=(typeof V_SR_ASPECT!=='undefined')?V_SR_ASPECT:{};
   VERBS.forEach(v=>{
     const partner=ASP[v.inf]||Object.keys(ASP).find(k=>ASP[k]===v.inf)||'';
-    const alt=[partner,...Object.values(v.conj||{})].filter(Boolean).map(_sxNorm).flatMap(t=>t.split(/\s+/)).filter(Boolean);
+    const pp=verbPast(v);
+    const alt=[partner,pp.m,pp.f,...Object.values(v.conj||{})].filter(Boolean).map(_sxNorm).flatMap(t=>t.split(/\s+/)).filter(Boolean);
     idx.push({type:'verb',verb:v,source:v.inf,english:v.en,normSource:_sxNorm(v.inf),normEnglish:_sxNorm(v.en),alt});
   });
   return idx;
@@ -4217,7 +4291,12 @@ renderVerbHome(){
   let h='<div style="text-align:center;padding:16px 0">';
   h+='<div style="font-size:48px;margin-bottom:8px">🔤</div>';
   h+='<div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">Verb Conjugation</div>';
-  h+='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px">Present Tense · '+VERBS.length+' verbs</div>';
+  const tense=st.vbTense||'present';
+  h+='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:10px">'+VERBS.length+' verbs</div>';
+  h+='<div class="seg-toggle" style="margin:0 auto 14px;max-width:260px">';
+  h+='<button class="seg-btn'+(tense==='present'?' seg-active':'')+'" onclick="S.setVerbTense(\'present\')">Present</button>';
+  h+='<button class="seg-btn'+(tense==='past'?' seg-active':'')+'" onclick="S.setVerbTense(\'past\')">Past</button>';
+  h+='</div>';
   h+='<div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">';
   [3,5,10].forEach(n=>{
     h+='<button style="padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;color:#fff;background:rgba(255,255,255,.12);transition:.2s" onclick="S.startVerbSession('+n+')">'+n+' verbs</button>';
@@ -4230,13 +4309,18 @@ renderVerbHome(){
   VERBS.forEach((v,i)=>{
     h+='<div style="display:flex;align-items:center;gap:10px;padding:12px;border:2px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:6px;cursor:pointer" onclick="S.startVerbSession(1,'+i+')">';
     h+='<span style="font-size:24px">'+v.em+'</span>';
-    h+='<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">'+esc(v.inf)+'</div>';
+    h+='<div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">'+esc(v.inf)+(v.pf?' <span class="vd-pf">pf</span>':'')+'</div>';
     h+='<div style="font-size:12px;color:rgba(255,255,255,.5)">'+esc(v.en)+'</div></div>';
     h+='<span style="color:rgba(255,255,255,.3);font-size:18px">›</span>';
     h+='</div>';
   });
   h+='</div>';
   el.innerHTML=h;
+},
+
+setVerbTense(t){
+  st.vbTense=t==='past'?'past':'present';save();
+  this.renderVerbHome();
 },
 
 startVerbSession(count,specificIdx){
@@ -4257,6 +4341,7 @@ renderVerbPhase(){
   const v=st.vbVerbs[st.vbIdx];
   document.getElementById('vd-count').textContent=(st.vbIdx+1)+' / '+st.vbVerbs.length;
   if(st.vbPhase===1){this.renderVerbP1(v);}
+  else if((st.vbTense||'present')==='past'){this.renderVerbPast(v);}
   else{this.renderVerbP2(v);}
 },
 
@@ -4267,7 +4352,7 @@ renderVerbP1(v){
   const answer=toSr?v.inf:v.en;
   let h='<div class="vd-phase">';
   h+='<div class="vd-prompt">'+esc(prompt)+'</div>';
-  h+='<div class="vd-inf">'+v.em+' '+esc(shown)+'</div>';
+  h+='<div class="vd-inf">'+v.em+' '+esc(shown)+(toSr||!v.pf?'':' <span class="vd-pf">pf</span>')+'</div>';
   h+='<input class="vd-input" id="vd-inf-input" placeholder="Type translation..." autocomplete="off" autocapitalize="off" spellcheck="false">';
   h+=srKeysHtml();
   h+='<div id="vd-inf-fb"></div>';
@@ -4289,9 +4374,16 @@ checkVerbP1(){
   const answer=inp.dataset.answer;
   const correct=normSR(answer);
   const correctBase=correct.replace(/^to /,'');
+  // "to buy (once)" also accepts "buy", "to buy" and either side of a "/"
+  const accepted=new Set();
+  [correct,correctBase].forEach(a=>{
+    accepted.add(a);
+    const noQual=a.replace(/\s*\([^)]*\)/g,'').trim();accepted.add(noQual);
+    noQual.split('/').map(x=>x.trim()).filter(Boolean).forEach(x=>{accepted.add(x);accepted.add(x.replace(/^to /,''));});
+  });
   const pair=inp.dataset.pair||'';
   st.vbTotal++;
-  if(val===correct||val===correctBase){
+  if(accepted.has(val)){
     st.vbCorrect++;inp.classList.add('correct');sCl();haptic('success');
     document.getElementById('vd-inf-fb').innerHTML='<div class="vd-fb ok">✅ Correct!<small>'+esc(pair)+'</small></div>';
   }else{
@@ -4309,7 +4401,8 @@ renderVerbP2(v){
     ['Mi',v.conj.mi],['Vi',v.conj.vi],['Oni/One/Ona',v.conj.oni]
   ];
   let h='<div class="vd-phase">';
-  h+='<div class="vd-prompt">Conjugate: '+v.em+' '+esc(v.inf)+' ('+esc(v.en)+')</div>';
+  h+='<div class="vd-prompt">Conjugate: '+v.em+' '+esc(v.inf)+(v.pf?' <span class="vd-pf">pf</span>':'')+' ('+esc(v.en)+')</div>';
+  if(v.note)h+='<div class="vd-note">'+esc(v.note)+'</div>';
   h+='<div class="vd-conj">';
   pronouns.forEach((p,i)=>{
     const suffix=p[1].slice(pre.length);
@@ -4324,32 +4417,62 @@ renderVerbP2(v){
   h+='<button class="vd-next" id="vd-p2-done" style="display:none" onclick="S.nextVerb()">Next Verb</button>';
   h+='</div>';
   document.getElementById('vd-body').innerHTML=h;
-  pronouns.forEach((p,i)=>{
+  this._wireVerbRows(pronouns.length);
+},
+
+// Past tense: the auxiliary (sam/si/je/smo/ste/su, plus "se" for reflexives)
+// is given and the learner types the participle. Same common-prefix trick as
+// the present drill so only the changing ending is typed.
+renderVerbPast(v){
+  const rows=verbPastRows(v);
+  const forms=rows.map(r=>r[2]);
+  let pre=forms[0];
+  forms.forEach(f=>{while(pre&&f.indexOf(pre)!==0)pre=pre.slice(0,-1);});
+  if(pre.length<2)pre='';
+  let h='<div class="vd-phase">';
+  h+='<div class="vd-prompt">Past tense: '+v.em+' '+esc(v.inf)+(v.pf?' <span class="vd-pf">pf</span>':'')+' ('+esc(v.en)+')</div>';
+  h+='<div class="vd-note">Auxiliary given · type the participle'+(v.pp?' · irregular':'')+'</div>';
+  h+='<div class="vd-conj">';
+  rows.forEach((r,i)=>{
+    const suffix=r[2].slice(pre.length);
+    h+='<div class="vd-row">';
+    h+='<span class="vd-pronoun">'+esc(r[0])+'</span>';
+    h+='<span class="vd-aux">'+esc(r[1])+'</span>';
+    if(pre)h+='<span class="vd-stem">'+esc(pre)+'</span>';
+    h+='<input class="vd-suffix" id="vd-c'+i+'" data-answer="'+esc(suffix)+'" data-full="'+esc(r[2])+'" placeholder="'+(pre?'...':r[2].charAt(0)+'...')+'" autocomplete="off" autocapitalize="off" spellcheck="false">';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+=srKeysHtml();
+  h+='<button class="vd-next" id="vd-p2-done" style="display:none" onclick="S.nextVerb()">Next Verb</button>';
+  h+='</div>';
+  document.getElementById('vd-body').innerHTML=h;
+  this._wireVerbRows(rows.length);
+},
+
+// Shared by the present and past conjugation phases. Checking is
+// diacritic-tolerant (normSR); the input is then shown with the correct spelling.
+_wireVerbRows(n){
+  for(let i=0;i<n;i++){
     const el=document.getElementById('vd-c'+i);
     const validate=()=>{
       if(el.classList.contains('correct')||el.classList.contains('wrong'))return;
-      const val=el.value.trim().toLowerCase();
+      const val=normSR(el.value);
       if(!val)return;
-      const ans=el.dataset.answer.toLowerCase();
-      const full=el.dataset.full.toLowerCase();
+      const ans=normSR(el.dataset.answer),full=normSR(el.dataset.full);
       st.vbTotal++;
-      if(val===ans||val===full){
-        st.vbCorrect++;el.classList.add('correct');sCl();
-      }else{
-        el.classList.add('wrong');el.value=el.dataset.answer;
-      }
+      if(val===ans||val===full){st.vbCorrect++;el.classList.add('correct');sCl();}
+      else{el.classList.add('wrong');}
+      el.value=el.dataset.answer;
       el.disabled=true;
       let next=null;
-      for(let j=i+1;j<pronouns.length;j++){
-        const nx=document.getElementById('vd-c'+j);
-        if(!nx.disabled){next=nx;break;}
-      }
+      for(let j=i+1;j<n;j++){const nx=document.getElementById('vd-c'+j);if(nx&&!nx.disabled){next=nx;break;}}
       if(next)next.focus();
       else document.getElementById('vd-p2-done').style.display='';
     };
     el.addEventListener('blur',validate);
     el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='Tab'){e.preventDefault();validate();}});
-  });
+  }
   document.getElementById('vd-c0').focus();
 },
 
@@ -5846,6 +5969,9 @@ _renderSearchExpansion(e){
       }
     });
     h+='</div>';
+    const pp=verbPast(e.verb);
+    h+='<div class="sx-past"><span class="sx-past-l">Past</span>'+esc(pp.m+' · '+pp.f+' · '+pp.mp)+(pp.refl?' <span class="sx-past-se">+ se</span>':'')+'</div>';
+    if(e.verb.note)h+='<div class="sx-note">'+esc(e.verb.note)+'</div>';
   }
   h+='</div>';
   return h;
