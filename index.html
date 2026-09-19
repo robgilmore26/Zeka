@@ -628,6 +628,28 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sent-blank.inc{border-bottom-color:var(--red);background:rgba(255,107,107,.15);color:#FF9999}
 .sent-punct{display:inline}
 
+/* CLOZE */
+.cz-hero{text-align:center;padding:18px 6px 6px}
+.cz-hero-i{font-size:44px;margin-bottom:6px}
+.cz-hero-t{font-family:var(--font-display);font-size:24px;font-weight:700;color:#fff}
+.cz-hero-d{font-size:13px;color:rgba(255,255,255,.6);line-height:1.5;margin-top:6px}
+.cz-hero-n{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:10px}
+.cz-mode{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}
+.cz-mode-l{font-size:12px;font-weight:700;color:rgba(255,255,255,.5)}
+.cz-start{width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);margin-top:8px}
+.cz-note{font-size:12px;color:rgba(255,255,255,.4);text-align:center;margin-top:18px;line-height:1.5}
+.cz-blank{display:inline-block;min-width:64px;padding:0 6px;border-bottom:2.5px solid var(--sr-blue);color:transparent;text-align:center;letter-spacing:2px;transition:.2s}
+.cz-blank.cor{color:#A6E26A;border-bottom-color:var(--green);letter-spacing:0}
+.cz-blank.inc{color:#FF9999;border-bottom-color:var(--red);letter-spacing:0}
+.cz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.cz-opt{padding:14px 10px;border:2px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.06);color:#fff;font-size:17px;font-weight:700;cursor:pointer;transition:.15s;font-family:var(--font-display);word-break:break-word}
+.cz-opt:active{transform:translateY(1px)}
+.cz-opt.cor{border-color:var(--green);background:rgba(88,204,2,.18)}
+.cz-opt.inc{border-color:var(--red);background:rgba(255,75,75,.14)}
+.cz-opt:disabled{cursor:default}
+.cz-switch{display:block;margin:14px auto 0;background:none;border:none;color:rgba(255,255,255,.45);font-size:13px;font-weight:700;cursor:pointer;text-decoration:underline}
+#cloze-drill .vd-input{margin-top:14px}
+
 /* ═══════════════ ZEKA PERSONALITY ═══════════════ */
 .zeka-face{width:100px;height:100px;border-radius:24px;box-shadow:0 8px 24px rgba(0,0,0,.3);display:block}
 .zeka-face.sm{width:60px;height:60px;border-radius:16px}
@@ -858,6 +880,8 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   <div id="overflow-menu" class="overflow-menu" style="display:none">
     <button class="overflow-item" onclick="S.setLearnMode('verbs');S.closeOverflowMenu()">Verbs</button>
     <button class="overflow-item" onclick="S.setLearnMode('sentences');S.closeOverflowMenu()">Sentences</button>
+    <button class="overflow-item" onclick="S.setLearnMode('cloze');S.closeOverflowMenu()">Cloze</button>
+    <button class="overflow-item" onclick="S.setLearnMode('reading');S.closeOverflowMenu()">Reading</button>
   </div>
   <div class="hscr" id="hscr" style="display:none"></div>
   <div id="fc-home" style="flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
@@ -871,6 +895,8 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div id="case-home" style="display:none"></div>
   </div>
   <div id="sentence-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
+  <div id="cloze-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
+  <div id="reading-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
     <button class="ni" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
@@ -943,6 +969,15 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div style="width:32px"></div>
   </div>
   <div class="vd-body" id="sn-body"></div>
+</div>
+
+<div class="sc" id="cloze-drill">
+  <div class="vd-top">
+    <button class="xbtn" onclick="S.exitCloze()"><span data-icon="x"></span></button>
+    <div class="vd-count" id="cz-count">0 / 0</div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="vd-body" id="cz-body"></div>
 </div>
 
 <div class="sc" id="progress">
@@ -3687,7 +3722,7 @@ function getRecentWins(buckets){
 
 function srKeysHtml(){
   if(curLang!=='sr')return '';
-  return '<div class="sr-keys">'+'šžčćđ'.split('').map(c=>'<button class="sr-key" onclick="S.insertSrKey(\''+c+'\')">'+c+'</button>').join('')+'</div>';
+  return '<div class="sr-keys">'+'šžčćđ'.split('').map(c=>'<button class="sr-key" onmousedown="event.preventDefault()" onclick="S.insertSrKey(\''+c+'\')">'+c+'</button>').join('')+'</div>';
 }
 
 function verbPrefix(v){
@@ -3870,6 +3905,106 @@ function _sxLev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let pre
 
 // Build the flat searchable index for the current language.
 // Returns array of {type, word, source, english, normSource, normEnglish}
+// ═══════════════ CLOZE DRILL ═══════════════
+// One Serbian sentence, one word missing. Items come from every sentence-bank
+// blank plus every unit phrase that contains one of the unit's own words, so
+// the blank is always a word the course actually teaches.
+// Item: {sr, en, answer (as written in the sentence), lv, focus, wordId, src}
+function _czClean(tok){return tok.replace(/[.,!?;:„“"'()]/g,'');}
+// The flashcard word this blank exercises, if any (longest matching stem wins)
+function _czWordFor(answer){
+  const core=normSR(answer).replace(/[^a-z]/g,'');if(core.length<2)return null;
+  let best=null,bestLen=0;
+  for(const w of ALL_W){
+    const sk=_fcStemKey(w.l);if(!sk.k||!_fcTokHit(core,sk))continue;
+    if(sk.exact)return w;
+    if(sk.k.length>bestLen){best=w;bestLen=sk.k.length;}
+  }
+  return best;
+}
+let _CZ_ITEMS=null,_CZ_LANG=null;
+function czItems(){
+  if(_CZ_ITEMS&&_CZ_LANG===curLang)return _CZ_ITEMS;
+  const items=[];
+  SENTENCES.forEach(s=>{
+    (s.blanks||[]).forEach(b=>{
+      if(!s.sr.split(/\s+/).some(t=>_czClean(t)===b))return;
+      const w=_czWordFor(b);
+      items.push({sr:s.sr,en:s.en,answer:b,lv:s.lv,focus:s.focus==='tatoeba'?'':(s.focus||''),wordId:w?w.id:null,src:'s'+s.id});
+    });
+  });
+  UNITS.forEach(u=>{
+    u.phrases.forEach((p,pi)=>{
+      const toks=p.tl.split(/\s+/);if(toks.length<3)return;
+      let hit=null;
+      u.words.forEach(w=>{
+        const sk=_fcStemKey(w.l);if(!sk.k)return;
+        toks.forEach(t=>{const core=normSR(t).replace(/[^a-z]/g,'');if(core&&_fcTokHit(core,sk)&&(!hit||sk.k.length>hit.sk.k.length))hit={w,tok:_czClean(t),sk};});
+      });
+      if(!hit||hit.tok.length<2)return;
+      items.push({sr:p.tl,en:p.en,answer:hit.tok,lv:u.lv,focus:'',wordId:hit.w.id,src:'u'+u.id+'p'+pi});
+    });
+  });
+  _CZ_ITEMS=items;_CZ_LANG=curLang;
+  return items;
+}
+// Levels a learner is ready for, from how much vocabulary they have reviewed
+function czLevelsAllowed(){const n=learnedWordCount();return n<150?['A1']:n<400?['A1','A2']:['A1','A2','B1','B2','C1'];}
+// Weighted sample: sentences built on words you already review count ×3, and
+// +2 more when that card is weak. One item per source sentence.
+function buildClozeSession(n){
+  const allowed=czLevelsAllowed();
+  let pool=czItems().filter(it=>allowed.includes(it.lv));
+  if(pool.length<n)pool=czItems();
+  const weighted=pool.map(it=>{
+    let w=1;
+    if(it.wordId!=null){
+      const c=st.fc[fcKey(it.wordId,'se')]||st.fc[fcKey(it.wordId,'es')];
+      if(c&&c.reps>0){w=3;if((c.lapses||0)>=2)w+=2;}
+    }
+    return{it,w};
+  });
+  const out=[],used=new Set();
+  while(out.length<n&&weighted.length){
+    const total=weighted.reduce((a,x)=>a+x.w,0);
+    let r=Math.random()*total,i=0;
+    for(;i<weighted.length-1;i++){r-=weighted[i].w;if(r<=0)break;}
+    const pick=weighted.splice(i,1)[0].it;
+    if(used.has(pick.src))continue;
+    used.add(pick.src);out.push({...pick});
+  }
+  return out;
+}
+// Three wrong options that target the grammar point: other case forms of the
+// same noun, other persons of the same verb (or genders of its participle),
+// other prepositions — then answers of similar length from the same level.
+function czDistractors(item,pool){
+  const ans=item.answer,nAns=normSR(ans);
+  const capital=/^[A-ZČĆŠŽĐ]/.test(ans);
+  const fix=x=>capital?x.charAt(0).toUpperCase()+x.slice(1):x.toLowerCase();
+  const cands=[];
+  const push=x=>{if(!x)return;const nx=normSR(x);if(!nx||nx===nAns||cands.some(c=>normSR(c)===nx))return;cands.push(fix(x));};
+  NOUNS.forEach(nn=>{const forms=Object.values(nn.cases||{});if(forms.some(x=>normSR(x)===nAns))forms.forEach(push);});
+  if(cands.length<3)VERBS.forEach(v=>{
+    const pres=Object.values(v.conj||{}).map(x=>x.replace(/^se /,''));
+    if(pres.some(x=>normSR(x)===nAns))pres.forEach(push);
+    const p=verbPast(v),past=[p.m,p.f,p.n,p.mp,p.fp];
+    if(past.some(x=>normSR(x)===nAns))past.forEach(push);
+  });
+  if(cands.length<3){const prep=UNITS.find(u=>u.id===49);if(prep&&prep.words.some(w=>normSR(w.l)===nAns))S.sh(prep.words).forEach(w=>push(w.l));}
+  if(cands.length<3)S.sh(pool.filter(x=>x.lv===item.lv&&Math.abs(x.answer.length-ans.length)<=2)).forEach(x=>{if(cands.length<6)push(x.answer);});
+  if(cands.length<3)S.sh(pool).forEach(x=>{if(cands.length<6)push(x.answer);});
+  return S.sh(cands).slice(0,3);
+}
+// A miss on a word you already review makes that card due now, both
+// directions — the flashcard queue is where it gets re-learned.
+function czNudgeDue(wordId){
+  const now=Date.now();let hit=false;
+  ['se','es'].forEach(d=>{const c=st.fc[fcKey(wordId,d)];if(c&&c.reps>0&&c.due>now){c.due=now-1;hit=true;}});
+  if(hit)save();
+  return hit;
+}
+
 function _sxIndex(){
   const idx=[];
   // alt: extra searchable tokens — Cyrillic spelling for words; aspect partner and
@@ -4270,13 +4405,19 @@ finishFcSession(){
   if(typeof _mcEligibleCards==='function'&&_mcEligibleCards().length>=10){
     matchBtn='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--sr-blue);box-shadow:0 3px 0 var(--sr-blue-d)" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'match\');S.startMatchSession();},300)">🧩 Try matching →</button>';
   }
+  let clozeBtn='';
+  if(curLang==='sr'&&typeof czItems==='function'&&czItems().length>=10){
+    clozeBtn='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:rgba(206,130,255,.3);box-shadow:0 3px 0 rgba(120,60,180,.55)" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'cloze\');S.startClozeSession(10);},50)">✏️ Practice in context</button>';
+  }
   const left=fcDueBreakdown().all.length;
   if(left>0){
     h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startFcSession()">Next '+Math.min(left,FC_SESSION_CAP)+' cards → <span style="font-weight:600;opacity:.8;text-transform:none;letter-spacing:0">('+left+' still due)</span></button>';
     h+=matchBtn;
+    h+=clozeBtn;
     h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)" onclick="S.exitFc()">Done for now</button>';
   }else{
     h+=matchBtn;
+    h+=clozeBtn;
     h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.exitFc()">Done</button>';
   }
   h+='</div>';
@@ -4286,9 +4427,12 @@ finishFcSession(){
   sDn();
 },
 
+_lastInput:null,
 insertSrKey(ch){
-  const el=document.activeElement;
-  if(!el||!el.classList.contains('vd-input')&&!el.classList.contains('vd-suffix'))return;
+  const ok=x=>!!x&&x.tagName==='INPUT'&&!x.disabled&&(x.classList.contains('vd-input')||x.classList.contains('vd-suffix')||x.classList.contains('sent-blank'));
+  let el=document.activeElement;
+  if(!ok(el))el=ok(this._lastInput)?this._lastInput:null;// the key button may have taken focus
+  if(!el)return;
   const start=el.selectionStart||el.value.length;
   const end=el.selectionEnd||el.value.length;
   el.value=el.value.slice(0,start)+ch+el.value.slice(end);
@@ -4724,6 +4868,139 @@ _sentResetDayIfNeeded(){
   if(st.sentDoneDate!==today){st.sentDoneDate=today;st.sentDoneToday=[];}
 },
 
+renderClozeHome(){
+  const el=document.getElementById('cloze-home');
+  if(curLang!=='sr'){el.innerHTML='<div class="empty-state">'+zekaHtml('Cloze is only available for Serbian right now.')+'</div>';return;}
+  const items=czItems(),allowed=czLevelsAllowed();
+  const inLevel=items.filter(i=>allowed.includes(i.lv)).length;
+  const mode=st.clozeMode||'tap';
+  let h='<div class="cz-hero"><div class="cz-hero-i">✏️</div><div class="cz-hero-t">Cloze</div>';
+  h+='<div class="cz-hero-d">A Serbian sentence with one word missing. Case endings, verb forms and prepositions — the parts a flashcard can\'t test.</div>';
+  h+='<div class="cz-hero-n">'+inLevel+' sentences at your level · '+items.length+' in total</div></div>';
+  h+='<div class="cz-mode"><span class="cz-mode-l">Answer by</span><div class="seg-toggle" style="margin:0;flex:1;max-width:220px">';
+  h+='<button class="seg-btn'+(mode==='tap'?' seg-active':'')+'" onclick="S.setClozeMode(\'tap\')">Tapping</button>';
+  h+='<button class="seg-btn'+(mode==='type'?' seg-active':'')+'" onclick="S.setClozeMode(\'type\')">Typing</button></div></div>';
+  h+='<div style="text-align:center;margin-top:20px">';
+  h+='<div style="font-size:11px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:10px">Start a round</div>';
+  h+='<div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">';
+  [5,10,15].forEach(n=>{
+    h+='<button style="padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;color:#fff;background:rgba(255,255,255,.12)" onclick="S.startClozeSession('+n+')">'+n+' sentences</button>';
+  });
+  h+='</div>';
+  h+='<button class="cz-start" onclick="S.startClozeSession(10)">Start · 10 sentences</button>';
+  h+='</div>';
+  h+='<div class="cz-note">Miss a word you already review and its flashcard comes back in your next session.</div>';
+  el.innerHTML=h;
+},
+
+setClozeMode(m){
+  st.clozeMode=m==='type'?'type':'tap';save();
+  if(document.getElementById('home').classList.contains('act'))this.renderClozeHome();
+},
+
+startClozeSession(n){
+  const items=buildClozeSession(n||10);
+  if(!items.length)return;
+  st.czItems=items;st.czIdx=0;st.czCorrect=0;st.czTotal=0;st.czNudged=[];
+  this.goScr('cloze-drill');
+  this.renderCloze();
+},
+
+renderCloze(){
+  if(st.czIdx>=st.czItems.length){this.finishClozeSession();return;}
+  const it=st.czItems[st.czIdx];
+  document.getElementById('cz-count').textContent=(st.czIdx+1)+' / '+st.czItems.length;
+  const mode=st.clozeMode||'tap';
+  let blanked=false;
+  const display=it.sr.split(/(\s+)/).map(tok=>{
+    if(!blanked&&_czClean(tok)===it.answer){
+      blanked=true;const tr=tok.match(/[.,!?;:]+$/);
+      return '<span class="cz-blank" id="cz-blank">'+'_'.repeat(Math.max(4,Math.min(it.answer.length,10)))+'</span>'+(tr?'<span class="sent-punct">'+tr[0]+'</span>':'');
+    }
+    return '<span class="sent-tok">'+esc(tok)+'</span>';
+  }).join('');
+  let h='<div class="sent-phase">';
+  h+='<div class="sent-lvl">'+esc(it.lv)+(it.focus?' · '+esc(it.focus):'')+'</div>';
+  h+='<div class="sent-en">'+esc(it.en)+'</div>';
+  h+='<div class="sent-display">'+display+'</div>';
+  if(mode==='tap'){
+    const opts=this.sh([it.answer,...czDistractors(it,czItems())]);
+    h+='<div class="cz-opts">'+opts.map(o=>'<button class="cz-opt" onclick="S.answerCloze(this)">'+esc(o)+'</button>').join('')+'</div>';
+  }else{
+    h+='<input class="vd-input" id="cz-input" placeholder="Type the missing word…" autocomplete="off" autocapitalize="off" spellcheck="false">';
+    h+=srKeysHtml();
+    h+='<button class="vd-next" id="cz-check" onclick="S.answerCloze()">Check</button>';
+  }
+  h+='<div id="cz-fb"></div>';
+  h+='<button class="vd-next" id="cz-next" style="display:none" onclick="S.nextCloze()">Next</button>';
+  h+='<button class="cz-switch" onclick="S.setClozeMode(\''+(mode==='tap'?'type':'tap')+'\');S.renderCloze()">'+(mode==='tap'?'Type it instead':'Tap instead')+'</button>';
+  h+='</div>';
+  document.getElementById('cz-body').innerHTML=h;
+  const inp=document.getElementById('cz-input');
+  if(inp){inp.focus();inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();S.answerCloze();}});}
+},
+
+answerCloze(btn){
+  const it=st.czItems[st.czIdx];if(!it||it.done)return;
+  let val;
+  const inp=document.getElementById('cz-input');
+  if(btn){val=btn.textContent;}
+  else{if(!inp)return;val=inp.value;if(!normSR(val))return;inp.disabled=true;}
+  const ok=normSR(val)===normSR(it.answer);
+  it.done=true;st.czTotal++;
+  const blank=document.getElementById('cz-blank');
+  if(blank){blank.textContent=it.answer;blank.classList.add(ok?'cor':'inc');}
+  document.querySelectorAll('.cz-opt').forEach(b=>{
+    b.disabled=true;
+    if(normSR(b.textContent)===normSR(it.answer))b.classList.add('cor');
+    else if(b===btn)b.classList.add('inc');
+  });
+  if(inp){inp.classList.add(ok?'correct':'wrong');inp.value=it.answer;}
+  const chk=document.getElementById('cz-check');if(chk)chk.style.display='none';
+  const sw=document.querySelector('.cz-switch');if(sw)sw.style.display='none';
+  const fb=document.getElementById('cz-fb');
+  if(ok){st.czCorrect++;sCl();haptic('success');fb.innerHTML='<div class="vd-fb ok">✅ Correct!</div>';}
+  else{
+    sNo();haptic('error');
+    let extra='';
+    if(it.wordId!=null&&czNudgeDue(it.wordId)){
+      const w=ALL_W.find(x=>x.id===it.wordId);st.czNudged.push(it.wordId);
+      extra='<small>'+esc(w?w.l:'')+' is back in your next flashcard session</small>';
+    }
+    fb.innerHTML='<div class="vd-fb bad">❌ It\'s <b>'+esc(it.answer)+'</b>'+extra+'</div>';
+  }
+  const nx=document.getElementById('cz-next');nx.style.display='';nx.focus();
+},
+
+nextCloze(){st.czIdx++;this.renderCloze();},
+
+exitCloze(){sCl();save();this.goHome();this.setLearnMode('cloze');},
+
+finishClozeSession(){
+  sDn();
+  const el=document.getElementById('cz-body');
+  const pct=st.czTotal>0?Math.round(st.czCorrect/st.czTotal*100):0;
+  const streakHit=(st.czTotal>0)?bumpStreak():null;
+  if(st.czTotal>0)save();
+  const cat=pct===100?'perfect':pct>=70?'good':'rough';
+  let h='<div style="text-align:center;padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px">';
+  h+=zekaHtml(zekaMsg(cat));
+  h+='<div style="font-size:22px;font-weight:800;color:#fff">Round Complete!</div>';
+  h+='<div style="display:flex;gap:20px;justify-content:center">';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--green)">'+st.czItems.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">SENTENCES</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--blue)">'+st.czCorrect+'/'+st.czTotal+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">CORRECT</div></div>';
+  h+='<div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--gold)">'+pct+'%</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:700">ACCURACY</div></div>';
+  h+='</div>';
+  const nudged=(st.czNudged||[]).length;
+  if(nudged)h+='<div class="cz-note" style="margin-top:0">'+nudged+' flashcard'+(nudged!==1?'s':'')+' moved back into your next session.</div>';
+  h+='<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;margin-top:8px">';
+  h+='<button style="width:100%;padding:16px;border:none;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d)" onclick="S.startClozeSession('+st.czItems.length+')">Another round</button>';
+  h+='<button style="width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.85);background:rgba(255,255,255,.12)" onclick="S.exitCloze()">Done</button>';
+  h+='</div></div>';
+  el.innerHTML=h;
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
+},
+
 renderSentHome(){
   const el=document.getElementById('sentence-home');
   if(!SENTENCES.length){
@@ -4920,17 +5197,17 @@ finishVerbSession(){
 },
 
 setLearnMode(mode){
-  const modes=['flashcards','lessons','match','verbs','sentences'];
+  const modes=['flashcards','lessons','match','verbs','sentences','cloze','reading'];
   const prev=st._learnMode||'flashcards';
   const dir=modes.indexOf(mode)>modes.indexOf(prev)?1:-1;// 1 = slide left, -1 = slide right
   st._learnMode=mode;
   // Active-highlight: first 3 buttons map to flashcards/lessons/match; 4th (⋯) highlights for verbs/sentences
   const visibleModes=['flashcards','lessons','match'];
   document.querySelectorAll('#learn-toggle .seg-btn').forEach((b,i)=>{
-    const active=i<3?(visibleModes[i]===mode):(mode==='verbs'||mode==='sentences');
+    const active=i<3?(visibleModes[i]===mode):(mode==='verbs'||mode==='sentences'||mode==='cloze'||mode==='reading');
     b.classList.toggle('seg-active',active);
   });
-  const containers={lessons:document.getElementById('hscr'),flashcards:document.getElementById('fc-home'),match:document.getElementById('match-home'),verbs:document.getElementById('grammar-home'),sentences:document.getElementById('sentence-home')};
+  const containers={lessons:document.getElementById('hscr'),flashcards:document.getElementById('fc-home'),match:document.getElementById('match-home'),verbs:document.getElementById('grammar-home'),sentences:document.getElementById('sentence-home'),cloze:document.getElementById('cloze-home'),reading:document.getElementById('reading-home')};
   // Animate previous out, new in
   const oldEl=containers[prev];
   const newEl=containers[mode];
@@ -4940,6 +5217,8 @@ setLearnMode(mode){
     if(mode==='match'&&typeof this.renderMatchHome==='function')this.renderMatchHome();
     if(mode==='verbs')this.setGrammarMode(st.grammarMode||'verbs');
     if(mode==='sentences')this.renderSentHome();
+    if(mode==='cloze')this.renderClozeHome();
+    if(mode==='reading'&&typeof this.renderReadingHome==='function')this.renderReadingHome();
     if(!REDUCED_MOTION&&prev!==mode){
       anim(newEl,{opacity:[0,1],transform:[`translateX(${dir*48}px)`,'translateX(0)']},{duration:.28,easing:'cubic-bezier(.22,.61,.36,1)'});
     }
@@ -6127,6 +6406,9 @@ startWeakCardSession(){
 }
 };
 
+// Remember the last drill input so the š ž č ć đ keys can target it even when
+// tapping the key button moved focus away from it.
+document.addEventListener('focusin',e=>{if(e.target&&e.target.tagName==='INPUT')S._lastInput=e.target;});
 // KEYBOARD
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
