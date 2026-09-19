@@ -6639,8 +6639,8 @@ _renderSearchExpansion(e){
     const ap=ASP[e.verb.inf]||null;
     const ip=ap?null:(Object.keys(ASP).find(k=>ASP[k]===e.verb.inf)||null);
     chips.push('<span class="sx-meta-chip">'+(ap?'Verb · imperfective':ip?'Verb · perfective':'Verb')+'</span>');
-    if(ap)chips.push('<span class="sx-meta-chip gn">perfective: '+esc(ap)+'</span>');
-    if(ip)chips.push('<span class="sx-meta-chip gn">imperfective: '+esc(ip)+'</span>');
+    if(ap)chips.push('<span class="sx-meta-chip gn">impf. · pf. '+esc(ap)+'</span>');
+    if(ip)chips.push('<span class="sx-meta-chip gn">pf. · impf. '+esc(ip)+'</span>');
   }
   h+='<div class="sx-expand-meta">'+chips.join('')+'</div>';
   if(e.type==='word'){
@@ -6829,7 +6829,13 @@ function renderIcons(root){
 renderIcons();
 // Build stamp: the page's own Last-Modified header (set by the host on deploy) —
 // zero maintenance, and lets QA confirm they are looking at the current build.
-(function(){const b=document.getElementById('build-stamp');const when=document.lastModified||'';if(b)b.textContent='Build '+when;console.log('[Zeka] build',when);})();
+(function(){
+  const b=document.getElementById('build-stamp');
+  const d=new Date(document.lastModified);
+  const when=isNaN(d)?(document.lastModified||''):d.toISOString().replace('T',' ').slice(0,19)+' UTC';
+  if(b)b.textContent='Build '+when;
+  console.log('[Zeka] build',when);
+})();
 
 // ═══════════════ LONG-PRESS UNIT PREVIEW ═══════════════
 (function setupLongPress(){
