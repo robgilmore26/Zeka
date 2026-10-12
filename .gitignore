@@ -4,8 +4,12 @@ fetch_audio_it.py
 italian-vocab-temp.js
 tatoeba_tmp/
 __pycache__/
-audio/
+/audio/
 # Capacitor (commit native projects only after they're set up + signed)
 node_modules/
 ios/App/App/public/
 android/app/src/main/assets/public/
+
+# Listening audio pipeline (tools/audio): generated, unreviewed clips never go in git
+tools/audio/staging/
+tools/audio/trial/

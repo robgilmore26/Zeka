@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zeka audio review</title>
+<style>
+  :root{--bg:#0F1419;--surface:#1A2028;--raised:#222A33;--text:#F5F7FA;--muted:rgba(245,247,250,.6);--blue:#1A5FD1;--green:#58CC02;--red:#FF4B4B;--orange:#FF9600}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+  main{max-width:900px;margin:0 auto;padding:20px 16px 80px}
+  h1{font-size:22px;margin:0 0 4px}
+  .muted{color:var(--muted)}
+  .bar{position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:2;border-bottom:1px solid #222a33;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .tabs button,.bar>button{background:var(--raised);color:var(--text);border:1px solid #2f3945;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:13px}
+  .tabs button.act{background:var(--blue);border-color:var(--blue)}
+  .count{font-size:13px;margin-left:auto}
+  .keys{font-size:12px;color:var(--muted);margin:10px 0}
+  kbd{background:var(--raised);border:1px solid #2f3945;border-radius:4px;padding:0 5px;font-size:11px}
+  .row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px;border-radius:12px;margin:8px 0;background:var(--surface);border:2px solid transparent}
+  .row.cur{border-color:var(--blue)}
+  .row.ok{background:rgba(88,204,2,.08)}
+  .row.flag{background:rgba(255,75,75,.1)}
+  .sr{font-size:19px;font-weight:700}
+  .cy,.en,.stt{font-size:13px;color:var(--muted)}
+  .stt b{color:var(--orange)}
+  .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--raised);margin-left:6px;vertical-align:middle}
+  .tag.check{background:rgba(255,150,0,.2);color:var(--orange)}
+  .tag.pass{background:rgba(88,204,2,.18);color:var(--green)}
+  .btns{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+  .btns button{background:var(--raised);color:var(--text);border:1px solid #2f3945;border-radius:10px;padding:8px 11px;cursor:pointer;font-size:14px}
+  .btns .okb{border-color:rgba(88,204,2,.6)}
+  .btns .flb{border-color:rgba(255,75,75,.6)}
+  .note{font-size:12px;color:#FF9999;margin-top:4px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Zeka audio review</h1>
+  <div class="muted">Only clips you mark OK are published. Clips the automatic check flagged are listed first.</div>
+  <div class="bar">
+    <div class="tabs" id="tabs"></div>
+    <button id="bulk">Mark every clip that passed the check as OK</button>
+    <button id="dl">Download decisions</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="keys"><kbd>Space</kbd> play · <kbd>S</kbd> slow · <kbd>A</kbd> OK and next · <kbd>F</kbd> flag and next · <kbd>↑</kbd><kbd>↓</kbd> move</div>
+  <div id="list"></div>
+</main>
+<script>
+const ROWS=/*__ROWS__*/[];
+const STORE='zeka-audio-review';
+let dec={};try{dec=JSON.parse(localStorage.getItem(STORE)||'{}');}catch(e){}
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(dec));}catch(e){}};
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tab='todo',cur=0,shown=[],audio=null;
+const TABS=[['todo','To check'],['check','Flagged by check'],['pass','Passed check'],['flagged','Flagged by you'],['all','All']];
+function filter(r){
+  const d=dec[r.f];
+  if(tab==='todo')return !d;
+  if(tab==='check')return r.status==='check';
+  if(tab==='pass')return r.status==='pass';
+  if(tab==='flagged')return d&&d.v==='flag';
+  return true;
+}
+function render(){
+  document.getElementById('tabs').innerHTML=TABS.map(([k,l])=>'<button class="'+(tab===k?'act':'')+'" data-t="'+k+'">'+l+'</button>').join('');
+  shown=ROWS.filter(filter);
+  if(cur>=shown.length)cur=Math.max(0,shown.length-1);
+  document.getElementById('list').innerHTML=shown.map((r,i)=>{
+    const d=dec[r.f];
+    return '<div class="row '+(i===cur?'cur ':'')+(d?(d.v==='ok'?'ok':'flag'):'')+'" data-i="'+i+'">'+
+      '<div><div class="sr">'+esc(r.latin)+(r.status?'<span class="tag '+r.status+'">'+(r.status==='pass'?'check passed':'check: listen')+'</span>':'')+'<span class="tag">'+esc(r.kind)+(r.lv?' · '+esc(r.lv):'')+'</span></div>'+
+      '<div class="cy">'+esc(r.cyr)+'</div><div class="en">'+esc(r.en)+'</div>'+
+      (r.stt!==undefined?'<div class="stt">Speech recognition heard: <b>'+esc(r.stt||'(nothing)')+'</b></div>':'')+
+      (d&&d.note?'<div class="note">'+esc(d.note)+'</div>':'')+'</div>'+
+      '<div class="btns"><button data-a="play">▶</button>'+(r.s?'<button data-a="slow">🐢</button>':'')+
+      '<button class="okb" data-a="ok">OK</button><button class="flb" data-a="flag">Flag</button></div></div>';
+  }).join('')||'<div class="muted" style="padding:30px 0">Nothing here.</div>';
+  const all=ROWS.length,ok=ROWS.filter(r=>dec[r.f]&&dec[r.f].v==='ok').length,fl=ROWS.filter(r=>dec[r.f]&&dec[r.f].v==='flag').length;
+  document.getElementById('count').textContent=ok+' OK · '+fl+' flagged · '+(all-ok-fl)+' to go';
+  const el=document.querySelector('.row.cur');if(el)el.scrollIntoView({block:'nearest'});
+}
+function play(i,slow){
+  const r=shown[i];if(!r)return;
+  if(audio)audio.pause();
+  audio=new Audio('clips/'+(slow&&r.s?r.s:r.f)+'.mp3');audio.play().catch(()=>{});
+}
+function decide(i,v){
+  const r=shown[i];if(!r)return;
+  if(v==='flag'){const note=prompt('What is wrong? (optional)',(dec[r.f]&&dec[r.f].note)||'');if(note===null)return;dec[r.f]={v,note,key:r.key};}
+  else dec[r.f]={v,key:r.key};
+  save();
+  if(tab==='all'||tab==='check'||tab==='pass')cur=Math.min(cur+1,shown.length-1);
+  render();play(cur);
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-t]');if(t){tab=t.dataset.t;cur=0;render();return;}
+  const b=e.target.closest('[data-a]');const row=e.target.closest('.row');
+  if(row){cur=+row.dataset.i;}
+  if(b){const a=b.dataset.a;if(a==='play')play(cur);else if(a==='slow')play(cur,true);else decide(cur,a);}
+  else if(row)render();
+});
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.key===' '){e.preventDefault();play(cur);}
+  else if(e.key==='s'||e.key==='S')play(cur,true);
+  else if(e.key==='a'||e.key==='A')decide(cur,'ok');
+  else if(e.key==='f'||e.key==='F')decide(cur,'flag');
+  else if(e.key==='ArrowDown'){e.preventDefault();cur=Math.min(cur+1,shown.length-1);render();}
+  else if(e.key==='ArrowUp'){e.preventDefault();cur=Math.max(cur-1,0);render();}
+});
+document.getElementById('bulk').onclick=()=>{
+  const n=ROWS.filter(r=>r.status==='pass'&&!dec[r.f]).length;
+  if(!n){alert('No unreviewed clips passed the automatic check.');return;}
+  if(!confirm('Mark '+n+' clips that passed the automatic check as OK? Listening to a sample of them first is a good idea.'))return;
+  ROWS.forEach(r=>{if(r.status==='pass'&&!dec[r.f])dec[r.f]={v:'ok',key:r.key,bulk:1};});save();render();
+};
+document.getElementById('dl').onclick=()=>{
+  const out={approved:ROWS.filter(r=>dec[r.f]&&dec[r.f].v==='ok').map(r=>r.f),flagged:ROWS.filter(r=>dec[r.f]&&dec[r.f].v==='flag').map(r=>({f:r.f,key:r.key,note:dec[r.f].note||''}))};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,1)],{type:'application/json'}));a.download='zeka-audio-review.json';a.click();
+};
+render();
+</script>
+</body>
+</html>

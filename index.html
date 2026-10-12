@@ -669,7 +669,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 
 /* ALSO TODAY strip (Flashcards home) */
 .today-l{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin:24px 0 8px;text-align:center}
-.today-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.today-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px}
 .today-tile{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 6px;border:2px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.04);color:#fff;cursor:pointer;transition:.15s;min-width:0;font-family:var(--font)}
 .today-tile:active{transform:translateY(1px)}
 .today-tile.done{border-color:rgba(88,204,2,.45);background:rgba(88,204,2,.08)}
@@ -677,6 +677,30 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .today-em{font-size:24px}
 .today-t{font-size:13px;font-weight:800}
 .today-s{font-size:11px;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+/* LISTENING */
+.spk-pair{display:inline-flex;gap:2px;vertical-align:middle}
+.spk-ctx{font-size:15px;padding:0 4px;margin-left:4px;vertical-align:middle}
+.rd-spk{font-size:16px;padding:0 3px;vertical-align:middle}
+.hear-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-size:12px;font-weight:700;color:var(--text-3)}
+.hear-row .spk-btn{font-size:18px}
+.audio-row{margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:rgba(255,255,255,.45)}
+.audio-tog{border:none;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+.audio-tog.on{background:var(--sr-blue);color:#fff}
+.ln-play-row{display:flex;justify-content:center;align-items:center;gap:14px;margin:18px 0 6px}
+.ln-play{width:88px;height:88px;border-radius:50%;border:none;background:var(--sr-blue);box-shadow:0 5px 0 var(--sr-blue-d);font-size:36px;cursor:pointer}
+.ln-play:active{transform:translateY(3px);box-shadow:0 2px 0 var(--sr-blue-d)}
+.ln-slow{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);font-size:24px;cursor:pointer}
+.ln-q{text-align:center;font-size:13px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;margin-top:10px}
+.ln-opts{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
+.ln-opt{font-family:var(--font);font-size:15px;text-align:left;padding:12px 14px}
+#listen-drill .vd-input{margin-top:14px}
+.ln-reveal{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--divider);text-align:center}
+.ln-reveal-sr{font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--text-1)}
+.ln-reveal-en{font-size:13px;color:var(--text-2);margin-top:3px;font-style:italic}
+.ln-diff{margin-top:8px;font-size:16px;font-weight:700;line-height:1.6}
+.ln-diff .ok{color:#A6E26A}
+.ln-diff .miss{color:#FF9999;text-decoration:underline wavy rgba(255,153,153,.6)}
 
 /* CLOZE */
 .cz-hero{text-align:center;padding:18px 6px 6px}
@@ -982,6 +1006,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   <div id="sentence-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
   <div id="cloze-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
   <div id="reading-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
+  <div id="listening-home" style="display:none;flex:1;overflow-y:auto;padding:14px 22px calc(110px + env(safe-area-inset-bottom,0px))"></div>
   <div class="bnav">
     <button class="ni act" onclick="S.goHome()"><span class="ni-i" data-icon="home"></span><span class="ni-l">Learn</span></button>
     <button class="ni" onclick="S.goProgress()"><span class="ni-i" data-icon="chart"></span><span class="ni-l">Progress</span></button>
@@ -1063,6 +1088,15 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div style="width:32px"></div>
   </div>
   <div class="vd-body" id="cz-body"></div>
+</div>
+
+<div class="sc" id="listen-drill">
+  <div class="vd-top">
+    <button class="xbtn" onclick="S.exitListening()"><span data-icon="x"></span></button>
+    <div class="vd-count" id="ln-count">0 / 0</div>
+    <div style="width:32px"></div>
+  </div>
+  <div class="vd-body" id="ln-body"></div>
 </div>
 
 <div class="sc" id="reading">
@@ -2646,36 +2680,51 @@ function showStreakMilestone(days){
 }
 function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLang].flag+'.png" style="height:18px;vertical-align:middle">';}
 
-// ═══════════════ SPEECH SYNTHESIS ═══════════════
-const SPEECH_LOCALE={sr:'sr-RS',en:'en-US'};
-let _spkAudio=null;
-if(window.speechSynthesis)speechSynthesis.getVoices();
-
-// Web Speech API fallback (used when no MP3 exists for this word)
-function _speakViaSynth(text,lang){
-  if(!window.speechSynthesis)return;
-  try{speechSynthesis.cancel();}catch(e){}
-  const locale=SPEECH_LOCALE[lang]||lang||curLang;
-  const sc=locale.split('-')[0];
-  const voices=speechSynthesis.getVoices();
-  // Prefer exact match, then prefix match, then any voice
-  const v=voices.find(x=>x.lang===locale)||voices.find(x=>x.lang.startsWith(sc));
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=v?v.lang:locale;
-  u.rate=0.85;
-  if(v)u.voice=v;
-  try{speechSynthesis.speak(u);}catch(e){console.warn('[speak] synth failed',e);}
+// ═══════════════ VOICE (pre-generated, human-reviewed clips) ═══════════════
+// voice/manifest.json maps lowercase Latin text → {f: clip, s: slow clip}. It is
+// written by tools/audio/build.py and contains ONLY clips a person listened to
+// and approved. No clip → no speaker button and no autoplay: the app never falls
+// back to the device's own speech for Serbian (that is what sounded wrong before).
+const VOICE={clips:{},n:0,loaded:false};
+let _vAudio=null;
+function _vkey(t){return String(t||'').trim().toLowerCase();}
+function voiceHas(t){return !!VOICE.clips[_vkey(t)];}
+function voiceHasSlow(t){const c=VOICE.clips[_vkey(t)];return !!(c&&c.s);}
+function voicePlay(t,slow){
+  const c=VOICE.clips[_vkey(t)];if(!c)return false;
+  try{
+    if(_vAudio){_vAudio.pause();}
+    _vAudio=new Audio('voice/'+(slow&&c.s?c.s:c.f));
+    const p=_vAudio.play();if(p&&p.catch)p.catch(()=>{});
+  }catch(e){return false;}
+  return true;
 }
-
-// Audio playback is disabled — TTS quality wasn't acceptable for Serbian.
-// Speak helpers are kept as no-ops so existing call sites don't break.
-// Speaker buttons in the UI are not rendered (spkBtn returns empty string).
-function speak(text,lang){/* disabled */}
-function speakWord(w){/* disabled */}
-function speakTL(text){/* disabled */}
-function speakEN(text){/* disabled */}
-function spkBtn(text,lang,cls){return '';}
-function spkWBtn(w,cls){return '';}
+function voiceAuto(){return st.voiceAuto!==false;}
+async function voiceInit(){
+  try{
+    const r=await fetch('voice/manifest.json',{cache:'no-cache'});
+    if(!r.ok)return;
+    const m=await r.json();
+    VOICE.clips=(m&&m.clips)||{};VOICE.n=Object.keys(VOICE.clips).length;VOICE.loaded=true;
+    document.dispatchEvent(new Event('voice-ready'));
+  }catch(e){}
+}
+// Existing call sites (lessons, flashcards, dictionary) go through these.
+function speak(text,lang){if(lang&&/^en/.test(lang))return;if(voiceAuto())voicePlay(text);}
+function speakWord(w){if(w&&voiceAuto())voicePlay(w.l);}
+function speakTL(text){if(voiceAuto())voicePlay(text);}
+function speakEN(text){}
+function spkBtn(text,lang,cls){
+  if(lang&&/^en/.test(lang))return '';
+  if(!voiceHas(text))return '';
+  return '<button class="spk-btn '+(cls||'')+'" data-say="'+esc(text)+'" onclick="event.stopPropagation();voicePlay(this.dataset.say)" aria-label="Play audio">🔊</button>';
+}
+// Normal + slow, for sentences
+function spkPair(text,cls){
+  if(!voiceHas(text))return '';
+  return '<span class="spk-pair">'+spkBtn(text,'sr',cls)+(voiceHasSlow(text)?'<button class="spk-btn spk-slow '+(cls||'')+'" data-say="'+esc(text)+'" onclick="event.stopPropagation();voicePlay(this.dataset.say,true)" aria-label="Play slowly">🐢</button>':'')+'</span>';
+}
+function spkWBtn(w,cls){return w?spkBtn(w.l,'sr',cls):'';}
 
 function buildUnits(raw){
   const units=raw.map(u=>({...u,words:u.w.map((w,i)=>({id:u.id*100+i,s:w[0],l:w[1],e:w[2],em:w[3],gn:w[4]||''})),phrases:(u.p||[]).map(p=>({tl:p[0],en:p[1]}))}));
@@ -2976,7 +3025,7 @@ function getStateData(){
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
     fcNewToday:st.fcNewToday,fcReviewedToday:st.fcReviewedToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
     sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate,
-    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg};
+    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg,voiceAuto:st.voiceAuto};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
@@ -2989,6 +3038,7 @@ function applyStateData(p){
   st.vbTense=['past','future'].includes(p.vbTense)?p.vbTense:'present';st.clozeMode=p.clozeMode==='type'?'type':'tap';
   st.czFocus=['cases','verbs','future'].includes(p.czFocus)?p.czFocus:'mixed';
   st.czg=(p.czg&&typeof p.czg==='object')?p.czg:{};
+  st.voiceAuto=p.voiceAuto!==false;
   st.readDone=Array.isArray(p.readDone)?p.readDone:[];
   st.today=(p.today&&typeof p.today==='object')?p.today:{d:'',m:0,c:0,r:0};
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},p.firsts||{});
@@ -3300,7 +3350,7 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
   fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
-  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},
+  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},voiceAuto:true,
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -3837,6 +3887,62 @@ function _sxLev(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let pre
 
 // Build the flat searchable index for the current language.
 // Returns array of {type, word, source, english, normSource, normEnglish}
+// ═══════════════ LISTENING DRILL ═══════════════
+// Built only from items with an approved clip. Three tasks:
+//   word — hear a word, pick its meaning          (misses send the flashcard back)
+//   sent — hear a sentence, pick its meaning
+//   dict — hear a short sentence, type it          (word-by-word feedback)
+function _lnSentences(){
+  const out=[],seen=new Set();
+  const add=(sr,en,lv,tt)=>{const k=_vkey(sr);if(!sr||!en||seen.has(k)||!voiceHas(sr))return;seen.add(k);out.push({src:'s:'+k,sr,en,lv:lv||'A1',tt:tt||null});};
+  SENTENCES.forEach(x=>add(x.sr,x.en,x.lv,x.tt));
+  (typeof CLOZE_SR!=='undefined'?CLOZE_SR:[]).forEach(x=>add(x.sr,x.en,x.lv));
+  READINGS.forEach(r=>r.s.forEach(x=>add(x.sr,x.en,r.lv)));
+  UNITS.forEach(u=>u.phrases.forEach(p=>add(p.tl,p.en,u.lv)));
+  return out;
+}
+function _lnTokens(t){return String(t||'').split(/\s+/).map(x=>x.replace(/[.,!?;:„“"'()—–-]/g,'')).filter(Boolean);}
+// Align what was typed with the sentence (diacritics optional) and mark each word.
+function lnDiff(expected,typed){
+  const E=_lnTokens(expected),e=E.map(normSR),T=_lnTokens(typed).map(normSR);
+  const m=e.length,n=T.length,L=Array.from({length:m+1},()=>new Array(n+1).fill(0));
+  for(let i=m-1;i>=0;i--)for(let j=n-1;j>=0;j--)L[i][j]=e[i]===T[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const hit=new Array(m).fill(false);let i=0,j=0;
+  while(i<m&&j<n){if(e[i]===T[j]){hit[i]=true;i++;j++;}else if(L[i+1][j]>=L[i][j+1])i++;else j++;}
+  return{words:E.map((w,k)=>({w,ok:hit[k]})),ok:hit.every(Boolean)&&n===m,extra:Math.max(0,n-L[0][0])};
+}
+function _lnWordOptions(w){
+  const u=UNITS.find(x=>x.words.some(y=>y.id===w.id));
+  const pool=S.sh(u?u.words.filter(x=>x.id!==w.id):[]).concat(S.sh(ALL_W).slice(0,60));
+  const opts=[w.e];
+  for(const x of pool){if(opts.length>=4)break;if(x.e&&!opts.some(o=>o.toLowerCase()===x.e.toLowerCase()))opts.push(x.e);}
+  return S.sh(opts);
+}
+function _lnSentOptions(it,all){
+  const len=_lnTokens(it.sr).length;
+  const near=S.sh(all.filter(x=>x.src!==it.src&&x.lv===it.lv&&Math.abs(_lnTokens(x.sr).length-len)<=3));
+  const pool=near.concat(S.sh(all).slice(0,40));
+  const opts=[it.en];
+  for(const x of pool){if(opts.length>=4)break;if(!opts.some(o=>o.toLowerCase()===x.en.toLowerCase()))opts.push(x.en);}
+  return S.sh(opts);
+}
+function buildListeningSession(n){
+  n=n||10;
+  const allowed=czLevelsAllowed();
+  const atLevel=(pool,k)=>{const lv=pool.filter(x=>allowed.includes(x.lv));return lv.length>=k?lv:pool;};
+  const lvOf=new Map();UNITS.forEach(u=>u.words.forEach(w=>lvOf.set(w.id,u.lv)));
+  const words=ALL_W.filter(w=>voiceHas(w.l)).map(w=>({t:'word',src:'w'+w.id,w,wordId:w.id,lv:lvOf.get(w.id)||'A1'}));
+  const sents=_lnSentences();
+  const short=sents.filter(x=>_lnTokens(x.sr).length>=2&&_lnTokens(x.sr).length<=7);
+  let nW=Math.round(n*0.4),nD=Math.round(n*0.3),nS=n-nW-nD;
+  if(!sents.length){nW=n;nD=0;nS=0;}else if(!words.length){nW=0;nD=Math.min(short.length,Math.round(n/2));nS=n-nD;}
+  const used=new Set();
+  const W=_czSample(atLevel(words,nW),nW,_czVocabWeight,used);
+  const D=_czSample(atLevel(short,nD),nD,()=>1,used).map(x=>({...x,t:'dict'}));
+  const X=_czSample(atLevel(sents,nS),nS,()=>1,used).map(x=>({...x,t:'sent'}));
+  return S.sh([...W,...X,...D]).map(it=>({...it,opts:it.t==='word'?_lnWordOptions(it.w):it.t==='sent'?_lnSentOptions(it,sents):null}));
+}
+
 // ═══════════════ READING ═══════════════
 function _rdCore(tok){return tok.replace(/[„“”"'.,!?;:()—–-]/g,'').trim();}
 // Gloss for a tapped word: the text's own gloss map (inflected forms) first,
@@ -4206,7 +4312,8 @@ renderFcHome(){
     const tiles=[
       {k:'m',em:'🧩',t:'Match',s:elig>=10?Math.min(5,Math.floor(Math.min(elig,25)/5))+' rounds':'Needs 10 cards',on:"S.setLearnMode('match')",dis:elig<10},
       {k:'c',em:'✏️',t:'Cloze',s:'10 sentences',on:"S.startClozeSession(10)"},
-      {k:'r',em:'📖',t:'Read',s:nextRead?nextRead.t:'All texts read',on:nextRead?'S.openReading('+nextRead.id+')':"S.setLearnMode('reading')"}
+      {k:'r',em:'📖',t:'Read',s:nextRead?nextRead.t:'All texts read',on:nextRead?'S.openReading('+nextRead.id+')':"S.setLearnMode('reading')"},
+      ...(VOICE.n?[{k:'l',em:'🎧',t:'Listen',s:'10 clips',on:"S.startListeningSession(10)"}]:[])
     ];
     h+='<div class="today-l">Also today</div><div class="today-strip">';
     tiles.forEach(x=>{
@@ -4230,6 +4337,10 @@ renderFcHome(){
     h+='<button onclick="S.setFcNewLimit('+n+')" style="border:none;padding:4px 8px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;background:'+(active?'var(--sr-blue)':'rgba(255,255,255,.08)')+';color:'+(active?'#fff':'rgba(255,255,255,.55)')+'">'+n+'</button>';
   });
   h+='</div>';
+  if(VOICE.n){
+    const on=voiceAuto();
+    h+='<div class="audio-row"><span>Audio:</span><button class="audio-tog'+(on?' on':'')+'" onclick="S.toggleVoiceAuto()">'+(on?'🔊 Plays automatically':'🔇 Only when tapped')+'</button></div>';
+  }
   h+='</div>';
   // "By Unit" breakdown — only shown in completed-lessons mode (less meaningful for all-vocab)
   const compUnits=st.fcSourceMode==='completed'?UNITS.filter(u=>st.completed.includes(u.id)):[];
@@ -4343,11 +4454,12 @@ renderFcCard(){
     h+='<div class="fc-intro-trans">'+esc(w.e)+'</div>';
     if(w.gn)h+='<div class="fc-gn">'+esc(w.gn)+'</div>';
     const introCtx=fcContextFor(w);
-    if(introCtx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(introCtx.tl,w.l)+'</div><div class="fc-ctx-en">'+esc(introCtx.en)+'</div>'+ttCredit(introCtx.tt)+'</div>';
+    if(introCtx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(introCtx.tl,w.l)+spkBtn(introCtx.tl,'sr','spk-sm spk-ctx')+'</div><div class="fc-ctx-en">'+esc(introCtx.en)+'</div>'+ttCredit(introCtx.tt)+'</div>';
     h+='<button class="fc-intro-cta" onclick="S.gotItFc()">Got it · Continue</button>';
     h+='<div class="fc-intro-hint">You\'ll see this card again in a few minutes to test recall.</div>';
     h+='</div>';
     document.getElementById('fc-body').innerHTML=h;
+    speakWord(w);
     return;
   }
 
@@ -4371,7 +4483,7 @@ renderFcCard(){
   h+=spkBtn(backText,backLang);
   if(w.gn)h+='<div class="fc-gn">'+esc(w.gn)+'</div>';
   const ctx=fcContextFor(w);
-  if(ctx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(ctx.tl,w.l)+'</div><div class="fc-ctx-en">'+esc(ctx.en)+'</div>'+ttCredit(ctx.tt)+'</div>';
+  if(ctx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(ctx.tl,w.l)+spkBtn(ctx.tl,'sr','spk-sm spk-ctx')+'</div><div class="fc-ctx-en">'+esc(ctx.en)+'</div>'+ttCredit(ctx.tt)+'</div>';
   h+='</div>';
   h+='</div></div>';
   h+='<div class="fc-ratings" id="fc-ratings" style="display:none">';
@@ -4381,6 +4493,7 @@ renderFcCard(){
   h+='<button class="fc-rate-btn r-easy" onclick="S.rateFc(3)">Easy<span class="fc-rate-ivl">'+fcIvlLabel(w.id,card.dir,3)+'</span></button>';
   h+='</div>';
   document.getElementById('fc-body').innerHTML=h;
+  if(isSE)speakWord(w);
   st.fcFlipped=false;
 },
 
@@ -4399,6 +4512,8 @@ flipFc(){
   st.fcFlipped=true;
   const card=document.getElementById('fc-card');
   if(card)card.classList.add('flipped');
+  // English → Serbian cards: the Serbian is on the back, so it is heard on flip
+  const cur=st.fcCards[st.fcIdx];if(cur&&cur.dir==='es')speakWord(cur.word);
   const ratings=document.getElementById('fc-ratings');
   if(ratings)ratings.style.display='flex';
 },
@@ -4957,6 +5072,123 @@ _sentResetDayIfNeeded(){
   if(st.sentDoneDate!==today){st.sentDoneDate=today;st.sentDoneToday=[];}
 },
 
+renderListeningHome(){
+  const el=document.getElementById('listening-home');
+  if(!VOICE.n){el.innerHTML='<div class="empty-state">'+zekaHtml('Listening clips are being recorded. They\'ll appear here as soon as they\'re checked.')+'</div>';return;}
+  const words=ALL_W.filter(w=>voiceHas(w.l)).length,sents=_lnSentences().length;
+  let h='<div class="cz-hero"><div class="cz-hero-i">🎧</div><div class="cz-hero-t">Listening</div>';
+  h+='<div class="cz-hero-d">Hear a word or sentence, then show you understood it: pick the meaning, or type what you heard. Every clip was checked by ear before it went in.</div>';
+  h+='<div class="cz-hero-n">'+words+' words · '+sents+' sentences</div></div>';
+  h+='<div style="text-align:center;margin-top:20px">';
+  h+='<div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">';
+  [5,10,15].forEach(n=>{h+='<button style="padding:10px 20px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;color:#fff;background:rgba(255,255,255,.12)" onclick="S.startListeningSession('+n+')">'+n+' clips</button>';});
+  h+='</div><button class="cz-start" onclick="S.startListeningSession(10)">Start · 10 clips</button></div>';
+  h+='<div class="cz-note">🐢 plays any sentence slowly. Miss a word you already review and its flashcard comes back in your next session.</div>';
+  el.innerHTML=h;
+},
+
+startListeningSession(n){
+  if(!VOICE.n)return;
+  const items=buildListeningSession(n||10);if(!items.length)return;
+  st.lnItems=items;st.lnIdx=0;st.lnCorrect=0;st.lnTotal=0;st.lnNudged=[];
+  this.goScr('listen-drill');
+  this.renderListen();
+},
+
+_lnText(it){return it.t==='word'?it.w.l:it.sr;},
+
+renderListen(){
+  if(st.lnIdx>=st.lnItems.length){this.finishListeningSession();return;}
+  const it=st.lnItems[st.lnIdx];
+  document.getElementById('ln-count').textContent=(st.lnIdx+1)+' / '+st.lnItems.length;
+  const txt=this._lnText(it);
+  const label={word:'Hear a word',sent:'Hear a sentence',dict:'Type what you hear'}[it.t];
+  let h='<div class="sent-phase ln-phase">';
+  h+='<div class="sent-lvl">'+esc(it.lv||'')+' · '+label+'</div>';
+  h+='<div class="ln-play-row"><button class="ln-play" onclick="S.lnPlay()" aria-label="Play">🔊</button>'+(voiceHasSlow(txt)?'<button class="ln-slow" onclick="S.lnPlay(true)" aria-label="Play slowly">🐢</button>':'')+'</div>';
+  if(it.t==='dict'){
+    h+='<input class="vd-input" id="ln-input" placeholder="Type the sentence…" autocomplete="off" autocapitalize="off" spellcheck="false">';
+    h+=srKeysHtml();
+    h+='<button class="vd-next" id="ln-check" onclick="S.lnCheckDict()">Check</button>';
+  }else{
+    h+='<div class="ln-q">What does it mean?</div>';
+    h+='<div class="ln-opts">'+it.opts.map(o=>'<button class="cz-opt ln-opt" onclick="S.lnPick(this)">'+esc(o)+'</button>').join('')+'</div>';
+  }
+  h+='<div id="ln-fb"></div>';
+  h+='<button class="vd-next" id="ln-next" style="display:none" onclick="S.lnNext()">Next</button>';
+  h+='</div>';
+  document.getElementById('ln-body').innerHTML=h;
+  const inp=document.getElementById('ln-input');
+  if(inp){inp.focus();inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();S.lnCheckDict();}});}
+  this.lnPlay();
+},
+
+lnPlay(slow){const it=st.lnItems[st.lnIdx];if(it)voicePlay(this._lnText(it),slow);},
+
+_lnReveal(it,ok,extra){
+  const txt=this._lnText(it),en=it.t==='word'?it.w.e:it.en;
+  st.lnTotal++;if(ok)st.lnCorrect++;
+  it.done=true;it.ok=ok;
+  if(ok){sCl();haptic('success');}else{sNo();haptic('error');}
+  let h='<div class="vd-fb '+(ok?'ok':'bad')+'">'+(ok?'✅ Correct!':'❌ Not quite')+(extra||'')+'</div>';
+  h+='<div class="ln-reveal"><div class="ln-reveal-sr">'+esc(txt)+'</div><div class="ln-reveal-en">'+esc(en)+'</div>'+(it.tt?ttCredit(it.tt):'')+'</div>';
+  document.getElementById('ln-fb').innerHTML=h;
+  const nx=document.getElementById('ln-next');nx.style.display='';nx.focus();
+},
+
+lnPick(btn){
+  const it=st.lnItems[st.lnIdx];if(!it||it.done)return;
+  const right=it.t==='word'?it.w.e:it.en;
+  const ok=btn.textContent===right;
+  document.querySelectorAll('.ln-opt').forEach(b=>{b.disabled=true;if(b.textContent===right)b.classList.add('cor');else if(b===btn)b.classList.add('inc');});
+  let extra='';
+  if(!ok&&it.t==='word'&&czNudgeDue(it.w.id)){st.lnNudged.push(it.w.id);extra='<small>'+esc(it.w.l)+' is back in your next flashcard session</small>';}
+  this._lnReveal(it,ok,extra);
+},
+
+lnCheckDict(){
+  const it=st.lnItems[st.lnIdx];if(!it||it.done)return;
+  const inp=document.getElementById('ln-input');if(!inp||!normSR(inp.value))return;
+  const d=lnDiff(it.sr,inp.value);
+  inp.disabled=true;inp.classList.add(d.ok?'correct':'wrong');
+  const chk=document.getElementById('ln-check');if(chk)chk.style.display='none';
+  const marked='<div class="ln-diff">'+d.words.map(x=>'<span class="'+(x.ok?'ok':'miss')+'">'+esc(x.w)+'</span>').join(' ')+'</div>';
+  const got=d.words.filter(x=>x.ok).length;
+  this._lnReveal(it,d.ok,'<small>'+got+' of '+d.words.length+' words'+(d.extra?' · '+d.extra+' extra':'')+'</small>'+marked);
+},
+
+lnNext(){st.lnIdx++;this.renderListen();},
+
+exitListening(){if(_vAudio)_vAudio.pause();sCl();save();this.goHome();this.setLearnMode('listening');},
+
+finishListeningSession(){
+  sDn();
+  const el=document.getElementById('ln-body');
+  const pct=st.lnTotal>0?Math.round(st.lnCorrect/st.lnTotal*100):0;
+  const streakHit=(st.lnTotal>0)?bumpStreak():null;
+  if(st.lnTotal>0){markToday('l');save();}
+  const by={word:[0,0],sent:[0,0],dict:[0,0]};
+  st.lnItems.forEach(it=>{if(!it.done)return;by[it.t][1]++;if(it.ok)by[it.t][0]++;});
+  const names={word:'words',sent:'sentences',dict:'dictation'};
+  let h='<div class="done-wrap">';
+  h+=zekaHtml(zekaMsg(pct===100?'perfect':pct>=70?'good':'rough'));
+  h+='<div class="done-title">Round Complete!</div>';
+  h+='<div class="done-stats">';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--green)">'+st.lnItems.length+'</div><div class="done-stat-l">CLIPS</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--blue)">'+st.lnCorrect+'/'+st.lnTotal+'</div><div class="done-stat-l">CORRECT</div></div>';
+  h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--gold)">'+pct+'%</div><div class="done-stat-l">ACCURACY</div></div>';
+  h+='</div>';
+  const tags=Object.entries(by).filter(([k,v])=>v[1]);
+  if(tags.length)h+='<div class="cz-tags">'+tags.map(([k,v])=>'<span class="cz-tag'+(v[0]===v[1]?' ok':v[0]===0?' bad':'')+'">'+names[k]+' <b>'+v[0]+'/'+v[1]+'</b></span>').join('')+'</div>';
+  const nudged=(st.lnNudged||[]).length;
+  if(nudged)h+='<div class="cz-note" style="margin-top:0">'+nudged+' flashcard'+(nudged!==1?'s':'')+' moved back into your next session.</div>';
+  h+='<div class="done-btns"><button class="btn-cta" onclick="S.startListeningSession('+st.lnItems.length+')">Another round</button><button class="btn-soft" onclick="S.exitListening()">Done</button></div></div>';
+  el.innerHTML=h;
+  if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
+},
+
+toggleVoiceAuto(){st.voiceAuto=!voiceAuto();save();this.renderFcHome();},
+
 renderReadingHome(){
   const el=document.getElementById('reading-home');
   if(!READINGS.length){el.innerHTML='<div class="empty-state">'+zekaHtml('Reading is only available for Serbian right now.')+'</div>';return;}
@@ -5001,7 +5233,7 @@ renderReading(){
       const c=_rdCore(tok);
       if(!c)return '<span class="rd-punct">'+esc(tok)+'</span>';
       return '<span class="rd-w" data-t="'+esc(c)+'" onclick="S.rdTap(this)">'+esc(tok)+'</span>';
-    }).join('')+'<button class="rd-en-btn" onclick="S.rdToggleEn('+si+')" aria-label="Show this sentence in English">EN</button></div>';
+    }).join('')+spkPair(sen.sr,'spk-sm rd-spk')+'<button class="rd-en-btn" onclick="S.rdToggleEn('+si+')" aria-label="Show this sentence in English">EN</button></div>';
     h+='<div class="rd-en" id="rd-en'+si+'" style="display:none">'+esc(sen.en)+'</div>';
     h+='</div>';
   });
@@ -5026,7 +5258,7 @@ rdTap(el){
   const bar=document.getElementById('rd-bar');
   bar.innerHTML='<div class="rd-bar-w">'+esc(t)+'</div><div class="rd-bar-g">'+esc(g||'No gloss for this word yet')+'</div>';
   bar.style.display='';
-  sCl();
+  if(!voicePlay(t))sCl();
 },
 
 rdToggleEn(si){
@@ -5193,6 +5425,7 @@ answerCloze(btn){
     }
     fb.innerHTML='<div class="vd-fb bad">❌ It\'s <b>'+esc(it.answer)+'</b>'+why+extra+'</div>';
   }
+  if(voiceHas(it.sr)){fb.insertAdjacentHTML('beforeend','<div class="hear-row">'+spkPair(it.sr,'spk-sm')+'<span>Hear the whole sentence</span></div>');if(voiceAuto())setTimeout(()=>voicePlay(it.sr),350);}
   const nx=document.getElementById('cz-next');nx.style.display='';nx.focus();
 },
 
@@ -5371,6 +5604,7 @@ checkSent(){
   if(allCorrect){sCl();haptic('success');}else{sNo();haptic('error');}
   const fb=document.getElementById('sn-fb');
   if(fb)fb.innerHTML=allCorrect?'<div class="vd-fb ok">✅ All correct!</div>':'<div class="vd-fb bad">❌ Not quite — the correct forms are filled in above</div>';
+  if(fb&&voiceHas(s.sr)){fb.insertAdjacentHTML('beforeend','<div class="hear-row">'+spkPair(s.sr,'spk-sm')+'<span>Hear the whole sentence</span></div>');if(voiceAuto())setTimeout(()=>voicePlay(s.sr),350);}
   btn.textContent='Next';
   // Mark today's daily as done if this was today's sentence
   if(s.id===(SENTENCES[this._sentDailyIdx()]||{}).id){
@@ -5429,17 +5663,17 @@ finishVerbSession(){
 },
 
 setLearnMode(mode){
-  const modes=['flashcards','lessons','match','verbs','sentences','cloze','reading'];
+  const modes=['flashcards','lessons','match','verbs','sentences','cloze','reading','listening'];
   const prev=st._learnMode||'flashcards';
   const dir=modes.indexOf(mode)>modes.indexOf(prev)?1:-1;// 1 = slide left, -1 = slide right
   st._learnMode=mode;
   // Active-highlight: first 3 buttons map to flashcards/lessons/match; 4th (⋯) highlights for verbs/sentences
   const visibleModes=['flashcards','lessons','match'];
   document.querySelectorAll('#learn-toggle .seg-btn').forEach((b,i)=>{
-    const active=i<3?(visibleModes[i]===mode):(mode==='verbs'||mode==='sentences'||mode==='cloze'||mode==='reading');
+    const active=i<3?(visibleModes[i]===mode):(mode==='verbs'||mode==='sentences'||mode==='cloze'||mode==='reading'||mode==='listening');
     b.classList.toggle('seg-active',active);
   });
-  const containers={lessons:document.getElementById('hscr'),flashcards:document.getElementById('fc-home'),match:document.getElementById('match-home'),verbs:document.getElementById('grammar-home'),sentences:document.getElementById('sentence-home'),cloze:document.getElementById('cloze-home'),reading:document.getElementById('reading-home')};
+  const containers={lessons:document.getElementById('hscr'),flashcards:document.getElementById('fc-home'),match:document.getElementById('match-home'),verbs:document.getElementById('grammar-home'),sentences:document.getElementById('sentence-home'),cloze:document.getElementById('cloze-home'),reading:document.getElementById('reading-home'),listening:document.getElementById('listening-home')};
   // Animate previous out, new in
   const oldEl=containers[prev];
   const newEl=containers[mode];
@@ -5451,6 +5685,7 @@ setLearnMode(mode){
     if(mode==='sentences')this.renderSentHome();
     if(mode==='cloze')this.renderClozeHome();
     if(mode==='reading'&&typeof this.renderReadingHome==='function')this.renderReadingHome();
+    if(mode==='listening')this.renderListeningHome();
     if(!REDUCED_MOTION&&prev!==mode){
       anim(newEl,{opacity:[0,1],transform:[`translateX(${dir*48}px)`,'translateX(0)']},{duration:.28,easing:'cubic-bezier(.22,.61,.36,1)'});
     }
@@ -5476,7 +5711,8 @@ openModesSheet(e){
     {k:'cases',em:'🏛️',t:'Cases',s:sr?'All 7 cases · '+NOUNS.length+' nouns':'Serbian only'},
     {k:'sentences',em:'💬',t:'Sentences',s:sr?'Today\'s sentence · fill the blanks':'Serbian only'},
     {k:'cloze',em:'✏️',t:'Cloze',s:sr?'One word missing · cases, past, future'+(t.c?' · done today ✓':''):'Serbian only'},
-    {k:'reading',em:'📖',t:'Reading',s:sr?(st.readDone||[]).length+' of '+READINGS.length+' texts read'+(t.r?' · read today ✓':''):'Serbian only'}
+    {k:'reading',em:'📖',t:'Reading',s:sr?(st.readDone||[]).length+' of '+READINGS.length+' texts read'+(t.r?' · read today ✓':''):'Serbian only'},
+    ...(VOICE.n?[{k:'listening',em:'🎧',t:'Listening',s:'Hear it, then answer · '+VOICE.n+' clips'+(t.l?' · done today ✓':'')}]:[])
   ];
   const cur=st._learnMode||'flashcards';
   const activeKey=cur==='verbs'?(st.grammarMode==='cases'?'cases':'verbs'):cur;
@@ -6483,7 +6719,7 @@ _renderSearchExpansion(e){
   h+='<div class="sx-expand-meta">'+chips.join('')+'</div>';
   if(e.type==='word'){
     const ctx=fcContextFor(e.word);
-    if(ctx)h+='<div class="sx-ctx">'+fcHighlight(ctx.tl,e.word.l)+'<div class="sx-ctx-en">'+esc(ctx.en)+'</div>'+ttCredit(ctx.tt)+'</div>';
+    if(ctx)h+='<div class="sx-ctx">'+fcHighlight(ctx.tl,e.word.l)+spkBtn(ctx.tl,'sr','spk-sm spk-ctx')+'<div class="sx-ctx-en">'+esc(ctx.en)+'</div>'+ttCredit(ctx.tt)+'</div>';
   }
   // Verb conjugation table — keys are ja/ti/on/mi/vi/oni
   if(e.type==='verb'&&e.verb.conj){
@@ -6722,6 +6958,12 @@ function toggleUsageStats(){
 }
 renderStatsToggle();
 usageOpenEvent();
+// Listening clips: load the reviewed-clip manifest, then refresh the Flashcards
+// home so its Listen tile and audio switch appear.
+document.addEventListener('voice-ready',()=>{
+  if(document.getElementById('home').classList.contains('act')&&(st._learnMode||'flashcards')==='flashcards')S.renderFcHome();
+});
+voiceInit();
 
 // ═══════════════ LONG-PRESS UNIT PREVIEW ═══════════════
 (function setupLongPress(){

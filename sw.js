@@ -1,4 +1,4 @@
-const CACHE='zeka-v69';
+const CACHE='zeka-v70';
 const ASSETS=[
   'index.html',
   'manifest.json',
@@ -27,6 +27,15 @@ self.addEventListener('fetch',e=>{
      url.includes('gsi/client')||url.includes('gsi/status')||
      url.includes('umami.is')||url.includes('umami.dev')){
     return;// Let the browser handle these normally
+  }
+  // The listening manifest changes whenever clips are published: network-first.
+  // Clip files are named by content hash, so the cache-first rule below is right for them.
+  if(url.includes('/voice/manifest.json')){
+    e.respondWith(fetch(e.request.url,{cache:'no-cache'}).then(res=>{
+      if(res.ok){const clone=res.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));}
+      return res;
+    }).catch(()=>caches.match(e.request)));
+    return;
   }
   // Network-first for HTML pages. cache:'no-cache' revalidates with the server
   // (ETag/304) instead of trusting the browser's HTTP cache, so a fresh deploy

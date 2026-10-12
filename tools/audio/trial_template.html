@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zeka audio trial</title>
+<style>
+  :root{--bg:#0F1419;--surface:#1A2028;--raised:#222A33;--text:#F5F7FA;--muted:rgba(245,247,250,.6);--blue:#1A5FD1;--green:#58CC02}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+  main{max-width:980px;margin:0 auto;padding:24px 16px 60px}
+  h1{font-size:22px;margin:0 0 6px}
+  p{color:var(--muted);margin:0 0 14px}
+  .how{background:var(--surface);border-radius:12px;padding:12px 16px;margin-bottom:18px}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);padding:8px;border-bottom:1px solid #2c3540;vertical-align:bottom}
+  td{padding:10px 8px;border-bottom:1px solid #222a33;vertical-align:middle}
+  .sr{font-size:18px;font-weight:700}
+  .cy{font-size:13px;color:var(--muted)}
+  .en{font-size:13px;color:var(--muted);font-style:italic}
+  button{background:var(--raised);color:var(--text);border:1px solid #2f3945;border-radius:10px;padding:8px 12px;font-size:15px;cursor:pointer}
+  button:hover{border-color:var(--blue)}
+  button.playing{background:var(--blue);border-color:var(--blue)}
+  .before{opacity:.85}
+  @media(max-width:700px){table,thead,tbody,tr,td,th{display:block}thead{display:none}td{border:none;padding:4px 0}tr{border-bottom:1px solid #2c3540;padding:10px 0}td[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--muted);text-transform:uppercase}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Zeka audio trial</h1>
+  <p>The same words and sentences, voiced the old way and the new way. Nothing on this page ships; it's here so you can judge by ear.</p>
+  <div class="how"><b>What changed:</b> in May the Serbian voice was given Latin text. These voices expect Cyrillic, so the new clips are generated from Cyrillic. Listen to the "Before" column against the new ones, especially the short words and the sentences. If the new versions sound right to you, the full course gets voiced this way.</div>
+  <table><thead id="head"></thead><tbody id="rows"></tbody></table>
+</main>
+<script>
+const ROWS=/*__ROWS__*/[];
+const VARIANTS=/*__VARIANTS__*/[];
+const head=document.getElementById('head'),body=document.getElementById('rows');
+head.innerHTML='<tr><th>Text</th>'+VARIANTS.map(v=>'<th>'+v.label+'</th>').join('')+'</tr>';
+let audio=null,btn=null;
+function play(file,b){
+  if(audio){audio.pause();}if(btn)btn.classList.remove('playing');
+  audio=new Audio(file);btn=b;b.classList.add('playing');
+  audio.onended=()=>b.classList.remove('playing');
+  audio.play().catch(()=>b.classList.remove('playing'));
+}
+ROWS.forEach(r=>{
+  const tr=document.createElement('tr');
+  let h='<td><div class="sr">'+r.latin+'</div><div class="cy">'+r.cyr+'</div><div class="en">'+r.en+'</div></td>';
+  VARIANTS.forEach(v=>{
+    const f=r.clips[v.id];
+    h+='<td data-l="'+v.label+'" class="'+(v.id==='before'?'before':'')+'">'+(f?'<button data-f="'+f+'">▶ Play</button>':'')+'</td>';
+  });
+  tr.innerHTML=h;
+  tr.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>play(b.dataset.f,b)));
+  body.appendChild(tr);
+});
+</script>
+</body>
+</html>
