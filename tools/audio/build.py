@@ -35,7 +35,7 @@ CLIPS = STAGING / 'clips'
 TRIAL = TOOLS / 'trial'
 VOICE_DIR = ROOT / 'voice'
 
-VOICE = 'sr-RS-SophieNeural'
+VOICE = 'sr-RS-NicholasNeural'  # chosen by Rob after the Oct 2026 trial (male voice, Cyrillic input)
 RATE = {'word': '-10%', 'sentence': '-5%', 'slow': '-35%'}
 
 # ─── text helpers ──────────────────────────────────────────────────────────────
@@ -295,7 +295,7 @@ def cmd_trial(a):
         ('before', 'Before (May): male voice, Latin text', 'sr-RS-NicholasNeural', 'latin', '-5%'),
         ('sophie', 'New: female voice, Cyrillic text', 'sr-RS-SophieNeural', 'cyr', None),
         ('nicholas', 'New: male voice, Cyrillic text', 'sr-RS-NicholasNeural', 'cyr', None),
-        ('slow', 'New, slow (sentences)', 'sr-RS-SophieNeural', 'cyr', RATE['slow']),
+        ('slow', 'New, slow (sentences)', 'sr-RS-NicholasNeural', 'cyr', RATE['slow']),
     ]
     rows = []
     for it in picks:
