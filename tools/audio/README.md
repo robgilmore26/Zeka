@@ -28,6 +28,15 @@ expect Serbian in Cyrillic, and isolated fragments are where any voice is weakes
    export AZURE_SPEECH_REGION=westeurope
    ```
 
+## Easiest way to run it (Windows)
+
+```powershell
+powershell -ExecutionPolicy Bypass -File toolsaudioun-azure.ps1            # A1 first
+powershell -ExecutionPolicy Bypass -File toolsaudioun-azure.ps1 -Levels all
+```
+
+It asks for the key (hidden input, not saved in history) and the region, then runs `generate --engine azure --verify`.
+
 ## Routine
 
 ```bash
