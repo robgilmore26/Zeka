@@ -396,6 +396,13 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .sync-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #3367D6}
 .sync-status{text-align:center;font-size:12px;font-weight:600;color:var(--g5);margin-top:10px}
 .build-stamp{text-align:center;font-size:11px;color:rgba(255,255,255,.3);margin-top:14px;font-variant-numeric:tabular-nums}
+.credits{text-align:center;font-size:11px;color:rgba(255,255,255,.35);margin-top:6px;line-height:1.5;padding:0 12px}
+.credits a{color:rgba(255,255,255,.55)}
+.tt-credit{display:inline-block;margin-top:4px;font-size:10px;font-weight:700;letter-spacing:.3px;color:var(--text-3);text-decoration:none;border-bottom:1px dotted currentColor}
+.tt-credit:hover{color:var(--text-2)}
+.fc-ctx .tt-credit{color:var(--g5)}
+.tt-line{text-align:center;margin-top:6px}
+.tt-daily .tt-credit{color:rgba(255,255,255,.7)}
 
 /* PROGRESS */
 #progress{background:var(--bg)}
@@ -1129,6 +1136,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     </div>
     <div class="sync-status" id="sync-status"></div>
     <div class="build-stamp" id="build-stamp"></div>
+    <div class="credits">Example sentences from <a href="https://tatoeba.org" target="_blank" rel="noopener">Tatoeba</a>, licensed <a href="https://creativecommons.org/licenses/by/2.0/fr/" target="_blank" rel="noopener">CC BY 2.0 FR</a>. Each one links to its source.</div>
   </div>
   </div>
   <div class="bnav bnav-lt">
@@ -2466,206 +2474,209 @@ const SENT_SR=[
 {id:24,sr:'Da sam znao, ne bih to uradio.',en:"If I had known, I wouldn't have done it.",lv:'B2',focus:'cond',blanks:['znao']},
 {id:25,sr:'Kao da nisam dovoljno spavao sinoć.',en:"It's as if I didn't sleep enough last night.",lv:'B2',focus:'comp',blanks:['spavao']},
 // ── Tatoeba imports (Latin Serbian only, IDs 100+) ──
-{id:100,sr:'Pitala sam te sinoć.',en:'I asked you last night.',lv:'A1',focus:'tatoeba',blanks:['Pitala']},
-{id:101,sr:'Vreme je za istinu.',en:'It\'s time for the truth.',lv:'A1',focus:'tatoeba',blanks:['istinu']},
-{id:102,sr:'To je kubanska cigara.',en:'It\'s a Cuban cigar.',lv:'A1',focus:'tatoeba',blanks:['kubanska']},
-{id:103,sr:'Da li stižete uskoro?',en:'Are you almost here?',lv:'A1',focus:'tatoeba',blanks:['stižete']},
-{id:104,sr:'Evo me na putu.',en:'Here I come.',lv:'A1',focus:'tatoeba',blanks:['putu']},
-{id:105,sr:'Zašto si to uradila?',en:'What did you do it for?',lv:'A1',focus:'tatoeba',blanks:['uradila']},
-{id:106,sr:'Nema razloga za paniku.',en:'There\'s no reason to panic.',lv:'A1',focus:'tatoeba',blanks:['razloga']},
-{id:107,sr:'Možda ti treba lopata.',en:'You may need a shovel.',lv:'A1',focus:'tatoeba',blanks:['lopata']},
-{id:108,sr:'Dozvolite mi da objasnim.',en:'Allow me to explain.',lv:'A1',focus:'tatoeba',blanks:['Dozvolite']},
-{id:109,sr:'Ne prilazi mojoj devojci.',en:'Stay away from my girlfriend.',lv:'A1',focus:'tatoeba',blanks:['prilazi']},
-{id:110,sr:'Tom je podigao poštu.',en:'Tom picked up his mail.',lv:'A1',focus:'tatoeba',blanks:['podigao']},
-{id:111,sr:'Imamo direktan pristup informacijama.',en:'We have direct access to the information.',lv:'A1',focus:'tatoeba',blanks:['informacijama']},
-{id:112,sr:'Zamalo da zaboravim pasoš.',en:'I almost forgot my passport.',lv:'A1',focus:'tatoeba',blanks:['zaboravim']},
-{id:113,sr:'To je zaista lepo.',en:'That\'s really beautiful.',lv:'A1',focus:'tatoeba',blanks:['zaista']},
-{id:114,sr:'Tom nosi novi kaput.',en:'Tom is wearing a new coat.',lv:'A1',focus:'tatoeba',blanks:['kaput']},
-{id:115,sr:'Da li si gledala?',en:'Have you been watching?',lv:'A1',focus:'tatoeba',blanks:['gledala']},
-{id:116,sr:'Nemoj da se razvlačiš.',en:'Don\'t slouch.',lv:'A1',focus:'tatoeba',blanks:['razvlačiš']},
-{id:117,sr:'Dođite da nas vidite.',en:'Come and see us.',lv:'A1',focus:'tatoeba',blanks:['Dođite']},
-{id:118,sr:'Kupio sam ti ih.',en:'I bought them for you.',lv:'A1',focus:'tatoeba',blanks:['Kupio']},
-{id:119,sr:'Šta ja to lupam?',en:'What am I saying here?',lv:'A1',focus:'tatoeba',blanks:['lupam']},
-{id:120,sr:'Molim te, ne viči.',en:'Please don\'t shout.',lv:'A1',focus:'tatoeba',blanks:['Molim']},
-{id:121,sr:'Svim stvarima dođe kraj.',en:'All things must pass.',lv:'A1',focus:'tatoeba',blanks:['stvarima']},
-{id:122,sr:'Tom je opet zaspao.',en:'Tom fell back to sleep.',lv:'A1',focus:'tatoeba',blanks:['zaspao']},
-{id:123,sr:'Ovo su korisne informacije.',en:'This is useful information.',lv:'A1',focus:'tatoeba',blanks:['informacije']},
-{id:124,sr:'Čiji je ovo rukopis?',en:'Whose handwriting is this?',lv:'A1',focus:'tatoeba',blanks:['rukopis']},
-{id:125,sr:'Biću u svojoj četvrti.',en:'I\'ll be in my quarters.',lv:'A1',focus:'tatoeba',blanks:['četvrti']},
-{id:126,sr:'Hajde da saznamo zasigurno.',en:'Let\'s find out for sure.',lv:'A1',focus:'tatoeba',blanks:['zasigurno']},
-{id:127,sr:'Tom nije baš fin.',en:'Tom isn\'t very nice.',lv:'A1',focus:'tatoeba',blanks:['nije']},
-{id:128,sr:'Nije bitno gde sam.',en:'Where I am doesn\'t matter.',lv:'A1',focus:'tatoeba',blanks:['bitno']},
-{id:129,sr:'Tom ima lepu baštu.',en:'Tom has a beautiful garden.',lv:'A1',focus:'tatoeba',blanks:['baštu']},
-{id:130,sr:'Samo ćemo vas pratiti.',en:'We\'ll just follow you.',lv:'A1',focus:'tatoeba',blanks:['pratiti']},
-{id:131,sr:'On joj se sviđa.',en:'She likes him.',lv:'A1',focus:'tatoeba',blanks:['sviđa']},
-{id:132,sr:'Ja sam užasan pisac.',en:'I\'m a terrible writer.',lv:'A1',focus:'tatoeba',blanks:['užasan']},
-{id:133,sr:'Sve su životinje jednake.',en:'All animals are equal.',lv:'A1',focus:'tatoeba',blanks:['životinje']},
-{id:134,sr:'Zašto nisi rekao nekome?',en:'Why didn\'t you tell anyone?',lv:'A1',focus:'tatoeba',blanks:['nekome']},
-{id:135,sr:'To me mnogo razljuti.',en:'That makes me so angry.',lv:'A1',focus:'tatoeba',blanks:['razljuti']},
-{id:136,sr:'Jesi li zauzet ovde?',en:'Are you busy here?',lv:'A1',focus:'tatoeba',blanks:['zauzet']},
-{id:137,sr:'Čuješ li ti nešto?',en:'Do you hear something?',lv:'A1',focus:'tatoeba',blanks:['Čuješ']},
-{id:138,sr:'Nigde nije bilo sigurno.',en:'It wasn\'t safe anywhere.',lv:'A1',focus:'tatoeba',blanks:['sigurno']},
-{id:139,sr:'On ima interesantnu knjigu.',en:'He has an interesting book.',lv:'A1',focus:'tatoeba',blanks:['interesantnu']},
-{id:140,sr:'U šta ti veruješ?',en:'What do you believe in?',lv:'A1',focus:'tatoeba',blanks:['veruješ']},
-{id:141,sr:'Tom se smejao ideji.',en:'Tom laughed at the idea.',lv:'A1',focus:'tatoeba',blanks:['smejao']},
-{id:142,sr:'Spreman sam da odgovorim.',en:'I\'m ready to respond.',lv:'A1',focus:'tatoeba',blanks:['odgovorim']},
-{id:143,sr:'Danas ste užasno poranili.',en:'You\'re here awfully early today.',lv:'A1',focus:'tatoeba',blanks:['poranili']},
-{id:144,sr:'Kakav jogurt najviše voliš?',en:'What kind of yogurt do you like best?',lv:'A1',focus:'tatoeba',blanks:['najviše']},
-{id:145,sr:'Kako se ovo zove?',en:'What is it called?',lv:'A1',focus:'tatoeba',blanks:['Kako']},
-{id:146,sr:'Tekst je jako prerađen.',en:'The text has been heavily edited.',lv:'A1',focus:'tatoeba',blanks:['prerađen']},
-{id:147,sr:'Načinila sam prvi korak.',en:'I took the first step.',lv:'A1',focus:'tatoeba',blanks:['Načinila']},
-{id:148,sr:'Ne prilazi mojoj ženi.',en:'Stay away from my woman.',lv:'A1',focus:'tatoeba',blanks:['prilazi']},
-{id:149,sr:'Molim te skini čarape.',en:'Take off your socks, please.',lv:'A1',focus:'tatoeba',blanks:['čarape']},
-{id:150,sr:'Tom je izgubio osećaj.',en:'Tom has lost his touch.',lv:'A1',focus:'tatoeba',blanks:['izgubio']},
-{id:151,sr:'Tom ima mračnu tajnu.',en:'Tom has a dark secret.',lv:'A1',focus:'tatoeba',blanks:['mračnu']},
-{id:152,sr:'Mislim da svi preetruju.',en:'I think everyone\'s overreacting.',lv:'A1',focus:'tatoeba',blanks:['preetruju']},
-{id:153,sr:'To nam puno pomaže.',en:'That helps us a lot.',lv:'A1',focus:'tatoeba',blanks:['pomaže']},
-{id:154,sr:'Veliki dečaci ne plaču.',en:'Big boys don\'t cry.',lv:'A1',focus:'tatoeba',blanks:['Veliki']},
-{id:155,sr:'Dogodiće se loše stvari.',en:'Bad things will happen.',lv:'A1',focus:'tatoeba',blanks:['Dogodiće']},
-{id:156,sr:'To nije prava stvar.',en:'It\'s not the real thing.',lv:'A1',focus:'tatoeba',blanks:['prava']},
-{id:157,sr:'Moramo to da uradimo.',en:'We have to do that.',lv:'A1',focus:'tatoeba',blanks:['uradimo']},
-{id:158,sr:'Prevela je svoju rečenicu.',en:'She translated her own sentence.',lv:'A1',focus:'tatoeba',blanks:['rečenicu']},
-{id:159,sr:'Važna je dobra namera.',en:'It\'s the thought that counts.',lv:'A1',focus:'tatoeba',blanks:['namera']},
-{id:160,sr:'Skrenite desno na sledećem uglu.',en:'Turn right at the next corner.',lv:'A2',focus:'tatoeba',blanks:['Skrenite']},
-{id:161,sr:'Niko ne dolazi da te spase.',en:'No one is coming to save you.',lv:'A2',focus:'tatoeba',blanks:['dolazi']},
-{id:162,sr:'Reakcija nije uvek najbolji način delovanja.',en:'Reaction is not always the best course of action.',lv:'A2',focus:'tatoeba',blanks:['delovanja']},
-{id:163,sr:'Ti si najdosadnija osoba koju poznajem.',en:'You are the most boring person I know.',lv:'A2',focus:'tatoeba',blanks:['najdosadnija']},
-{id:164,sr:'Šta će se desiti sledeći put?',en:'What happens next time?',lv:'A2',focus:'tatoeba',blanks:['sledeći']},
-{id:165,sr:'Tom samo što se vratio kući.',en:'Tom just got back home.',lv:'A2',focus:'tatoeba',blanks:['vratio']},
-{id:166,sr:'Moj otac je popravio polomljenu stolicu.',en:'My father fixed a broken chair.',lv:'A2',focus:'tatoeba',blanks:['polomljenu']},
-{id:167,sr:'Taj je lažnjak, zar ne?',en:'It\'s a fake one, right?',lv:'A2',focus:'tatoeba',blanks:['lažnjak']},
-{id:168,sr:'Ne želim ništa od tebe.',en:'I don\'t want anything from you.',lv:'A2',focus:'tatoeba',blanks:['želim']},
-{id:169,sr:'Izvinite, moram da ispratim goste.',en:'I\'m sorry, I have to see off the guests now.',lv:'A2',focus:'tatoeba',blanks:['Izvinite']},
-{id:170,sr:'Mislim da je skroz smešno.',en:'I think it\'s absolutely ridiculous.',lv:'A2',focus:'tatoeba',blanks:['Mislim']},
-{id:171,sr:'On je na putu do kuće.',en:'He\'s on his way home.',lv:'A2',focus:'tatoeba',blanks:['putu']},
-{id:172,sr:'Još uvek volim klasični rok.',en:'I still love classic rock.',lv:'A2',focus:'tatoeba',blanks:['klasični']},
-{id:173,sr:'Hvala vam puno za sve!',en:'Thank you very much for everything.',lv:'A2',focus:'tatoeba',blanks:['Hvala']},
-{id:174,sr:'Uvek sam nervozan na pasoškoj kontroli.',en:'I get nervous at immigration.',lv:'A2',focus:'tatoeba',blanks:['nervozan']},
-{id:175,sr:'Reci mi šta je ono.',en:'Tell me what that is.',lv:'A2',focus:'tatoeba',blanks:['Reci']},
-{id:176,sr:'Tom mi je to rekao danas.',en:'Tom told me that today.',lv:'A2',focus:'tatoeba',blanks:['rekao']},
-{id:177,sr:'Mogla bih sad da odem tamo.',en:'I could go there now.',lv:'A2',focus:'tatoeba',blanks:['Mogla']},
-{id:178,sr:'Da li si video mog psa?',en:'Have you seen my dog?',lv:'A2',focus:'tatoeba',blanks:['video']},
-{id:179,sr:'To je bio dobar šešir.',en:'That was a good hat.',lv:'A2',focus:'tatoeba',blanks:['dobar']},
-{id:180,sr:'Previše sam zauzet na poslu.',en:'I\'m too busy at work.',lv:'A2',focus:'tatoeba',blanks:['Previše']},
-{id:181,sr:'Da li sam to ja ispustio?',en:'Did I drop that?',lv:'A2',focus:'tatoeba',blanks:['ispustio']},
-{id:182,sr:'Tom je taj koga želiš.',en:'Tom is the one you want.',lv:'A2',focus:'tatoeba',blanks:['želiš']},
-{id:183,sr:'Dozvolila mi je da odem.',en:'She allowed me to go.',lv:'A2',focus:'tatoeba',blanks:['Dozvolila']},
-{id:184,sr:'Ja samo vršim svoju dužnost.',en:'I\'m only doing my duty.',lv:'A2',focus:'tatoeba',blanks:['dužnost']},
-{id:185,sr:'Volim da te gledam dok igraš.',en:'I love watching you dance.',lv:'A2',focus:'tatoeba',blanks:['gledam']},
-{id:186,sr:'Naoko živi u beloj kući.',en:'Naoko lives in the white house.',lv:'A2',focus:'tatoeba',blanks:['Naoko']},
-{id:187,sr:'Jesi li spreman za još?',en:'Are you ready for more?',lv:'A2',focus:'tatoeba',blanks:['spreman']},
-{id:188,sr:'Nisam ljuta ni na kog.',en:'I\'m not mad at anybody.',lv:'A2',focus:'tatoeba',blanks:['Nisam']},
-{id:189,sr:'To zvuči kao odličan plan.',en:'That sounds like a great plan.',lv:'A2',focus:'tatoeba',blanks:['odličan']},
-{id:190,sr:'To je bila velika eksplozija.',en:'It was a big explosion.',lv:'A2',focus:'tatoeba',blanks:['eksplozija']},
-{id:191,sr:'Tom zna da nema nade.',en:'Tom knows it\'s hopeless.',lv:'A2',focus:'tatoeba',blanks:['nema']},
-{id:192,sr:'Jesi li mogla da pročitaš to?',en:'Could you read it?',lv:'A2',focus:'tatoeba',blanks:['pročitaš']},
-{id:193,sr:'Zvali su me i gore.',en:'I\'ve been called worse.',lv:'A2',focus:'tatoeba',blanks:['Zvali']},
-{id:194,sr:'Osećam oštar bol u stomaku.',en:'I have a sharp pain in the stomach.',lv:'A2',focus:'tatoeba',blanks:['stomaku']},
-{id:195,sr:'Vreme je da se oprostimo.',en:'It\'s time to say goodbye.',lv:'A2',focus:'tatoeba',blanks:['oprostimo']},
-{id:196,sr:'Da li si dobro pogledao?',en:'Did you get a good look?',lv:'A2',focus:'tatoeba',blanks:['pogledao']},
-{id:197,sr:'Samo ćemo da te pratimo.',en:'We\'ll just follow you.',lv:'A2',focus:'tatoeba',blanks:['pratimo']},
-{id:198,sr:'Da li sam ja ispustio to?',en:'Did I drop that?',lv:'A2',focus:'tatoeba',blanks:['ispustio']},
-{id:199,sr:'Uvek držim prozor otvorenim dok spavam.',en:'I always leave the window open while I sleep.',lv:'A2',focus:'tatoeba',blanks:['otvorenim']},
-{id:200,sr:'Potražila sam sok od grožđa.',en:'I asked for grape juice.',lv:'A2',focus:'tatoeba',blanks:['Potražila']},
-{id:201,sr:'Njegov mlađi brat je poznati fudbaler.',en:'His little brother is a famous soccer player.',lv:'A2',focus:'tatoeba',blanks:['fudbaler']},
-{id:202,sr:'Moraš da ideš u školu.',en:'You must go to school.',lv:'A2',focus:'tatoeba',blanks:['Moraš']},
-{id:203,sr:'Ovo će biti veoma korisno.',en:'This will be extremely helpful.',lv:'A2',focus:'tatoeba',blanks:['korisno']},
-{id:204,sr:'Nisam stvarno htela da uradim to.',en:'I didn\'t really want to do that.',lv:'A2',focus:'tatoeba',blanks:['stvarno']},
-{id:205,sr:'Lepota je u oku posmatrača.',en:'Beauty is in the eye of the beholder.',lv:'A2',focus:'tatoeba',blanks:['posmatrača']},
-{id:206,sr:'Još sam ljut zbog nje.',en:'I\'m still angry because of her.',lv:'A2',focus:'tatoeba',blanks:['ljut']},
-{id:207,sr:'To baš i nije moj posao.',en:'That\'s not really my job.',lv:'A2',focus:'tatoeba',blanks:['posao']},
-{id:208,sr:'Ne ulazi u tu prostoriju.',en:'Don\'t go in that room.',lv:'A2',focus:'tatoeba',blanks:['prostoriju']},
-{id:209,sr:'Kaži joj da sam nevin.',en:'Tell her I\'m innocent.',lv:'A2',focus:'tatoeba',blanks:['nevin']},
-{id:210,sr:'Volela bih da sam lepa.',en:'I wish I was pretty.',lv:'A2',focus:'tatoeba',blanks:['Volela']},
-{id:211,sr:'Jesi li mogla da ga pročitaš?',en:'Could you read it?',lv:'A2',focus:'tatoeba',blanks:['pročitaš']},
-{id:212,sr:'Koji čas ti je najdosadniji?',en:'What\'s your most boring class?',lv:'A2',focus:'tatoeba',blanks:['najdosadniji']},
-{id:213,sr:'Engleski moraš učiti korak po korak.',en:'English is something to be learned step by step.',lv:'A2',focus:'tatoeba',blanks:['Engleski']},
-{id:214,sr:'Tom veoma dobro svira klavir.',en:'Tom is very good at playing the piano.',lv:'A2',focus:'tatoeba',blanks:['klavir']},
-{id:215,sr:'Opasnost vreba na svakom ćošku.',en:'Danger lurks around every corner.',lv:'A2',focus:'tatoeba',blanks:['Opasnost']},
-{id:216,sr:'Možeš li da dodaš so?',en:'Could you pass the salt?',lv:'A2',focus:'tatoeba',blanks:['Možeš']},
-{id:217,sr:'Na selu ima mnogo drveća.',en:'There are lots of trees in the countryside.',lv:'A2',focus:'tatoeba',blanks:['drveća']},
-{id:218,sr:'Nosi zlatno lanče oko vrata.',en:'She is wearing a gold necklace around her neck.',lv:'A2',focus:'tatoeba',blanks:['zlatno']},
-{id:219,sr:'Nikad ranije nisam spazio to.',en:'I\'ve never noticed that before.',lv:'A2',focus:'tatoeba',blanks:['ranije']},
-{id:220,sr:'Hajde samo da se bacimo na posao.',en:'Let\'s just get to work.',lv:'B1',focus:'tatoeba',blanks:['bacimo']},
-{id:221,sr:'To je rizik koji moramo da preuzmemo.',en:'It\'s a risk we have to take.',lv:'B1',focus:'tatoeba',blanks:['preuzmemo']},
-{id:222,sr:'Da li je ovo bezbedno da se jede?',en:'Is it safe to eat this?',lv:'B1',focus:'tatoeba',blanks:['bezbedno']},
-{id:223,sr:'Da li si nekad koristio neki od ovih?',en:'Have you ever used one of these?',lv:'B1',focus:'tatoeba',blanks:['koristio']},
-{id:224,sr:'Za svakog muškog lika postoji ženska verzija.',en:'For every given male character, there is a female version of that character.',lv:'B1',focus:'tatoeba',blanks:['postoji']},
-{id:225,sr:'Uštedećete vreme ako pažljivo slušate moje instrukcije.',en:'If you listen carefully to my instructions, it\'ll save you some time.',lv:'B1',focus:'tatoeba',blanks:['instrukcije']},
-{id:226,sr:'Mislim da bi ti trebalo da biraš.',en:'I think you should be the one to choose.',lv:'B1',focus:'tatoeba',blanks:['trebalo']},
-{id:227,sr:'Niko ne zna u šta se pretvorila.',en:'Nobody knows what has become of her.',lv:'B1',focus:'tatoeba',blanks:['pretvorila']},
-{id:228,sr:'Mislila sam da nećeš moći da uradiš to.',en:'I thought you wouldn\'t be able to do that.',lv:'B1',focus:'tatoeba',blanks:['Mislila']},
-{id:229,sr:'Jesi li sigurna da je ova stvar bezbedna?',en:'Are you sure this thing is safe?',lv:'B1',focus:'tatoeba',blanks:['bezbedna']},
-{id:230,sr:'Odakle ti to da je život fer?',en:'Who said life is fair?',lv:'B1',focus:'tatoeba',blanks:['Odakle']},
-{id:231,sr:'Tom je bio prijateljski nastojen prema meni.',en:'Tom was friendly to me.',lv:'B1',focus:'tatoeba',blanks:['prijateljski']},
-{id:232,sr:'Tom nije pravi čovek za taj posao.',en:'Tom isn\'t the right man for the job.',lv:'B1',focus:'tatoeba',blanks:['pravi']},
-{id:233,sr:'Da li si ti umešan u ovo?',en:'Are you involved in this?',lv:'B1',focus:'tatoeba',blanks:['umešan']},
-{id:234,sr:'Tom je počeo da stenje od bolova.',en:'Tom started moaning in pain.',lv:'B1',focus:'tatoeba',blanks:['stenje']},
-{id:235,sr:'Žao mi je ako sam vas razočarala.',en:'I\'m sorry if I disappointed you.',lv:'B1',focus:'tatoeba',blanks:['razočarala']},
-{id:236,sr:'Nasilje je jedini jezik koji oni razumeju.',en:'Violence is the only language they understand.',lv:'B1',focus:'tatoeba',blanks:['razumeju']},
-{id:237,sr:'Napravio je ogroman profit investirajući na tržište akcija.',en:'He made a killing by investing in the stock market.',lv:'B1',focus:'tatoeba',blanks:['investirajući']},
-{id:238,sr:'Tom je jako dobar u mentalnoj aritmetici.',en:'Tom\'s very good at mental arithmetic.',lv:'B1',focus:'tatoeba',blanks:['aritmetici']},
-{id:239,sr:'Tom nije znao koje pitanje da postavi.',en:'Tom didn\'t know what question to ask.',lv:'B1',focus:'tatoeba',blanks:['pitanje']},
-{id:240,sr:'Tom je juče došao kod mene na večeru.',en:'Tom came over to my house for dinner yesterday.',lv:'B1',focus:'tatoeba',blanks:['večeru']},
-{id:241,sr:'Ne zaboravi da se namažeš kremom za sunčanje.',en:'Don\'t forget to put on sunscreen.',lv:'B1',focus:'tatoeba',blanks:['zaboravi']},
-{id:242,sr:'Ona je bila jedina koja me je razumela.',en:'She was the only one who understood me.',lv:'B1',focus:'tatoeba',blanks:['razumela']},
-{id:243,sr:'Testiranje novog motora će se obaviti danas.',en:'The test of the new engine takes place today.',lv:'B1',focus:'tatoeba',blanks:['Testiranje']},
-{id:244,sr:'Prokeltstvo, možeš li da zamisliš koliko su smrdeli?',en:'Damn, can you imagine how badly they smelled?',lv:'B1',focus:'tatoeba',blanks:['Prokeltstvo']},
-{id:245,sr:'Ova knjiga će ti pomoći da pišeš efikasno.',en:'This book will help you write effectively.',lv:'B1',focus:'tatoeba',blanks:['efikasno']},
-{id:246,sr:'Tom je počeo da izlazi sa starijom ženom.',en:'Tom has started dating an older woman.',lv:'B1',focus:'tatoeba',blanks:['starijom']},
-{id:247,sr:'Bio si u pravu što si briuo.',en:'You were right to worry.',lv:'B1',focus:'tatoeba',blanks:['pravu']},
-{id:248,sr:'Da li si završio sa pranjem sudova?',en:'Have you finished washing the dishes?',lv:'B1',focus:'tatoeba',blanks:['završio']},
-{id:249,sr:'To sam mogao da uradim vez tvoje pomoći.',en:'I could\'ve done that without your help.',lv:'B1',focus:'tatoeba',blanks:['uradim']},
-{id:250,sr:'Koji od vas će poći sa mnom?',en:'Which of you will come with me?',lv:'B1',focus:'tatoeba',blanks:['Koji']},
-{id:251,sr:'Moja je starija sestra vrlo talentovana da peva.',en:'My older sister is a very talented singer.',lv:'B1',focus:'tatoeba',blanks:['talentovana']},
-{id:252,sr:'Tom je juče kupio par crnih cipela.',en:'Tom bought a pair of black dress shoes yesterday.',lv:'B1',focus:'tatoeba',blanks:['cipela']},
-{id:253,sr:'Moraš da se fokusiraš na svoje vrline.',en:'You need to focus on your strengths.',lv:'B1',focus:'tatoeba',blanks:['fokusiraš']},
-{id:254,sr:'Red je bio veliki na autobuskoj stanici.',en:'There was not a long queue at the bus stop.',lv:'B1',focus:'tatoeba',blanks:['autobuskoj']},
-{id:255,sr:'Meri izgleda slatko šta god da nosi.',en:'Mary looks cute no matter what she wears.',lv:'B1',focus:'tatoeba',blanks:['izgleda']},
-{id:256,sr:'Doneo sam ove izveštaje da ih detaljnije pogledaš.',en:'I brought these reports for you to examine.',lv:'B1',focus:'tatoeba',blanks:['detaljnije']},
-{id:257,sr:'Ovo će naš posao učiniti mnogo lakšim.',en:'This will make our job much easier.',lv:'B1',focus:'tatoeba',blanks:['učiniti']},
-{id:258,sr:'U tom momentu, eksplodiralo je sa velikim praskom.',en:'At that instant it exploded with a great noise.',lv:'B1',focus:'tatoeba',blanks:['eksplodiralo']},
-{id:259,sr:'Taj dečak priča kao da je odrasla osoba.',en:'That boy speaks as if he were an adult.',lv:'B1',focus:'tatoeba',blanks:['odrasla']},
-{id:260,sr:'Ne znam šta da mislim o ovome.',en:'I don\'t know what to think of this.',lv:'B1',focus:'tatoeba',blanks:['mislim']},
-{id:261,sr:'Ne mogu da se setim melodije te pesme.',en:'I can\'t remember the melody of that song.',lv:'B1',focus:'tatoeba',blanks:['melodije']},
-{id:262,sr:'Da li želiš da vidiš nešto kul?',en:'Do you want to see something cool?',lv:'B1',focus:'tatoeba',blanks:['želiš']},
-{id:263,sr:'Neko mi je ukrao nešto iz torbe.',en:'Someone stole something from my bag.',lv:'B1',focus:'tatoeba',blanks:['ukrao']},
-{id:264,sr:'Danas mi ništa ne polazi za rukom.',en:'Nothing\'s working out for me today.',lv:'B1',focus:'tatoeba',blanks:['polazi']},
-{id:265,sr:'Da li ste vi umešani u ovo?',en:'Are you involved in this?',lv:'B1',focus:'tatoeba',blanks:['umešani']},
-{id:266,sr:'To je baš ono što je doktor naručio.',en:'That\'s just what the doctor ordered.',lv:'B1',focus:'tatoeba',blanks:['naručio']},
-{id:267,sr:'Tom mi je juče napisao preko trideset poruka.',en:'Tom wrote me more than thirty messages yesterday.',lv:'B1',focus:'tatoeba',blanks:['trideset']},
-{id:268,sr:'Zašto si tako dobra u objašnjavanju stvari?',en:'Why are you so good at explaining things?',lv:'B1',focus:'tatoeba',blanks:['objašnjavanju']},
-{id:269,sr:'Mislim da ćete moći da uradite to.',en:'I think you\'ll not be able to do that.',lv:'B1',focus:'tatoeba',blanks:['uradite']},
-{id:270,sr:'Koliko misliš da će ti trebati da pročitaš ovu knjigu?',en:'How long do you think it would take you to read this book?',lv:'B2',focus:'tatoeba',blanks:['pročitaš']},
-{id:271,sr:'Tom kaže da ima četiri kuća u pet različitih zemalja.',en:'Tom says that he has 4 homes in 5 different countries.',lv:'B2',focus:'tatoeba',blanks:['različitih']},
-{id:272,sr:'Tom je jedan od najinteresantnijih momaka koje sam ikad upoznao.',en:'Tom is one of the most interesting guys I\'ve ever met.',lv:'B2',focus:'tatoeba',blanks:['najinteresantnijih']},
-{id:273,sr:'Tom piše svojim roditeljima kod kuće barem jednom mesečno.',en:'Tom writes home to his parents at least once a month.',lv:'B2',focus:'tatoeba',blanks:['roditeljima']},
-{id:274,sr:'Sekund kasnije, njegove su se usne izvile u zlokoban osmeh.',en:'A second later his lips curved in a malicious smile.',lv:'B2',focus:'tatoeba',blanks:['zlokoban']},
-{id:275,sr:'Ponos teži da postane oholost, koja je blizak rod ludosti.',en:'Pride tends to develop into hubris, which is close kin to madness.',lv:'B2',focus:'tatoeba',blanks:['postane']},
-{id:276,sr:'U spavaćoj sobi imam ogledalo od poda do plafona.',en:'I have a full-length mirror in my bedroom.',lv:'B2',focus:'tatoeba',blanks:['spavaćoj']},
-{id:277,sr:'Niko od nas nije zapravo video da se to dogodilo.',en:'None of us actually saw it happen.',lv:'B2',focus:'tatoeba',blanks:['dogodilo']},
-{id:278,sr:'Molim te, uradi što god misliš da je neophodno.',en:'Please do whatever you think is necessary.',lv:'B2',focus:'tatoeba',blanks:['neophodno']},
-{id:279,sr:'Probao sam da prestanem da radim više stvari istovremeno.',en:'I\'ve tried to stop multitasking.',lv:'B2',focus:'tatoeba',blanks:['istovremeno']},
-{id:280,sr:'Ne bih mogao da uradim ovo bez tvoje pomoći.',en:'I couldn\'t have done it without your help.',lv:'B2',focus:'tatoeba',blanks:['uradim']},
-{id:281,sr:'Nikada nisam dozvolio da moje školovanje ometa moje obrazovanje.',en:'I have never let my schooling interfere with my education.',lv:'B2',focus:'tatoeba',blanks:['obrazovanje']},
-{id:282,sr:'Tom je rekao da mu je potrebna moja pomoć.',en:'Tom said he wanted my help.',lv:'B2',focus:'tatoeba',blanks:['potrebna']},
-{id:283,sr:'Dokle ćeš da se ljutiš i vičeš na nas?',en:'Until when shall you tell us off?',lv:'B2',focus:'tatoeba',blanks:['ljutiš']},
-{id:284,sr:'Tom je skrenuo desno kad je trebalo da skrene levo.',en:'Tom turned right when he should\'ve turned left.',lv:'B2',focus:'tatoeba',blanks:['skrenuo']},
-{id:285,sr:'Ako nešto zvuči previše dobro da bude istinito, verovatno jeste.',en:'If something sounds too good to be true, it probably is.',lv:'B2',focus:'tatoeba',blanks:['verovatno']},
-{id:286,sr:'Tom je vrlo očito nagovestio da želi da odemo.',en:'Tom hinted very strongly that he wanted us to leave.',lv:'B2',focus:'tatoeba',blanks:['nagovestio']},
-{id:287,sr:'Ovo je ono što sam oduvek želeo da radim.',en:'This is what I\'ve always wanted to do.',lv:'B2',focus:'tatoeba',blanks:['oduvek']},
-{id:288,sr:'Prijatelji, mogu li da porazgovaram sa vama na minut?',en:'Friends, can I talk with you for a minute?',lv:'B2',focus:'tatoeba',blanks:['porazgovaram']},
-{id:289,sr:'Snažni vetrovi su sinoć odlomili mnogo grana sa stabala.',en:'The strong winds knocked down a lot of tree branches last night.',lv:'B2',focus:'tatoeba',blanks:['odlomili']},
-{id:290,sr:'Zar ne bi trebalo da se spremaš za posao?',en:'Shouldn\'t you be getting ready for work?',lv:'B2',focus:'tatoeba',blanks:['trebalo']},
-{id:291,sr:'Vatrogasna vozila imaju prednost u odnosu na ostala vozila.',en:'Fire engines have priority over other vehicles.',lv:'B2',focus:'tatoeba',blanks:['Vatrogasna']},
-{id:292,sr:'Ovom cvetu ne treba puno svetlosti da bi preživelo.',en:'This plant doesn\'t need a lot of light.',lv:'B2',focus:'tatoeba',blanks:['svetlosti']},
-{id:293,sr:'Solidno čitam kineski, ali ne umem lepo da ga pišem.',en:'I can read Chinese fairly well, but I can\'t write it very well.',lv:'B2',focus:'tatoeba',blanks:['Solidno']},
-{id:294,sr:'Tom je dao sve od sebe, ali nije bilo dovoljno.',en:'Tom gave his all, but it wasn\'t enough.',lv:'B2',focus:'tatoeba',blanks:['dovoljno']},
-{id:295,sr:'Tom bi mogao da nam kaže kako da uradimo to.',en:'Tom might be able to tell us how to do that.',lv:'B2',focus:'tatoeba',blanks:['uradimo']},
-{id:296,sr:'Oni nikada ne mogu da to postignu drugačije nego silom.',en:'They can never achieve that any other way than by force.',lv:'B2',focus:'tatoeba',blanks:['drugačije']},
-{id:297,sr:'Pokušala sam da prestanem da radim više stvari istovremeno.',en:'I\'ve tried to stop multitasking.',lv:'B2',focus:'tatoeba',blanks:['istovremeno']},
-{id:298,sr:'Teško mi je da razumem francuski kad se brzo govori.',en:'I find it difficult to understand French when it\'s spoken quickly.',lv:'B2',focus:'tatoeba',blanks:['francuski']},
-{id:299,sr:'Infracrveni i ultraljubičasti zraci su vrste svetlosti nevidljive ljudskom oku.',en:'Infrared and ultra-violet rays are types of light invisible to the human eye.',lv:'B2',focus:'tatoeba',blanks:['ultraljubičasti']}
+// Sentences and translations © Tatoeba contributors, CC BY 2.0 FR.
+// tt:[Serbian sentence id, English sentence id] on tatoeba.org — shown as a
+// credit wherever the sentence appears (ttCredit). Keep tt when editing.
+{id:100,sr:'Pitala sam te sinoć.',en:'I asked you last night.',lv:'A1',focus:'tatoeba',blanks:['Pitala'],tt:[4254058,2313692]},
+{id:101,sr:'Vreme je za istinu.',en:'It\'s time for the truth.',lv:'A1',focus:'tatoeba',blanks:['istinu'],tt:[4292424,2882851]},
+{id:102,sr:'To je kubanska cigara.',en:'It\'s a Cuban cigar.',lv:'A1',focus:'tatoeba',blanks:['kubanska'],tt:[3522750,1461953]},
+{id:103,sr:'Da li stižete uskoro?',en:'Are you almost here?',lv:'A1',focus:'tatoeba',blanks:['stižete'],tt:[4371143,3730610]},
+{id:104,sr:'Evo me na putu.',en:'Here I come.',lv:'A1',focus:'tatoeba',blanks:['putu'],tt:[2024433,1112325]},
+{id:105,sr:'Zašto si to uradila?',en:'What did you do it for?',lv:'A1',focus:'tatoeba',blanks:['uradila'],tt:[4258336,2645658]},
+{id:106,sr:'Nema razloga za paniku.',en:'There\'s no reason to panic.',lv:'A1',focus:'tatoeba',blanks:['razloga'],tt:[4238364,4225694]},
+{id:107,sr:'Možda ti treba lopata.',en:'You may need a shovel.',lv:'A1',focus:'tatoeba',blanks:['lopata'],tt:[5024916,5011419]},
+{id:108,sr:'Dozvolite mi da objasnim.',en:'Allow me to explain.',lv:'A1',focus:'tatoeba',blanks:['Dozvolite'],tt:[4324383,3426422]},
+{id:109,sr:'Ne prilazi mojoj devojci.',en:'Stay away from my girlfriend.',lv:'A1',focus:'tatoeba',blanks:['prilazi'],tt:[4250146,4195851]},
+{id:110,sr:'Tom je podigao poštu.',en:'Tom picked up his mail.',lv:'A1',focus:'tatoeba',blanks:['podigao'],tt:[4256612,2546377]},
+{id:111,sr:'Imamo direktan pristup informacijama.',en:'We have direct access to the information.',lv:'A1',focus:'tatoeba',blanks:['informacijama'],tt:[4246589,4213855]},
+{id:112,sr:'Zamalo da zaboravim pasoš.',en:'I almost forgot my passport.',lv:'A1',focus:'tatoeba',blanks:['zaboravim'],tt:[6945611,2291615]},
+{id:113,sr:'To je zaista lepo.',en:'That\'s really beautiful.',lv:'A1',focus:'tatoeba',blanks:['zaista'],tt:[4273322,2045762]},
+{id:114,sr:'Tom nosi novi kaput.',en:'Tom is wearing a new coat.',lv:'A1',focus:'tatoeba',blanks:['kaput'],tt:[4784527,4731508]},
+{id:115,sr:'Da li si gledala?',en:'Have you been watching?',lv:'A1',focus:'tatoeba',blanks:['gledala'],tt:[4258410,2646070]},
+{id:116,sr:'Nemoj da se razvlačiš.',en:'Don\'t slouch.',lv:'A1',focus:'tatoeba',blanks:['razvlačiš'],tt:[4996834,2111903]},
+{id:117,sr:'Dođite da nas vidite.',en:'Come and see us.',lv:'A1',focus:'tatoeba',blanks:['Dođite'],tt:[4449670,2999529]},
+{id:118,sr:'Kupio sam ti ih.',en:'I bought them for you.',lv:'A1',focus:'tatoeba',blanks:['Kupio'],tt:[4251373,3150789]},
+{id:119,sr:'Šta ja to lupam?',en:'What am I saying here?',lv:'A1',focus:'tatoeba',blanks:['lupam'],tt:[6984994,5747887]},
+{id:120,sr:'Molim te, ne viči.',en:'Please don\'t shout.',lv:'A1',focus:'tatoeba',blanks:['Molim'],tt:[4983323,4940139]},
+{id:121,sr:'Svim stvarima dođe kraj.',en:'All things must pass.',lv:'A1',focus:'tatoeba',blanks:['stvarima'],tt:[4324360,3501295]},
+{id:122,sr:'Tom je opet zaspao.',en:'Tom fell back to sleep.',lv:'A1',focus:'tatoeba',blanks:['zaspao'],tt:[6938542,3177919]},
+{id:123,sr:'Ovo su korisne informacije.',en:'This is useful information.',lv:'A1',focus:'tatoeba',blanks:['informacije'],tt:[4781400,4747565]},
+{id:124,sr:'Čiji je ovo rukopis?',en:'Whose handwriting is this?',lv:'A1',focus:'tatoeba',blanks:['rukopis'],tt:[5848797,1495806]},
+{id:125,sr:'Biću u svojoj četvrti.',en:'I\'ll be in my quarters.',lv:'A1',focus:'tatoeba',blanks:['četvrti'],tt:[4258272,2546723]},
+{id:126,sr:'Hajde da saznamo zasigurno.',en:'Let\'s find out for sure.',lv:'A1',focus:'tatoeba',blanks:['zasigurno'],tt:[4273270,2007602]},
+{id:127,sr:'Tom nije baš fin.',en:'Tom isn\'t very nice.',lv:'A1',focus:'tatoeba',blanks:['nije'],tt:[4251014,2647484]},
+{id:128,sr:'Nije bitno gde sam.',en:'Where I am doesn\'t matter.',lv:'A1',focus:'tatoeba',blanks:['bitno'],tt:[7010385,1127852]},
+{id:129,sr:'Tom ima lepu baštu.',en:'Tom has a beautiful garden.',lv:'A1',focus:'tatoeba',blanks:['baštu'],tt:[3437130,2045811]},
+{id:130,sr:'Samo ćemo vas pratiti.',en:'We\'ll just follow you.',lv:'A1',focus:'tatoeba',blanks:['pratiti'],tt:[4253893,3311950]},
+{id:131,sr:'On joj se sviđa.',en:'She likes him.',lv:'A1',focus:'tatoeba',blanks:['sviđa'],tt:[3387263,887271]},
+{id:132,sr:'Ja sam užasan pisac.',en:'I\'m a terrible writer.',lv:'A1',focus:'tatoeba',blanks:['užasan'],tt:[4248700,4198396]},
+{id:133,sr:'Sve su životinje jednake.',en:'All animals are equal.',lv:'A1',focus:'tatoeba',blanks:['životinje'],tt:[2774968,2774903]},
+{id:134,sr:'Zašto nisi rekao nekome?',en:'Why didn\'t you tell anyone?',lv:'A1',focus:'tatoeba',blanks:['nekome'],tt:[3248583,3248577]},
+{id:135,sr:'To me mnogo razljuti.',en:'That makes me so angry.',lv:'A1',focus:'tatoeba',blanks:['razljuti'],tt:[4971964,4968245]},
+{id:136,sr:'Jesi li zauzet ovde?',en:'Are you busy here?',lv:'A1',focus:'tatoeba',blanks:['zauzet'],tt:[4371158,2648579]},
+{id:137,sr:'Čuješ li ti nešto?',en:'Do you hear something?',lv:'A1',focus:'tatoeba',blanks:['Čuješ'],tt:[6960549,953198]},
+{id:138,sr:'Nigde nije bilo sigurno.',en:'It wasn\'t safe anywhere.',lv:'A1',focus:'tatoeba',blanks:['sigurno'],tt:[4274651,2280359]},
+{id:139,sr:'On ima interesantnu knjigu.',en:'He has an interesting book.',lv:'A1',focus:'tatoeba',blanks:['interesantnu'],tt:[3369415,292052]},
+{id:140,sr:'U šta ti veruješ?',en:'What do you believe in?',lv:'A1',focus:'tatoeba',blanks:['veruješ'],tt:[5909470,3395892]},
+{id:141,sr:'Tom se smejao ideji.',en:'Tom laughed at the idea.',lv:'A1',focus:'tatoeba',blanks:['smejao'],tt:[4292314,2645331]},
+{id:142,sr:'Spreman sam da odgovorim.',en:'I\'m ready to respond.',lv:'A1',focus:'tatoeba',blanks:['odgovorim'],tt:[4972155,4963989]},
+{id:143,sr:'Danas ste užasno poranili.',en:'You\'re here awfully early today.',lv:'A1',focus:'tatoeba',blanks:['poranili'],tt:[5308547,5306664]},
+{id:144,sr:'Kakav jogurt najviše voliš?',en:'What kind of yogurt do you like best?',lv:'A1',focus:'tatoeba',blanks:['najviše'],tt:[4781280,4768204]},
+{id:145,sr:'Kako se ovo zove?',en:'What is it called?',lv:'A1',focus:'tatoeba',blanks:['Kako'],tt:[5843361,2648239]},
+{id:146,sr:'Tekst je jako prerađen.',en:'The text has been heavily edited.',lv:'A1',focus:'tatoeba',blanks:['prerađen'],tt:[945309,995272]},
+{id:147,sr:'Načinila sam prvi korak.',en:'I took the first step.',lv:'A1',focus:'tatoeba',blanks:['Načinila'],tt:[6991364,3134009]},
+{id:148,sr:'Ne prilazi mojoj ženi.',en:'Stay away from my woman.',lv:'A1',focus:'tatoeba',blanks:['prilazi'],tt:[4250147,4195849]},
+{id:149,sr:'Molim te skini čarape.',en:'Take off your socks, please.',lv:'A1',focus:'tatoeba',blanks:['čarape'],tt:[3292392,18086]},
+{id:150,sr:'Tom je izgubio osećaj.',en:'Tom has lost his touch.',lv:'A1',focus:'tatoeba',blanks:['izgubio'],tt:[5029129,5013015]},
+{id:151,sr:'Tom ima mračnu tajnu.',en:'Tom has a dark secret.',lv:'A1',focus:'tatoeba',blanks:['mračnu'],tt:[4251404,3164444]},
+{id:152,sr:'Mislim da svi preetruju.',en:'I think everyone\'s overreacting.',lv:'A1',focus:'tatoeba',blanks:['preetruju'],tt:[5035473,4999740]},
+{id:153,sr:'To nam puno pomaže.',en:'That helps us a lot.',lv:'A1',focus:'tatoeba',blanks:['pomaže'],tt:[4975999,4950729]},
+{id:154,sr:'Veliki dečaci ne plaču.',en:'Big boys don\'t cry.',lv:'A1',focus:'tatoeba',blanks:['Veliki'],tt:[5396762,5360596]},
+{id:155,sr:'Dogodiće se loše stvari.',en:'Bad things will happen.',lv:'A1',focus:'tatoeba',blanks:['Dogodiće'],tt:[4259815,3129309]},
+{id:156,sr:'To nije prava stvar.',en:'It\'s not the real thing.',lv:'A1',focus:'tatoeba',blanks:['prava'],tt:[4248520,4205334]},
+{id:157,sr:'Moramo to da uradimo.',en:'We have to do that.',lv:'A1',focus:'tatoeba',blanks:['uradimo'],tt:[6963508,2953664]},
+{id:158,sr:'Prevela je svoju rečenicu.',en:'She translated her own sentence.',lv:'A1',focus:'tatoeba',blanks:['rečenicu'],tt:[6926849,6593888]},
+{id:159,sr:'Važna je dobra namera.',en:'It\'s the thought that counts.',lv:'A1',focus:'tatoeba',blanks:['namera'],tt:[6928239,397055]},
+{id:160,sr:'Skrenite desno na sledećem uglu.',en:'Turn right at the next corner.',lv:'A2',focus:'tatoeba',blanks:['Skrenite'],tt:[6979468,264257]},
+{id:161,sr:'Niko ne dolazi da te spase.',en:'No one is coming to save you.',lv:'A2',focus:'tatoeba',blanks:['dolazi'],tt:[3243123,3241671]},
+{id:162,sr:'Reakcija nije uvek najbolji način delovanja.',en:'Reaction is not always the best course of action.',lv:'A2',focus:'tatoeba',blanks:['delovanja'],tt:[7774260,1533758]},
+{id:163,sr:'Ti si najdosadnija osoba koju poznajem.',en:'You are the most boring person I know.',lv:'A2',focus:'tatoeba',blanks:['najdosadnija'],tt:[4243385,4231100]},
+{id:164,sr:'Šta će se desiti sledeći put?',en:'What happens next time?',lv:'A2',focus:'tatoeba',blanks:['sledeći'],tt:[4259832,3129325]},
+{id:165,sr:'Tom samo što se vratio kući.',en:'Tom just got back home.',lv:'A2',focus:'tatoeba',blanks:['vratio'],tt:[4259767,3023542]},
+{id:166,sr:'Moj otac je popravio polomljenu stolicu.',en:'My father fixed a broken chair.',lv:'A2',focus:'tatoeba',blanks:['polomljenu'],tt:[665177,319092]},
+{id:167,sr:'Taj je lažnjak, zar ne?',en:'It\'s a fake one, right?',lv:'A2',focus:'tatoeba',blanks:['lažnjak'],tt:[4261786,3168218]},
+{id:168,sr:'Ne želim ništa od tebe.',en:'I don\'t want anything from you.',lv:'A2',focus:'tatoeba',blanks:['želim'],tt:[3394935,2014264]},
+{id:169,sr:'Izvinite, moram da ispratim goste.',en:'I\'m sorry, I have to see off the guests now.',lv:'A2',focus:'tatoeba',blanks:['Izvinite'],tt:[714510,531833]},
+{id:170,sr:'Mislim da je skroz smešno.',en:'I think it\'s absolutely ridiculous.',lv:'A2',focus:'tatoeba',blanks:['Mislim'],tt:[5035391,4999707]},
+{id:171,sr:'On je na putu do kuće.',en:'He\'s on his way home.',lv:'A2',focus:'tatoeba',blanks:['putu'],tt:[4248465,1956293]},
+{id:172,sr:'Još uvek volim klasični rok.',en:'I still love classic rock.',lv:'A2',focus:'tatoeba',blanks:['klasični'],tt:[5034796,4983611]},
+{id:173,sr:'Hvala vam puno za sve!',en:'Thank you very much for everything.',lv:'A2',focus:'tatoeba',blanks:['Hvala'],tt:[5806641,65805]},
+{id:174,sr:'Uvek sam nervozan na pasoškoj kontroli.',en:'I get nervous at immigration.',lv:'A2',focus:'tatoeba',blanks:['nervozan'],tt:[665243,281934]},
+{id:175,sr:'Reci mi šta je ono.',en:'Tell me what that is.',lv:'A2',focus:'tatoeba',blanks:['Reci'],tt:[4971954,4968247]},
+{id:176,sr:'Tom mi je to rekao danas.',en:'Tom told me that today.',lv:'A2',focus:'tatoeba',blanks:['rekao'],tt:[4975947,4972794]},
+{id:177,sr:'Mogla bih sad da odem tamo.',en:'I could go there now.',lv:'A2',focus:'tatoeba',blanks:['Mogla'],tt:[4449731,3821970]},
+{id:178,sr:'Da li si video mog psa?',en:'Have you seen my dog?',lv:'A2',focus:'tatoeba',blanks:['video'],tt:[5002293,4971274]},
+{id:179,sr:'To je bio dobar šešir.',en:'That was a good hat.',lv:'A2',focus:'tatoeba',blanks:['dobar'],tt:[4250444,3736209]},
+{id:180,sr:'Previše sam zauzet na poslu.',en:'I\'m too busy at work.',lv:'A2',focus:'tatoeba',blanks:['Previše'],tt:[4246052,4217751]},
+{id:181,sr:'Da li sam to ja ispustio?',en:'Did I drop that?',lv:'A2',focus:'tatoeba',blanks:['ispustio'],tt:[4449868,3333905]},
+{id:182,sr:'Tom je taj koga želiš.',en:'Tom is the one you want.',lv:'A2',focus:'tatoeba',blanks:['želiš'],tt:[4292325,2645353]},
+{id:183,sr:'Dozvolila mi je da odem.',en:'She allowed me to go.',lv:'A2',focus:'tatoeba',blanks:['Dozvolila'],tt:[4324391,2948239]},
+{id:184,sr:'Ja samo vršim svoju dužnost.',en:'I\'m only doing my duty.',lv:'A2',focus:'tatoeba',blanks:['dužnost'],tt:[6977062,3873515]},
+{id:185,sr:'Volim da te gledam dok igraš.',en:'I love watching you dance.',lv:'A2',focus:'tatoeba',blanks:['gledam'],tt:[5035286,4983617]},
+{id:186,sr:'Naoko živi u beloj kući.',en:'Naoko lives in the white house.',lv:'A2',focus:'tatoeba',blanks:['Naoko'],tt:[2763053,2759669]},
+{id:187,sr:'Jesi li spreman za još?',en:'Are you ready for more?',lv:'A2',focus:'tatoeba',blanks:['spreman'],tt:[4259734,2646106]},
+{id:188,sr:'Nisam ljuta ni na kog.',en:'I\'m not mad at anybody.',lv:'A2',focus:'tatoeba',blanks:['Nisam'],tt:[4972236,4963965]},
+{id:189,sr:'To zvuči kao odličan plan.',en:'That sounds like a great plan.',lv:'A2',focus:'tatoeba',blanks:['odličan'],tt:[4243431,4228295]},
+{id:190,sr:'To je bila velika eksplozija.',en:'It was a big explosion.',lv:'A2',focus:'tatoeba',blanks:['eksplozija'],tt:[4971895,4969838]},
+{id:191,sr:'Tom zna da nema nade.',en:'Tom knows it\'s hopeless.',lv:'A2',focus:'tatoeba',blanks:['nema'],tt:[4292317,2645334]},
+{id:192,sr:'Jesi li mogla da pročitaš to?',en:'Could you read it?',lv:'A2',focus:'tatoeba',blanks:['pročitaš'],tt:[4449791,3393025]},
+{id:193,sr:'Zvali su me i gore.',en:'I\'ve been called worse.',lv:'A2',focus:'tatoeba',blanks:['Zvali'],tt:[4256568,2359056]},
+{id:194,sr:'Osećam oštar bol u stomaku.',en:'I have a sharp pain in the stomach.',lv:'A2',focus:'tatoeba',blanks:['stomaku'],tt:[4250156,4195550]},
+{id:195,sr:'Vreme je da se oprostimo.',en:'It\'s time to say goodbye.',lv:'A2',focus:'tatoeba',blanks:['oprostimo'],tt:[5945095,2645043]},
+{id:196,sr:'Da li si dobro pogledao?',en:'Did you get a good look?',lv:'A2',focus:'tatoeba',blanks:['pogledao'],tt:[4274740,2470094]},
+{id:197,sr:'Samo ćemo da te pratimo.',en:'We\'ll just follow you.',lv:'A2',focus:'tatoeba',blanks:['pratimo'],tt:[4253895,3311950]},
+{id:198,sr:'Da li sam ja ispustio to?',en:'Did I drop that?',lv:'A2',focus:'tatoeba',blanks:['ispustio'],tt:[4449863,3333905]},
+{id:199,sr:'Uvek držim prozor otvorenim dok spavam.',en:'I always leave the window open while I sleep.',lv:'A2',focus:'tatoeba',blanks:['otvorenim'],tt:[5028570,5028244]},
+{id:200,sr:'Potražila sam sok od grožđa.',en:'I asked for grape juice.',lv:'A2',focus:'tatoeba',blanks:['Potražila'],tt:[4274659,2291891]},
+{id:201,sr:'Njegov mlađi brat je poznati fudbaler.',en:'His little brother is a famous soccer player.',lv:'A2',focus:'tatoeba',blanks:['fudbaler'],tt:[4782988,4753835]},
+{id:202,sr:'Moraš da ideš u školu.',en:'You must go to school.',lv:'A2',focus:'tatoeba',blanks:['Moraš'],tt:[4967429,2163206]},
+{id:203,sr:'Ovo će biti veoma korisno.',en:'This will be extremely helpful.',lv:'A2',focus:'tatoeba',blanks:['korisno'],tt:[4986840,4950782]},
+{id:204,sr:'Nisam stvarno htela da uradim to.',en:'I didn\'t really want to do that.',lv:'A2',focus:'tatoeba',blanks:['stvarno'],tt:[5308578,5305600]},
+{id:205,sr:'Lepota je u oku posmatrača.',en:'Beauty is in the eye of the beholder.',lv:'A2',focus:'tatoeba',blanks:['posmatrača'],tt:[5993452,393871]},
+{id:206,sr:'Još sam ljut zbog nje.',en:'I\'m still angry because of her.',lv:'A2',focus:'tatoeba',blanks:['ljut'],tt:[4995352,2113414]},
+{id:207,sr:'To baš i nije moj posao.',en:'That\'s not really my job.',lv:'A2',focus:'tatoeba',blanks:['posao'],tt:[5002913,4984302]},
+{id:208,sr:'Ne ulazi u tu prostoriju.',en:'Don\'t go in that room.',lv:'A2',focus:'tatoeba',blanks:['prostoriju'],tt:[4986788,4985129]},
+{id:209,sr:'Kaži joj da sam nevin.',en:'Tell her I\'m innocent.',lv:'A2',focus:'tatoeba',blanks:['nevin'],tt:[6938597,3908077]},
+{id:210,sr:'Volela bih da sam lepa.',en:'I wish I was pretty.',lv:'A2',focus:'tatoeba',blanks:['Volela'],tt:[4246620,4211798]},
+{id:211,sr:'Jesi li mogla da ga pročitaš?',en:'Could you read it?',lv:'A2',focus:'tatoeba',blanks:['pročitaš'],tt:[4449789,3393025]},
+{id:212,sr:'Koji čas ti je najdosadniji?',en:'What\'s your most boring class?',lv:'A2',focus:'tatoeba',blanks:['najdosadniji'],tt:[12844950,12828225]},
+{id:213,sr:'Engleski moraš učiti korak po korak.',en:'English is something to be learned step by step.',lv:'A2',focus:'tatoeba',blanks:['Engleski'],tt:[3296990,26249]},
+{id:214,sr:'Tom veoma dobro svira klavir.',en:'Tom is very good at playing the piano.',lv:'A2',focus:'tatoeba',blanks:['klavir'],tt:[4781408,4749458]},
+{id:215,sr:'Opasnost vreba na svakom ćošku.',en:'Danger lurks around every corner.',lv:'A2',focus:'tatoeba',blanks:['Opasnost'],tt:[4243515,4221146]},
+{id:216,sr:'Možeš li da dodaš so?',en:'Could you pass the salt?',lv:'A2',focus:'tatoeba',blanks:['Možeš'],tt:[3384088,516617]},
+{id:217,sr:'Na selu ima mnogo drveća.',en:'There are lots of trees in the countryside.',lv:'A2',focus:'tatoeba',blanks:['drveća'],tt:[4782987,4753808]},
+{id:218,sr:'Nosi zlatno lanče oko vrata.',en:'She is wearing a gold necklace around her neck.',lv:'A2',focus:'tatoeba',blanks:['zlatno'],tt:[4250236,4193493]},
+{id:219,sr:'Nikad ranije nisam spazio to.',en:'I\'ve never noticed that before.',lv:'A2',focus:'tatoeba',blanks:['ranije'],tt:[5035498,4999749]},
+{id:220,sr:'Hajde samo da se bacimo na posao.',en:'Let\'s just get to work.',lv:'B1',focus:'tatoeba',blanks:['bacimo'],tt:[4276824,2007622]},
+{id:221,sr:'To je rizik koji moramo da preuzmemo.',en:'It\'s a risk we have to take.',lv:'B1',focus:'tatoeba',blanks:['preuzmemo'],tt:[5039779,5029434]},
+{id:222,sr:'Da li je ovo bezbedno da se jede?',en:'Is it safe to eat this?',lv:'B1',focus:'tatoeba',blanks:['bezbedno'],tt:[4261946,3238959]},
+{id:223,sr:'Da li si nekad koristio neki od ovih?',en:'Have you ever used one of these?',lv:'B1',focus:'tatoeba',blanks:['koristio'],tt:[5039802,5029263]},
+{id:224,sr:'Za svakog muškog lika postoji ženska verzija.',en:'For every given male character, there is a female version of that character.',lv:'B1',focus:'tatoeba',blanks:['postoji'],tt:[4248470,4248337]},
+{id:225,sr:'Uštedećete vreme ako pažljivo slušate moje instrukcije.',en:'If you listen carefully to my instructions, it\'ll save you some time.',lv:'B1',focus:'tatoeba',blanks:['instrukcije'],tt:[3243039,3241713]},
+{id:226,sr:'Mislim da bi ti trebalo da biraš.',en:'I think you should be the one to choose.',lv:'B1',focus:'tatoeba',blanks:['trebalo'],tt:[12738882,12737660]},
+{id:227,sr:'Niko ne zna u šta se pretvorila.',en:'Nobody knows what has become of her.',lv:'B1',focus:'tatoeba',blanks:['pretvorila'],tt:[7774264,308052]},
+{id:228,sr:'Mislila sam da nećeš moći da uradiš to.',en:'I thought you wouldn\'t be able to do that.',lv:'B1',focus:'tatoeba',blanks:['Mislila'],tt:[4250563,3736269]},
+{id:229,sr:'Jesi li sigurna da je ova stvar bezbedna?',en:'Are you sure this thing is safe?',lv:'B1',focus:'tatoeba',blanks:['bezbedna'],tt:[4781908,4781076]},
+{id:230,sr:'Odakle ti to da je život fer?',en:'Who said life is fair?',lv:'B1',focus:'tatoeba',blanks:['Odakle'],tt:[5028663,5011415]},
+{id:231,sr:'Tom je bio prijateljski nastojen prema meni.',en:'Tom was friendly to me.',lv:'B1',focus:'tatoeba',blanks:['prijateljski'],tt:[4975923,4972800]},
+{id:232,sr:'Tom nije pravi čovek za taj posao.',en:'Tom isn\'t the right man for the job.',lv:'B1',focus:'tatoeba',blanks:['pravi'],tt:[5308557,5306659]},
+{id:233,sr:'Da li si ti umešan u ovo?',en:'Are you involved in this?',lv:'B1',focus:'tatoeba',blanks:['umešan'],tt:[5039805,5029261]},
+{id:234,sr:'Tom je počeo da stenje od bolova.',en:'Tom started moaning in pain.',lv:'B1',focus:'tatoeba',blanks:['stenje'],tt:[3542872,2958230]},
+{id:235,sr:'Žao mi je ako sam vas razočarala.',en:'I\'m sorry if I disappointed you.',lv:'B1',focus:'tatoeba',blanks:['razočarala'],tt:[4781362,4756757]},
+{id:236,sr:'Nasilje je jedini jezik koji oni razumeju.',en:'Violence is the only language they understand.',lv:'B1',focus:'tatoeba',blanks:['razumeju'],tt:[3541260,3541338]},
+{id:237,sr:'Napravio je ogroman profit investirajući na tržište akcija.',en:'He made a killing by investing in the stock market.',lv:'B1',focus:'tatoeba',blanks:['investirajući'],tt:[3298855,294892]},
+{id:238,sr:'Tom je jako dobar u mentalnoj aritmetici.',en:'Tom\'s very good at mental arithmetic.',lv:'B1',focus:'tatoeba',blanks:['aritmetici'],tt:[4250739,4136691]},
+{id:239,sr:'Tom nije znao koje pitanje da postavi.',en:'Tom didn\'t know what question to ask.',lv:'B1',focus:'tatoeba',blanks:['pitanje'],tt:[7896322,7888134]},
+{id:240,sr:'Tom je juče došao kod mene na večeru.',en:'Tom came over to my house for dinner yesterday.',lv:'B1',focus:'tatoeba',blanks:['večeru'],tt:[4781982,4753640]},
+{id:241,sr:'Ne zaboravi da se namažeš kremom za sunčanje.',en:'Don\'t forget to put on sunscreen.',lv:'B1',focus:'tatoeba',blanks:['zaboravi'],tt:[4239894,4228312]},
+{id:242,sr:'Ona je bila jedina koja me je razumela.',en:'She was the only one who understood me.',lv:'B1',focus:'tatoeba',blanks:['razumela'],tt:[7192860,7190126]},
+{id:243,sr:'Testiranje novog motora će se obaviti danas.',en:'The test of the new engine takes place today.',lv:'B1',focus:'tatoeba',blanks:['Testiranje'],tt:[4967469,2163179]},
+{id:244,sr:'Prokeltstvo, možeš li da zamisliš koliko su smrdeli?',en:'Damn, can you imagine how badly they smelled?',lv:'B1',focus:'tatoeba',blanks:['Prokeltstvo'],tt:[4238285,4236685]},
+{id:245,sr:'Ova knjiga će ti pomoći da pišeš efikasno.',en:'This book will help you write effectively.',lv:'B1',focus:'tatoeba',blanks:['efikasno'],tt:[3430889,2610798]},
+{id:246,sr:'Tom je počeo da izlazi sa starijom ženom.',en:'Tom has started dating an older woman.',lv:'B1',focus:'tatoeba',blanks:['starijom'],tt:[11559081,11557422]},
+{id:247,sr:'Bio si u pravu što si briuo.',en:'You were right to worry.',lv:'B1',focus:'tatoeba',blanks:['pravu'],tt:[5039842,5028370]},
+{id:248,sr:'Da li si završio sa pranjem sudova?',en:'Have you finished washing the dishes?',lv:'B1',focus:'tatoeba',blanks:['završio'],tt:[4790667,4772245]},
+{id:249,sr:'To sam mogao da uradim vez tvoje pomoći.',en:'I could\'ve done that without your help.',lv:'B1',focus:'tatoeba',blanks:['uradim'],tt:[5024521,4981355]},
+{id:250,sr:'Koji od vas će poći sa mnom?',en:'Which of you will come with me?',lv:'B1',focus:'tatoeba',blanks:['Koji'],tt:[665374,664025]},
+{id:251,sr:'Moja je starija sestra vrlo talentovana da peva.',en:'My older sister is a very talented singer.',lv:'B1',focus:'tatoeba',blanks:['talentovana'],tt:[3648839,4644992]},
+{id:252,sr:'Tom je juče kupio par crnih cipela.',en:'Tom bought a pair of black dress shoes yesterday.',lv:'B1',focus:'tatoeba',blanks:['cipela'],tt:[4781973,4753634]},
+{id:253,sr:'Moraš da se fokusiraš na svoje vrline.',en:'You need to focus on your strengths.',lv:'B1',focus:'tatoeba',blanks:['fokusiraš'],tt:[4243427,4228360]},
+{id:254,sr:'Red je bio veliki na autobuskoj stanici.',en:'There was not a long queue at the bus stop.',lv:'B1',focus:'tatoeba',blanks:['autobuskoj'],tt:[665198,35241]},
+{id:255,sr:'Meri izgleda slatko šta god da nosi.',en:'Mary looks cute no matter what she wears.',lv:'B1',focus:'tatoeba',blanks:['izgleda'],tt:[4790654,4774124]},
+{id:256,sr:'Doneo sam ove izveštaje da ih detaljnije pogledaš.',en:'I brought these reports for you to examine.',lv:'B1',focus:'tatoeba',blanks:['detaljnije'],tt:[3494122,3494120]},
+{id:257,sr:'Ovo će naš posao učiniti mnogo lakšim.',en:'This will make our job much easier.',lv:'B1',focus:'tatoeba',blanks:['učiniti'],tt:[4239833,4239446]},
+{id:258,sr:'U tom momentu, eksplodiralo je sa velikim praskom.',en:'At that instant it exploded with a great noise.',lv:'B1',focus:'tatoeba',blanks:['eksplodiralo'],tt:[665161,329147]},
+{id:259,sr:'Taj dečak priča kao da je odrasla osoba.',en:'That boy speaks as if he were an adult.',lv:'B1',focus:'tatoeba',blanks:['odrasla'],tt:[4992698,2130882]},
+{id:260,sr:'Ne znam šta da mislim o ovome.',en:'I don\'t know what to think of this.',lv:'B1',focus:'tatoeba',blanks:['mislim'],tt:[4258419,3286272]},
+{id:261,sr:'Ne mogu da se setim melodije te pesme.',en:'I can\'t remember the melody of that song.',lv:'B1',focus:'tatoeba',blanks:['melodije'],tt:[4644946,1392879]},
+{id:262,sr:'Da li želiš da vidiš nešto kul?',en:'Do you want to see something cool?',lv:'B1',focus:'tatoeba',blanks:['želiš'],tt:[3243938,3243929]},
+{id:263,sr:'Neko mi je ukrao nešto iz torbe.',en:'Someone stole something from my bag.',lv:'B1',focus:'tatoeba',blanks:['ukrao'],tt:[4246887,4211141]},
+{id:264,sr:'Danas mi ništa ne polazi za rukom.',en:'Nothing\'s working out for me today.',lv:'B1',focus:'tatoeba',blanks:['polazi'],tt:[7001822,2610815]},
+{id:265,sr:'Da li ste vi umešani u ovo?',en:'Are you involved in this?',lv:'B1',focus:'tatoeba',blanks:['umešani'],tt:[5039814,5029261]},
+{id:266,sr:'To je baš ono što je doktor naručio.',en:'That\'s just what the doctor ordered.',lv:'B1',focus:'tatoeba',blanks:['naručio'],tt:[4967351,4966419]},
+{id:267,sr:'Tom mi je juče napisao preko trideset poruka.',en:'Tom wrote me more than thirty messages yesterday.',lv:'B1',focus:'tatoeba',blanks:['trideset'],tt:[4248904,4198302]},
+{id:268,sr:'Zašto si tako dobra u objašnjavanju stvari?',en:'Why are you so good at explaining things?',lv:'B1',focus:'tatoeba',blanks:['objašnjavanju'],tt:[4971841,4961926]},
+{id:269,sr:'Mislim da ćete moći da uradite to.',en:'I think you\'ll not be able to do that.',lv:'B1',focus:'tatoeba',blanks:['uradite'],tt:[4250574,3736273]},
+{id:270,sr:'Koliko misliš da će ti trebati da pročitaš ovu knjigu?',en:'How long do you think it would take you to read this book?',lv:'B2',focus:'tatoeba',blanks:['pročitaš'],tt:[4243341,4242126]},
+{id:271,sr:'Tom kaže da ima četiri kuća u pet različitih zemalja.',en:'Tom says that he has 4 homes in 5 different countries.',lv:'B2',focus:'tatoeba',blanks:['različitih'],tt:[4238447,4238434]},
+{id:272,sr:'Tom je jedan od najinteresantnijih momaka koje sam ikad upoznao.',en:'Tom is one of the most interesting guys I\'ve ever met.',lv:'B2',focus:'tatoeba',blanks:['najinteresantnijih'],tt:[5002932,4984298]},
+{id:273,sr:'Tom piše svojim roditeljima kod kuće barem jednom mesečno.',en:'Tom writes home to his parents at least once a month.',lv:'B2',focus:'tatoeba',blanks:['roditeljima'],tt:[4248926,4198291]},
+{id:274,sr:'Sekund kasnije, njegove su se usne izvile u zlokoban osmeh.',en:'A second later his lips curved in a malicious smile.',lv:'B2',focus:'tatoeba',blanks:['zlokoban'],tt:[3545490,3545489]},
+{id:275,sr:'Ponos teži da postane oholost, koja je blizak rod ludosti.',en:'Pride tends to develop into hubris, which is close kin to madness.',lv:'B2',focus:'tatoeba',blanks:['postane'],tt:[4243412,4229672]},
+{id:276,sr:'U spavaćoj sobi imam ogledalo od poda do plafona.',en:'I have a full-length mirror in my bedroom.',lv:'B2',focus:'tatoeba',blanks:['spavaćoj'],tt:[4238405,4232602]},
+{id:277,sr:'Niko od nas nije zapravo video da se to dogodilo.',en:'None of us actually saw it happen.',lv:'B2',focus:'tatoeba',blanks:['dogodilo'],tt:[4781317,4755746]},
+{id:278,sr:'Molim te, uradi što god misliš da je neophodno.',en:'Please do whatever you think is necessary.',lv:'B2',focus:'tatoeba',blanks:['neophodno'],tt:[4967647,4955300]},
+{id:279,sr:'Probao sam da prestanem da radim više stvari istovremeno.',en:'I\'ve tried to stop multitasking.',lv:'B2',focus:'tatoeba',blanks:['istovremeno'],tt:[5035421,4999723]},
+{id:280,sr:'Ne bih mogao da uradim ovo bez tvoje pomoći.',en:'I couldn\'t have done it without your help.',lv:'B2',focus:'tatoeba',blanks:['uradim'],tt:[4790675,4772510]},
+{id:281,sr:'Nikada nisam dozvolio da moje školovanje ometa moje obrazovanje.',en:'I have never let my schooling interfere with my education.',lv:'B2',focus:'tatoeba',blanks:['obrazovanje'],tt:[6484129,667914]},
+{id:282,sr:'Tom je rekao da mu je potrebna moja pomoć.',en:'Tom said he wanted my help.',lv:'B2',focus:'tatoeba',blanks:['potrebna'],tt:[4986865,4950771]},
+{id:283,sr:'Dokle ćeš da se ljutiš i vičeš na nas?',en:'Until when shall you tell us off?',lv:'B2',focus:'tatoeba',blanks:['ljutiš'],tt:[4243575,4216048]},
+{id:284,sr:'Tom je skrenuo desno kad je trebalo da skrene levo.',en:'Tom turned right when he should\'ve turned left.',lv:'B2',focus:'tatoeba',blanks:['skrenuo'],tt:[4790686,4761951]},
+{id:285,sr:'Ako nešto zvuči previše dobro da bude istinito, verovatno jeste.',en:'If something sounds too good to be true, it probably is.',lv:'B2',focus:'tatoeba',blanks:['verovatno'],tt:[4978308,4978034]},
+{id:286,sr:'Tom je vrlo očito nagovestio da želi da odemo.',en:'Tom hinted very strongly that he wanted us to leave.',lv:'B2',focus:'tatoeba',blanks:['nagovestio'],tt:[11700844,11700014]},
+{id:287,sr:'Ovo je ono što sam oduvek želeo da radim.',en:'This is what I\'ve always wanted to do.',lv:'B2',focus:'tatoeba',blanks:['oduvek'],tt:[3304860,3304857]},
+{id:288,sr:'Prijatelji, mogu li da porazgovaram sa vama na minut?',en:'Friends, can I talk with you for a minute?',lv:'B2',focus:'tatoeba',blanks:['porazgovaram'],tt:[4246065,4217003]},
+{id:289,sr:'Snažni vetrovi su sinoć odlomili mnogo grana sa stabala.',en:'The strong winds knocked down a lot of tree branches last night.',lv:'B2',focus:'tatoeba',blanks:['odlomili'],tt:[6593659,6555123]},
+{id:290,sr:'Zar ne bi trebalo da se spremaš za posao?',en:'Shouldn\'t you be getting ready for work?',lv:'B2',focus:'tatoeba',blanks:['trebalo'],tt:[5043443,5042271]},
+{id:291,sr:'Vatrogasna vozila imaju prednost u odnosu na ostala vozila.',en:'Fire engines have priority over other vehicles.',lv:'B2',focus:'tatoeba',blanks:['Vatrogasna'],tt:[664810,268170]},
+{id:292,sr:'Ovom cvetu ne treba puno svetlosti da bi preživelo.',en:'This plant doesn\'t need a lot of light.',lv:'B2',focus:'tatoeba',blanks:['svetlosti'],tt:[4507096,2458735]},
+{id:293,sr:'Solidno čitam kineski, ali ne umem lepo da ga pišem.',en:'I can read Chinese fairly well, but I can\'t write it very well.',lv:'B2',focus:'tatoeba',blanks:['Solidno'],tt:[4248964,4198273]},
+{id:294,sr:'Tom je dao sve od sebe, ali nije bilo dovoljno.',en:'Tom gave his all, but it wasn\'t enough.',lv:'B2',focus:'tatoeba',blanks:['dovoljno'],tt:[4246910,4210054]},
+{id:295,sr:'Tom bi mogao da nam kaže kako da uradimo to.',en:'Tom might be able to tell us how to do that.',lv:'B2',focus:'tatoeba',blanks:['uradimo'],tt:[4250605,3736293]},
+{id:296,sr:'Oni nikada ne mogu da to postignu drugačije nego silom.',en:'They can never achieve that any other way than by force.',lv:'B2',focus:'tatoeba',blanks:['drugačije'],tt:[3571533,3571531]},
+{id:297,sr:'Pokušala sam da prestanem da radim više stvari istovremeno.',en:'I\'ve tried to stop multitasking.',lv:'B2',focus:'tatoeba',blanks:['istovremeno'],tt:[5035424,4999723]},
+{id:298,sr:'Teško mi je da razumem francuski kad se brzo govori.',en:'I find it difficult to understand French when it\'s spoken quickly.',lv:'B2',focus:'tatoeba',blanks:['francuski'],tt:[4967652,4955344]},
+{id:299,sr:'Infracrveni i ultraljubičasti zraci su vrste svetlosti nevidljive ljudskom oku.',en:'Infrared and ultra-violet rays are types of light invisible to the human eye.',lv:'B2',focus:'tatoeba',blanks:['ultraljubičasti'],tt:[4249163,4197706]}
 ];
 
 // ═══════════════ READING TEXTS ═══════════════
@@ -3189,13 +3200,20 @@ function _fcTokHit(core,sk){if(!sk.k)return false;return sk.exact?core===sk.k:co
 
 // One example sentence that uses this word: the word's own unit phrases first,
 // then the sentence bank. Returns {tl,en} or null.
+// Attribution link for a Tatoeba sentence (CC BY 2.0 FR). The sentence page
+// lists its contributor and the linked translation. stopPropagation keeps a tap
+// on the link from flipping a flashcard.
+function ttCredit(tt){
+  if(!tt||!tt[0])return '';
+  return '<a class="tt-credit" href="https://tatoeba.org/en/sentences/show/'+(+tt[0])+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">Tatoeba #'+(+tt[0])+'</a>';
+}
 function fcContextFor(word){
   if(!word||!word.l)return null;
   const sk=_fcStemKey(word.l);if(!sk.k||sk.k.length<2)return null;
   const hit=txt=>normSR(txt).split(/\s+/).some(t=>_fcTokHit(t.replace(/[^a-z]/g,''),sk));
   const unit=UNITS.find(u=>u.words.some(x=>x.id===word.id));
   if(unit&&unit.phrases){const p=unit.phrases.find(p=>hit(p.tl));if(p)return{tl:p.tl,en:p.en};}
-  if(typeof SENTENCES!=='undefined'&&SENTENCES.length){const s=SENTENCES.find(s=>hit(s.sr));if(s)return{tl:s.sr,en:s.en};}
+  if(typeof SENTENCES!=='undefined'&&SENTENCES.length){const s=SENTENCES.find(s=>hit(s.sr));if(s)return{tl:s.sr,en:s.en,tt:s.tt||null};}
   return null;
 }
 
@@ -4348,7 +4366,7 @@ function czItems(){
     (s.blanks||[]).forEach(b=>{
       if(!s.sr.split(/\s+/).some(t=>_czClean(t)===b))return;
       const w=_czWordFor(b);
-      items.push({sr:s.sr,en:s.en,answer:b,lv:s.lv,focus:s.focus==='tatoeba'?'':(s.focus||''),wordId:w?w.id:null,src:'s'+s.id});
+      items.push({sr:s.sr,en:s.en,answer:b,lv:s.lv,focus:s.focus==='tatoeba'?'':(s.focus||''),wordId:w?w.id:null,src:'s'+s.id,tt:s.tt||null});
     });
   });
   UNITS.forEach(u=>{
@@ -4772,7 +4790,7 @@ renderFcCard(){
     h+='<div class="fc-intro-trans">'+esc(w.e)+'</div>';
     if(w.gn)h+='<div class="fc-gn">'+esc(w.gn)+'</div>';
     const introCtx=fcContextFor(w);
-    if(introCtx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(introCtx.tl,w.l)+'</div><div class="fc-ctx-en">'+esc(introCtx.en)+'</div></div>';
+    if(introCtx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(introCtx.tl,w.l)+'</div><div class="fc-ctx-en">'+esc(introCtx.en)+'</div>'+ttCredit(introCtx.tt)+'</div>';
     h+='<button class="fc-intro-cta" onclick="S.gotItFc()">Got it · Continue</button>';
     h+='<div class="fc-intro-hint">You\'ll see this card again in a few minutes to test recall.</div>';
     h+='</div>';
@@ -4800,7 +4818,7 @@ renderFcCard(){
   h+=spkBtn(backText,backLang);
   if(w.gn)h+='<div class="fc-gn">'+esc(w.gn)+'</div>';
   const ctx=fcContextFor(w);
-  if(ctx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(ctx.tl,w.l)+'</div><div class="fc-ctx-en">'+esc(ctx.en)+'</div></div>';
+  if(ctx)h+='<div class="fc-ctx"><div class="fc-ctx-sr">'+fcHighlight(ctx.tl,w.l)+'</div><div class="fc-ctx-en">'+esc(ctx.en)+'</div>'+ttCredit(ctx.tt)+'</div>';
   h+='</div>';
   h+='</div></div>';
   h+='<div class="fc-ratings" id="fc-ratings" style="display:none">';
@@ -5569,6 +5587,7 @@ renderCloze(){
   h+='<div class="sent-lvl">'+esc(it.lv)+(it.focus?' · '+esc(it.focus):'')+'</div>';
   h+='<div class="sent-en">'+esc(it.en)+'</div>';
   h+='<div class="sent-display">'+display+'</div>';
+  if(it.tt)h+='<div class="tt-line">'+ttCredit(it.tt)+'</div>';
   if(mode==='tap'){
     const opts=this.sh([it.answer,...(it.opts||czDistractors(it,czItems()))]);
     h+='<div class="cz-opts">'+opts.map(o=>'<button class="cz-opt" onclick="S.answerCloze(this)">'+esc(o)+'</button>').join('')+'</div>';
@@ -5677,6 +5696,7 @@ renderSentHome(){
     h+='<div class="sent-daily-lbl">TODAY\'S SENTENCE · '+esc(daily.lv)+'</div>';
     h+='<div class="sent-daily-sr">'+esc(daily.sr)+'</div>';
     h+='<div class="sent-daily-en">'+esc(daily.en)+'</div>';
+    if(daily.tt)h+='<div class="tt-line tt-daily">'+ttCredit(daily.tt)+'</div>';
     h+='<div class="sent-daily-actions">';
     h+=spkBtn(daily.sr,'sr','spk-lg');
     if(!dailyDone){
@@ -5757,9 +5777,10 @@ renderSentDrill(){
     return '<span class="sent-tok">'+esc(tok)+'</span>';
   }).join('');
   let h='<div class="sent-phase">';
-  h+='<div class="sent-lvl">'+esc(s.lv)+' · '+esc(s.focus)+'</div>';
+  h+='<div class="sent-lvl">'+esc(s.lv)+(s.focus&&s.focus!=='tatoeba'?' · '+esc(s.focus):'')+'</div>';
   h+='<div class="sent-en">'+esc(s.en)+'</div>';
   h+='<div class="sent-display">'+display+'</div>';
+  if(s.tt)h+='<div class="tt-line">'+ttCredit(s.tt)+'</div>';
   h+=srKeysHtml();
   h+='<div id="sn-fb"></div>';
   h+='<button class="vd-next" id="sn-check-btn" onclick="S.checkSent()">Check</button>';
@@ -6930,7 +6951,7 @@ _renderSearchExpansion(e){
   h+='<div class="sx-expand-meta">'+chips.join('')+'</div>';
   if(e.type==='word'){
     const ctx=fcContextFor(e.word);
-    if(ctx)h+='<div class="sx-ctx">'+fcHighlight(ctx.tl,e.word.l)+'<div class="sx-ctx-en">'+esc(ctx.en)+'</div></div>';
+    if(ctx)h+='<div class="sx-ctx">'+fcHighlight(ctx.tl,e.word.l)+'<div class="sx-ctx-en">'+esc(ctx.en)+'</div>'+ttCredit(ctx.tt)+'</div>';
   }
   // Verb conjugation table — keys are ja/ti/on/mi/vi/oni
   if(e.type==='verb'&&e.verb.conj){
