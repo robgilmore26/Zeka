@@ -16,6 +16,9 @@
 <meta name="apple-mobile-web-app-title" content="Zeka">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0F1419">
+<!-- Umami: cookie-free visit counts. Runs only on zeka.one (data-domains);
+     a visitor can switch it off in Profile (localStorage umami.disabled). -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="c07df6f5-0e37-4b2e-b81d-97bd72f55547" data-domains="zeka.one"></script>
 <script type="module">
   // Motion One — modern animation engine (~5KB gzipped). Exposed globally as window.M
   import {animate, stagger, spring, inView, scroll, timeline} from 'https://cdn.jsdelivr.net/npm/motion@10.18.0/+esm';
@@ -1137,6 +1140,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div class="sync-status" id="sync-status"></div>
     <div class="build-stamp" id="build-stamp"></div>
     <div class="credits">Example sentences from <a href="https://tatoeba.org" target="_blank" rel="noopener">Tatoeba</a>, licensed <a href="https://creativecommons.org/licenses/by/2.0/fr/" target="_blank" rel="noopener">CC BY 2.0 FR</a>. Each one links to its source.</div>
+    <div class="credits" id="stats-optout"></div>
   </div>
   </div>
   <div class="bnav bnav-lt">
@@ -7144,6 +7148,52 @@ renderIcons();
   if(b)b.textContent='Build '+when;
   console.log('[Zeka] build',when);
 })();
+
+// ═══════════════ USAGE SIGNAL (Umami, cookie-free) ═══════════════
+// Cookie-free analytics deliberately can't recognise a visitor on a later day,
+// so "do people come back?" is answered from the device instead: once per day
+// it sends an 'open' event carrying how long ago THIS device first opened Zeka
+// (kept in localStorage, never sent as an id). cohort says whether the device
+// already had Zeka progress when tracking began, so existing users don't look
+// like day-0 newcomers.
+function _usageBucket(days){return days<=0?'day 0':days===1?'day 1':days<7?'days 2-6':days<14?'days 7-13':days<30?'days 14-29':'day 30+';}
+function usageOpenEvent(opts){
+  opts=opts||{};
+  const ls=window.localStorage;
+  if(!opts.force&&location.hostname!=='zeka.one')return null;
+  try{if(ls.getItem('umami.disabled'))return null;}catch(e){return null;}
+  const today=(opts.today||new Date().toISOString().slice(0,10));
+  let first,cohort,last;
+  try{
+    first=ls.getItem('zeka_first_open');cohort=ls.getItem('zeka_cohort');last=ls.getItem('zeka_last_open');
+    if(!first){
+      first=today;ls.setItem('zeka_first_open',first);
+      cohort=Object.keys(ls).some(k=>/^zeka_(sr|it)$|^zeka_g_/.test(k))?'existing':'new';
+      ls.setItem('zeka_cohort',cohort);
+    }
+  }catch(e){return null;}
+  if(last===today)return null;
+  const days=Math.round((Date.parse(today)-Date.parse(first))/864e5);
+  const data={since_first:_usageBucket(days),returning:days>=7?'yes':'no',cohort:cohort||'new',lang:curLang};
+  const send=tries=>{
+    const u=opts.umami||window.umami;
+    if(u&&typeof u.track==='function'){u.track('open',data);try{ls.setItem('zeka_last_open',today);}catch(e){}}
+    else if(tries<20)setTimeout(()=>send(tries+1),500);
+  };
+  send(0);
+  return data;
+}
+function renderStatsToggle(){
+  const el=document.getElementById('stats-optout');if(!el)return;
+  let off=false;try{off=!!localStorage.getItem('umami.disabled');}catch(e){}
+  el.innerHTML='Anonymous visit stats, no cookies: <b>'+(off?'off':'on')+'</b> · <a href="#" onclick="toggleUsageStats();return false">'+(off?'turn on':'turn off')+'</a>';
+}
+function toggleUsageStats(){
+  try{if(localStorage.getItem('umami.disabled'))localStorage.removeItem('umami.disabled');else localStorage.setItem('umami.disabled','1');}catch(e){}
+  renderStatsToggle();
+}
+renderStatsToggle();
+usageOpenEvent();
 
 // ═══════════════ LONG-PRESS UNIT PREVIEW ═══════════════
 (function setupLongPress(){

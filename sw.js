@@ -1,4 +1,4 @@
-const CACHE='zeka-v68';
+const CACHE='zeka-v69';
 const ASSETS=[
   'index.html',
   'manifest.json',
@@ -19,12 +19,13 @@ self.addEventListener('activate',e=>{
 
 self.addEventListener('fetch',e=>{
   const url=e.request.url;
-  // Never cache Firebase, Google auth, or Firestore requests
+  // Never cache Firebase, Google auth, Firestore or analytics requests
   if(url.includes('googleapis.com')||url.includes('firebaseapp.com')||
      url.includes('firestore')||url.includes('gstatic.com/firebasejs')||
      url.includes('accounts.google.com')||url.includes('firebaseinstallations')||
      url.includes('identitytoolkit')||url.includes('securetoken')||
-     url.includes('gsi/client')||url.includes('gsi/status')){
+     url.includes('gsi/client')||url.includes('gsi/status')||
+     url.includes('umami.is')||url.includes('umami.dev')){
     return;// Let the browser handle these normally
   }
   // Network-first for HTML pages. cache:'no-cache' revalidates with the server
