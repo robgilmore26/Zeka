@@ -689,6 +689,14 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .cz-opt:disabled{cursor:default}
 .cz-switch{display:block;margin:14px auto 0;background:none;border:none;color:rgba(255,255,255,.45);font-size:13px;font-weight:700;cursor:pointer;text-decoration:underline}
 #cloze-drill .vd-input{margin-top:14px}
+.cz-focus{margin-top:16px}
+.cz-cue{font-family:var(--font);font-size:14px;font-weight:600;color:var(--text-3);white-space:nowrap}
+.vd-fb small.cz-why{color:var(--text-1);background:rgba(255,255,255,.06);border-radius:10px;padding:8px 10px;margin-top:8px;font-weight:600;line-height:1.4}
+.cz-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:360px}
+.cz-tag{font-size:12px;font-weight:700;color:var(--text-2);background:rgba(255,255,255,.08);padding:5px 10px;border-radius:999px;text-transform:capitalize}
+.cz-tag b{color:#fff;margin-left:2px}
+.cz-tag.ok{background:rgba(88,204,2,.16);color:var(--green)}
+.cz-tag.bad{background:rgba(255,75,75,.14);color:#FF9999}
 
 /* READING */
 .rd-lv{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin:18px 0 8px}
@@ -2124,7 +2132,7 @@ const V_SR=[
 {inf:'raditi',en:'to work',em:'💼',conj:{ja:'radim',ti:'radiš',on:'radi',mi:'radimo',vi:'radite',oni:'rade'}},
 {inf:'znati',en:'to know',em:'🧠',conj:{ja:'znam',ti:'znaš',on:'zna',mi:'znamo',vi:'znate',oni:'znaju'}},
 {inf:'videti',en:'to see',em:'👀',conj:{ja:'vidim',ti:'vidiš',on:'vidi',mi:'vidimo',vi:'vidite',oni:'vide'}},
-{inf:'jesti',en:'to eat',em:'🍽️',conj:{ja:'jedem',ti:'jedeš',on:'jede',mi:'jedemo',vi:'jedete',oni:'jedu'},pp:['jeo','jela']},
+{inf:'jesti',en:'to eat',em:'🍽️',conj:{ja:'jedem',ti:'jedeš',on:'jede',mi:'jedemo',vi:'jedete',oni:'jedu'},pp:['jeo','jela'],fu:'ješ'},
 {inf:'piti',en:'to drink',em:'🥤',conj:{ja:'pijem',ti:'piješ',on:'pije',mi:'pijemo',vi:'pijete',oni:'piju'}},
 {inf:'govoriti',en:'to speak',em:'🗣️',conj:{ja:'govorim',ti:'govoriš',on:'govori',mi:'govorimo',vi:'govorite',oni:'govore'}},
 {inf:'razumeti',en:'to understand',em:'💡',conj:{ja:'razumem',ti:'razumeš',on:'razume',mi:'razumemo',vi:'razumete',oni:'razumeju'}},
@@ -2204,7 +2212,7 @@ const V_SR=[
 {inf:'dati',en:'to give (once)',em:'🎁',pf:true,conj:{ja:'dam',ti:'daš',on:'da',mi:'damo',vi:'date',oni:'daju'}},
 {inf:'napisati',en:'to write (once)',em:'✍️',pf:true,conj:{ja:'napišem',ti:'napišeš',on:'napiše',mi:'napišemo',vi:'napišete',oni:'napišu'}},
 {inf:'pročitati',en:'to read (once)',em:'📕',pf:true,conj:{ja:'pročitam',ti:'pročitaš',on:'pročita',mi:'pročitamo',vi:'pročitate',oni:'pročitaju'}},
-{inf:'pojesti',en:'to eat (once)',em:'🍽️',pf:true,pp:['pojeo','pojela'],conj:{ja:'pojedem',ti:'pojedeš',on:'pojede',mi:'pojedemo',vi:'pojedete',oni:'pojedu'}},
+{inf:'pojesti',en:'to eat (once)',em:'🍽️',pf:true,pp:['pojeo','pojela'],fu:'poješ',conj:{ja:'pojedem',ti:'pojedeš',on:'pojede',mi:'pojedemo',vi:'pojedete',oni:'pojedu'}},
 {inf:'popiti',en:'to drink (once)',em:'🥤',pf:true,conj:{ja:'popijem',ti:'popiješ',on:'popije',mi:'popijemo',vi:'popijete',oni:'popiju'}},
 {inf:'naučiti',en:'to learn (once)',em:'🎓',pf:true,conj:{ja:'naučim',ti:'naučiš',on:'nauči',mi:'naučimo',vi:'naučite',oni:'nauče'}},
 {inf:'reći',en:'to say (once)',em:'🗣️',pf:true,pp:['rekao','rekla'],note:'Present forms are borrowed from kazati (kažem); reći itself lives in the past and future.',conj:{ja:'kažem',ti:'kažeš',on:'kaže',mi:'kažemo',vi:'kažete',oni:'kažu'}},
@@ -2749,6 +2757,166 @@ const READ_SR=[
  g:{"izvinite":"excuse me (polite)","da":"(question particle) — da li = is…? · also to/that — došao da popijem = came to have","li":"(question particle) — da li = is…?","je":"is · also it/her (acc. of ona) — Pročitala sam je = I read it","ovo":"this (neut.)","mesto":"seat, place","slobodno":"free (neut.)","jeste":"it is (emphatic yes)","izvolite":"go ahead, please (polite)","čekate":"you are waiting (čekati, 2nd pl. / polite)","nekoga":"someone (acc. of neko)","ne":"no · not","samo":"only, just","sam":"I am (past-tense auxiliary)","došao":"came (masc. participle of doći, pf.)","popijem":"I drink up (popiti, pf.) — da popijem = to have a drink","kafu":"coffee (acc. of kafa)","i":"and","malo":"a little","čitam":"I read (čitati)","odlična":"excellent (fem.)","knjiga":"book","pročitala":"read (fem. participle of pročitati, pf.)","prošle":"last (gen. fem. of prošli)","godine":"year (gen. of godina) — prošle godine = last year","kraj":"end, ending","me":"me (acc. of ja)","iznenadio":"surprised (masc. participle of iznenaditi, pf.)","nemojte":"don't (polite negative imperative)","mi":"to me (dat.)","reći":"to say, to tell (pf.)","kako":"how","se":"(reflexive) — završava se = it ends","završava":"ends (završavati se)","tek":"only, just (barely)","na":"on, at","pola":"half — na pola = halfway","neću":"I won't (negative future of hteti)","obećavam":"I promise (obećavati)","odakle":"from where","ste":"you are (2nd pl. / polite of biti)","imate":"you have (imati, 2nd pl. / polite)","blag":"mild, slight (masc.)","naglasak":"accent","iz":"from (+ gen.)","amerike":"America (gen. of Amerika)","ali":"but","već":"already — već dve godine = for two years now","dve":"two (fem.)","živim":"I live (živeti)","u":"in (+ loc.)","beogradu":"Belgrade (loc.)","učim":"I learn, I study (učiti)","srpski":"Serbian","odlično":"excellently, great","govorite":"you speak (govoriti, 2nd pl. / polite)","ja":"I","milica":"Milica (a name)","drago":"dear, glad — drago mi je = nice to meet you"}}
 ];
 
+// ═══════════════ GRAMMAR CLOZE BANK ═══════════════
+// One grammar point per sentence: g = loc acc gen dat ins voc past asp fut.
+// a = the answer (appears exactly once in sr), c = cue shown after the blank,
+// d = three hand-picked wrong options, w = the rule shown after answering.
+// Progress (st.czg) is keyed by id: APPEND ONLY, never reorder or renumber.
+const CLOZE_SR=[
+{id:1,lv:"A1",g:"loc",sr:"Živim u Beogradu.",a:"Beogradu",en:"I live in Belgrade.",c:"Beograd",d:["Beograd","Beograda","Beogradom"],w:"u + where? → locative"},
+{id:2,lv:"A1",g:"loc",sr:"Knjiga je na stolu.",a:"stolu",en:"The book is on the table.",c:"sto",d:["sto","stola","stolom"],w:"na + where? → locative"},
+{id:3,lv:"A1",g:"loc",sr:"Deca su u školi.",a:"školi",en:"The children are at school.",c:"škola",d:["školu","škola","školom"],w:"u + where? → locative (-a → -i)"},
+{id:4,lv:"A1",g:"loc",sr:"Radim u kancelariji.",a:"kancelariji",en:"I work in an office.",c:"kancelarija",d:["kancelariju","kancelarija","kancelarijom"],w:"u + where? → locative"},
+{id:5,lv:"A1",g:"loc",sr:"Mačka spava na krevetu.",a:"krevetu",en:"The cat sleeps on the bed.",c:"krevet",d:["krevet","kreveta","krevetom"],w:"na + where? → locative (-u)"},
+{id:6,lv:"A1",g:"loc",sr:"Sedim u kuhinji.",a:"kuhinji",en:"I am sitting in the kitchen.",c:"kuhinja",d:["kuhinju","kuhinja","kuhinjom"],w:"u + where? → locative"},
+{id:7,lv:"A2",g:"loc",sr:"Kupujem voće na pijaci.",a:"pijaci",en:"I buy fruit at the market.",c:"pijaca",d:["pijacu","pijaca","pijacom"],w:"na + where? → locative"},
+{id:8,lv:"A2",g:"loc",sr:"Ana je sada na poslu.",a:"poslu",en:"Ana is at work now.",c:"posao",d:["posao","posla","poslom"],w:"na poslu = at work: locative, and posao drops its -a- (posl-)"},
+{id:9,lv:"A2",g:"loc",sr:"Pričamo o filmu.",a:"filmu",en:"We are talking about the film.",c:"film",d:["film","filma","filmom"],w:"o + about → locative"},
+{id:10,lv:"A2",g:"loc",sr:"Razmišljam o tebi.",a:"tebi",en:"I am thinking about you.",c:"ti",d:["tebe","te","tobom"],w:"o + locative; ti → tebi"},
+{id:11,lv:"A2",g:"loc",sr:"Šetamo po gradu.",a:"gradu",en:"We are walking around the city.",c:"grad",d:["grad","grada","gradom"],w:"po + around / along → locative"},
+{id:12,lv:"A2",g:"loc",sr:"Slika visi na zidu.",a:"zidu",en:"The picture is hanging on the wall.",c:"zid",d:["zid","zida","zidom"],w:"na + where? → locative"},
+{id:13,lv:"A2",g:"loc",sr:"Auto je u garaži.",a:"garaži",en:"The car is in the garage.",c:"garaža",d:["garažu","garaža","garažom"],w:"u + where? → locative"},
+{id:14,lv:"B1",g:"loc",sr:"Ključevi su u torbi.",a:"torbi",en:"The keys are in the bag.",c:"torba",d:["torbu","torba","torbom"],w:"u + where? → locative"},
+{id:15,lv:"B1",g:"loc",sr:"Odmor smo proveli na moru.",a:"moru",en:"We spent the holiday at the seaside.",c:"more",d:["more","mora","morem"],w:"na + where? → locative (more → moru)"},
+{id:16,lv:"B1",g:"loc",sr:"Napisao je knjigu o Srbiji.",a:"Srbiji",en:"He wrote a book about Serbia.",c:"Srbija",d:["Srbiju","Srbija","Srbijom"],w:"o + about → locative"},
+{id:17,lv:"A1",g:"acc",sr:"Idem u školu.",a:"školu",en:"I am going to school.",c:"škola",d:["školi","škola","školom"],w:"u + where to? (motion) → accusative"},
+{id:18,lv:"A1",g:"acc",sr:"Stavi knjigu na sto.",a:"sto",en:"Put the book on the table.",c:"sto",d:["stolu","stola","stolom"],w:"na + where to? (motion) → accusative; inanimate masculine = nominative"},
+{id:19,lv:"A1",g:"acc",sr:"Pijem kafu.",a:"kafu",en:"I drink coffee.",c:"kafa",d:["kafa","kafe","kafom"],w:"direct object → accusative (-a → -u)"},
+{id:20,lv:"A1",g:"acc",sr:"Volim muziku.",a:"muziku",en:"I love music.",c:"muzika",d:["muzika","muzike","muzici"],w:"direct object → accusative (-a → -u)"},
+{id:21,lv:"A1",g:"acc",sr:"Vidim brata.",a:"brata",en:"I see my brother.",c:"brat",d:["brat","bratu","bratom"],w:"animate masculine object → accusative ends in -a"},
+{id:22,lv:"A1",g:"acc",sr:"Čitam knjigu.",a:"knjigu",en:"I am reading a book.",c:"knjiga",d:["knjiga","knjizi","knjige"],w:"direct object → accusative (-a → -u)"},
+{id:23,lv:"A2",g:"acc",sr:"Sutra putujemo u Italiju.",a:"Italiju",en:"Tomorrow we are travelling to Italy.",c:"Italija",d:["Italiji","Italija","Italijom"],w:"u + where to? (motion) → accusative"},
+{id:24,lv:"A2",g:"acc",sr:"Idemo na more.",a:"more",en:"We are going to the seaside.",c:"more",d:["moru","mora","morem"],w:"na + where to? (motion) → accusative"},
+{id:25,lv:"A2",g:"acc",sr:"Idem na posao.",a:"posao",en:"I am going to work.",c:"posao",d:["poslu","posla","poslom"],w:"na + where to? → accusative (= nominative for posao)"},
+{id:26,lv:"A2",g:"acc",sr:"Prolazimo kroz park.",a:"park",en:"We are walking through the park.",c:"park",d:["parku","parka","parkom"],w:"kroz + accusative"},
+{id:27,lv:"A2",g:"acc",sr:"Gledamo film.",a:"film",en:"We are watching a film.",c:"film",d:["filma","filmu","filmom"],w:"inanimate masculine object → accusative = nominative"},
+{id:28,lv:"A2",g:"acc",sr:"Čekam autobus.",a:"autobus",en:"I am waiting for the bus.",c:"autobus",d:["autobusa","autobusu","autobusom"],w:"čekati takes a direct object → accusative (inanimate = nominative)"},
+{id:29,lv:"A2",g:"acc",sr:"Zovem prijatelja.",a:"prijatelja",en:"I am calling a friend.",c:"prijatelj",d:["prijatelj","prijatelju","prijateljem"],w:"animate masculine object → accusative ends in -a"},
+{id:30,lv:"A2",g:"acc",sr:"Pozivam vas na večeru.",a:"vas",en:"I am inviting you to dinner.",c:"vi",d:["vama","vam","vi"],w:"pronoun object → accusative (vi → vas)"},
+{id:31,lv:"A2",g:"acc",sr:"Kupujem kuću na selu.",a:"kuću",en:"I am buying a house in the countryside.",c:"kuća",d:["kuća","kući","kuće"],w:"direct object → accusative (-a → -u)"},
+{id:32,lv:"B1",g:"acc",sr:"Ovo je poklon za mamu.",a:"mamu",en:"This is a present for mom.",c:"mama",d:["mami","mama","mame"],w:"za meaning \"for\" → accusative"},
+{id:33,lv:"B1",g:"acc",sr:"Imam sestru i dva brata.",a:"sestru",en:"I have a sister and two brothers.",c:"sestra",d:["sestra","sestre","sestri"],w:"direct object → accusative (-a → -u)"},
+{id:34,lv:"B1",g:"acc",sr:"Bacio je loptu kroz prozor.",a:"prozor",en:"He threw the ball through the window.",c:"prozor",d:["prozoru","prozora","prozorom"],w:"kroz + accusative"},
+{id:35,lv:"A1",g:"gen",sr:"Ja sam iz Amerike.",a:"Amerike",en:"I am from America.",c:"Amerika",d:["Ameriku","Americi","Amerika"],w:"iz + genitive"},
+{id:36,lv:"A1",g:"gen",sr:"Kafa bez šećera, molim.",a:"šećera",en:"Coffee without sugar, please.",c:"šećer",d:["šećer","šećeru","šećerom"],w:"bez + genitive"},
+{id:37,lv:"A1",g:"gen",sr:"Idem kod lekara.",a:"lekara",en:"I am going to the doctor's.",c:"lekar",d:["lekaru","lekar","lekarom"],w:"kod (at someone's) + genitive"},
+{id:38,lv:"A1",g:"gen",sr:"Stojim ispred kuće.",a:"kuće",en:"I am standing in front of the house.",c:"kuća",d:["kući","kuću","kuća"],w:"ispred + genitive"},
+{id:39,lv:"A2",g:"gen",sr:"Pas je ispod stola.",a:"stola",en:"The dog is under the table.",c:"sto",d:["stolu","sto","stolom"],w:"ispod + genitive"},
+{id:40,lv:"A2",g:"gen",sr:"Banka je pored pošte.",a:"pošte",en:"The bank is next to the post office.",c:"pošta",d:["pošti","poštu","pošta"],w:"pored + genitive"},
+{id:41,lv:"A2",g:"gen",sr:"Vidimo se posle posla.",a:"posla",en:"See you after work.",c:"posao",d:["poslu","posao","poslom"],w:"posle + genitive"},
+{id:42,lv:"A2",g:"gen",sr:"Operi ruke pre ručka.",a:"ručka",en:"Wash your hands before lunch.",c:"ručak",d:["ručku","ručak","ručkom"],w:"pre + genitive (ručak drops its -a-)"},
+{id:43,lv:"A2",g:"gen",sr:"Ovo je pismo od mame.",a:"mame",en:"This is a letter from mom.",c:"mama",d:["mami","mamu","mama"],w:"od + genitive"},
+{id:44,lv:"A2",g:"gen",sr:"Ostajem do petka.",a:"petka",en:"I am staying until Friday.",c:"petak",d:["petak","petku","petkom"],w:"do + genitive (petak drops its -a-)"},
+{id:45,lv:"A2",g:"gen",sr:"Lampa je iznad kreveta.",a:"kreveta",en:"The lamp is above the bed.",c:"krevet",d:["krevetu","krevet","krevetom"],w:"iznad + genitive"},
+{id:46,lv:"A2",g:"gen",sr:"Dolazim sa posla.",a:"posla",en:"I am coming from work.",c:"posao",d:["poslom","poslu","posao"],w:"sa meaning \"from\" → genitive; sa meaning \"with\" → instrumental"},
+{id:47,lv:"B1",g:"gen",sr:"Parkirao sam iza zgrade.",a:"zgrade",en:"I parked behind the building.",c:"zgrada",d:["zgradi","zgradu","zgrada"],w:"iza + genitive"},
+{id:48,lv:"B1",g:"gen",sr:"Živimo blizu centra.",a:"centra",en:"We live near the center.",c:"centar",d:["centru","centar","centrom"],w:"blizu + genitive (centar drops its -a-)"},
+{id:49,lv:"B1",g:"gen",sr:"Šetali smo oko jezera.",a:"jezera",en:"We walked around the lake.",c:"jezero",d:["jezeru","jezero","jezerom"],w:"oko + genitive"},
+{id:50,lv:"B1",g:"gen",sr:"Most preko reke je star.",a:"reke",en:"The bridge over the river is old.",c:"reka",d:["reku","reci","reka"],w:"preko + genitive"},
+{id:51,lv:"A1",g:"gen",sr:"Nemam vremena.",a:"vremena",en:"I don't have time.",c:"vreme",d:["vreme","vremenu","vremenom"],w:"nemati / nema + genitive"},
+{id:52,lv:"A1",g:"gen",sr:"Daj mi čašu vode.",a:"vode",en:"Give me a glass of water.",c:"voda",d:["vodu","voda","vodi"],w:"a glass / a kilo / a cup of → genitive"},
+{id:53,lv:"A2",g:"gen",sr:"Nema hleba u kući.",a:"hleba",en:"There is no bread in the house.",c:"hleb",d:["hleb","hlebu","hlebom"],w:"nema (there is no) + genitive"},
+{id:54,lv:"A2",g:"gen",sr:"Kupi kilo jabuka.",a:"jabuka",en:"Buy a kilo of apples.",c:"jabuke",d:["jabuke","jabukama","jabuku"],w:"quantity + plural noun → genitive plural"},
+{id:55,lv:"A2",g:"gen",sr:"Imam mnogo posla.",a:"posla",en:"I have a lot of work.",c:"posao",d:["posao","poslu","poslom"],w:"mnogo / malo + genitive"},
+{id:56,lv:"A2",g:"gen",sr:"Popij malo čaja.",a:"čaja",en:"Drink a little tea.",c:"čaj",d:["čaj","čaju","čajem"],w:"malo + genitive"},
+{id:57,lv:"A2",g:"gen",sr:"Imam dva brata.",a:"brata",en:"I have two brothers.",c:"brat",d:["brat","bratu","braće"],w:"2, 3, 4 + genitive singular"},
+{id:58,lv:"A2",g:"gen",sr:"U sobi su tri stola.",a:"stola",en:"There are three tables in the room.",c:"sto",d:["sto","stolovi","stolova"],w:"2, 3, 4 + genitive singular"},
+{id:59,lv:"A2",g:"gen",sr:"Nemam brata.",a:"brata",en:"I don't have a brother.",c:"brat",d:["brat","bratu","bratom"],w:"negation (nemam) → genitive"},
+{id:60,lv:"A2",g:"gen",sr:"Daj mi parče torte.",a:"torte",en:"Give me a piece of cake.",c:"torta",d:["tortu","torta","torti"],w:"a piece of → genitive"},
+{id:61,lv:"B1",g:"gen",sr:"Čekam već pet minuta.",a:"minuta",en:"I have been waiting five minutes already.",c:"minut",d:["minut","minuti","minutom"],w:"5 and up + genitive plural"},
+{id:62,lv:"B1",g:"gen",sr:"Ovde živi mnogo ljudi.",a:"ljudi",en:"Many people live here.",c:"ljudi",d:["ljudima","ljude","čovek"],w:"mnogo + genitive plural (ljudi)"},
+{id:63,lv:"A1",g:"dat",sr:"Dajem knjigu bratu.",a:"bratu",en:"I give the book to my brother.",c:"brat",d:["brata","brat","bratom"],w:"to whom? → dative (-u)"},
+{id:64,lv:"A2",g:"dat",sr:"Pišem pismo mami.",a:"mami",en:"I am writing a letter to mom.",c:"mama",d:["mamu","mama","mame"],w:"to whom? → dative (-a → -i)"},
+{id:65,lv:"A2",g:"dat",sr:"Pomažem prijatelju.",a:"prijatelju",en:"I am helping a friend.",c:"prijatelj",d:["prijatelja","prijatelj","prijateljem"],w:"pomagati takes the dative"},
+{id:66,lv:"A2",g:"dat",sr:"Idem ka centru.",a:"centru",en:"I am going toward the center.",c:"centar",d:["centra","centar","centrom"],w:"ka / prema + dative"},
+{id:67,lv:"A2",g:"dat",sr:"Ani se sviđa ovaj grad.",a:"Ani",en:"Ana likes this city.",c:"Ana",d:["Ana","Anu","Ane"],w:"sviđati se: the person who likes → dative"},
+{id:68,lv:"A2",g:"dat",sr:"Kupio sam cveće devojci.",a:"devojci",en:"I bought flowers for my girlfriend.",c:"devojka",d:["devojku","devojka","devojke"],w:"dative of -ka nouns: k → c (devojci)"},
+{id:69,lv:"A2",g:"dat",sr:"Telefoniram sestri.",a:"sestri",en:"I am phoning my sister.",c:"sestra",d:["sestru","sestra","sestre"],w:"telefonirati + dative"},
+{id:70,lv:"A2",g:"dat",sr:"Čestitam Marku rođendan.",a:"Marku",en:"I wish Marko a happy birthday.",c:"Marko",d:["Marka","Marko","Markom"],w:"čestitati (to someone) → dative"},
+{id:71,lv:"A2",g:"dat",sr:"Javi se baki.",a:"baki",en:"Get in touch with grandma.",c:"baka",d:["baku","baka","bake"],w:"javiti se + dative; baka → baki (family words keep the k)"},
+{id:72,lv:"B1",g:"dat",sr:"Okrenuo se prema moru.",a:"moru",en:"He turned toward the sea.",c:"more",d:["more","mora","morem"],w:"prema + dative"},
+{id:73,lv:"B1",g:"dat",sr:"Verujem tebi.",a:"tebi",en:"I believe you.",c:"ti",d:["tebe","ti","tobom"],w:"verovati + dative; ti → tebi"},
+{id:74,lv:"B1",g:"dat",sr:"Ovo pripada gradu.",a:"gradu",en:"This belongs to the city.",c:"grad",d:["grada","grad","gradom"],w:"pripadati + dative"},
+{id:75,lv:"A1",g:"ins",sr:"Pijem kafu sa mlekom.",a:"mlekom",en:"I drink coffee with milk.",c:"mleko",d:["mleko","mleka","mleku"],w:"sa meaning \"with\" → instrumental"},
+{id:76,lv:"A1",g:"ins",sr:"Idem u bioskop sa sestrom.",a:"sestrom",en:"I am going to the cinema with my sister.",c:"sestra",d:["sestru","sestra","sestri"],w:"sa meaning \"with\" → instrumental (-a → -om)"},
+{id:77,lv:"A2",g:"ins",sr:"Putujem vozom.",a:"vozom",en:"I travel by train.",c:"voz",d:["voz","vozu","voza"],w:"means of transport → instrumental, no preposition"},
+{id:78,lv:"A2",g:"ins",sr:"Idem tamo autobusom.",a:"autobusom",en:"I go there by bus.",c:"autobus",d:["autobus","autobusa","autobusu"],w:"means of transport → instrumental, no preposition"},
+{id:79,lv:"A2",g:"ins",sr:"Pišem olovkom.",a:"olovkom",en:"I write with a pencil.",c:"olovka",d:["olovku","olovka","olovci"],w:"tool → instrumental, no preposition"},
+{id:80,lv:"A2",g:"ins",sr:"Jedem supu kašikom.",a:"kašikom",en:"I eat soup with a spoon.",c:"kašika",d:["kašiku","kašika","kašici"],w:"tool → instrumental, no preposition"},
+{id:81,lv:"A2",g:"ins",sr:"Razgovaram sa profesorom.",a:"profesorom",en:"I am talking with the professor.",c:"profesor",d:["profesora","profesoru","profesor"],w:"sa meaning \"with\" → instrumental"},
+{id:82,lv:"A2",g:"ins",sr:"Bavim se sportom.",a:"sportom",en:"I do sports.",c:"sport",d:["sport","sporta","sportu"],w:"baviti se + instrumental"},
+{id:83,lv:"A2",g:"ins",sr:"Sedimo za stolom.",a:"stolom",en:"We are sitting at the table.",c:"sto",d:["sto","stolu","stola"],w:"za + where? (location) → instrumental"},
+{id:84,lv:"A2",g:"ins",sr:"Volim da šetam sa psom.",a:"psom",en:"I like walking with the dog.",c:"pas",d:["psa","pas","psu"],w:"sa meaning \"with\" → instrumental (pas → psom)"},
+{id:85,lv:"B1",g:"ins",sr:"Zadovoljan sam poslom.",a:"poslom",en:"I am satisfied with the job.",c:"posao",d:["posao","posla","poslu"],w:"zadovoljan + instrumental"},
+{id:86,lv:"B1",g:"ins",sr:"Čekam te pred bioskopom.",a:"bioskopom",en:"I'll wait for you in front of the cinema.",c:"bioskop",d:["bioskop","bioskopu","bioskopa"],w:"pred + location → instrumental"},
+{id:87,lv:"B1",g:"ins",sr:"Pas leži pod drvetom.",a:"drvetom",en:"The dog is lying under the tree.",c:"drvo",d:["drvo","drveta","drvetu"],w:"pod + location → instrumental (ispod takes the genitive)"},
+{id:88,lv:"A1",g:"voc",sr:"Dobar dan, gospodine!",a:"gospodine",en:"Good day, sir!",c:"gospodin",d:["gospodin","gospodina","gospodinu"],w:"addressing someone → vocative (-e)"},
+{id:89,lv:"A1",g:"voc",sr:"Zdravo, Jovane!",a:"Jovane",en:"Hi, Jovan!",c:"Jovan",d:["Jovan","Jovana","Jovanu"],w:"addressing someone → vocative (-e)"},
+{id:90,lv:"A2",g:"voc",sr:"Dragi prijatelju, hvala ti na svemu.",a:"prijatelju",en:"Dear friend, thank you for everything.",c:"prijatelj",d:["prijatelj","prijatelja","prijateljem"],w:"vocative: -elj → -elju"},
+{id:91,lv:"A2",g:"voc",sr:"Bože, kakva gužva!",a:"Bože",en:"God, what a crowd!",c:"Bog",d:["Bog","Boga","Bogu"],w:"Bog → Bože (vocative: g → ž)"},
+{id:92,lv:"A2",g:"voc",sr:"Profesore, imam pitanje.",a:"Profesore",en:"Professor, I have a question.",c:"profesor",d:["Profesor","Profesora","Profesoru"],w:"vocative: -or → -ore"},
+{id:93,lv:"B1",g:"voc",sr:"Izvini, druže!",a:"druže",en:"Sorry, mate!",c:"drug",d:["drug","druga","drugu"],w:"drug → druže (vocative: g → ž)"},
+{id:94,lv:"A1",g:"past",sr:"Ana je došla kući.",a:"došla",en:"Ana came home.",c:"doći",d:["došao","došli","došlo"],w:"feminine subject → -la; doći → došao / došla"},
+{id:95,lv:"A1",g:"past",sr:"Marko je bio u Beogradu.",a:"bio",en:"Marko was in Belgrade.",c:"biti",d:["bila","bili","bilo"],w:"masculine singular → -o"},
+{id:96,lv:"A1",g:"past",sr:"Mi smo gledali film.",a:"gledali",en:"We watched a film.",c:"gledati",d:["gledao","gledala","gledale"],w:"mi (men or mixed) → -li"},
+{id:97,lv:"A1",g:"past",sr:"Gde ste bili juče?",a:"bili",en:"Where were you yesterday?",c:"biti",d:["bio","bila","bilo"],w:"vi (plural or polite) → -li"},
+{id:98,lv:"A2",g:"past",sr:"Devojke su pevale celo veče.",a:"pevale",en:"The girls sang all evening.",c:"pevati",d:["pevali","pevala","pevao"],w:"feminine plural → -le"},
+{id:99,lv:"A2",g:"past",sr:"Dete je plakalo.",a:"plakalo",en:"The child cried.",c:"plakati",d:["plakao","plakala","plakali"],w:"neuter singular (dete) → -lo"},
+{id:100,lv:"A2",g:"past",sr:"Moja mama je kuvala ručak.",a:"kuvala",en:"My mom cooked lunch.",c:"kuvati",d:["kuvao","kuvali","kuvalo"],w:"feminine singular → -la"},
+{id:101,lv:"A2",g:"past",sr:"Oni su živeli u Novom Sadu.",a:"živeli",en:"They lived in Novi Sad.",c:"živeti",d:["živeo","živela","živele"],w:"masculine or mixed plural → -li"},
+{id:102,lv:"A2",g:"past",sr:"Jesi li jela, Ana?",a:"jela",en:"Have you eaten, Ana?",c:"jesti",d:["jeo","jeli","jelo"],w:"talking to a woman → -la; jesti → jeo / jela"},
+{id:103,lv:"A2",g:"past",sr:"Petar je išao na posao peške.",a:"išao",en:"Petar went to work on foot.",c:"ići",d:["išla","išli","išlo"],w:"ići → išao (m) / išla (f)"},
+{id:104,lv:"A2",g:"past",sr:"Sestra mi je rekla istinu.",a:"rekla",en:"My sister told me the truth.",c:"reći",d:["rekao","rekli","reklo"],w:"reći → rekao / rekla"},
+{id:105,lv:"A2",g:"past",sr:"Moj brat je mogao da dođe.",a:"mogao",en:"My brother was able to come.",c:"moći",d:["mogla","mogli","moglo"],w:"moći → mogao / mogla"},
+{id:106,lv:"A2",g:"past",sr:"Ona je spavala do podne.",a:"spavala",en:"She slept until noon.",c:"spavati",d:["spavao","spavali","spavalo"],w:"feminine singular → -la"},
+{id:107,lv:"B1",g:"past",sr:"Sunce je sijalo ceo dan.",a:"sijalo",en:"The sun shone all day.",c:"sijati",d:["sijao","sijala","sijali"],w:"neuter singular (sunce) → -lo"},
+{id:108,lv:"B1",g:"past",sr:"Pismo je stiglo juče.",a:"stiglo",en:"The letter arrived yesterday.",c:"stići",d:["stigao","stigla","stigli"],w:"neuter singular → -lo; stići → stigao / stiglo"},
+{id:109,lv:"B1",g:"past",sr:"Deca su se igrala u parku.",a:"igrala",en:"The children played in the park.",c:"igrati se",d:["igrali","igrale","igrao"],w:"deca takes su + -la (neuter plural form)"},
+{id:110,lv:"B1",g:"past",sr:"Vrata su se otvorila.",a:"otvorila",en:"The door opened.",c:"otvoriti se",d:["otvorili","otvorile","otvorio"],w:"vrata is neuter plural → -la"},
+{id:111,lv:"B1",g:"past",sr:"Knjige su pale sa police.",a:"pale",en:"The books fell off the shelf.",c:"pasti",d:["pali","pala","pao"],w:"feminine plural → -le; pasti → pao / pala"},
+{id:112,lv:"A2",g:"asp",sr:"Svaki dan čitam novine.",a:"čitam",en:"I read the paper every day.",c:"čitati / pročitati",d:["pročitam","pročitao","čitao"],w:"repeated action (svaki dan) → imperfective"},
+{id:113,lv:"A2",g:"asp",sr:"Juče sam pročitao celu knjigu.",a:"pročitao",en:"Yesterday I read the whole book.",c:"čitati / pročitati",d:["čitao","pročitam","čitam"],w:"completed, with a result (celu knjigu) → perfective"},
+{id:114,lv:"A2",g:"asp",sr:"Šta radiš sada?",a:"radiš",en:"What are you doing now?",c:"raditi / uraditi",d:["uradiš","radio","uradio"],w:"happening right now → imperfective"},
+{id:115,lv:"A2",g:"asp",sr:"Jesi li uradio domaći?",a:"uradio",en:"Have you done your homework?",c:"raditi / uraditi",d:["radio","uradiš","radiš"],w:"finished, with a result → perfective"},
+{id:116,lv:"A2",g:"asp",sr:"Obično kupujem hleb u pekari.",a:"kupujem",en:"I usually buy bread at the bakery.",c:"kupovati / kupiti",d:["kupim","kupio","kupovao"],w:"habit (obično) → imperfective"},
+{id:117,lv:"A2",g:"asp",sr:"Moram da kupim hleb.",a:"kupim",en:"I have to buy bread.",c:"kupovati / kupiti",d:["kupujem","kupio","kupovao"],w:"one specific action after moram da → perfective present"},
+{id:118,lv:"A2",g:"asp",sr:"Upravo dolazi autobus.",a:"dolazi",en:"The bus is arriving right now.",c:"dolaziti / doći",d:["dođe","došao","dolazio"],w:"in progress right now → imperfective"},
+{id:119,lv:"A2",g:"asp",sr:"Molim te, zatvori prozor.",a:"zatvori",en:"Please close the window.",c:"zatvarati / zatvoriti",d:["zatvaraj","zatvorio","zatvara"],w:"one-time request → perfective imperative"},
+{id:120,lv:"A2",g:"asp",sr:"Ne otvaraj vrata nikome!",a:"otvaraj",en:"Don't open the door to anyone!",c:"otvarati / otvoriti",d:["otvori","otvorio","otvara"],w:"negative commands usually take the imperfective"},
+{id:121,lv:"A2",g:"asp",sr:"Uvek zaboravljam ključeve.",a:"zaboravljam",en:"I always forget my keys.",c:"zaboravljati / zaboraviti",d:["zaboravim","zaboravio","zaboravljao"],w:"always (repeated) → imperfective"},
+{id:122,lv:"A2",g:"asp",sr:"Opet sam zaboravio ključeve!",a:"zaboravio",en:"I forgot my keys again!",c:"zaboravljati / zaboraviti",d:["zaboravljao","zaboravim","zaboravljam"],w:"one completed event → perfective"},
+{id:123,lv:"B1",g:"asp",sr:"Kad dođeš, zovi me.",a:"dođeš",en:"When you arrive, call me.",c:"dolaziti / doći",d:["dolaziš","došao","dolazio"],w:"one future event after kad → perfective present"},
+{id:124,lv:"B1",g:"asp",sr:"Ceo dan sam učio za ispit.",a:"učio",en:"I studied all day for the exam.",c:"učiti / naučiti",d:["naučio","učim","naučim"],w:"duration (ceo dan) → imperfective"},
+{id:125,lv:"B1",g:"asp",sr:"Konačno sam naučio sve reči.",a:"naučio",en:"I finally learned all the words.",c:"učiti / naučiti",d:["učio","naučim","učim"],w:"result achieved (konačno, sve) → perfective"},
+{id:126,lv:"B1",g:"asp",sr:"Dok sam kuvao, slušao sam radio.",a:"kuvao",en:"While I was cooking, I listened to the radio.",c:"kuvati / skuvati",d:["skuvao","kuvam","skuvam"],w:"dok (while) → ongoing → imperfective"},
+{id:127,lv:"B1",g:"asp",sr:"Kad sam skuvao ručak, pozvao sam goste.",a:"skuvao",en:"When I had cooked lunch, I called the guests.",c:"kuvati / skuvati",d:["kuvao","skuvam","kuvam"],w:"finished before the next event → perfective"},
+{id:128,lv:"B1",g:"asp",sr:"Sutra ću ti poslati poruku.",a:"poslati",en:"I'll send you a message tomorrow.",c:"slati / poslati",d:["slati","pošaljem","šaljem"],w:"one message, completed → perfective"},
+{id:129,lv:"B1",g:"asp",sr:"Svako jutro mu šaljem poruku.",a:"šaljem",en:"I send him a message every morning.",c:"slati / poslati",d:["pošaljem","poslao","slao"],w:"svako jutro (repeated) → imperfective"},
+{id:130,lv:"A1",g:"fut",sr:"Sutra ću raditi.",a:"ću",en:"Tomorrow I will work.",c:"ja",d:["će","ćeš","ćemo"],w:"ja → ću"},
+{id:131,lv:"A1",g:"fut",sr:"Ti ćeš doći, zar ne?",a:"ćeš",en:"You will come, won't you?",c:"ti",d:["ću","će","ćete"],w:"ti → ćeš"},
+{id:132,lv:"A1",g:"fut",sr:"Ona će kupiti hleb.",a:"će",en:"She will buy bread.",c:"ona",d:["ćemo","ću","ćeš"],w:"on / ona / ono → će"},
+{id:133,lv:"A1",g:"fut",sr:"Radiću sutra od kuće.",a:"Radiću",en:"I'll work from home tomorrow.",c:"raditi · ja",d:["Radim","Radio","Radićeš"],w:"verb first: raditi + ću → radiću (drop the -ti)"},
+{id:134,lv:"A2",g:"fut",sr:"Mi ćemo putovati vozom.",a:"ćemo",en:"We will travel by train.",c:"mi",d:["ćete","će","ću"],w:"mi → ćemo"},
+{id:135,lv:"A2",g:"fut",sr:"Da li ćete doći na žurku?",a:"ćete",en:"Will you come to the party?",c:"vi",d:["ćemo","ćeš","će"],w:"vi → ćete"},
+{id:136,lv:"A2",g:"fut",sr:"Oni će stići uveče.",a:"će",en:"They will arrive in the evening.",c:"oni",d:["ću","ćemo","ćete"],w:"oni → će (same as on / ona)"},
+{id:137,lv:"A2",g:"fut",sr:"Kad ćeš doći?",a:"ćeš",en:"When will you come?",c:"ti",d:["ću","će","ćete"],w:"question word first, then the auxiliary"},
+{id:138,lv:"A2",g:"fut",sr:"Sutra ćemo ići na more.",a:"ćemo",en:"Tomorrow we will go to the seaside.",c:"mi",d:["ćete","će","ćeš"],w:"mi → ćemo"},
+{id:139,lv:"A2",g:"fut",sr:"Videćemo se sutra!",a:"Videćemo",en:"See you tomorrow!",c:"videti · mi",d:["Vidimo","Videće","Videćete"],w:"videti + ćemo → videćemo"},
+{id:140,lv:"A2",g:"fut",sr:"Biću kod kuće posle osam.",a:"Biću",en:"I'll be home after eight.",c:"biti · ja",d:["Bio","Bićeš","Sam"],w:"biti + ću → biću"},
+{id:141,lv:"A2",g:"fut",sr:"Pisaćeš mi?",a:"Pisaćeš",en:"Will you write to me?",c:"pisati · ti",d:["Pišeš","Pisaću","Pisao"],w:"pisati + ćeš → pisaćeš"},
+{id:142,lv:"A2",g:"fut",sr:"Ići ću u prodavnicu.",a:"Ići",en:"I'll go to the shop.",c:"ići · ja",d:["Idem","Ide","Išao"],w:"-ći verbs stay two words: ići ću, doći ću, moći ću"},
+{id:143,lv:"A2",g:"fut",sr:"Javiću ti se sutra.",a:"Javiću",en:"I'll get in touch with you tomorrow.",c:"javiti se · ja",d:["Javim","Javio","Javiće"],w:"javiti + ću → javiću; se comes after ti"},
+{id:144,lv:"A2",g:"fut",sr:"Ješćemo u restoranu.",a:"Ješćemo",en:"We'll eat at the restaurant.",c:"jesti · mi",d:["Jedemo","Ješćete","Jeli"],w:"jesti + ćemo → ješćemo (st + ć → šć)"},
+{id:145,lv:"A2",g:"fut",sr:"Ja neću doći na večeru.",a:"neću",en:"I won't come to dinner.",c:"ja · not",d:["nećeš","neće","ne ću"],w:"ne + ću → neću, written as one word"},
+{id:146,lv:"B1",g:"fut",sr:"Doći ćemo sutra uveče.",a:"ćemo",en:"We'll come tomorrow evening.",c:"mi",d:["ćete","će","ću"],w:"-ći verbs stay two words: doći ćemo"},
+{id:147,lv:"B1",g:"fut",sr:"Neću moći da dođem.",a:"moći",en:"I won't be able to come.",c:"moći",d:["mogu","mogao","moću"],w:"neću + infinitive; -ći verbs never merge (no \"moću\")"},
+{id:148,lv:"B1",g:"fut",sr:"Ona neće raditi u subotu.",a:"neće",en:"She won't work on Saturday.",c:"ona · not",d:["neću","nećemo","ne će"],w:"on / ona → neće"},
+{id:149,lv:"B1",g:"fut",sr:"Hoćeš li doći?",a:"Hoćeš",en:"Will you come?",c:"ti · question",d:["Ćeš","Hoću","Hoće"],w:"yes / no question: long form first → hoćeš li …"},
+{id:150,lv:"B1",g:"fut",sr:"Hoće li padati kiša?",a:"Hoće",en:"Will it rain?",c:"question",d:["Će","Hoćeš","Hoćemo"],w:"yes / no question: hoće li …"},
+{id:151,lv:"B1",g:"fut",sr:"Ja ću da učim srpski.",a:"učim",en:"I'm going to study Serbian.",c:"učiti · ja",d:["učiti","učio","uči"],w:"ću da + present is common in Serbia: ću da učim"},
+{id:152,lv:"B1",g:"fut",sr:"Mislim da će padati kiša.",a:"će",en:"I think it will rain.",c:"it",d:["ću","ćeš","ćemo"],w:"impersonal (rain) → će"}
+];
+
 // ═══════════════ LANGUAGE SYSTEM ═══════════════
 const LANG_DATA={
   sr:{name:'Serbian',flag:'rs',code:'sr',units:U_SR},
@@ -3250,7 +3418,7 @@ function getStateData(){
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
     fcNewToday:st.fcNewToday,fcReviewedToday:st.fcReviewedToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
     sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate,
-    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today};
+    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
@@ -3260,7 +3428,9 @@ function applyStateData(p){
   st.fcReviewedToday=p.fcReviewedToday||0;
   st.fcSourceMode=p.fcSourceMode||'all';
   st.sentDoneToday=p.sentDoneToday||[];st.sentDoneDate=p.sentDoneDate||'';
-  st.vbTense=p.vbTense==='past'?'past':'present';st.clozeMode=p.clozeMode==='type'?'type':'tap';
+  st.vbTense=['past','future'].includes(p.vbTense)?p.vbTense:'present';st.clozeMode=p.clozeMode==='type'?'type':'tap';
+  st.czFocus=['cases','verbs','future'].includes(p.czFocus)?p.czFocus:'mixed';
+  st.czg=(p.czg&&typeof p.czg==='object')?p.czg:{};
   st.readDone=Array.isArray(p.readDone)?p.readDone:[];
   st.today=(p.today&&typeof p.today==='object')?p.today:{d:'',m:0,c:0,r:0};
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},p.firsts||{});
@@ -3572,7 +3742,7 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
   fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
-  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},
+  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -3942,6 +4112,25 @@ function verbPastRows(v){
   return[['Ja (m)','sam'+se,p.m],['Ti (f)','si'+se,p.f],['Ono',p.refl?'se':'je',p.n],['Mi','smo'+se,p.mp],['Vi','ste'+se,p.mp],['One','su'+se,p.fp]];
 }
 
+// ═══════════════ FUTURE TENSE (futur I) ═══════════════
+// Auxiliary ću/ćeš/će/ćemo/ćete/će. When the verb comes first (pronoun dropped)
+// an infinitive in -ti merges with it: raditi → radiću. Infinitives in -ći never
+// merge: ići ću. fu overrides the merged stem where sound changes apply
+// (jesti → ješću). Reflexive se goes last: budiću se, obući ću se.
+const FUT_AUX=['ću','ćeš','će','ćemo','ćete','će'];
+function verbFuture(v){
+  const refl=/ se$/.test(v.inf);
+  const inf=v.inf.replace(/ se$/,'');
+  const se=refl?' se':'';
+  if(/ći$/.test(inf))return{forms:FUT_AUX.map(a=>inf+' '+a+se),merged:false,refl};
+  const stem=v.fu||inf.replace(/ti$/,'');
+  return{forms:FUT_AUX.map(a=>stem+a+se),merged:true,refl};
+}
+function verbFutureRows(v){
+  const fu=verbFuture(v);
+  return ['(ja)','(ti)','(on/ona)','(mi)','(vi)','(oni)'].map((l,i)=>[l,fu.forms[i]]);
+}
+
 function casePrefix(n){
   const forms=Object.values(n.cases);
   let pre=forms[0];
@@ -4180,21 +4369,39 @@ function czItems(){
 }
 // Levels a learner is ready for, from how much vocabulary they have reviewed
 function czLevelsAllowed(){const n=learnedWordCount();return n<150?['A1']:n<400?['A1','A2']:['A1','A2','B1','B2','C1'];}
-// Weighted sample: sentences built on words you already review count ×3, and
-// +2 more when that card is weak. One item per source sentence.
-function buildClozeSession(n){
-  const allowed=czLevelsAllowed();
-  let pool=czItems().filter(it=>allowed.includes(it.lv));
-  if(pool.length<n)pool=czItems();
-  const weighted=pool.map(it=>{
-    let w=1;
-    if(it.wordId!=null){
-      const c=st.fc[fcKey(it.wordId,'se')]||st.fc[fcKey(it.wordId,'es')];
-      if(c&&(c.due!==0||c.reps>0)){w=3;if((c.lapses||0)>=2)w+=2;}
-    }
-    return{it,w};
-  });
-  const out=[],used=new Set();
+
+// Grammar items (CLOZE_SR) in the same shape as the vocabulary items, plus
+// g (grammar tag), cue, own wrong options and the rule line.
+const CZ_TAG_LABEL={loc:'locative',acc:'accusative',gen:'genitive',dat:'dative',ins:'instrumental',voc:'vocative',past:'past tense',asp:'aspect',fut:'future'};
+const CZ_GROUPS={cases:['loc','acc','gen','dat','ins','voc'],verbs:['past','asp'],future:['fut']};
+let _CZG_ITEMS=null,_CZG_LANG=null;
+function czGrammarItems(){
+  if(_CZG_ITEMS&&_CZG_LANG===curLang)return _CZG_ITEMS;
+  const bank=curLang==='sr'&&typeof CLOZE_SR!=='undefined'?CLOZE_SR:[];
+  _CZG_ITEMS=bank.map(x=>({sr:x.sr,en:x.en,answer:x.a,lv:x.lv,focus:CZ_TAG_LABEL[x.g]||x.g,g:x.g,cue:x.c,opts:x.d,why:x.w,wordId:null,src:'g'+x.id}));
+  _CZG_LANG=curLang;
+  return _CZG_ITEMS;
+}
+// Vocabulary items: sentences built on words you already review count ×3, and
+// +2 more when that card is weak.
+function _czVocabWeight(it){
+  if(it.wordId==null)return 1;
+  const c=st.fc[fcKey(it.wordId,'se')]||st.fc[fcKey(it.wordId,'es')];
+  if(c&&(c.due!==0||c.reps>0))return 3+((c.lapses||0)>=2?2:0);
+  return 1;
+}
+// Grammar items: unseen 2, last answer wrong 4, right once 1, right twice+ 0.35 —
+// a missed rule keeps coming back, a mastered one fades.
+function _czGrammarWeight(it){
+  const r=(st.czg||{})[it.src];
+  if(!r||!r.n)return 2;
+  return r.ok===0?4:r.ok===1?1:0.35;
+}
+// Weighted sample without replacement, one item per source sentence.
+function _czSample(pool,n,weightFn,used){
+  used=used||new Set();
+  const weighted=pool.filter(it=>!used.has(it.src)).map(it=>({it,w:weightFn(it)}));
+  const out=[];
   while(out.length<n&&weighted.length){
     const total=weighted.reduce((a,x)=>a+x.w,0);
     let r=Math.random()*total,i=0;
@@ -4204,6 +4411,23 @@ function buildClozeSession(n){
     used.add(pick.src);out.push({...pick});
   }
   return out;
+}
+// focus: 'mixed' (about 60% grammar, the rest vocabulary in context),
+// 'cases', 'verbs' (past & aspect) or 'future'. Level-gated, widening to the
+// whole group when too few items are at the learner's level.
+function buildClozeSession(n,focus){
+  const allowed=czLevelsAllowed();
+  const atLevel=(pool,k)=>{const lv=pool.filter(it=>allowed.includes(it.lv));return lv.length>=k?lv:pool;};
+  const gram=czGrammarItems();
+  if(focus&&focus!=='mixed'&&CZ_GROUPS[focus]){
+    const pool=gram.filter(it=>CZ_GROUPS[focus].includes(it.g));
+    return _czSample(atLevel(pool,n),n,_czGrammarWeight);
+  }
+  const used=new Set();
+  const nG=gram.length?Math.round(n*0.6):0;
+  const g=_czSample(atLevel(gram,nG),nG,_czGrammarWeight,used);
+  const v=_czSample(atLevel(czItems(),n-g.length),n-g.length,_czVocabWeight,used);
+  return S.sh([...g,...v]);
 }
 // Three wrong options that target the grammar point: other case forms of the
 // same noun, other persons of the same verb (or genders of its participle),
@@ -4248,7 +4472,8 @@ function _sxIndex(){
   VERBS.forEach(v=>{
     const partner=ASP[v.inf]||Object.keys(ASP).find(k=>ASP[k]===v.inf)||'';
     const pp=verbPast(v);
-    const alt=[partner,pp.m,pp.f,...Object.values(v.conj||{})].filter(Boolean).map(_sxNorm).flatMap(t=>t.split(/\s+/)).filter(Boolean);
+    const fu=verbFuture(v);
+    const alt=[partner,pp.m,pp.f,fu.merged?fu.forms[0].split(' ')[0]:'',...Object.values(v.conj||{})].filter(Boolean).map(_sxNorm).flatMap(t=>t.split(/\s+/)).filter(Boolean);
     idx.push({type:'verb',verb:v,source:v.inf,english:v.en,normSource:_sxNorm(v.inf),normEnglish:_sxNorm(v.en),alt});
   });
   return idx;
@@ -4655,7 +4880,7 @@ finishFcSession(){
   }
   let clozeBtn='';
   if(curLang==='sr'&&typeof czItems==='function'&&czItems().length>=10){
-    clozeBtn='<button class="btn-cta purple sm" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'cloze\');S.startClozeSession(10);},50)">✏️ Practice in context</button>';
+    clozeBtn='<button class="btn-cta purple sm" onclick="S.exitFc();setTimeout(()=>{S.setLearnMode(\'cloze\');S.startClozeSession(10,\'mixed\');},50)">✏️ Practice in context</button>';
   }
   const left=fcDueBreakdown().all.length;
   if(left>0){
@@ -4702,9 +4927,10 @@ renderVerbHome(){
   h+='<div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">Verb Conjugation</div>';
   const tense=st.vbTense||'present';
   h+='<div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:10px">'+VERBS.length+' verbs</div>';
-  h+='<div class="seg-toggle" style="margin:0 auto 14px;max-width:260px">';
+  h+='<div class="seg-toggle" style="margin:0 auto 14px;max-width:300px">';
   h+='<button class="seg-btn'+(tense==='present'?' seg-active':'')+'" onclick="S.setVerbTense(\'present\')">Present</button>';
   h+='<button class="seg-btn'+(tense==='past'?' seg-active':'')+'" onclick="S.setVerbTense(\'past\')">Past</button>';
+  h+='<button class="seg-btn'+(tense==='future'?' seg-active':'')+'" onclick="S.setVerbTense(\'future\')">Future</button>';
   h+='</div>';
   h+='<div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">';
   [3,5,10].forEach(n=>{
@@ -4742,7 +4968,7 @@ _vbFilter:'all',
 setVerbFilter(k){this._vbFilter=k;this.renderVerbHome();},
 
 setVerbTense(t){
-  st.vbTense=t==='past'?'past':'present';save();
+  st.vbTense=['past','future'].includes(t)?t:'present';save();
   this.renderVerbHome();
 },
 
@@ -4765,6 +4991,7 @@ renderVerbPhase(){
   document.getElementById('vd-count').textContent=(st.vbIdx+1)+' / '+st.vbVerbs.length;
   if(st.vbPhase===1){this.renderVerbP1(v);}
   else if((st.vbTense||'present')==='past'){this.renderVerbPast(v);}
+  else if(st.vbTense==='future'){this.renderVerbFuture(v);}
   else{this.renderVerbP2(v);}
 },
 
@@ -4873,6 +5100,35 @@ renderVerbPast(v){
   this._wireVerbRows(rows.length);
 },
 
+// Future: the pronoun is dropped (rows read "(ja)"), which is exactly when the
+// verb merges with the auxiliary — so the learner types the whole form.
+renderVerbFuture(v){
+  const fu=verbFuture(v);
+  const rows=verbFutureRows(v);
+  const inf=v.inf.replace(/ se$/,'');
+  let h='<div class="vd-phase">';
+  h+='<div class="vd-prompt">Future: '+v.em+' '+esc(v.inf)+(v.pf?' <span class="vd-pf">pf</span>':'')+' ('+esc(v.en)+')</div>';
+  // With the pronoun the clitics cluster after it: "Ja ću se buditi" (never "Ja ću buditi se")
+  const withPron='Ja ću '+(fu.refl?'se ':'')+esc(inf);
+  h+='<div class="vd-note">'+(fu.merged
+    ?'Pronoun dropped, so the verb merges: '+esc(fu.forms[0])+(v.fu?' · irregular stem':'')
+    :'-ći verbs never merge: '+esc(fu.forms[0]))+'<br>With the pronoun: '+withPron+'</div>';
+  h+='<div class="vd-conj">';
+  rows.forEach((r,i)=>{
+    const alt=fu.refl?r[1].replace(/ se$/,''):'';
+    h+='<div class="vd-row">';
+    h+='<span class="vd-pronoun">'+esc(r[0])+'</span>';
+    h+='<input class="vd-suffix" id="vd-c'+i+'" data-answer="'+esc(r[1])+'" data-full="'+esc(r[1])+'"'+(alt?' data-alt="'+esc(alt)+'"':'')+' placeholder="'+esc(r[1].charAt(0))+'..." autocomplete="off" autocapitalize="off" spellcheck="false">';
+    h+='</div>';
+  });
+  h+='</div>';
+  h+=srKeysHtml();
+  h+='<button class="vd-next" id="vd-p2-done" style="display:none" onclick="S.nextVerb()">Next Verb</button>';
+  h+='</div>';
+  document.getElementById('vd-body').innerHTML=h;
+  this._wireVerbRows(rows.length);
+},
+
 // Shared by the present and past conjugation phases. Checking is
 // diacritic-tolerant (normSR); the input is then shown with the correct spelling.
 _wireVerbRows(n){
@@ -4882,9 +5138,9 @@ _wireVerbRows(n){
       if(el.classList.contains('correct')||el.classList.contains('wrong'))return;
       const val=normSR(el.value);
       if(!val)return;
-      const ans=normSR(el.dataset.answer),full=normSR(el.dataset.full);
+      const ans=normSR(el.dataset.answer),full=normSR(el.dataset.full),alt=el.dataset.alt?normSR(el.dataset.alt):null;
       st.vbTotal++;
-      if(val===ans||val===full){st.vbCorrect++;el.classList.add('correct');sCl();}
+      if(val===ans||val===full||(alt&&val===alt)){st.vbCorrect++;el.classList.add('correct');sCl();}
       else{el.classList.add('wrong');}
       el.value=el.dataset.answer;
       el.disabled=true;
@@ -5247,12 +5503,20 @@ exitReading(){sCl();this.goHome();this.setLearnMode('reading');},
 renderClozeHome(){
   const el=document.getElementById('cloze-home');
   if(curLang!=='sr'){el.innerHTML='<div class="empty-state">'+zekaHtml('Cloze is only available for Serbian right now.')+'</div>';return;}
-  const items=czItems(),allowed=czLevelsAllowed();
-  const inLevel=items.filter(i=>allowed.includes(i.lv)).length;
-  const mode=st.clozeMode||'tap';
+  const items=czItems(),gram=czGrammarItems();
+  const mode=st.clozeMode||'tap',focus=st.czFocus||'mixed';
   let h='<div class="cz-hero"><div class="cz-hero-i">✏️</div><div class="cz-hero-t">Cloze</div>';
   h+='<div class="cz-hero-d">A Serbian sentence with one word missing. Case endings, verb forms and prepositions — the parts a flashcard can\'t test.</div>';
-  h+='<div class="cz-hero-n">'+inLevel+' sentences at your level · '+items.length+' in total</div></div>';
+  h+='<div class="cz-hero-n">'+gram.length+' grammar sentences · '+items.length+' vocabulary sentences</div></div>';
+  const inGroup=k=>gram.filter(it=>CZ_GROUPS[k].includes(it.g)).length;
+  h+='<div class="sent-lv-row cz-focus">';
+  [['mixed','Mixed',gram.length+items.length],['cases','Cases',inGroup('cases')],['verbs','Past & aspect',inGroup('verbs')],['future','Future',inGroup('future')]].forEach(([k,l,c])=>{
+    h+='<button class="sent-lv-chip'+(focus===k?' act':'')+'" onclick="S.setClozeFocus(\''+k+'\')">'+l+'<span class="sent-lv-n">'+c+'</span></button>';
+  });
+  h+='</div>';
+  const seen=Object.keys(st.czg||{}).filter(k=>(st.czg[k]||{}).n).length;
+  const shaky=Object.keys(st.czg||{}).filter(k=>(st.czg[k]||{}).n&&st.czg[k].ok===0).length;
+  if(seen)h+='<div class="cz-hero-n" style="margin-top:8px">'+seen+' grammar sentences practiced'+(shaky?' · '+shaky+' to revisit':'')+'</div>';
   h+='<div class="cz-mode"><span class="cz-mode-l">Answer by</span><div class="seg-toggle" style="margin:0;flex:1;max-width:220px">';
   h+='<button class="seg-btn'+(mode==='tap'?' seg-active':'')+'" onclick="S.setClozeMode(\'tap\')">Tapping</button>';
   h+='<button class="seg-btn'+(mode==='type'?' seg-active':'')+'" onclick="S.setClozeMode(\'type\')">Typing</button></div></div>';
@@ -5269,13 +5533,18 @@ renderClozeHome(){
   el.innerHTML=h;
 },
 
+setClozeFocus(k){
+  st.czFocus=['cases','verbs','future'].includes(k)?k:'mixed';save();
+  this.renderClozeHome();
+},
+
 setClozeMode(m){
   st.clozeMode=m==='type'?'type':'tap';save();
   if(document.getElementById('home').classList.contains('act'))this.renderClozeHome();
 },
 
-startClozeSession(n){
-  const items=buildClozeSession(n||10);
+startClozeSession(n,focus){
+  const items=buildClozeSession(n||10,focus||st.czFocus||'mixed');
   if(!items.length)return;
   st.czItems=items;st.czIdx=0;st.czCorrect=0;st.czTotal=0;st.czNudged=[];
   this.goScr('cloze-drill');
@@ -5291,7 +5560,8 @@ renderCloze(){
   const display=it.sr.split(/(\s+)/).map(tok=>{
     if(!blanked&&_czClean(tok)===it.answer){
       blanked=true;const tr=tok.match(/[.,!?;:]+$/);
-      return '<span class="cz-blank" id="cz-blank">'+'_'.repeat(Math.max(4,Math.min(it.answer.length,10)))+'</span>'+(tr?'<span class="sent-punct">'+tr[0]+'</span>':'');
+      const cue=it.cue?' <span class="cz-cue">('+esc(it.cue)+')</span>':'';
+      return '<span class="cz-blank" id="cz-blank">'+'_'.repeat(Math.max(4,Math.min(it.answer.length,10)))+'</span>'+cue+(tr?'<span class="sent-punct">'+tr[0]+'</span>':'');
     }
     return '<span class="sent-tok">'+esc(tok)+'</span>';
   }).join('');
@@ -5300,7 +5570,7 @@ renderCloze(){
   h+='<div class="sent-en">'+esc(it.en)+'</div>';
   h+='<div class="sent-display">'+display+'</div>';
   if(mode==='tap'){
-    const opts=this.sh([it.answer,...czDistractors(it,czItems())]);
+    const opts=this.sh([it.answer,...(it.opts||czDistractors(it,czItems()))]);
     h+='<div class="cz-opts">'+opts.map(o=>'<button class="cz-opt" onclick="S.answerCloze(this)">'+esc(o)+'</button>').join('')+'</div>';
   }else{
     h+='<input class="vd-input" id="cz-input" placeholder="Type the missing word…" autocomplete="off" autocapitalize="off" spellcheck="false">';
@@ -5323,7 +5593,13 @@ answerCloze(btn){
   if(btn){val=btn.textContent;}
   else{if(!inp)return;val=inp.value;if(!normSR(val))return;inp.disabled=true;}
   const ok=normSR(val)===normSR(it.answer);
-  it.done=true;st.czTotal++;
+  it.done=true;it.ok=ok;st.czTotal++;
+  if(it.g){
+    if(!st.czg)st.czg={};
+    const r=st.czg[it.src]||{n:0,ok:0};
+    st.czg[it.src]={n:(r.n||0)+1,ok:ok?(r.ok||0)+1:0};
+  }
+  const why=it.why?'<small class="cz-why">'+esc(it.why)+'</small>':'';
   const blank=document.getElementById('cz-blank');
   if(blank){blank.textContent=it.answer;blank.classList.add(ok?'cor':'inc');}
   document.querySelectorAll('.cz-opt').forEach(b=>{
@@ -5335,7 +5611,7 @@ answerCloze(btn){
   const chk=document.getElementById('cz-check');if(chk)chk.style.display='none';
   const sw=document.querySelector('.cz-switch');if(sw)sw.style.display='none';
   const fb=document.getElementById('cz-fb');
-  if(ok){st.czCorrect++;sCl();haptic('success');fb.innerHTML='<div class="vd-fb ok">✅ Correct!</div>';}
+  if(ok){st.czCorrect++;sCl();haptic('success');fb.innerHTML='<div class="vd-fb ok">✅ Correct!'+why+'</div>';}
   else{
     sNo();haptic('error');
     let extra='';
@@ -5343,7 +5619,7 @@ answerCloze(btn){
       const w=ALL_W.find(x=>x.id===it.wordId);st.czNudged.push(it.wordId);
       extra='<small>'+esc(w?w.l:'')+' is back in your next flashcard session</small>';
     }
-    fb.innerHTML='<div class="vd-fb bad">❌ It\'s <b>'+esc(it.answer)+'</b>'+extra+'</div>';
+    fb.innerHTML='<div class="vd-fb bad">❌ It\'s <b>'+esc(it.answer)+'</b>'+why+extra+'</div>';
   }
   const nx=document.getElementById('cz-next');nx.style.display='';nx.focus();
 },
@@ -5367,6 +5643,12 @@ finishClozeSession(){
   h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--blue)">'+st.czCorrect+'/'+st.czTotal+'</div><div class="done-stat-l">CORRECT</div></div>';
   h+='<div class="done-stat"><div class="done-stat-v" style="color:var(--gold)">'+pct+'%</div><div class="done-stat-l">ACCURACY</div></div>';
   h+='</div>';
+  const tags={};
+  st.czItems.forEach(it=>{if(!it.g||!it.done)return;const t=tags[it.g]||(tags[it.g]={ok:0,n:0});t.n++;if(it.ok)t.ok++;});
+  const tagRows=Object.entries(tags).sort((a,b)=>a[1].ok/a[1].n-b[1].ok/b[1].n);
+  if(tagRows.length){
+    h+='<div class="cz-tags">'+tagRows.map(([g,t])=>'<span class="cz-tag'+(t.ok===t.n?' ok':t.ok===0?' bad':'')+'">'+esc(CZ_TAG_LABEL[g]||g)+' <b>'+t.ok+'/'+t.n+'</b></span>').join('')+'</div>';
+  }
   const nudged=(st.czNudged||[]).length;
   if(nudged)h+='<div class="cz-note" style="margin-top:0">'+nudged+' flashcard'+(nudged!==1?'s':'')+' moved back into your next session.</div>';
   h+='<div class="done-btns">';
@@ -5619,7 +5901,7 @@ openModesSheet(e){
     {k:'verbs',em:'🔤',t:'Verbs',s:VERBS.length?VERBS.length+' verbs · present & past tense':'Not available for '+langName()},
     {k:'cases',em:'🏛️',t:'Cases',s:sr?'All 7 cases · '+NOUNS.length+' nouns':'Serbian only'},
     {k:'sentences',em:'💬',t:'Sentences',s:sr?'Today\'s sentence · fill the blanks':'Serbian only'},
-    {k:'cloze',em:'✏️',t:'Cloze',s:sr?'One word missing · '+czItems().length+' sentences'+(t.c?' · done today ✓':''):'Serbian only'},
+    {k:'cloze',em:'✏️',t:'Cloze',s:sr?'One word missing · cases, past, future'+(t.c?' · done today ✓':''):'Serbian only'},
     {k:'reading',em:'📖',t:'Reading',s:sr?(st.readDone||[]).length+' of '+READINGS.length+' texts read'+(t.r?' · read today ✓':''):'Serbian only'}
   ];
   const cur=st._learnMode||'flashcards';
@@ -5674,7 +5956,7 @@ async switchLang(){
   st.firsts={lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false};
   if(st.grammarMode==='cases'&&next!=='sr')st.grammarMode='verbs';
   // Drop every language-scoped pane so nothing from the previous language lingers
-  st.readDone=[];
+  st.readDone=[];st.czg={};
   ['hscr','fc-home','match-home','verb-home','case-home','sentence-home','cloze-home','reading-home','pg-body','sx-body'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML='';});
   const sx=document.getElementById('sx-input');if(sx)sx.value='';this._sxExpanded=null;
   document.querySelectorAll('.lp-sheet').forEach(x=>x.remove());
@@ -6662,6 +6944,8 @@ _renderSearchExpansion(e){
     h+='</div>';
     const pp=verbPast(e.verb);
     h+='<div class="sx-past"><span class="sx-past-l">Past</span>'+esc(pp.m+' · '+pp.f+' · '+pp.mp)+(pp.refl?' <span class="sx-past-se">+ se</span>':'')+'</div>';
+    const fu=verbFuture(e.verb);
+    h+='<div class="sx-past"><span class="sx-past-l">Future</span>'+esc([0,1,2].map(i=>fu.forms[i]).join(' · '))+'</div>';
     if(e.verb.note)h+='<div class="sx-note">'+esc(e.verb.note)+'</div>';
   }
   h+='</div>';
