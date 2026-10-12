@@ -167,11 +167,15 @@ def cmd_generate(a):
     results_path = STAGING / 'results.json'
     results = json.loads(results_path.read_text('utf-8')) if results_path.exists() else {}
     done = 0
+    verify = a.verify
+    tts_fail_run = stt_fail_run = 0
+    started = time.time()
+    print(f'{len(items)} item(s) to voice with {VOICE} ({eng.name}){" + speech-to-text check" if verify else ""}', file=sys.stderr)
     for n, it in enumerate(items, 1):
         rate = RATE[it['kind']]
         f = clip_id(eng.name, VOICE, rate, it['cyr'])
         rec = results.get(it['key'], {})
-        if rec.get('f') == f and (CLIPS / f'{f}.mp3').exists() and (not a.verify or 'stt' in rec):
+        if rec.get('f') == f and (CLIPS / f'{f}.mp3').exists() and (not verify or 'stt' in rec or 'stt_error' in rec):
             continue
         try:
             mp3 = CLIPS / f'{f}.mp3'
@@ -183,20 +187,39 @@ def cmd_generate(a):
                 if not (CLIPS / f'{s}.mp3').exists():
                     (CLIPS / f'{s}.mp3').write_bytes(eng.tts(it['cyr'], VOICE, RATE['slow']))
                 rec['s'] = s
-            if a.verify:
+            tts_fail_run = 0
+        except Exception as e:
+            results[it['key']] = {**it, 'error': str(e)[:200]}
+            print(f'  ! {it["latin"]}: {e}', file=sys.stderr)
+            tts_fail_run += 1
+            if tts_fail_run >= 5:
+                results_path.write_text(json.dumps(results, ensure_ascii=False, indent=1), 'utf-8')
+                sys.exit('Stopped: 5 clips in a row failed. Check AZURE_SPEECH_KEY and AZURE_SPEECH_REGION '
+                         '(the region is the short name shown under Keys and Endpoint, e.g. westeurope), then run the same command again — it resumes.')
+            continue
+        if verify:
+            # The check is a safety net, not a gate: if it fails, the clip is kept and simply marked for listening.
+            try:
                 wav = eng.tts(it['cyr'], VOICE, rate, fmt='riff-16khz-16bit-mono-pcm')
                 heard = eng.stt(wav)
                 score = wer(fold(it['latin']), fold(heard))
                 limit = 0.0 if it['kind'] == 'word' else 0.2
                 rec.update(stt=heard, wer=round(score, 3), status='pass' if heard and score <= limit else 'check')
-            results[it['key']] = rec
-            done += 1
-        except Exception as e:  # keep going; report at the end
-            results[it['key']] = {**it, 'error': str(e)[:200]}
-            print(f'  ! {it["latin"]}: {e}', file=sys.stderr)
+                stt_fail_run = 0
+            except Exception as e:
+                rec.update(stt_error=str(e)[:200], status='check')
+                stt_fail_run += 1
+                if stt_fail_run >= 5:
+                    verify = False
+                    print('  ! speech-to-text check failed 5 times in a row; continuing without it '
+                          '(remaining clips will all be marked for listening). Error: ' + str(e)[:160], file=sys.stderr)
+        results[it['key']] = rec
+        done += 1
         if n % 25 == 0:
             results_path.write_text(json.dumps(results, ensure_ascii=False, indent=1), 'utf-8')
-            print(f'  {n}/{len(items)}', file=sys.stderr)
+            el = time.time() - started
+            eta = el / max(done, 1) * (len(items) - n)
+            print(f'  {n}/{len(items)}  ·  about {int(eta // 60)} min left', file=sys.stderr)
     results_path.write_text(json.dumps(results, ensure_ascii=False, indent=1), 'utf-8')
     errors = sum(1 for r in results.values() if 'error' in r)
     checks = sum(1 for r in results.values() if r.get('status') == 'check')
