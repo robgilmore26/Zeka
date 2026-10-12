@@ -31,8 +31,8 @@ expect Serbian in Cyrillic, and isolated fragments are where any voice is weakes
 ## Easiest way to run it (Windows)
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File toolsaudioun-azure.ps1            # A1 first
-powershell -ExecutionPolicy Bypass -File toolsaudioun-azure.ps1 -Levels all
+powershell -ExecutionPolicy Bypass -File tools\audio\run-azure.ps1            # A1 first
+powershell -ExecutionPolicy Bypass -File tools\audio\run-azure.ps1 -Levels all
 ```
 
 It asks for the key (hidden input, not saved in history) and the region, then runs `generate --engine azure --verify`.
