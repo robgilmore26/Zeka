@@ -3412,17 +3412,18 @@ const FC_NEW_LIMIT_DEFAULT=30;
 // overdue reviews is chipped away 30 at a time, and a large pile can be
 // spread over the coming days instead of all landing today.
 const FC_SESSION_CAP=30;      // max cards per session
-const FC_SESSION_NEW_SLICE=5; // new cards kept in a capped session
+const FC_SESSION_NEW_SLICE=10;// new cards added on top of a full session of reviews
 const FC_BACKLOG_THRESHOLD=60;// reviews due before the welcome-back offer appears
 const FC_SMOOTH_PER_DAY=40;   // reviews left due per day when spreading a backlog
-const FC_CATCHUP_AT=30;       // more reviews due than this → new words pause (catch-up mode)
+const FC_CATCHUP_AT=60;       // more reviews due than this → new words pause (catch-up mode)
 
 // How overdue a review is relative to its own interval — cards with short
 // intervals that are long past due are the most likely to have been forgotten.
 function _fcOverdueRatio(c,now){const ivlMs=Math.max(c.ivl||0,1/24)*86400000;return (now-(c.due||now))/ivlMs;}
 
-// Compose one session from the due breakdown: most-overdue reviews first,
-// a small slice of new cards, capped at FC_SESSION_CAP.
+// Compose one session from the due breakdown: up to FC_SESSION_CAP reviews,
+// most overdue first, plus today's new words on top (up to FC_SESSION_NEW_SLICE),
+// so a full review load never squeezes out new words and the pool keeps growing.
 // Returns {cards, reviews, news, capped, remaining}
 function fcBuildSession(bd){
   bd=bd||fcDueBreakdown();
@@ -3435,9 +3436,8 @@ function fcBuildSession(bd){
   const capped=reviews.length+news.length>FC_SESSION_CAP;
   let takeNew=news.length,takeRev=reviews.length;
   if(capped){
-    takeNew=Math.min(news.length,FC_SESSION_NEW_SLICE);
-    takeRev=Math.min(reviews.length,FC_SESSION_CAP-takeNew);
-    takeNew=Math.min(news.length,FC_SESSION_CAP-takeRev);
+    takeRev=Math.min(reviews.length,FC_SESSION_CAP);
+    takeNew=Math.min(news.length,Math.max(FC_SESSION_NEW_SLICE,FC_SESSION_CAP-takeRev));
   }
   const cards=[...reviews.slice(0,takeRev),...news.slice(0,takeNew)];
   return{cards,reviews:takeRev,news:takeNew,capped,remaining:reviews.length-takeRev+(news.length-takeNew)};
@@ -4647,7 +4647,7 @@ finishFcSession(){
   }
   const left=fcDueBreakdown().all.length;
   if(left>0){
-    h+='<button class="btn-cta" onclick="S.startFcSession()">Next '+Math.min(left,FC_SESSION_CAP)+' cards → <span style="font-weight:600;opacity:.8;text-transform:none;letter-spacing:0">('+left+' still due)</span></button>';
+    h+='<button class="btn-cta" onclick="S.startFcSession()">Next '+fcBuildSession().cards.length+' cards → <span style="font-weight:600;opacity:.8;text-transform:none;letter-spacing:0">('+left+' still due)</span></button>';
     h+=matchBtn;
     h+=clozeBtn;
     h+='<button class="btn-soft" onclick="S.exitFc()">Done for now</button>';
