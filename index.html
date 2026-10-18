@@ -2921,13 +2921,24 @@ const ELO={
     const exp=this.expected(uElo,wDiff);
     let chg;
     if(ok){
-      chg=Math.round(this.K_WIN*(1-exp));
+      // Every right answer earns at least 1, so content below your level never pays 0
+      chg=Math.max(1,Math.round(this.K_WIN*(1-exp)));
     }else{
       chg=Math.round(this.K_LOSS*(0-exp));// negative
       // Floor losses so a single mistake against an easy word is never devastating
       if(chg<-this.MAX_LOSS_PER_Q)chg=-this.MAX_LOSS_PER_Q;
     }
     return{newElo:uElo+chg,chg};
+  },
+  // Difficulty of one question. A word you haven't learned yet counts as hard for
+  // you (rated at your own level), so learning new material moves ELO even in a
+  // step rated far below you; words you already know keep the lesson's rating.
+  qDiff(ex){
+    const base=this.diff(st.unit.id);
+    const words=ex.word?[ex.word]:(ex.pairs||[]);
+    const unknown=w=>!['se','es'].some(d=>{const c=st.fc[fcKey(w.id,d)];return c&&c.reps>=2;});
+    const fresh=words.length?words.some(unknown):!st.completed.includes(st.unit.id);
+    return fresh?Math.max(base,st.elo):base;
   },
   diff(uid){const pi=PATH_SR.findIndex(u=>u.id===uid);if(pi>=0)return 800+pi*40;const idx=UNITS.findIndex(u=>u.id===uid);return 800+(idx>=0?idx:uid)*40},
   lvl(elo){
@@ -6473,7 +6484,7 @@ mTap(el){
       if(ms.matched.length===st.exs[st.ei].pairs.length){
         st.answered=true;st.ltot++;const perf=ms.err===0;
         if(perf){st.lcor++;st.lxp+=10;}else st.lxp+=5;
-        const r=ELO.calc(st.elo,ELO.diff(st.unit.id),perf);st.elo=r.newElo;st.lelo+=r.chg;
+        const r=ELO.calc(st.elo,ELO.qDiff(st.exs[st.ei]),perf);st.elo=r.newElo;st.lelo+=r.chg;
         st.exs[st.ei].pairs.forEach(p=>{const ws=wstat(p.id);ws.s++;if(perf)ws.c++;else ws.i++;ws.t=Date.now();});
         save();setTimeout(()=>{sOk();this.showMaDone(perf,r.chg);},400);
       }
@@ -6544,7 +6555,7 @@ chk(){
   else if(ex.type==='wb'){ok=st.wbAns.map(c=>c.w).join(' ')===ex.cp.join(' ');}
 
   st.answered=true;st.ltot++;
-  const diff=ELO.diff(st.unit.id),r=ELO.calc(st.elo,diff,ok);st.elo=r.newElo;st.lelo+=r.chg;
+  const diff=ELO.qDiff(ex),r=ELO.calc(st.elo,diff,ok);st.elo=r.newElo;st.lelo+=r.chg;
   if(ex.word){const ws=wstat(ex.word.id);ws.s++;if(ok)ws.c++;else ws.i++;ws.t=Date.now();}
   if(ok){st.lcor++;st.lxp+=10;sOk();haptic('success');this.fb(true,ex,r.chg);}
   else{st.hearts--;sNo();haptic('error');this.fb(false,ex,r.chg);this.updL();
