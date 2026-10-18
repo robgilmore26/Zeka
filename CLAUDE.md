@@ -77,7 +77,9 @@ Easy: all of it) from the per-card `last` timestamp; intervals cap at 365 days. 
 worn-down ease (`fcAlgo:2`). Catch-up mode pauses new words while more than 60 reviews are due; new words ride on top of a full 30-review session (up to 10); new words/day can be
 paused (0 is a real value, not "unset"). Each word is asked in one direction per day (`fcDueBreakdown`): a card
 waits while its se/es sibling was rated today, only the more overdue of two due siblings is offered, and a new
-word's English→Serbian card is introduced on a later day than its Serbian→English one.
+word's English→Serbian card is introduced on a later day than its Serbian→English one. New words are introduced
+in `FC_NEW_ORDER_SR` order (usefulness tiers + OpenSubtitles frequency, duplicates last); **add every new word id to
+that list** at a sensible spot, or it is introduced after all 978 current words.
 
 ## Serbian content
 
