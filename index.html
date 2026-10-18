@@ -3029,7 +3029,7 @@ function getStateData(){
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
     fcNewToday:st.fcNewToday,fcReviewedToday:st.fcReviewedToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
     sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate,
-    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg,voiceAuto:st.voiceAuto,fcAlgo:st.fcAlgo,fcCatchupSkip:st.fcCatchupSkip};
+    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg,voiceAuto:st.voiceAuto,fcAlgo:st.fcAlgo,fcCatchupSkip:st.fcCatchupSkip,savedAt:st.savedAt};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
@@ -3044,6 +3044,7 @@ function applyStateData(p){
   st.czg=(p.czg&&typeof p.czg==='object')?p.czg:{};
   st.voiceAuto=p.voiceAuto!==false;
   st.fcCatchupSkip=p.fcCatchupSkip||'';
+  st.savedAt=p.savedAt||0;
   // Scheduling v2: repair ease on cards the old rules slowed down. It runs on
   // every load of v1 data and is idempotent, so it never forces a save here:
   // saving during load could overwrite a newer cloud copy with an older local
@@ -3059,6 +3060,19 @@ function applyStateData(p){
   st.firsts=Object.assign({lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},p.firsts||{});
   const today=new Date().toDateString();
   if(st.lastDate){const d=Math.floor((new Date(today)-new Date(st.lastDate))/864e5);if(d>1)st.streak=0;}
+}
+
+// Card-by-card merge of two flashcard maps: the copy rated most recently wins
+// (more views breaks a tie, for cards rated before c.last existed).
+function _fcMerge(a,b){
+  const out=Object.assign({},a);
+  for(const k in b){
+    const x=out[k],y=b[k];
+    if(!x){out[k]=y;continue;}
+    const tx=x.last||0,ty=y.last||0;
+    if(ty>tx||(ty===tx&&(y.views||0)>(x.views||0)))out[k]=y;
+  }
+  return out;
 }
 
 function fbUserDoc(){return fbDb.collection('users').doc(fbUser.uid);}
@@ -3079,28 +3093,44 @@ async function fbLoad(){
       return;
     }
     if(cloud){
+      // The newer copy wins (savedAt; XP only for copies saved before savedAt
+      // existed). Flashcards are then merged card by card, so a review never
+      // disappears because the other copy won: flashcards earn no XP, so with
+      // the old XP-only rule a stale cloud copy (a write cut off when the app
+      // closed, or an old tab on another device) could replace newer reviews.
       const local=getStateData();
-      if(cloud.xp>=local.xp){applyStateData(cloud);saveLocal();}
-      else{fbSaveCloud();}
+      const cloudNewer=(cloud.savedAt||local.savedAt)?(cloud.savedAt||0)>=(local.savedAt||0):cloud.xp>=local.xp;
+      const fc=_fcMerge(local.fc||{},cloud.fc||{});
+      if(cloudNewer)applyStateData(cloud);
+      st.fc=fc;
+      saveLocal();
+      if(!cloudNewer||JSON.stringify(fc)!==JSON.stringify(cloud.fc||{}))fbSaveCloud();
     }else{
       fbSaveCloud();
     }
   }catch(e){console.log('Cloud load failed, using local');}
 }
 
+// Leaving the app (switching away, locking the phone, closing it) sends any
+// pending cloud save at once instead of losing it with the 500 ms timer.
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'&&_fbSaveTimer){clearTimeout(_fbSaveTimer);_fbSaveTimer=null;_fbWrite();}
+});
 function fbSaveCloud(){
   if(!fbUser)return;
   clearTimeout(_fbSaveTimer);
-  _fbSaveTimer=setTimeout(()=>{
-    const data=getStateData();
-    const update={};
-    update['langs.'+curLang]=data;
-    update.updatedAt=firebase.firestore.FieldValue.serverTimestamp();
-    fbUserDoc().update(update).catch(()=>{
-      // Doc may not exist yet, create it
-      fbUserDoc().set(update,{merge:true}).catch(()=>{});
-    });
-  },500);
+  _fbSaveTimer=setTimeout(()=>{_fbSaveTimer=null;_fbWrite();},500);
+}
+function _fbWrite(){
+  if(!fbUser)return;
+  const data=getStateData();
+  const update={};
+  update['langs.'+curLang]=data;
+  update.updatedAt=firebase.firestore.FieldValue.serverTimestamp();
+  fbUserDoc().update(update).catch(()=>{
+    // Doc may not exist yet, create it
+    fbUserDoc().set(update,{merge:true}).catch(()=>{});
+  });
 }
 
 fbAuth.onAuthStateChanged(async user=>{
@@ -3365,7 +3395,7 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
   fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
-  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},voiceAuto:true,fcAlgo:2,fcCatchupSkip:'',
+  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},voiceAuto:true,fcAlgo:2,fcCatchupSkip:'',savedAt:0,
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -3385,6 +3415,7 @@ function saveLocal(){try{localStorage.setItem(_lsKey(),JSON.stringify(getStateDa
 }catch(e){}}
 
 function save(){
+  st.savedAt=Date.now();
   saveLocal();
   if(!GUEST)fbSaveCloud();// guest profiles never write to Firestore
   try{const i=document.getElementById('save-ind');if(i){i.classList.add('show');setTimeout(()=>i.classList.remove('show'),1200);}
