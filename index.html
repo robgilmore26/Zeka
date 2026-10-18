@@ -3575,23 +3575,42 @@ function fcDueBreakdown(){
   // Introduce new words in CEFR/unit order (A1 → C1) so beginners build foundation vocab first.
   // sourceWords already comes from UNITS in unit order; no shuffle needed.
   const wordList=sourceWords;
-  wordList.forEach(w=>{
-    ['se','es'].forEach(dir=>{
-      const k=fcKey(w.id,dir);
-      const c=st.fc[k];
+  // Siblings: every word has two cards (se, es). Showing both in one day made
+  // the same words feel endless, so a word is asked in one direction per day:
+  //  • a card whose sibling was rated today waits (unless it is itself mid-learning today);
+  //  • if both are due, only the more overdue one is offered;
+  //  • a new word is introduced Serbian→English first; English→Serbian becomes
+  //    new on a later day when the Serbian→English card is not due.
+  const dayStart=new Date().setHours(0,0,0,0);
+  const ratedToday=c=>!!(c&&c.last&&c.last>=dayStart);
+  const addWord=(word,cs,allowNew)=>{
+    const [cse,ces]=cs;
+    const due=[];
+    cs.forEach((c,i)=>{
+      const dir=i?'es':'se',sib=cs[1-i];
       const isNew=!c||(c.due===0&&c.reps===0);
-      if(isNew)newPool.push({word:w,dir:dir,key:k,isNew:true});
-      else if(c.due<=now)reviews.push({word:w,dir:dir,key:k,isNew:false});
+      if(isNew){
+        if(!allowNew)return;
+        if(dir==='es'&&(!cse||(cse.due===0&&cse.reps===0)||ratedToday(cse)||cse.due<=now))return;
+        if(dir==='se'&&ratedToday(ces))return;
+        newPool.push({word,dir,key:fcKey(word.id,dir),isNew:true});
+      }else if(c.due<=now){
+        if(ratedToday(sib)&&!ratedToday(c))return;
+        due.push({word,dir,key:fcKey(word.id,dir),isNew:false,c});
+      }
     });
-  });
+    if(due.length===2){
+      const a=due[0].c,b=due[1].c;
+      const sibToday=ratedToday(a)&&ratedToday(b);
+      if(!sibToday)due.splice(_fcOverdueRatio(a,now)>=_fcOverdueRatio(b,now)?1:0,1);
+    }
+    due.forEach(d=>{delete d.c;reviews.push(d);});
+  };
+  wordList.forEach(w=>addWord(w,[st.fc[fcKey(w.id,'se')],st.fc[fcKey(w.id,'es')]],true));
+  // verbs are only added to FC when explicitly seeded; no auto-new
   VERBS.forEach(v=>{
     const vId='v_'+v.inf;
-    ['se','es'].forEach(dir=>{
-      const k=vId+'_'+dir;
-      const c=st.fc[k];
-      if(!c)return;// verbs are only added to FC when explicitly seeded; no auto-new
-      if(c.due<=now)reviews.push({word:{id:vId,l:v.inf,e:v.en,em:v.em,s:v.inf},dir:dir,key:k,isNew:false});
-    });
+    addWord({id:vId,l:v.inf,e:v.en,em:v.em,s:v.inf},[st.fc[vId+'_se'],st.fc[vId+'_es']],false);
   });
   const newRemaining=fcNewLimitRemaining();
   // Catch-up mode: while more reviews are due than one session holds, new words
