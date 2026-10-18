@@ -147,6 +147,45 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .lp-go{width:100%;padding:16px;border:none;border-radius:14px;font-size:14px;font-weight:800;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);text-transform:uppercase;letter-spacing:1px;cursor:pointer}
 .lp-go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
 .lock-msg{font-size:14px;color:var(--text-2);line-height:1.5;margin:0 0 16px}
+.lp-alt{width:100%;margin-top:10px;padding:14px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:transparent;color:#fff;font-size:14px;font-weight:700;cursor:pointer}
+.gx-opts{display:flex;flex-direction:column;gap:8px}
+.gx-opt{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.04);color:#fff;font-size:15px;font-weight:800;cursor:pointer;text-align:left}
+.gx-opt span{font-size:12px;font-weight:600;color:var(--text-2);font-style:italic}
+.gx-pref{margin:16px 20px 0;padding:14px 16px;background:var(--surface);border:1px solid var(--divider);border-radius:16px}
+.gx-pref-t{font-size:14px;font-weight:800;color:var(--text-1)}
+.gx-pref-s{font-size:12px;color:var(--text-2);margin-top:2px}
+.gx-pills{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.gx-pill{flex:1;min-width:80px;padding:9px 10px;border-radius:12px;border:1px solid var(--divider);background:transparent;color:var(--text-2);font-size:13px;font-weight:700;cursor:pointer}
+.gx-pill.on{background:var(--sr-blue);border-color:var(--sr-blue);color:#fff}
+.node.open{background:var(--green);box-shadow:0 6px 0 var(--green-d);opacity:.8}
+.node.open .node-lbl{color:rgba(88,204,2,.7)}
+.tp-head{margin:34px 20px 4px}
+.tp-title{font-family:var(--font-display);font-size:26px;font-weight:900;color:#fff;letter-spacing:-.02em}
+.tp-sub{font-size:13px;color:var(--text-2);margin-top:4px}
+.tp-lv{display:flex;justify-content:space-between;align-items:baseline;margin:18px 20px 8px;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3)}
+.tp-lv-n{font-variant-numeric:tabular-nums;letter-spacing:0}
+.tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;padding:0 16px}
+.tp-chip{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--surface);border:1px solid var(--divider);border-radius:14px;color:var(--text-1);font-size:13px;font-weight:700;text-align:left;cursor:pointer;min-width:0}
+.tp-chip:active{transform:scale(.97)}
+.tp-ic{font-size:20px;flex-shrink:0}
+.tp-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tp-ok{color:var(--green);font-weight:900;flex-shrink:0}
+.tp-chip.done{border-color:rgba(88,204,2,.3)}
+.dlg{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.dlg-row{display:flex}
+.dlg-row.r{justify-content:flex-end}
+.dlg-b{max-width:84%;padding:10px 13px;border-radius:16px;background:var(--surface);border:1px solid var(--divider)}
+.dlg-row.l .dlg-b{border-bottom-left-radius:5px}
+.dlg-row.r .dlg-b{border-bottom-right-radius:5px;background:rgba(26,95,209,.16);border-color:rgba(26,95,209,.3)}
+.dlg-who{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);margin-bottom:3px}
+.dlg-sr{font-size:16px;font-weight:700;color:var(--text-1);line-height:1.35}
+.dlg-en{font-size:13px;color:var(--text-2);margin-top:3px;line-height:1.35}
+.pi-gram{font-size:14px;line-height:1.55;color:var(--text-2);background:var(--surface);border:1px solid var(--divider);border-radius:14px;padding:14px 16px;margin-bottom:22px}
+.pi-gram b,.pi-gram i{color:var(--text-1)}
+.pi-gn{font-size:11px;color:var(--text-3);font-style:italic}
+.pi-refs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.pi-ref{font-size:13px;font-weight:700;color:var(--text-1);padding:6px 10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--divider)}
+.pi-test{font-size:13px;font-weight:700;color:var(--gold);background:rgba(255,212,59,.08);border:1px solid rgba(255,212,59,.25);border-radius:12px;padding:10px 14px;margin-bottom:18px}
 .lock-msg b{color:#fff}
 
 /* Continue FAB on home */
@@ -1162,6 +1201,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
   </div>
   <div id="p-friends"></div>
   <div class="pach" id="p-ach"></div>
+  <div id="p-gender"></div>
   <div class="sync-sec">
     <button class="sync-btn" id="sync-btn" onclick="fbSignOut()" style="display:none">Sign Out</button>
     <div id="g-signin-prof" style="display:flex;justify-content:center"></div>
@@ -1655,7 +1695,7 @@ p:[["Moramo da recikliramo više","We must recycle more"],["Obnovljiva energija 
 p:[["Hipoteza je potvrđena","The hypothesis was confirmed"],["Analiza podataka je završena","The data analysis is complete"],["Metodologija je jasna","The methodology is clear"],["Zaključak sledi iz dokaza","The conclusion follows from the evidence"]]},
 {id:89,t:"Complex Verb Forms",d:"Advanced conjugation",lv:"C1",ic:"📝",co:"#FF9600",w:[
 ["Био бих","Bio bih","I would be","🤔"],["Да сам знао","Da sam znao","Had I known","💭"],["Нека буде","Neka bude","Let it be","🙏"],
-["Да би могао","Da bi mogao","So that he could","💡"],["Кад бих имао","Kad bih imao","If I had","🌟"],["Желео бих","Želeo bih","I would like","⭐"],
+["Да би могао","Da bi mogao","So that he could","💡"],["Кад бих имао","Kad bih imao","If I had","🌟"],["Желе{о|ла} бих","Žele{o|la} bih","I would like","⭐"],
 ["Требало би","Trebalo bi","It should","👆"],["Могло би","Moglo bi","It could","🤷"],["Рекло би се","Reklo bi se","One would say","🗣️"],
 ["Чини ми се","Čini mi se","It seems to me","🧐"]],
 p:[["Bio bih srećan da dođeš","I would be happy if you came"],["Da sam znao, ne bih to uradio","Had I known, I wouldn't have done it"],["Želeo bih da naučim više","I would like to learn more"],["Trebalo bi da razgovaramo","We should talk"]]},
@@ -1701,6 +1741,21 @@ p:[["Inflacija raste ove godine","Inflation is rising this year"],["Devizni kurs
 ["Интервју","Intervju","Interview","🎤"],["Објавити","Objaviti","To publish","📤"],["Штампа","Štampa","Press","🗞️"],["Објективност","Objektivnost","Objectivity","⚖️"],
 ["Цензура","Cenzura","Censorship","🚫"],["Медијска писменост","Medijska pismenost","Media literacy","📚"]],
 p:[["Novinar izveštava sa lica mesta","The journalist reports from the scene"],["Naslov privlači pažnju","The headline grabs attention"],["Objektivnost je važna u novinarstvu","Objectivity is important in journalism"],["Medijska pismenost je neophodna","Media literacy is essential"]]}
+];
+
+// Conversation Path (Oct 2026): lesson steps built around real situations. Unit ids 94+.
+// r: existing word ids reused (same flashcard, no duplicate), w: only words new to the course,
+// dlg: opening dialogue [speaker, Serbian, English], me: the speaker shown on the right, gram: grammar note. {m|f} = learner-gender form.
+const PATH_STAGES_SR={1:{t:"First conversations",d:"Greet people, introduce yourself, order, ask the way",lv:'A1'}};
+const PATH_SR=[
+{"id":94,"t":"Hello & goodbye","d":"Greet anyone, formally or not","lv":"A1","ic":"👋","co":"#58CC02","path":1,"stage":1,"r":[100,101,102,103,104,105,106,3207,206,2900,2407],"w":[["Ћао","Ćao","Hi / Bye","👋","informal"],["Видимо се","Vidimo se","See you","🙋"],["Хвала вам","Hvala vam","Thank you (formal)","🙏","formal"],["Пријатан дан","Prijatan dan","Have a nice day","☀️"]],"p":[["Dobro, hvala. A vi?","Fine, thanks. And you?"],["Hvala vam, takođe.","Thank you, you too."],["Izvini, žurim.","Sorry, I'm in a hurry."],["Prijatan dan!","Have a nice day!"],["Vidimo se sutra!","See you tomorrow!"]],"dlg":[["Gospođa Petrović","Dobro jutro, Marko! Kako si?","Good morning, Marko! How are you?"],["Marko","Dobro, hvala. A vi?","Fine, thanks. And you?"],["Gospođa Petrović","Dobro sam. Prijatan dan!","I'm fine. Have a nice day!"],["Marko","Hvala vam, takođe. Doviđenja!","Thank you, you too. Goodbye!"],["Ana","Ćao, Marko!","Hi, Marko!"],["Marko","Ćao, Ana! Izvini, žurim. Vidimo se!","Hi, Ana! Sorry, I'm in a hurry. See you!"],["Ana","Vidimo se!","See you!"]],"me":"Marko","gram":"Serbian has two words for <i>you</i>. <b>Ti</b> is for friends, family and children. <b>Vi</b> is for strangers, older people and anyone you would call Mr or Mrs, and it is also the plural <i>you</i> for two or more people. It changes other words too: <i>izvini</i> (ti) / <i>izvinite</i> (Vi), <i>hvala ti</i> / <i>hvala vam</i>. <i>Ćao</i> is informal: use it with people you say <i>ti</i> to."},
+{"id":95,"t":"Who are you?","d":"Say your name and where you're from","lv":"A1","ic":"🙋","co":"#58CC02","path":1,"stage":1,"r":[200,201,204,205,4500,4505,4509,6600],"w":[["Како се зовеш?","Kako se zoveš?","What's your name?","🏷️","informal"],["Како се зовете?","Kako se zovete?","What's your name? (formal)","🏷️","formal"],["Одакле си?","Odakle si?","Where are you from?","🌍"],["Из Америке сам","Iz Amerike sam","I'm from America","🇺🇸"],["Живим у Београду","Živim u Beogradu","I live in Belgrade","🏙️"],["И мени","I meni","Nice to meet you too","😊","reply to 'Drago mi je'"],["И","I","And / too","➕"],["Али","Ali","But","↔️"],["А ти?","A ti?","And you?","👉"]],"p":[["Ja sam iz Novog Sada.","I'm from Novi Sad."],["Živim u Beogradu.","I live in Belgrade."],["Kako se zovete?","What's your name? (formal)"],["I ja živim u Beogradu.","I live in Belgrade too."],["Drago mi je.","Nice to meet you."]],"dlg":[["Ana","Zdravo! Ja sam Ana. Kako se zoveš?","Hi! I'm Ana. What's your name?"],["Tom","Zdravo, Ana. Zovem se Tom.","Hi, Ana. My name is Tom."],["Ana","Drago mi je, Tom.","Nice to meet you, Tom."],["Tom","I meni.","Nice to meet you too."],["Ana","Odakle si?","Where are you from?"],["Tom","Iz Amerike sam. A ti?","I'm from America. And you?"],["Ana","Ja sam iz Novog Sada, ali živim u Beogradu.","I'm from Novi Sad, but I live in Belgrade."],["Tom","I ja živim u Beogradu!","I live in Belgrade too!"]],"me":"Tom","gram":"<b>Biti</b> (to be) has short forms you will use all the time: <i>sam, si, je, smo, ste, su</i>. They never start a sentence: <i>Ja sam Ana</i> or <i>Iz Amerike sam</i>, never <i>Sam iz Amerike</i>. The pronoun is often dropped, because <i>sam</i> already means <i>I am</i>. <b>Iz</b> (from) changes the place name: <i>Amerika → iz Amerike</i>, <i>Novi Sad → iz Novog Sada</i>."},
+{"id":96,"t":"How are you?","d":"Answer, and ask back","lv":"A1","ic":"🙂","co":"#58CC02","path":1,"stage":1,"r":[202,203,2005,2000,5408],"w":[["Како сте?","Kako ste?","How are you? (formal)","🙂","formal"],["Одлично","Odlično","Great","🤩"],["Није лоше","Nije loše","Not bad","👌"],["Онако","Onako","So-so","😐"],["Нисам добро","Nisam dobro","I'm not well","🤒"],["Мало","Malo","A little / a bit","🤏"],["Шта има ново?","Šta ima novo?","What's new?","🆕"],["Ништа посебно","Ništa posebno","Nothing special","🤷"],["Све","Sve","Everything / all","🌐"]],"p":[["Malo sam umor{an|na}.","I'm a bit tired."],["Nisam dobro.","I'm not well."],["Sve je dobro.","Everything's fine."],["A kod tebe?","And with you?"],["Ništa posebno.","Nothing special."]],"dlg":[["Milan","Ćao, Ana! Kako si?","Hi, Ana! How are you?"],["Ana","Odlično! A ti?","Great! And you?"],["Milan","Nije loše. Malo sam umoran.","Not bad. I'm a bit tired."],["Ana","Šta ima novo?","What's new?"],["Milan","Ništa posebno. A kod tebe?","Nothing special. And with you?"],["Ana","Sve je dobro, hvala.","Everything's fine, thanks."]],"me":"Ana","gram":"Adjectives match the person they describe. A man says <i>Umoran sam</i> (I'm tired), a woman <i>Umorna sam</i>. The same goes for <i>srećan / srećna</i> (happy). <i>Dobro</i> (well) never changes: everyone says <i>Dobro sam</i> and <i>Nisam dobro</i>. <b>Ne + sam</b> joins into one word, <b>nisam</b>: <i>Nisam dobro</i> (I'm not well). <i>Je</i> does the same: <i>nije</i>, as in <i>Nije loše</i> (Not bad)."},
+{"id":97,"t":"When you don't understand","d":"Keep a conversation going","lv":"A1","ic":"🤔","co":"#58CC02","path":1,"stage":1,"r":[208,207,209,5306,107,3207,2404],"w":[["Не знам","Ne znam","I don't know","🤷"],["Говорите ли енглески?","Govorite li engleski?","Do you speak English?","🇬🇧","formal"],["Спорије, молим вас","Sporije, molim vas","Slower, please","🐢","formal"],["Можете ли да поновите?","Možete li da ponovite?","Could you repeat that?","🔁","formal"],["Шта то значи?","Šta to znači?","What does that mean?","❓"],["Како се то каже на српском?","Kako se to kaže na srpskom?","How do you say that in Serbian?","🗣️"],["Нажалост","Nažalost","Unfortunately","😕"],["Тражити","Tražiti","To look for","🔎"]],"p":[["Govorite li engleski?","Do you speak English?"],["Možete li da ponovite?","Could you repeat that?"],["Sporije, molim vas.","Slower, please."],["Kako se to kaže na srpskom?","How do you say that in Serbian?"],["Šta to znači?","What does that mean?"],["Ne znam.","I don't know."]],"dlg":[["Tom","Izvinite, govorite li engleski?","Excuse me, do you speak English?"],["Jelena","Nažalost, ne. Govorite li srpski?","Unfortunately not. Do you speak Serbian?"],["Tom","Malo. Sporije, molim vas.","A little. Slower, please."],["Jelena","Naravno. Da li tražite nešto?","Of course. Are you looking for something?"],["Tom","Izvinite, ne razumem. Možete li da ponovite?","Sorry, I don't understand. Could you repeat that?"],["Jelena","Da li… tražite… nešto?","Are you… looking for… something?"],["Tom","Da! Pijacu. Kako se kaže „map“ na srpskom?","Yes! The market. How do you say \"map\" in Serbian?"],["Jelena","Mapa. Ili plan grada.","Mapa. Or plan grada (city map)."]],"me":"Tom","gram":"Two ways to ask a yes/no question: put <b>li</b> after the verb (<i>Govorite li engleski?</i>) or start with <b>Da li</b> (<i>Da li govorite engleski?</i>). Both mean <i>Do you speak English?</i> After <i>možete</i> (can you) usually comes <b>da</b> + a verb in the same person: <i>Možete li da ponovite?</i> If you didn't catch something, just say <b>Molim?</b> (Pardon?), the same word as <i>please</i>."},
+{"id":98,"t":"Wanting & needing","d":"Ask for what you want","lv":"A1","ic":"🙏","co":"#58CC02","path":1,"stage":1,"r":[3202,3203,8905,3206,503,501,504,3208,5408],"w":[["Нешто","Nešto","Something","✨"],["Или","Ili","Or","🔀"],["Молим те","Molim te","Please (informal)","🙏","informal"],["Не треба ми ништа","Ne treba mi ništa","I don't need anything","🙅"],["Још","Još","More / else / still","➕"],["Хоћеш ли?","Hoćeš li?","Do you want (to)? / Will you?","🤲","informal"],["Ја бих","Ja bih","I'll have / I'd like","☝️"]],"p":[["Hoću vodu.","I want water."],["Kafu ili čaj?","Coffee or tea?"],["Kafu, molim te.","Coffee, please."],["Treba li ti još nešto?","Do you need anything else?"],["Ne treba mi ništa.","I don't need anything."],["Žele{o|la} bih čaj.","I'd like tea."]],"dlg":[["Ana","Hoćeš li nešto da popiješ?","Would you like something to drink?"],["Tom","Vodu, hvala.","Water, thanks."],["Ana","Može. A posle kafu ili čaj?","Sure. And after that, coffee or tea?"],["Tom","Kafu, molim te.","Coffee, please."],["Ana","Ja bih čaj. Treba li ti još nešto?","I'll have tea. Do you need anything else?"],["Tom","Ne, hvala, ne treba mi ništa.","No, thanks, I don't need anything."]],"me":"Tom","gram":"After <i>hoću</i> (I want) and <i>želeo bih</i> (I'd like), a word ending in <b>-a</b> changes to <b>-u</b>: <i>kafa → kafu</i>, <i>voda → vodu</i>. Things ending in a consonant, like <i>čaj</i> and <i>sok</i>, stay the same. <b>Treba mi</b> works the other way round (literally <i>to me is needed</i>), so the word doesn't change: <i>Treba mi voda</i>. A man says <i>želeo bih</i>, a woman <i>želela bih</i>."},
+{"id":99,"t":"At the café","d":"Order, pay and say thanks","lv":"A1","ic":"☕","co":"#58CC02","path":1,"stage":1,"r":[503,504,3400,3401,3201,1407,300,301,2102,2904],"w":[["Изволите","Izvolite","Here you are / What can I get you?","💁","formal"],["Кафић","Kafić","Café","☕"],["Са млеком","Sa mlekom","With milk","🥛"],["Без шећера","Bez šećera","Without sugar","🚫"],["Кисела вода","Kisela voda","Sparkling water","💧"],["Динар","Dinar","Dinar","💵"],["Задржите кусур","Zadržite kusur","Keep the change","🪙","formal"],["Одмах","Odmah","Right away","⚡"]],"p":[["Jednu kafu sa mlekom, molim.","A coffee with milk, please."],["Račun, molim.","The bill, please."],["Zadržite kusur.","Keep the change."],["Jedno pivo i jedan sok.","A beer and a juice."],["Bez šećera, hvala.","No sugar, thanks."]],"dlg":[["Konobar","Dobar dan, izvolite.","Hello, what can I get you?"],["Tom","Dobar dan. Jednu kafu sa mlekom, molim.","Hello. A coffee with milk, please."],["Konobar","Sa šećerom?","With sugar?"],["Tom","Ne, bez šećera. I jednu kiselu vodu.","No, without sugar. And a sparkling water."],["Konobar","Odmah. … Izvolite.","Right away. … Here you are."],["Tom","Hvala. Račun, molim. Koliko je?","Thanks. The bill, please. How much is it?"],["Konobar","Petsto dinara.","Five hundred dinars."],["Tom","Izvolite. Zadržite kusur.","Here you are. Keep the change."],["Konobar","Hvala, prijatno!","Thank you, have a nice day!"]],"me":"Tom","gram":"<b>Jedan</b> (one) matches its noun: <i>jedan sok, jedna kafa, jedno pivo</i>. When you order, it changes along with the noun: <i>jednu kafu, jednu kiselu vodu</i>. <b>Sa</b> (with) and <b>bez</b> (without) change the noun too: <i>sa mlekom, bez šećera</i>. Learn them as set phrases for now. <i>Izvolite</i> is the waiter's all-purpose word: <i>What can I get you?</i> and <i>Here you are</i>."},
+{"id":100,"t":"Have / don't have","d":"Having, not having, there is","lv":"A1","ic":"🎒","co":"#58CC02","path":1,"stage":1,"r":[1601,1402,5408,1800],"w":[["Имам","Imam","I have","✋"],["Немам","Nemam","I don't have","🚫"],["Имаш ли времена?","Imaš li vremena?","Do you have time?","⏰","informal"],["Немам времена","Nemam vremena","I don't have time","⌛"],["Има","Ima","There is / he/she has","✅"],["Нема","Nema","There isn't / he/she doesn't have","❌"],["Нема проблема","Nema problema","No problem","👍"],["Нема везе","Nema veze","It doesn't matter","🤷"],["Много","Mnogo","A lot / much","📈"],["Време","Vreme","Time / weather","⏳"],["Немам појма","Nemam pojma","I have no idea","🤯","colloquial"]],"p":[["Imaš li vremena?","Do you have time?"],["Nemam vremena.","I don't have time."],["Imam mnogo posla.","I have a lot of work."],["Ima jedan dobar kafić.","There's a good café."],["Nema problema.","No problem."],["Nema veze.","It doesn't matter."]],"dlg":[["Milan","Tom, imaš li vremena za kafu?","Tom, do you have time for a coffee?"],["Tom","Nažalost, nemam. Imam mnogo posla.","Unfortunately not. I have a lot of work."],["Milan","Nema problema. A sutra?","No problem. And tomorrow?"],["Tom","Sutra može! Ima li ovde neki dobar kafić?","Tomorrow works! Is there a good café around here?"],["Milan","Ima jedan odličan, blizu je. Ali nema interneta.","There's a great one, it's close. But there's no internet."],["Tom","Nema veze!","Doesn't matter!"]],"me":"Tom","gram":"<b>Imati</b> (to have): <i>imam, imaš, ima, imamo, imate, imaju</i>. The negative is one word: <i>nemam, nemaš, nema…</i> <b>Ima</b> and <b>nema</b> also mean <i>there is</i> and <i>there isn't</i>: <i>Ima jedan kafić</i> (There's a café). After <i>imaš li</i>, <i>nemam</i>, <i>nema</i> and <i>mnogo</i> the noun often changes: <i>vreme → imaš li vremena?</i>, <i>nemam vremena</i>, <i>internet → nema interneta</i>, <i>posao → mnogo posla</i>. Learn these as set phrases for now."},
+{"id":101,"t":"Where is it?","d":"Ask the way and understand the answer","lv":"A1","ic":"🧭","co":"#58CC02","path":1,"stage":1,"r":[3200,2205,2206,2207,2208,2209,3103,3104,4904],"w":[["Овде","Ovde","Here","📍"],["Тамо","Tamo","There","👉"],["Тоалет","Toalet","Toilet","🚻"],["У центру","U centru","In the centre","🏛️"],["На углу","Na uglu","On the corner","↪️"],["Идите право","Idite pravo","Go straight on","⬆️","formal"],["Скрените лево","Skrenite levo","Turn left","⬅️","formal"],["Па","Pa","Then / so","➡️"],["Хвала пуно","Hvala puno","Thanks a lot","🙏"]],"p":[["Gde je apoteka?","Where is the pharmacy?"],["Idite pravo, pa skrenite levo.","Go straight on, then turn left."],["Da li ovde ima toalet?","Is there a toilet around here?"],["Na uglu je, pored banke.","It's on the corner, next to the bank."],["Nije daleko.","It's not far."]],"dlg":[["Tom","Izvinite, gde je apoteka?","Excuse me, where is the pharmacy?"],["Čovek","Apoteka? Nije daleko. Idite pravo, pa skrenite levo.","The pharmacy? It's not far. Go straight on, then turn left."],["Tom","Pravo, pa levo. Da li je u centru?","Straight on, then left. Is it in the centre?"],["Čovek","Da, na uglu, pored banke.","Yes, on the corner, next to the bank."],["Tom","A da li ovde ima toalet?","And is there a toilet around here?"],["Čovek","Ima, tamo desno.","There is, over there on the right."],["Tom","Hvala puno!","Thanks a lot!"],["Čovek","Nema na čemu.","You're welcome."]],"me":"Tom","gram":"To say where something <i>is</i>, <b>u</b> (in) and <b>na</b> (on, at) change the end of the noun: <i>centar → u centru</i>, <i>grad → u gradu</i>, <i>ugao → na uglu</i>, <i>stanica → na stanici</i>. <b>Pa</b> here means <i>then</i>. Polite instructions end in <b>-ite</b> or <b>-jte</b>: <i>idite</i> (go), <i>skrenite</i> (turn), <i>čekajte</i> (wait). Going somewhere uses another form you'll meet later: <i>idem u centar</i>."}
 ];
 
 // The Italian course (U_IT, 88 units) was retired on 2026-10-12. It is in git
@@ -2506,13 +2561,20 @@ const CLOZE_SR=[
 
 // ═══════════════ LANGUAGE SYSTEM ═══════════════
 const LANG_DATA={
-  sr:{name:'Serbian',flag:'rs',code:'sr',units:U_SR}
+  sr:{name:'Serbian',flag:'rs',code:'sr',units:U_SR.concat(PATH_SR)}
 };
 // Serbian only. A device that was last on Italian gets a one-time notice.
 const _WAS_ITALIAN=localStorage.getItem('zeka_lang')==='it';
 if(_WAS_ITALIAN)localStorage.setItem('zeka_lang','sr');
 let curLang='sr';
 let UNITS,ALL_PH,ALL_W;
+// Learner gender for forms like umoran/umorna, written {m|f} in the data.
+// 'm', 'f' or 'b' (show both, e.g. umoran/umorna). Mirrors st.gender once state loads.
+let ZK_GENDER='b';
+function gx(s){
+  if(!s||s.indexOf('{')<0)return s;
+  return s.replace(/\{([^|}]*)\|([^}]*)\}/g,(m,a,b)=>ZK_GENDER==='m'?a:ZK_GENDER==='f'?b:a+'/'+b);
+}
 let VERBS=[];
 let NOUNS=[];
 let SENTENCES=[];
@@ -2730,8 +2792,35 @@ function spkPair(text,cls){
 }
 function spkWBtn(w,cls){return w?spkBtn(w.l,'sr',cls):'';}
 
+// Conversation Path helpers
+function pathUnits(){return UNITS.filter(u=>u.path);}
+// Share of a step's words the learner already knows (a card past its learning steps)
+function pathKnownShare(u){
+  const ws=u.lessonWords||u.words;if(!ws.length)return 0;
+  const known=ws.filter(w=>['se','es'].some(d=>{const c=st.fc[fcKey(w.id,d)];return c&&c.reps>=2;})).length;
+  return known/ws.length;
+}
+// A step opens after the previous one, if any later step is done, or if 80% of its words are known
+function pathUnlocked(u){
+  const path=pathUnits();const i=path.findIndex(x=>x.id===u.id);
+  if(i<=0)return true;
+  if(st.completed.includes(path[i-1].id))return true;
+  if(path.slice(i+1).some(x=>st.completed.includes(x.id)))return true;
+  return pathKnownShare(u)>=0.8;
+}
+function pathNext(){return pathUnits().find(u=>!st.completed.includes(u.id)&&pathUnlocked(u))||null;}
+
 function buildUnits(raw){
-  const units=raw.map(u=>({...u,words:u.w.map((w,i)=>({id:u.id*100+i,s:w[0],l:w[1],e:w[2],em:w[3],gn:w[4]||''})),phrases:(u.p||[]).map(p=>({tl:p[0],en:p[1]}))}));
+  const units=raw.map(u=>({...u,words:u.w.map((w,i)=>({id:u.id*100+i,s:gx(w[0]),l:gx(w[1]),e:w[2],em:w[3],gn:w[4]||''})),phrases:(u.p||[]).map(p=>({tl:gx(p[0]),en:p[1]})),
+    dlg:u.dlg?u.dlg.map(d=>[d[0],gx(d[1]),d[2]]):null}));
+  // Path steps reuse existing words by id (r): the same word objects, so the same
+  // flashcards. lessonWords = reused + new, used by the lesson exercises.
+  const byId=new Map();units.forEach(u=>u.words.forEach(w=>byId.set(w.id,w)));
+  units.forEach(u=>{
+    u.refs=(u.r||[]).map(id=>byId.get(id)).filter(Boolean);
+    if((u.r||[]).length!==u.refs.length)console.warn('[Zeka] unit',u.id,'references a missing word id');
+    u.lessonWords=u.refs.length?[...u.refs,...u.words]:u.words;
+  });
   // Word ids are unit.id*100+position, so a duplicate unit id (or a unit with
   // >99 words) silently merges SRS state across different words. Warn loudly.
   const seen=new Set();
@@ -2741,6 +2830,10 @@ function buildUnits(raw){
     if(u.words.length>99)console.warn('[Zeka] unit',u.id,'has >99 words; word ids will collide');
   });
   return units;
+}
+function rebuildUnits(){
+  UNITS=buildUnits(LANG_DATA[curLang].units);ALL_PH=UNITS.flatMap(u=>u.phrases);ALL_W=UNITS.flatMap(u=>u.words);
+  _SX_CACHE=null;
 }
 function setLang(code){
   curLang=code;localStorage.setItem('zeka_lang',code);
@@ -2836,7 +2929,7 @@ const ELO={
     }
     return{newElo:uElo+chg,chg};
   },
-  diff(uid){const idx=UNITS.findIndex(u=>u.id===uid);return 800+(idx>=0?idx:uid)*40},
+  diff(uid){const pi=PATH_SR.findIndex(u=>u.id===uid);if(pi>=0)return 800+pi*40;const idx=UNITS.findIndex(u=>u.id===uid);return 800+(idx>=0?idx:uid)*40},
   lvl(elo){
     if(elo<1000)return"Novice";if(elo<1150)return"Elementary";if(elo<1300)return"Pre-Intermediate";
     if(elo<1500)return"Intermediate";if(elo<1700)return"Upper-Intermediate";if(elo<1900)return"Advanced";return"Expert";
@@ -3029,7 +3122,7 @@ function getStateData(){
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
     fcNewToday:st.fcNewToday,fcReviewedToday:st.fcReviewedToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
     sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate,
-    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg,voiceAuto:st.voiceAuto,fcAlgo:st.fcAlgo,fcCatchupSkip:st.fcCatchupSkip,savedAt:st.savedAt};
+    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg,voiceAuto:st.voiceAuto,fcAlgo:st.fcAlgo,fcCatchupSkip:st.fcCatchupSkip,savedAt:st.savedAt,gender:st.gender};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
@@ -3045,6 +3138,8 @@ function applyStateData(p){
   st.voiceAuto=p.voiceAuto!==false;
   st.fcCatchupSkip=p.fcCatchupSkip||'';
   st.savedAt=p.savedAt||0;
+  st.gender=['m','f','b'].includes(p.gender)?p.gender:'';
+  _syncGender();
   // Scheduling v2: repair ease on cards the old rules slowed down. It runs on
   // every load of v1 data and is idempotent, so it never forces a save here:
   // saving during load could overwrite a newer cloud copy with an older local
@@ -3074,6 +3169,9 @@ function _fcMerge(a,b){
   }
   return out;
 }
+
+// Rebuild the course text when the learner's gender choice changes.
+function _syncGender(){const g=st.gender||'b';if(g!==ZK_GENDER){ZK_GENDER=g;if(UNITS)rebuildUnits();}}
 
 function fbUserDoc(){return fbDb.collection('users').doc(fbUser.uid);}
 
@@ -3395,7 +3493,7 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
   fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
-  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},voiceAuto:true,fcAlgo:2,fcCatchupSkip:'',savedAt:0,
+  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},voiceAuto:true,fcAlgo:2,fcCatchupSkip:'',savedAt:0,gender:'',
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -3446,7 +3544,12 @@ function fcGet(wordId,dir){
 const FC_NEW_ORDER_SR=[1600,108,109,4900,201,4901,200,5001,5004,4915,1601,5401,6800,5000,203,202,4910,8001,3206,4911,5405,6801,5403,2905,6802,5306,5308,1604,1602,3200,6804,5404,3203,5002,3501,2400,106,4914,5307,2403,5309,5402,4912,6805,5400,5003,107,3209,5005,2906,205,1605,300,101,100,5006,4913,5800,3500,3202,3502,1603,301,807,302,501,3204,3205,3505,208,206,808,102,1607,3207,207,204,1606,209,503,3503,809,105,3201,500,3504,3706,5600,3708,6308,5702,8200,2901,9301,5605,5700,9321,5408,5602,9302,2207,5407,900,6108,8000,6300,5302,2408,8112,5803,4916,5708,8008,5701,6302,5604,4918,2404,9330,4917,1800,2900,9304,8002,9306,5301,3208,5300,6309,400,8100,5608,4409,5409,902,8005,5200,8905,5801,104,6807,6306,8909,8007,9314,2200,402,901,401,4401,1402,5100,2902,2907,408,3707,6809,3101,5805,8207,403,1405,8103,3704,6808,509,5007,4403,9307,409,1406,304,2406,8101,9309,1609,2909,3305,3705,6803,1905,8004,404,103,2407,4806,2903,2201,8205,4400,6301,5606,5802,2208,303,2209,305,4406,1407,2908,1608,8006,405,2000,309,5804,2401,2402,1709,5601,3401,6806,3402,3507,3306,6103,2206,306,1401,3100,2205,307,4804,5207,506,1404,8109,508,3709,6102,507,308,6109,504,3506,5906,2101,3107,5603,8208,4407,4408,1008,2005,502,5903,2904,1403,2109,3400,8204,8203,6600,8900,2100,5008,8906,5406,8907,5305,8107,9315,5703,6202,6601,5907,4202,8212,1307,908,8211,5303,5009,5806,3601,7005,8210,8309,4909,3600,9322,8009,8102,4920,2104,9312,6303,4908,1007,5304,806,5704,4109,906,4919,4405,9329,9313,9319,2409,1907,7007,1002,4906,3900,905,8213,6706,4907,3102,2103,3307,3105,4904,9305,4007,4402,9323,5107,7001,4902,1304,1802,605,4905,5607,4308,1801,1306,2002,1308,8305,6206,1200,7006,600,703,8003,909,1903,6004,7009,8214,7003,9316,4800,604,8105,2304,8106,8110,3108,407,6204,3701,9320,3406,802,2006,1103,6200,3700,700,1803,1309,3106,3104,4903,3909,1805,6307,3703,9209,5201,903,701,4200,9300,4505,5609,4809,6305,9328,1201,3905,2203,2003,1302,907,4207,8310,9311,1205,8108,6709,8209,1804,3702,8111,4201,904,805,3404,6203,6304,1301,1902,1303,1300,3907,4404,4808,9318,804,5902,8311,3409,4603,1702,3405,6000,5101,8206,8201,4101,1701,8104,1104,5500,4009,1705,8202,406,3509,1202,505,2405,8010,3109,3508,3303,2300,8011,3403,6104,4708,800,4509,801,4304,2001,1305,803,5709,5900,2102,4102,3408,6408,4006,4104,4802,4301,1900,5901,3304,6101,4008,4805,9303,1409,6501,4803,5707,6100,4100,6400,4801,4103,6407,9308,3103,4309,3407,2204,4105,4107,4106,4500,4108,4508,5705,5706,8904,8902,8901,8903,3603,7300,4921,5106,4706,9325,8308,7105,9324,3004,8314,2308,7303,704,2502,3607,1502,3606,7709,7304,3608,5808,8306,1703,4203,5909,1708,9326,4504,1503,6007,7604,6209,5102,2504,601,1904,2800,702,4501,7605,5807,5105,1102,4605,8304,4601,1509,4205,6504,1808,4204,6105,1209,2309,2706,6106,4206,602,1809,6406,7305,706,5905,1505,2307,1105,6509,3605,8300,1909,1207,1500,1507,4001,8704,4502,1101,8312,3602,1704,8302,2004,4507,6208,2007,6005,1908,7301,6207,1100,2008,1107,705,3008,3309,9310,7708,1203,708,6008,603,2606,5503,607,5507,1807,2009,3804,2605,7203,9327,4707,4506,4602,5809,4209,1806,8301,8307,8313,4503,1106,5203,1204,3308,6205,1506,5504,5904,5104,6002,1208,6006,1504,3302,4703,608,1706,1707,6402,5109,4702,1109,3801,6403,4704,5502,5508,4600,3609,1501,3806,1108,2302,8303,1408,2105,2303,4609,709,4701,609,6009,4608,2301,2107,2106,4000,707,2108,2306,5501,3802,3300,2305,6401,4604,6003,6700,4208,3805,6409,6404,3604,6405,4002,4700,5205,6506,9317,5506,3807,3301,5505,4004,6201,6505,6107,4005,4003,606,3803,3808,5103,4709,5509,6508,5204,3809,6502,1508,6503,6507,6602,8908,2503,7707,8501,7509,8607,7502,9105,7507,9207,8503,8508,7500,9100,2501,8502,7401,8509,2505,7601,7409,7104,6909,2500,9104,8504,7102,9006,7101,8402,7309,7400,9200,2704,8500,7506,8600,9102,8703,7600,8803,7901,8708,7201,6702,2701,7302,3003,7100,8805,7306,7503,2702,8405,7403,9201,3005,2708,2601,2509,7508,8507,8605,2700,9000,9205,3001,2709,6705,7902,7501,6704,7909,8403,8601,3901,2507,2609,7109,2802,9004,7202,7208,2607,6609,7204,7402,9107,2608,7606,8804,7308,7200,7803,7702,2707,8806,3903,8408,8409,7209,9204,2705,2604,7307,3002,8407,6707,3000,7103,8404,9001,6608,7608,2805,8802,9009,7206,3006,2806,2506,2804,7406,2508,3009,7906,6701,8801,2803,9003,7609,7603,6708,8701,3904,6703,8702,7405,7809,9103,7705,8401,7701,6908,8705,9005,9206,7905,7408,2602,7504,8603,8604,3902,9101,2809,7407,7700,8800,7205,7805,7108,8400,9108,8609,2703,8406,7107,8506,3906,9203,7106,8606,8505,2808,8706,2807,7703,7900,3908,3007,7706,6603,6604,6605,6606,6607,6900,6901,6902,6903,6904,6905,6906,6907,7207,7505,7602,7607,7704,7800,7801,7802,7806,7807,7808,7904,7907,7908,9002,9007,9008,9106,9109,9202,9208,8608,8700,8707,8709,8807,8808,8809,4300,7004,1001,5208,1003,1000,6500,4807,1700,4306,5108,1906,4607,7000,7008,8602,1901,5209,4307,1009,7002,2603,1006,1206,7804,7404,2202,5202,2801,5908,1005,4606,1400,5206,4705,4303,3800,6001,2600,4305,7903,4302,1004];
 let _fcNewRank=null;
 function fcNewRank(id){
-  if(!_fcNewRank){_fcNewRank=new Map();FC_NEW_ORDER_SR.forEach((wid,i)=>_fcNewRank.set(wid,i));}
+  if(!_fcNewRank){
+    // Conversation Path words first, in step order, then everything else by usefulness
+    _fcNewRank=new Map();let i=0;
+    PATH_SR.forEach(u=>{[...(u.r||[]),...u.w.map((w,k)=>u.id*100+k)].forEach(wid=>{if(!_fcNewRank.has(wid))_fcNewRank.set(wid,i++);});});
+    FC_NEW_ORDER_SR.forEach(wid=>{if(!_fcNewRank.has(wid))_fcNewRank.set(wid,i++);});
+  }
   const r=_fcNewRank.get(id);return r===undefined?1e6:r;
 }
 
@@ -5893,44 +5996,12 @@ rPath(){
     B2:{em:'📚',lbl:'B2 · Upper-Intermediate',title:'Fluency',sub:'Complex topics, nuanced speech',g1:'#FFA54F',g2:'#E8801E',img:'chapter-b2.png'},
     C1:{em:'🎓',lbl:'C1 · Advanced',title:'Mastery',sub:'Academic and advanced',g1:'#FF6B6B',g2:'#C93030',img:'chapter-c1.png'}
   };
-  // Pre-compute per-level progress
-  const lvStats={};
-  UNITS.forEach(u=>{
-    if(!lvStats[u.lv])lvStats[u.lv]={done:0,total:0};
-    lvStats[u.lv].total++;
-    if(st.completed.includes(u.id))lvStats[u.lv].done++;
-  });
-  let lastLv='';
+  const done=u=>st.completed.includes(u.id);
   const positions=['center','right','center','left'];
-  let posIdxInLv=0;
-  UNITS.forEach((u,ui)=>{
-    const done=st.completed.includes(u.id);
-    const unlocked=ui===0||st.completed.includes(UNITS[ui-1].id);
-    const cls=done?'done':(unlocked?'cur':'lock');
+  const nodeHtml=(u,cls,pos)=>{
     const clk=cls!=='lock'?`onclick="S.startL(${u.id})" data-uid="${u.id}"`:`onclick="S.lockedTap(${u.id})"`;
-    // Chapter hero card when level changes
-    if(u.lv!==lastLv){
-      if(lastLv)h+='</div>';// close prior chapter-units
-      lastLv=u.lv;posIdxInLv=0;
-      const lv=LV[u.lv]||{em:'📖',lbl:u.lv,title:u.lv,sub:'',g1:'#1A5FD1',g2:'#0C3D8E'};
-      const st2=lvStats[u.lv];
-      const pct=st2.total>0?Math.round(st2.done/st2.total*100):0;
-      h+=`<div class="chap-hero lv-${u.lv}">
-        <div class="chap-hero-body">
-          <div class="chap-hero-lbl">${esc(lv.lbl)}</div>
-          <div class="chap-hero-title">${esc(lv.title)}</div>
-          <div class="chap-hero-sub">${esc(lv.sub)}</div>
-          <div class="chap-hero-prog">
-            <div class="chap-hero-bar"><div class="chap-hero-fill" style="width:${pct}%"></div></div>
-            <div class="chap-hero-pct">${st2.done}/${st2.total}</div>
-          </div>
-        </div>
-      </div>`;
-      h+=`<div class="chap-units" style="--chap-tint:${lv.g1}">`;
-    }
-    const pos=positions[posIdxInLv%positions.length];posIdxInLv++;
     let stars='';
-    if(done){
+    if(cls==='done'){
       const ua=st.uacc[u.id]||0;
       const n=ua>=95?3:ua>=80?2:ua>=60?1:0;
       if(n>0){
@@ -5940,13 +6011,57 @@ rPath(){
       }
     }
     const lockIc=cls==='lock'?'<span class="lock-ic" data-icon="lock"></span>':u.ic;
-    h+=`<div class="node-row ${pos}">
+    return `<div class="node-row ${pos}">
       <button class="node ${cls}" ${clk}>
         <span class="node-ic">${lockIc}</span>
         <span class="node-lbl">${esc(u.t)}</span>
         ${stars}
       </button>
     </div>`;
+  };
+  const hero=(cls,lbl,title,sub,d,t,tint)=>{
+    const pct=t>0?Math.round(d/t*100):0;
+    return `<div class="chap-hero ${cls}">
+        <div class="chap-hero-body">
+          <div class="chap-hero-lbl">${esc(lbl)}</div>
+          <div class="chap-hero-title">${esc(title)}</div>
+          <div class="chap-hero-sub">${esc(sub)}</div>
+          <div class="chap-hero-prog">
+            <div class="chap-hero-bar"><div class="chap-hero-fill" style="width:${pct}%"></div></div>
+            <div class="chap-hero-pct">${d}/${t}</div>
+          </div>
+        </div>
+      </div><div class="chap-units" style="--chap-tint:${tint}">`;
+  };
+  // Conversation Path: steps in order; the first open, unfinished step is current
+  const path=pathUnits();
+  let lastStage=0,pi=0,curSet=false;
+  path.forEach((u,i)=>{
+    if(u.stage!==lastStage){
+      if(lastStage)h+='</div>';
+      lastStage=u.stage;pi=0;
+      const sg=PATH_STAGES_SR[u.stage]||{t:'Stage '+u.stage,d:'',lv:u.lv};
+      const inSt=path.filter(x=>x.stage===u.stage);
+      h+=hero('lv-'+sg.lv,'Conversation Path · Stage '+u.stage,sg.t,sg.d,inSt.filter(done).length,inSt.length,'#58CC02');
+    }
+    let cls=done(u)?'done':pathUnlocked(u)?'open':'lock';
+    if(cls==='open'&&!curSet){cls='cur';curSet=true;}
+    h+=nodeHtml(u,cls,positions[pi++%positions.length]);
+  });
+  if(lastStage)h+='</div>';
+  // Topic packs: the original units, always open, grouped by level
+  const topics=UNITS.filter(u=>!u.path);
+  h+='<div class="tp-head"><div class="tp-title">Topic packs</div><div class="tp-sub">Vocabulary by subject. Open any pack, any time.</div></div>';
+  let lastLv='';
+  topics.forEach(u=>{
+    if(u.lv!==lastLv){
+      if(lastLv)h+='</div>';
+      lastLv=u.lv;
+      const lv=LV[u.lv]||{lbl:u.lv,title:u.lv};
+      const inLv=topics.filter(x=>x.lv===u.lv);
+      h+=`<div class="tp-lv"><span>${esc(lv.lbl)}</span><span class="tp-lv-n">${inLv.filter(done).length}/${inLv.length}</span></div><div class="tp-grid">`;
+    }
+    h+=`<button class="tp-chip${done(u)?' done':''}" onclick="S.startL(${u.id})" data-uid="${u.id}"><span class="tp-ic">${u.ic}</span><span class="tp-t">${esc(u.t)}</span>${done(u)?'<span class="tp-ok">✓</span>':''}</button>`;
   });
   if(lastLv)h+='</div>';
   el.innerHTML=h;
@@ -5972,11 +6087,8 @@ renderContinueFab(){
   }
   // Priority 2: the current (unlocked, not done) unit
   if(!action){
-    const curIdx=UNITS.findIndex((u,i)=>!st.completed.includes(u.id)&&(i===0||st.completed.includes(UNITS[i-1].id)));
-    if(curIdx>=0){
-      const u=UNITS[curIdx];
-      action={label:'Continue lesson',title:u.t,icon:u.ic,handler:()=>this.startL(u.id)};
-    }
+    const u=pathNext();
+    if(u)action={label:'Continue lesson',title:u.t,icon:u.ic,handler:()=>this.startL(u.id)};
   }
   // Priority 3: daily sentence not yet done
   if(!action&&typeof SENTENCES!=='undefined'&&SENTENCES.length){
@@ -5998,33 +6110,38 @@ renderContinueFab(){
 // ── LESSON ──
 // Locked node tapped: explain the unlock rule and offer the next actionable lesson.
 lockedTap(uid){
-  const ui=UNITS.findIndex(u=>u.id===uid);if(ui<0)return;
-  const u=UNITS[ui];
-  const curIdx=UNITS.findIndex((x,i)=>i<ui&&!st.completed.includes(x.id));
-  const req=curIdx>=0?UNITS[curIdx]:UNITS[ui-1];
+  const path=pathUnits();
+  const ui=path.findIndex(u=>u.id===uid);if(ui<0)return;
+  const u=path[ui];
+  const curIdx=path.findIndex((x,i)=>i<ui&&!st.completed.includes(x.id));
+  const req=curIdx>=0?path[curIdx]:path[ui-1];
   const between=curIdx>=0?ui-curIdx:1;
   haptic('tap');sCl();
   document.querySelectorAll('.lp-sheet').forEach(x=>x.remove());
   const sheet=document.createElement('div');sheet.className='lp-sheet';
   let h='<div class="lp-card"><div class="lp-handle"></div>';
   h+='<div class="lp-head"><span class="lp-em">🔒</span><div><div class="lp-tit">'+esc(u.t)+'</div><div class="lp-sub">'+esc(u.lv)+' · Locked</div></div></div>';
-  h+='<div class="lock-msg">Lessons unlock in order. Finish <b>'+esc(req.t)+'</b>'+(between>1?' and the '+(between-1)+' lesson'+(between>2?'s':'')+' after it':'')+' to unlock <b>'+esc(u.t)+'</b>.</div>';
+  h+='<div class="lock-msg">Steps open in order. Finish <b>'+esc(req.t)+'</b>'+(between>1?' and the '+(between-1)+' step'+(between>2?'s':'')+' after it':'')+', or test out: score 80% or more on <b>'+esc(u.t)+'</b> to open it now.</div>';
   h+='<button class="lp-go" id="lock-go">Go to '+esc(req.t)+' →</button>';
+  h+='<button class="lp-alt" id="lock-test">Test out of this step</button>';
   h+='</div>';
   sheet.innerHTML=h;_overlayHost().appendChild(sheet);
   const close=()=>{if(sheet.parentNode)sheet.remove();};
-  sheet.addEventListener('click',e=>{if(e.target.id==='lock-go'){close();S.startL(req.id);}else if(e.target===sheet)close();});
+  sheet.addEventListener('click',e=>{if(e.target.id==='lock-go'){close();S.startL(req.id);}else if(e.target.id==='lock-test'){close();S.startL(u.id,{testOut:true});}else if(e.target===sheet)close();});
   if(!REDUCED_MOTION){anim(sheet,{opacity:[0,1]},{duration:.18});anim(sheet.querySelector('.lp-card'),{transform:['translateY(100%)','translateY(0)']},{duration:.32,easing:'cubic-bezier(.22,.61,.36,1)'});}
 },
 
-startL(uid){
+startL(uid,opts){
   sCl();const u=UNITS.find(x=>x.id===uid);if(!u)return;
+  // Path steps use man/woman forms: ask once before the first one
+  if(u.path&&!st.gender){this.askGender(()=>this.startL(uid,opts));return;}
+  st._testOut=!!(opts&&opts.testOut);
   st.unit=u;st.hearts=5;st.ei=-1;st.lxp=0;st.lcor=0;st.ltot=0;st.lelo=0;
   st.exs=this.genEx(u);this.goScr('lesson');this.updL();this.showIntro();
 },
 
 genEx(u){
-  const w=u.words,ex=[];
+  const w=u.lessonWords||u.words,ex=[];
   ex.push(this.mkMC(w,'se'));ex.push(this.mkEm(w));
   const ph1=this.mkPh(u);if(ph1)ex.push(ph1);
   ex.push(this.mkMC(w,'es'));ex.push(this.mkMa(w));ex.push(this.mkMC(w,'se'));
@@ -6107,6 +6224,7 @@ updL(){
 
 showIntro(){
   const u=st.unit,b=document.getElementById('lbody');
+  if(u.path){this.showPathIntro();return;}
   const LV_THEME={A1:'#58CC02',A2:'#1A5FD1',B1:'#A06CD5',B2:'#FFA54F',C1:'#FF6B6B'};
   const theme=LV_THEME[u.lv]||'#1A5FD1';
   let h=`<div class="ibox">
@@ -6120,6 +6238,62 @@ showIntro(){
   u.words.forEach((w,i)=>{h+=`<div class="vcard" style="animation-delay:${.1+i*.06}s"><div class="vem">${w.em}</div><div class="vinf">
     <div class="vs">${w.l} ${spkWBtn(w,'spk-sm')}</div><div class="ve">${w.e}</div></div></div>`;});
   h+=`<button class="igo" onclick="S.nxt()">Begin</button></div>`;b.innerHTML=h;
+},
+
+showPathIntro(){
+  const u=st.unit,b=document.getElementById('lbody');
+  const path=pathUnits(),k=path.findIndex(x=>x.id===u.id)+1;
+  // The learner's stand-in (u.me) sits on the right, like your own messages
+  const me=u.me;
+  let h=`<div class="ibox">
+    <div class="ihero" style="--theme:#58CC02">
+      <div class="ihero-lbl">Stage ${u.stage} · Step ${k}</div>
+      <div class="ihero-em">${u.ic}</div>
+      <div class="ihero-title">${esc(u.t)}</div>
+      <div class="ihero-sub">${esc(u.d)}</div>
+    </div>`;
+  if(st._testOut)h+='<div class="pi-test">Test out: score 80% or more to open this step.</div>';
+  if(u.dlg&&u.dlg.length){
+    h+='<div class="ivocab-lbl">Conversation</div><div class="dlg">';
+    u.dlg.forEach(d=>{
+      const side=d[0]===me?'r':'l';
+      h+=`<div class="dlg-row ${side}"><div class="dlg-b"><div class="dlg-who">${esc(d[0])}</div><div class="dlg-sr">${esc(d[1])} ${spkBtn(d[1],'sr','spk-sm')}</div><div class="dlg-en">${esc(d[2])}</div></div></div>`;
+    });
+    h+='</div>';
+  }
+  // gram is trusted course HTML (b/i only), written in the data
+  if(u.gram)h+=`<div class="ivocab-lbl">How it works</div><div class="pi-gram">${u.gram}</div>`;
+  if(u.words.length){
+    h+=`<div class="ivocab-lbl">New words</div>`;
+    u.words.forEach((w,i)=>{h+=`<div class="vcard" style="animation-delay:${.1+i*.04}s"><div class="vem">${w.em}</div><div class="vinf">
+      <div class="vs">${esc(w.l)} ${spkWBtn(w,'spk-sm')}</div><div class="ve">${esc(w.e)}${w.gn?' <span class="pi-gn">'+esc(w.gn)+'</span>':''}</div></div></div>`;});
+  }
+  if(u.refs.length)h+=`<div class="ivocab-lbl">Words you'll use again</div><div class="pi-refs">${u.refs.map(w=>'<span class="pi-ref">'+esc(w.l)+'</span>').join('')}</div>`;
+  h+=`<button class="igo" onclick="S.nxt()">${st._testOut?'Start the test':'Begin'}</button></div>`;
+  b.innerHTML=h;
+},
+
+askGender(then){
+  document.querySelectorAll('.lp-sheet').forEach(x=>x.remove());
+  const sheet=document.createElement('div');sheet.className='lp-sheet';
+  sheet.innerHTML='<div class="lp-card"><div class="lp-handle"></div>'
+    +'<div class="lp-head"><span class="lp-em">🗣️</span><div><div class="lp-tit">When you talk about yourself</div><div class="lp-sub">You can change this in Profile</div></div></div>'
+    +'<div class="lock-msg">Some Serbian words change with who is speaking: a man says <b>umoran sam</b> (I\'m tired), a woman <b>umorna sam</b>. Which forms should Zeka use for you?</div>'
+    +'<div class="gx-opts"><button class="gx-opt" data-g="m">Man<span>umoran, želeo bih</span></button><button class="gx-opt" data-g="f">Woman<span>umorna, želela bih</span></button><button class="gx-opt" data-g="b">Show both<span>umoran/umorna</span></button></div></div>';
+  _overlayHost().appendChild(sheet);
+  sheet.addEventListener('click',e=>{
+    const b=e.target.closest('.gx-opt');
+    if(b){st.gender=b.dataset.g;_syncGender();save();sheet.remove();if(then)then();}
+    else if(e.target===sheet)sheet.remove();
+  });
+},
+
+setGender(g){st.gender=g;_syncGender();save();this.renderGenderPref();},
+renderGenderPref(){
+  const el=document.getElementById('p-gender');if(!el)return;
+  const g=st.gender||'b';
+  const opt=(v,l)=>`<button class="gx-pill${g===v?' on':''}" onclick="S.setGender('${v}')">${l}</button>`;
+  el.innerHTML='<div class="gx-pref"><div class="gx-pref-t">When I talk about myself</div><div class="gx-pref-s">Serbian forms like <i>umoran / umorna sam</i></div><div class="gx-pills">'+opt('m','Man')+opt('f','Woman')+opt('b','Show both')+'</div></div>';
 },
 
 nxt(){
@@ -6415,7 +6589,8 @@ noH(){const ov=document.createElement('div');ov.className='ov';ov.id='ovnh';
 showComp(){
   sDn();const acc=st.ltot>0?Math.round(st.lcor/st.ltot*100):0;
   if(acc===100)st.lxp+=20;st.xp+=st.lxp;
-  const wasNew=!st.completed.includes(st.unit.id);
+  const testFailed=st._testOut&&acc<80;
+  const wasNew=!st.completed.includes(st.unit.id)&&!testFailed;
   if(wasNew){st.completed.push(st.unit.id);
     st.unit.words.forEach(w=>{['se','es'].forEach(dir=>{const k=fcKey(w.id,dir);if(!st.fc[k])st.fc[k]={ease:2.5,ivl:0,due:0,reps:0};});});
   }
@@ -6436,6 +6611,9 @@ showComp(){
   const accCat=acc===100?'perfect':acc>=70?'good':'rough';
   let subMsg=zekaMsg(accCat);
   if(firstHit)subMsg+=' · '+zekaMsg(firstHit);
+  if(testFailed)subMsg='Test out needs 80%. Do the steps before it, or try again.';
+  else if(st._testOut)subMsg='Passed! '+st.unit.t+' is open.';
+  st._testOut=false;
   document.getElementById('cp-sub').textContent=subMsg;
   const statsEl=document.getElementById('cp-stats');
   if(statsEl)statsEl.style.border=acc===100?'2px solid var(--gold)':'';
@@ -6484,6 +6662,7 @@ async goProfile(){
   document.getElementById('p-xp').textContent=st.xp;
   document.getElementById('p-les').textContent=st.completed.length;
   document.getElementById('p-wrd').textContent=learnedWordCount();
+  this.renderGenderPref();
 
   // Username + friend code display
   const usrDisp=document.getElementById('p-username-display');

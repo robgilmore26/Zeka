@@ -1,6 +1,6 @@
 # Conversation Path: design (draft for Rob's approval)
 
-Date: 2026-10-18 · Status: proposed · Owner: Rob
+Date: 2026-10-18 · Status: approved; Stage 1 built · Owner: Rob
 
 ## Problem
 
@@ -118,7 +118,12 @@ choice) are listed for Rob instead of being decided silently.
    uses it for a few days, adjust.
 2. Stage 2. 3. Stage 3. 4. Stage 4. Each ships on its own after review.
 
-## Questions for Rob
+## Decisions (Rob, 2026-10-18)
+
+All four suggestions accepted: old units stay as Topic packs; colloquial forms are taught and labelled; each
+learner is asked once (man / woman / show both); Rob starts at step 1 and can test out.
+
+## Questions asked
 
 1. Keep the old units visible as Topic packs (recommended), or hide them?
 2. Teach common colloquial forms (*ćao, može, ajde, ma*), labelled as colloquial (recommended)?

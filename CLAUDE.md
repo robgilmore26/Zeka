@@ -40,7 +40,9 @@ cause, a fix, a deploy and a check that it is live — not a description. He rea
 
 - **Data ids are permanent.** Word id = `unit.id * 100 + position`: never reorder words in a unit, never reuse a
   unit id (Serbian units use ids 1–93; ids 80–83 once collided and merged progress). Append new words at the end.
-  `CLOZE_SR` ids (st.czg progress), `READ_SR` ids (st.readDone) and `SENT_SR` ids are append-only too. Verb cards
+  `CLOZE_SR` ids (st.czg progress), `READ_SR` ids (st.readDone) and `SENT_SR` ids are append-only too. Conversation
+  Path steps (`PATH_SR`) use unit ids 94+; they reuse existing words by id (`r:[...]`, same flashcard) and list only
+  words new to the course in `w`, so check a word isn't already in the course before adding it. Verb cards
   are keyed `v_<infinitive>`, so renaming an infinitive orphans its card.
 - **Boot order.** `setLang(curLang)` runs at load; anything it (or other boot code) touches must be declared above
   it, or the app hangs on "Loading…" for everyone (temporal dead zone — this happened once).
@@ -64,7 +66,8 @@ messages and blocked `navigator.vibrate` are harmless. Measure layouts with `get
 
 ## Learning features (current)
 
-Flashcards (spaced repetition, the main mode) · Lessons (93 units) · Match · Search/dictionary · Progress ·
+Flashcards (spaced repetition, the main mode) · Lessons (Conversation Path, Stage 1 = 8 steps, ids 94–101; plus the
+93 original units as always-open Topic packs) · Match · Search/dictionary · Progress ·
 Verbs (118 verbs, present / past / future drills) · Cases (7 cases) · Sentences (daily sentence + bank) ·
 Cloze (152 hand-written grammar sentences + ~530 vocabulary sentences, focus picker, grammar memory) ·
 Reading (8 graded texts, tap-to-translate) · Listening (drill + speaker buttons; hidden until clips are published).
@@ -87,7 +90,8 @@ Get every new batch of Serbian content (sentences, conjugations, glosses, wrong 
 before shipping. The usual failure is a "wrong" option that is also correct: Serbian uses the perfective present for
 habits ("Uvek zaboravim ključeve"), the present for planned future ("Vidimo se sutra", "Radim sutra"), short
 clitics ("Verujem ti"), and plural accusatives can fit. Write items so the sentence itself rules alternatives out.
-With a pronoun, clitics cluster: "Ja ću se buditi", never "Ja ću buditi se". Tatoeba sentences (`SENT_SR` ids 100+,
+With a pronoun, clitics cluster: "Ja ću se buditi", never "Ja ću buditi se". Forms that depend on the learner's gender
+are written `{m|f}` in the data (`Žele{o|la} bih`) and resolved by `gx()` from `st.gender` (m / f / b = both). Tatoeba sentences (`SENT_SR` ids 100+,
 CC BY 2.0 FR) carry `tt:[srId,enId]` and must keep their visible "Tatoeba #id" credit.
 
 ## Listening audio
