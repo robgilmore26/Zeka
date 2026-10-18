@@ -74,7 +74,9 @@ forgetting a review card gives one short retry, then half its old interval (not 
 −0.15 once per lapse, Hard −0.10) and Good restores it toward 2.5; overdue recall is credited (Good: half the delay,
 Easy: all of it) from the per-card `last` timestamp; intervals cap at 365 days. A one-time, idempotent repair raises
 worn-down ease (`fcAlgo:2`). Catch-up mode pauses new words while more than 30 reviews are due; new words/day can be
-paused (0 is a real value, not "unset").
+paused (0 is a real value, not "unset"). Each word is asked in one direction per day (`fcDueBreakdown`): a card
+waits while its se/es sibling was rated today, only the more overdue of two due siblings is offered, and a new
+word's English→Serbian card is introduced on a later day than its Serbian→English one.
 
 ## Serbian content
 
