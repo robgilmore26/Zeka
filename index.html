@@ -357,7 +357,7 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .igo:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
 
 /* COMPLETE */
-#comp{background:radial-gradient(ellipse at 50% 0%,#1A5FD1 0%,#0F1419 60%);align-items:center;justify-content:center;gap:14px;position:relative;overflow:hidden}
+#comp{background:radial-gradient(ellipse at 50% 0%,#1A5FD1 0%,#0F1419 60%);align-items:center;justify-content:center;gap:14px;overflow:hidden;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 #comp::before{content:'';position:absolute;inset:-100px;background-image:radial-gradient(circle at 30% 30%,rgba(255,212,59,.12),transparent 40%),radial-gradient(circle at 70% 70%,rgba(88,204,2,.08),transparent 45%);pointer-events:none}
 #comp > *{position:relative;z-index:1}
 .cp-i{font-size:80px;animation:bounceIn .6s ease}
@@ -6378,8 +6378,12 @@ showComp(){
   // Choreographed reveal: title pops, Zeka bounces, stats count up sequentially
   const zekaImg=document.getElementById('cp-zeka');
   if(zekaImg){
-    zekaImg.style.opacity='0';zekaImg.style.transform='scale(.4) rotate(-12deg)';
-    anim(zekaImg,{opacity:[0,1],transform:['scale(.4) rotate(-12deg)','scale(1.08) rotate(4deg)','scale(1) rotate(0deg)']},{duration:.7,easing:'cubic-bezier(.34,1.56,.64,1)'});
+    // Hide only when the bounce-in can run, or Zeka stays invisible (no Motion / reduced motion)
+    zekaImg.style.opacity='';zekaImg.style.transform='';
+    if(!REDUCED_MOTION&&window.M){
+      zekaImg.style.opacity='0';zekaImg.style.transform='scale(.4) rotate(-12deg)';
+      anim(zekaImg,{opacity:[0,1],transform:['scale(.4) rotate(-12deg)','scale(1.08) rotate(4deg)','scale(1) rotate(0deg)']},{duration:.7,easing:'cubic-bezier(.34,1.56,.64,1)'});
+    }
   }
   // Stat numbers count up in sequence
   setTimeout(()=>countUp(xpEl,0,st.lxp,650),400);
