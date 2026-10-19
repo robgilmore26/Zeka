@@ -69,7 +69,8 @@ messages and blocked `navigator.vibrate` are harmless. Measure layouts with `get
 
 ## Learning features (current)
 
-Flashcards (spaced repetition, the main mode) · Lessons (Conversation Path: Stage 1 = ids 94–101, Stage 2 = ids 102–109; plus the
+Flashcards (spaced repetition, the main mode) · Lessons (Conversation Path: Stage 1 = ids 94–101, Stage 2 = ids 102–109, Stage 3 = ids 110–115;
+plus the
 93 original units as always-open Topic packs) · Match · Search/dictionary · Progress ·
 Verbs (118 verbs, present / past / future drills) · Cases (7 cases) · Sentences (daily sentence + bank) ·
 Cloze (152 hand-written grammar sentences + ~530 vocabulary sentences, focus picker, grammar memory) ·
