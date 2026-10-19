@@ -6675,6 +6675,24 @@ async goProfile(){
   document.getElementById('p-wrd').textContent=learnedWordCount();
   this.renderGenderPref();
 
+  // Achievements
+  const ach=document.getElementById('p-ach');
+  const a=[{i:'🎯',n:'First Lesson',d:'Complete 1 lesson',u:st.completed.length>=1},
+    {i:'🔥',n:'On Fire',d:'3-day streak',u:st.streak>=3},{i:'💯',n:'Century',d:'Earn 100 XP',u:st.xp>=100},
+    {i:'📚',n:'Scholar',d:'Complete 10 units',u:st.completed.length>=10},
+    {i:'🏆',n:'Polyglot',d:'Complete 20 units',u:st.completed.length>=20},
+    {i:'👑',n:'Master',d:'All '+UNITS.length+' units done',u:st.completed.length>=UNITS.length},
+    {i:'⚡',n:'Lightning',d:'Earn 500 XP',u:st.xp>=500},
+    {i:'🧠',n:'Big Brain',d:'Reach ELO 1500',u:st.elo>=1500},
+    {i:'🌟',n:'Expert',d:'Reach ELO 1900',u:st.elo>=1900}];
+  ach.innerHTML=`<div class="psect">Achievements</div>`+a.map(x=>
+    `<div class="arow ${x.u?'':'lk'}"><div class="arow-i">${x.i}</div><div class="arow-inf">
+    <div class="arow-n">${x.n}</div><div class="arow-d">${x.d}</div></div><div>${x.u?'✅':'🔒'}</div></div>`).join('');
+  // Open the screen now; account details (username, friend code, friends) need the
+  // server and fill in when they arrive, so a slow connection never blocks the tap.
+  this.goScr('prof');
+  updateSyncUI();
+
   // Username + friend code display
   const usrDisp=document.getElementById('p-username-display');
   const fcodeDisp=document.getElementById('p-fcode-display');
@@ -6714,22 +6732,6 @@ async goProfile(){
       this.showSetUsername();
     }
   }
-
-  // Achievements
-  const ach=document.getElementById('p-ach');
-  const a=[{i:'🎯',n:'First Lesson',d:'Complete 1 lesson',u:st.completed.length>=1},
-    {i:'🔥',n:'On Fire',d:'3-day streak',u:st.streak>=3},{i:'💯',n:'Century',d:'Earn 100 XP',u:st.xp>=100},
-    {i:'📚',n:'Scholar',d:'Complete 10 units',u:st.completed.length>=10},
-    {i:'🏆',n:'Polyglot',d:'Complete 20 units',u:st.completed.length>=20},
-    {i:'👑',n:'Master',d:'All '+UNITS.length+' units done',u:st.completed.length>=UNITS.length},
-    {i:'⚡',n:'Lightning',d:'Earn 500 XP',u:st.xp>=500},
-    {i:'🧠',n:'Big Brain',d:'Reach ELO 1500',u:st.elo>=1500},
-    {i:'🌟',n:'Expert',d:'Reach ELO 1900',u:st.elo>=1900}];
-  ach.innerHTML=`<div class="psect">Achievements</div>`+a.map(x=>
-    `<div class="arow ${x.u?'':'lk'}"><div class="arow-i">${x.i}</div><div class="arow-inf">
-    <div class="arow-n">${x.n}</div><div class="arow-d">${x.d}</div></div><div>${x.u?'✅':'🔒'}</div></div>`).join('');
-  this.goScr('prof');
-  updateSyncUI();
 },
 
 async _loadFriends(){
