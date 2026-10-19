@@ -2808,6 +2808,20 @@ function pathUnlocked(u){
   if(path.slice(i+1).some(x=>st.completed.includes(x.id)))return true;
   return pathKnownShare(u)>=0.8;
 }
+// Restore Conversation Path steps whose completion was lost to an old copy
+// overwriting newer progress (Oct 2026). Finishing a step adds flashcards for
+// both directions of each of its new words, and flashcards survive merges; a
+// new word only gets its English→Serbian card from flashcards on a later day,
+// so a step with both cards for every new word was finished. Returns true if
+// anything was restored.
+function _pathRecover(){
+  let n=0;
+  pathUnits().forEach(u=>{
+    if(st.completed.includes(u.id)||!u.words.length)return;
+    if(u.words.every(w=>st.fc[fcKey(w.id,'se')]&&st.fc[fcKey(w.id,'es')])){st.completed.push(u.id);n++;}
+  });
+  return n>0;
+}
 function pathNext(){return pathUnits().find(u=>!st.completed.includes(u.id)&&pathUnlocked(u))||null;}
 
 function buildUnits(raw){
@@ -3184,6 +3198,27 @@ function _fcMerge(a,b){
 // Rebuild the course text when the learner's gender choice changes.
 function _syncGender(){const g=st.gender||'b';if(g!==ZK_GENDER){ZK_GENDER=g;if(UNITS)rebuildUnits();}}
 
+// Merge two saved copies of progress: `nw` (the newer) is the base; anything
+// earned only in `old` is added. Finished lessons, best accuracies, XP, read
+// texts, achievements, word and grammar stats only ever grow; flashcards keep
+// each card's latest rating; the streak follows the copy studied most recently.
+function _mergeState(nw,old){
+  const d=JSON.parse(JSON.stringify(nw||{}));old=old||{};let changed=false;
+  const union=k=>{const set=new Set(d[k]||[]);(old[k]||[]).forEach(x=>{if(!set.has(x)){set.add(x);changed=true;}});d[k]=[...set];};
+  union('completed');union('readDone');
+  const maxMap=(k,score)=>{d[k]=d[k]||{};const o=old[k]||{};for(const id in o){if(!d[k][id]||score(o[id])>score(d[k][id])){d[k][id]=o[id];changed=true;}}};
+  maxMap('uacc',v=>v||0);
+  maxMap('ws',v=>(v&&v.s)||0);
+  maxMap('czg',v=>(v&&v.n)||0);
+  if((old.xp||0)>(d.xp||0)){d.xp=old.xp;changed=true;}
+  if(old.firsts){d.firsts=d.firsts||{};for(const k in old.firsts)if(old.firsts[k]&&!d.firsts[k]){d.firsts[k]=true;changed=true;}}
+  if(old.lastDate&&(!d.lastDate||new Date(old.lastDate)>new Date(d.lastDate))){d.lastDate=old.lastDate;d.streak=old.streak;changed=true;}
+  const fc=_fcMerge(d.fc||{},old.fc||{});
+  if(Object.keys(old.fc||{}).some(k=>fc[k]===old.fc[k]&&d.fc&&d.fc[k]!==old.fc[k]))changed=true;
+  d.fc=fc;
+  return{data:d,changed};
+}
+
 function fbUserDoc(){return fbDb.collection('users').doc(fbUser.uid);}
 
 async function fbLoad(){
@@ -3202,18 +3237,17 @@ async function fbLoad(){
       return;
     }
     if(cloud){
-      // The newer copy wins (savedAt; XP only for copies saved before savedAt
-      // existed). Flashcards are then merged card by card, so a review never
-      // disappears because the other copy won: flashcards earn no XP, so with
-      // the old XP-only rule a stale cloud copy (a write cut off when the app
-      // closed, or an old tab on another device) could replace newer reviews.
+      // The newer copy (savedAt; XP only for copies saved before savedAt existed)
+      // is the base, and progress from the other copy is merged in so nothing
+      // earned on either side is lost: an old tab left open (Safari, the
+      // installed app, a PC) can save an older picture of your progress later
+      // than your real progress, and must not wipe it.
       const local=getStateData();
       const cloudNewer=(cloud.savedAt||local.savedAt)?(cloud.savedAt||0)>=(local.savedAt||0):cloud.xp>=local.xp;
-      const fc=_fcMerge(local.fc||{},cloud.fc||{});
-      if(cloudNewer)applyStateData(cloud);
-      st.fc=fc;
+      const m=_mergeState(cloudNewer?cloud:local,cloudNewer?local:cloud);
+      applyStateData(m.data);
       saveLocal();
-      if(!cloudNewer||JSON.stringify(fc)!==JSON.stringify(cloud.fc||{}))fbSaveCloud();
+      if(!cloudNewer||m.changed)fbSaveCloud();
     }else{
       fbSaveCloud();
     }
@@ -3222,8 +3256,20 @@ async function fbLoad(){
 
 // Leaving the app (switching away, locking the phone, closing it) sends any
 // pending cloud save at once instead of losing it with the 500 ms timer.
+// Coming back to a tab or app that sat in the background for a while re-reads
+// the cloud copy first, so its older picture of your progress is brought up to
+// date before you do anything in it (only on screens with nothing in progress).
+let _hiddenAt=0;
 document.addEventListener('visibilitychange',()=>{
-  if(document.visibilityState==='hidden'&&_fbSaveTimer){clearTimeout(_fbSaveTimer);_fbSaveTimer=null;_fbWrite();}
+  if(document.visibilityState==='hidden'){
+    _hiddenAt=Date.now();
+    if(_fbSaveTimer){clearTimeout(_fbSaveTimer);_fbSaveTimer=null;_fbWrite();}
+  }else if(fbUser&&_hiddenAt&&Date.now()-_hiddenAt>60000){
+    const act=document.querySelector('.sc.act');
+    if(act&&['home','prof','progress','search'].includes(act.id)){
+      fbLoad().then(()=>{if(_pathRecover())save();const a=document.querySelector('.sc.act');if(a&&a.id==='home')S.goHome();});
+    }
+  }
 });
 function fbSaveCloud(){
   if(!fbUser)return;
@@ -3250,6 +3296,7 @@ fbAuth.onAuthStateChanged(async user=>{
     if(GUEST){GUEST=null;localStorage.removeItem('zeka_guest');}
     load();// Load local state for current language first
     await fbLoad();
+    if(_pathRecover())save();
     S.goHome();
   }else if(GUEST){
     // Local guest profile — no cloud, no Google

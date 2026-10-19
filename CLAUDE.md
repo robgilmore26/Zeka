@@ -48,8 +48,11 @@ cause, a fix, a deploy and a check that it is live — not a description. He rea
   it, or the app hangs on "Loading…" for everyone (temporal dead zone — this happened once).
 - **Persisted state:** a new `st` field must be added to the `st` defaults, `getStateData()` **and**
   `applyStateData()`, or it silently fails to sync. Never call `save()` while state is loading: it can overwrite a
-  newer cloud copy with an older local one before `fbLoad` compares them. `fbLoad` keeps the copy with the newer
-  `savedAt` (stamped by `save()`; XP decides only for pre-savedAt copies) and merges `st.fc` card by card by `last`.
+  newer cloud copy with an older local one before `fbLoad` compares them. `fbLoad` takes the copy with the newer
+  `savedAt` as the base and `_mergeState` adds everything earned only in the other copy (completed, uacc, xp, readDone,
+  firsts, ws, czg, streak, `st.fc` card by card by `last`), so a stale tab saving later can't wipe progress; a tab
+  back from >60 s in the background re-reads the cloud first. A new persisted field that only grows belongs in
+  `_mergeState` too.
 - **Overlays/sheets** mount through `_overlayHost()` (inside `#scr`), never `document.body`, or they stretch across
   the desktop window. No CSS `zoom`; use transforms (zoom rendered differently in Rob's browser).
 - After editing, **parse every inline `<script>`** (extract each, strip the module `import` line,
