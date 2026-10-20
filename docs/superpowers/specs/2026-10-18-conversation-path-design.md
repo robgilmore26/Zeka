@@ -1,6 +1,6 @@
 # Conversation Path: design (draft for Rob's approval)
 
-Date: 2026-10-18 · Status: approved; Stage 1 built · Owner: Rob
+Date: 2026-10-18 · Status: approved; all four stages built (2026-10-20) · Owner: Rob
 
 ## Problem
 
