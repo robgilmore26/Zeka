@@ -86,7 +86,9 @@ paused (0 is a real value, not "unset"). Each word is asked in one direction per
 waits while its se/es sibling was rated today, only the more overdue of two due siblings is offered, and a new
 word's English→Serbian card is introduced on a later day than its Serbian→English one. New words are introduced
 in `FC_NEW_ORDER_SR` order (usefulness tiers + OpenSubtitles frequency, duplicates last); **add every new word id to
-that list** at a sensible spot, or it is introduced after all 978 current words.
+that list** at a sensible spot, or it is introduced after all 978 current words. A word that appears in two units with the
+same meaning uses one card (`_fcTwinHidden`); a "new" card for a word met before (lesson stats, a finished lesson, the
+other direction) is a recall test, not the new-word intro (`fcSeenBefore`).
 
 ## Serbian content
 
