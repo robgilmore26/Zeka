@@ -1,0 +1,12 @@
+# GitHub Pages (Jekyll) settings for zeka.one.
+# Everything in main is published unless excluded here, and Markdown files are
+# turned into web pages, so keep internal notes, design docs and tools out.
+exclude:
+  - CLAUDE.md
+  - CAPACITOR.md
+  - README.md
+  - docs
+  - tools
+  - fetch_tatoeba.py
+  - package.json
+  - capacitor.config.json

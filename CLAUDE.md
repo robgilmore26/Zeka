@@ -30,7 +30,11 @@ cause, a fix, a deploy and a check that it is live — not a description. He rea
 
 - GitHub Pages serves `main` at **zeka.one** (repo `robgilmore26/Zeka`; the old name SerbianDuolingo redirects).
   Deploy = get the change onto `main` and push. Work on a branch, then merge or fast-forward it into `main`.
-- On Rob's PC the main checkout has two modified icon PNGs he wants left **uncommitted**; never `git add -A` there.
+- The app icons are `icon-192.png` and `icon-512.png` (lowercase); `icon-1024.png` is the full-size master art for the
+  future app stores. Never add a file whose name differs from another only by capital letters: Rob's Windows PC can't
+  hold both (the old `icon-192.PNG` / `icon-512.PNG` duplicates showed up there as phantom modifications).
+- GitHub Pages publishes every file in `main` (Jekyll turns `.md` into pages), so `_config.yml` excludes the internal
+  docs, notes and tools. Add any new internal file or folder to its `exclude` list.
 - GitHub's CDN caches HTML for ~10 minutes. Confirm a deploy with the page's `Last-Modified` header
   (`curl -s -D - -o /dev/null "https://zeka.one/?nocache=$(date +%s)"`) and by grepping the live HTML for a symbol
   from the change. Profile shows `Build <Last-Modified in UTC>` for the same purpose.
