@@ -84,7 +84,7 @@ The ⋯ segment on Learn opens the extra modes; Flashcards home has an "Also tod
 **Flashcard scheduling (v2, Oct 2026)** — `fcNext()` is the single source of truth (rating and button labels):
 forgetting a review card gives one short retry, then half its old interval (not a reset); ease falls less (Again
 −0.15 once per lapse, Hard −0.10) and Good restores it toward 2.5; overdue recall is credited (Good: half the delay,
-Easy: all of it) from the per-card `last` timestamp; intervals cap at 365 days. A one-time, idempotent repair raises
+Easy: all of it) from the per-card `last` timestamp; intervals cap at 365 days. Easy on a new or learning card skips the 10-minute/1-day steps (`FC_EASY_GRAD` = 4 days). A one-time, idempotent repair raises
 worn-down ease (`fcAlgo:2`). Catch-up mode pauses new words while more than 60 reviews are due; new words ride on top of a full 30-review session (up to 10); new words/day can be
 paused (0 is a real value, not "unset"). Each word is asked in one direction per day (`fcDueBreakdown`): a card
 waits while its se/es sibling was rated today, only the more overdue of two due siblings is offered, and a new

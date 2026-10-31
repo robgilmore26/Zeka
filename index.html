@@ -3711,7 +3711,7 @@ function fcNewLimitRemaining(){
 //    steps of a brand-new word never change ease.
 //  • Long gaps count: recalling an overdue card earns credit for the extra time
 //    (Good: half the delay, Easy: all of it), measured from c.last.
-const FC_LAPSE_KEEP=0.5,FC_EASE_MIN=1.3,FC_EASE_MAX=3,FC_EASE_HOME=2.5,FC_MAX_IVL=365,FC_MINUTE=1/(24*60);
+const FC_EASY_GRAD=4,FC_LAPSE_KEEP=0.5,FC_EASE_MIN=1.3,FC_EASE_MAX=3,FC_EASE_HOME=2.5,FC_MAX_IVL=365,FC_MINUTE=1/(24*60);
 // When was this card last rated? c.last from v2 on; older cards: due − interval.
 function _fcLast(c){if(c.last)return c.last;if(c.due&&c.ivl)return c.due-c.ivl*864e5;return 0;}
 // Pure: the card's next {ease, ivl, reps, relearn, prevIvl} for a rating.
@@ -3737,8 +3737,11 @@ function fcNext(c,rating,now){
     n.ivl=Math.min(FC_MAX_IVL,Math.max(1,n.ivl));n.reps++;
     return n;
   }
-  // brand-new word, learning steps: 10 minutes, then a day
+  // brand-new word, learning steps: 10 minutes, then a day. Easy skips the steps
+  // and comes back in FC_EASY_GRAD days (it used to act like Good here, so words
+  // you already knew kept returning after 10 minutes and the next day).
   if(rating===0){n.reps=0;n.ivl=FC_MINUTE;return n;}
+  if(rating===3){n.reps=2;n.ivl=FC_EASY_GRAD;return n;}
   if(n.reps===0){n.reps=1;n.ivl=10/(24*60);return n;}
   n.reps=2;n.ivl=1;return n;
 }
