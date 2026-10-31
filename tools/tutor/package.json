@@ -1,0 +1,17 @@
+{
+  "name": "zeka-tutor",
+  "private": true,
+  "type": "module",
+  "description": "Zeka Speaking Practice server (Cloudflare Worker)",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "test": "node --test test/tutor.test.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0"
+  }
+}

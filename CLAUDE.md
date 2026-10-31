@@ -78,7 +78,8 @@ plus the
 93 original units as always-open Topic packs) · Match · Search/dictionary · Progress ·
 Verbs (118 verbs, present / past / future drills) · Cases (7 cases) · Sentences (daily sentence + bank) ·
 Cloze (152 hand-written grammar sentences + ~530 vocabulary sentences, focus picker, grammar memory) ·
-Reading (8 graded texts, tap-to-translate) · Listening (drill + speaker buttons; hidden until clips are published).
+Reading (8 graded texts, tap-to-translate) · Listening (drill + speaker buttons; hidden until clips are published) ·
+Speaking Practice (push-to-talk voice tutor; hidden until `TUTOR_URL` is set — see below).
 The ⋯ segment on Learn opens the extra modes; Flashcards home has an "Also today" strip.
 
 **Flashcard scheduling (v2, Oct 2026)** — `fcNext()` is the single source of truth (rating and button labels):
@@ -112,6 +113,18 @@ round-trips each clip through speech-to-text to flag mismatches, writes a review
 clips Rob approved into `voice/`. The app plays only manifest clips and never falls back to device speech (the May
 2026 audio failed because Latin text and bare fragments were fed to the voice). Generation needs Rob's Azure Speech
 key; on his PC `tools\audio\run-azure.ps1` asks for it with hidden input. Never put the key in a file or a chat.
+
+## Speaking Practice (voice tutor)
+
+The app records a turn (MediaRecorder, hold-to-talk) and posts it to a Cloudflare Worker in `tools/tutor/` (its
+README has the setup): ElevenLabs Scribe `scribe_v2` → Claude `claude-haiku-5-5` (Rob's tutor prompt, replies capped
+at 160 tokens) → ElevenLabs TTS `eleven_v3`, voice "Ivan - Deep Serbian & Croatian (Balkan)". All keys live in the
+Worker as Cloudflare secrets; the Worker accepts only verified Firebase ID tokens whose email is in `ALLOWED_EMAILS`.
+Tutor lines starting `EN:` are English support (shown lighter, not voiced); Cyrillic is converted to Latin on both
+sides. `TUTOR_URL` in `index.html` switches the mode on. Sessions (transcript, duration, summary, cost) and a
+corrections log live in `st.speak` (merged in `_mergeState`); the 5 newest corrections go into each new session.
+`node --test tools/tutor/test/tutor.test.mjs` tests the server logic offline. The cloud sandbox can't reach
+ElevenLabs, so real calls are first exercised from Rob's PC.
 
 ## Analytics and QA
 

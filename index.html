@@ -147,6 +147,33 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
 .lp-go{width:100%;padding:16px;border:none;border-radius:14px;font-size:14px;font-weight:800;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);text-transform:uppercase;letter-spacing:1px;cursor:pointer}
 .lp-go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
 .lock-msg{font-size:14px;color:var(--text-2);line-height:1.5;margin:0 0 16px}
+.sp-cost{font-size:12px;font-weight:700;color:var(--text-3);font-variant-numeric:tabular-nums;min-width:56px;text-align:right}
+.sp-opts{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:6px 20px 10px;border-bottom:1px solid var(--divider)}
+.sp-opt{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--text-2)}
+.sp-opt b{color:var(--text-1)}
+.sp-opt input[type=range]{width:150px;accent-color:var(--sr-blue)}
+.sp-sw{flex-direction:row;align-items:center;gap:8px;cursor:pointer}
+.sp-sw input{width:18px;height:18px;accent-color:var(--sr-blue)}
+.sp-log{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
+.sp-log .dlg-en{color:var(--text-3)}
+.sp-intro{background:var(--surface);border:1px solid var(--divider);border-radius:16px;padding:16px;margin-bottom:6px}
+.sp-intro-t{font-family:var(--font-display);font-size:22px;font-weight:900;color:#fff}
+.sp-intro-s{font-size:14px;color:var(--text-2);margin-top:6px;line-height:1.5}
+.sp-past{background:var(--surface);border:1px solid var(--divider);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--text-2)}
+.sp-past summary{cursor:pointer;font-weight:700;color:var(--text-1)}
+.sp-sum{font-size:14px;line-height:1.55;color:var(--text-2);margin-top:8px}
+.sp-summary{background:var(--surface);border:1px solid rgba(88,204,2,.3);border-radius:16px;padding:14px 16px}
+.sp-err{font-size:13px;color:var(--orange);background:rgba(255,165,79,.08);border-radius:10px;padding:8px 12px}
+.sp-play{display:flex;gap:8px;margin-top:8px}
+.sp-play button{font-size:12px;font-weight:700;color:var(--text-1);background:rgba(255,255,255,.06);border:1px solid var(--divider);border-radius:10px;padding:6px 10px;cursor:pointer}
+.sp-bar{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 20px calc(18px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--divider);background:var(--surface)}
+.sp-mic{width:84px;height:84px;border-radius:50%;border:none;background:var(--sr-blue);color:#fff;font-size:34px;box-shadow:0 6px 0 var(--sr-blue-d);cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.sp-mic.rec{background:var(--red);box-shadow:0 0 0 10px rgba(255,107,107,.25);transform:scale(1.06)}
+.sp-mic.busy{opacity:.5;cursor:default}
+.sp-hint{font-size:12px;color:var(--text-2);font-weight:600}
+.sp-endbtn{background:transparent;border:1px solid var(--divider);color:var(--text-2);border-radius:12px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.sp-go,.sp-end{width:100%;padding:16px;border:none;border-radius:14px;background:var(--green);color:#fff;font-size:15px;font-weight:800;box-shadow:0 4px 0 var(--green-d);cursor:pointer}
+.sp-note{font-size:14px;color:var(--text-2);text-align:center;line-height:1.5}
 .lp-alt{width:100%;margin-top:10px;padding:14px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:transparent;color:#fff;font-size:14px;font-weight:700;cursor:pointer}
 .gx-opts{display:flex;flex-direction:column;gap:8px}
 .gx-opt{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.04);color:#fff;font-size:15px;font-weight:800;cursor:pointer;text-align:left}
@@ -1140,6 +1167,20 @@ body{font-family:var(--font);background:linear-gradient(135deg,#0f0c29,#302b63,#
     <div style="width:32px"></div>
   </div>
   <div class="vd-body" id="ln-body"></div>
+</div>
+
+<div class="sc" id="speak">
+  <div class="vd-top">
+    <button class="xbtn" onclick="S.exitSpeaking()"><span data-icon="x"></span></button>
+    <div class="vd-count">Speaking Practice</div>
+    <div class="sp-cost" id="sp-cost">$0.000</div>
+  </div>
+  <div class="sp-opts">
+    <label class="sp-opt"><span>Speed <b id="sp-rate-v">0.85×</b></span><input type="range" id="sp-rate" min="0.6" max="1" step="0.05" oninput="S.spSetRate(this.value)"></label>
+    <label class="sp-opt sp-sw"><input type="checkbox" id="sp-eng" onchange="S.spSetEng(this.checked)"><span>English support</span></label>
+  </div>
+  <div class="sp-log" id="sp-log"></div>
+  <div class="sp-bar" id="sp-bar"></div>
 </div>
 
 <div class="sc" id="reading">
@@ -2774,6 +2815,20 @@ function langFlag(){return '<img src="https://flagcdn.com/w40/'+LANG_DATA[curLan
 // and approved. No clip → no speaker button and no autoplay: the app never falls
 // back to the device's own speech for Serbian (that is what sounded wrong before).
 const VOICE={clips:{},n:0,loaded:false};
+// Speaking Practice (voice tutor). The server (tools/tutor, a Cloudflare Worker)
+// holds the API keys; the mode stays hidden until its address is set here.
+const TUTOR_URL='';
+// Rough per-session cost shown in the app (estimates; check your plans):
+let _sp=null,_spAudio=null,_spStream=null,_spRec=null,_spChunks=[],_spRecAt=0,_spMaxT=null,_spUnlocked=false;
+function spAudioEl(){if(!_spAudio)_spAudio=new Audio();return _spAudio;}
+// iOS only lets audio play after a tap: start (and stop) the player inside the first tap
+function spUnlockAudio(){if(_spUnlocked)return;_spUnlocked=true;const a=spAudioEl();try{a.muted=true;const p=a.play();if(p&&p.catch)p.catch(()=>{});a.pause();a.muted=false;}catch(e){}}
+// Safety net: the tutor must write Latin; convert any Cyrillic that slips through
+const SP_CYR={'А':'A','Б':'B','В':'V','Г':'G','Д':'D','Ђ':'Đ','Е':'E','Ж':'Ž','З':'Z','И':'I','Ј':'J','К':'K','Л':'L','Љ':'Lj','М':'M','Н':'N','Њ':'Nj','О':'O','П':'P','Р':'R','С':'S','Т':'T','Ћ':'Ć','У':'U','Ф':'F','Х':'H','Ц':'C','Ч':'Č','Џ':'Dž','Ш':'Š','а':'a','б':'b','в':'v','г':'g','д':'d','ђ':'đ','е':'e','ж':'ž','з':'z','и':'i','ј':'j','к':'k','л':'l','љ':'lj','м':'m','н':'n','њ':'nj','о':'o','п':'p','р':'r','с':'s','т':'t','ћ':'ć','у':'u','ф':'f','х':'h','ц':'c','ч':'č','џ':'dž','ш':'š'};
+function spLatin(s){return String(s||'').replace(/[\u0400-\u04FF]+/g,w=>{const o=[...w].map(c=>SP_CYR[c]??c).join('');return w.length>1&&w===w.toUpperCase()&&w!==w.toLowerCase()?o.toUpperCase():o;});}
+// Tutor replies put English support on lines starting with "EN:"
+function spLines(text){return String(text||'').split(/\n+/).map(x=>x.trim()).filter(Boolean).map(x=>/^EN:\s*/i.test(x)?{en:true,t:x.replace(/^EN:\s*/i,'')}:{en:false,t:x});}
+const SP_PRICE={ttsPer1k:0.10,sttPerMin:0.40/60,claudeIn:0.10/1e6,claudeOut:0.50/1e6};
 let _vAudio=null;
 function _vkey(t){return String(t||'').trim().toLowerCase();}
 function voiceHas(t){return !!VOICE.clips[_vkey(t)];}
@@ -3169,7 +3224,7 @@ function getStateData(){
     completed:st.completed,ws:st.ws,hearts:st.hearts,fc:st.fc,firsts:st.firsts,uacc:st.uacc,
     fcNewToday:st.fcNewToday,fcReviewedToday:st.fcReviewedToday,fcNewDate:st.fcNewDate,fcNewLimit:st.fcNewLimit,fcSourceMode:st.fcSourceMode,
     sentDoneToday:st.sentDoneToday,sentDoneDate:st.sentDoneDate,
-    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg,voiceAuto:st.voiceAuto,fcAlgo:st.fcAlgo,fcCatchupSkip:st.fcCatchupSkip,savedAt:st.savedAt,gender:st.gender};
+    vbTense:st.vbTense,clozeMode:st.clozeMode,readDone:st.readDone,today:st.today,czFocus:st.czFocus,czg:st.czg,voiceAuto:st.voiceAuto,fcAlgo:st.fcAlgo,fcCatchupSkip:st.fcCatchupSkip,savedAt:st.savedAt,gender:st.gender,speak:st.speak};
 }
 function applyStateData(p){
   st.elo=p.elo||1000;st.xp=p.xp||0;st.streak=p.streak||0;st.lastDate=p.lastDate||null;
@@ -3186,6 +3241,9 @@ function applyStateData(p){
   st.fcCatchupSkip=p.fcCatchupSkip||'';
   st.savedAt=p.savedAt||0;
   st.gender=['m','f','b'].includes(p.gender)?p.gender:'';
+  {const sp=(p.speak&&typeof p.speak==='object')?p.speak:{};
+   st.speak={rate:typeof sp.rate==='number'?Math.min(1,Math.max(0.6,sp.rate)):0.85,eng:sp.eng!==false,
+     sessions:Array.isArray(sp.sessions)?sp.sessions:[],mistakes:Array.isArray(sp.mistakes)?sp.mistakes:[]};}
   _syncGender();
   // Scheduling v2: repair ease on cards the old rules slowed down. It runs on
   // every load of v1 data and is idempotent, so it never forces a save here:
@@ -3232,6 +3290,16 @@ function _mergeState(nw,old){
   maxMap('uacc',v=>v||0);
   maxMap('ws',v=>(v&&v.s)||0);
   maxMap('czg',v=>(v&&v.n)||0);
+  // Speaking sessions and the mistakes log only grow: keep both copies' entries
+  if(old.speak){
+    d.speak=d.speak||{rate:0.85,eng:true,sessions:[],mistakes:[]};
+    const ids=new Set((d.speak.sessions||[]).map(x=>x.id));
+    (old.speak.sessions||[]).forEach(x=>{if(!ids.has(x.id)){(d.speak.sessions=d.speak.sessions||[]).push(x);changed=true;}});
+    d.speak.sessions.sort((a,b)=>a.id-b.id);
+    const mk=x=>(x.said||'')+'|'+(x.correct||'');const ms=new Set((d.speak.mistakes||[]).map(mk));
+    (old.speak.mistakes||[]).forEach(x=>{if(!ms.has(mk(x))){(d.speak.mistakes=d.speak.mistakes||[]).push(x);changed=true;}});
+    d.speak.mistakes.sort((a,b)=>(b.t||0)-(a.t||0));
+  }
   if((old.xp||0)>(d.xp||0)){d.xp=old.xp;changed=true;}
   if(old.firsts){d.firsts=d.firsts||{};for(const k in old.firsts)if(old.firsts[k]&&!d.firsts[k]){d.firsts[k]=true;changed=true;}}
   if(old.lastDate&&(!d.lastDate||new Date(old.lastDate)>new Date(d.lastDate))){d.lastDate=old.lastDate;d.streak=old.streak;changed=true;}
@@ -3573,7 +3641,7 @@ async function fbGetPendingRequests(){
 // ═══════════════ STATE ═══════════════
 let st={elo:1000,xp:0,streak:0,lastDate:null,hearts:5,completed:[],ws:{},fc:{},uacc:{},
   fcNewToday:0,fcReviewedToday:0,fcNewDate:'',fcNewLimit:30,fcSourceMode:'all',
-  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},voiceAuto:true,fcAlgo:2,fcCatchupSkip:'',savedAt:0,gender:'',
+  vbTense:'present',clozeMode:'tap',readDone:[],today:{d:'',m:0,c:0,r:0},czFocus:'mixed',czg:{},voiceAuto:true,fcAlgo:2,fcCatchupSkip:'',savedAt:0,gender:'',speak:{rate:0.85,eng:true,sessions:[],mistakes:[]},
   firsts:{lesson:false,flashcard:false,verb:false,caseDrill:false,keepGoing:false},
   unit:null,ei:0,exs:[],lxp:0,lcor:0,ltot:0,lelo:0,selIdx:-1,answered:false,matchSt:null,wbAns:[],wbUsed:null,
   fcCards:[],fcIdx:0,fcFlipped:false,fcReviewed:0,fcAgainCount:0,fcCorrectCount:0,
@@ -5644,6 +5712,167 @@ rdMarkDone(){
   if(streakHit)setTimeout(()=>showStreakMilestone(streakHit),600);
 },
 
+// ═══ Speaking Practice ═══
+// Push-to-talk voice tutor. Each turn: record → server (speech-to-text, Claude,
+// text-to-speech) → show the transcript and play the reply. Sessions and the
+// corrections log are saved in st.speak and sync like other progress.
+openSpeaking(){
+  sCl();
+  _sp={history:[],lines:[],start:0,cost:{tts:0,stt:0,inTok:0,outTok:0},busy:false,ended:false};
+  this.goScr('speak');
+  const r=document.getElementById('sp-rate');r.value=st.speak.rate;document.getElementById('sp-rate-v').textContent=st.speak.rate.toFixed(2)+'×';
+  document.getElementById('sp-eng').checked=st.speak.eng;
+  this.spRenderLog();this.spRenderBar();
+},
+exitSpeaking(){
+  if(_sp&&_sp.history.length>1&&!_sp.ended)this.spSave(null);
+  if(_spAudio)_spAudio.pause();
+  if(_spRec&&_spRec.state==='recording')_spRec.stop();
+  if(_spStream){_spStream.getTracks().forEach(t=>t.stop());_spStream=null;}
+  _sp=null;this.goHome();
+},
+spSetRate(v){st.speak.rate=Math.round(parseFloat(v)*100)/100;document.getElementById('sp-rate-v').textContent=st.speak.rate.toFixed(2)+'×';if(_spAudio&&!_spAudio.paused&&!_spAudio._slow)_spAudio.playbackRate=st.speak.rate;save();},
+spSetEng(on){st.speak.eng=!!on;save();},
+spCostUSD(){const c=_sp.cost;return c.tts/1000*SP_PRICE.ttsPer1k+c.stt/60*SP_PRICE.sttPerMin+c.inTok*SP_PRICE.claudeIn+c.outTok*SP_PRICE.claudeOut;},
+spRenderBar(){
+  const bar=document.getElementById('sp-bar');if(!bar||!_sp)return;
+  if(!fbUser){bar.innerHTML='<div class="sp-note">Sign in (Profile) to use Speaking Practice. It uses paid voice services, so it is not open to guests.</div>';return;}
+  if(_sp.ended){bar.innerHTML='<button class="sp-end" onclick="S.openSpeaking()">New session</button>';return;}
+  if(!_sp.start){bar.innerHTML='<button class="sp-go" onclick="S.spBegin()">Start talking with Zeka</button>';return;}
+  bar.innerHTML='<button class="sp-mic'+(_sp.busy?' busy':'')+'" id="sp-mic" aria-label="Hold to talk">'+(_sp.busy?'…':'🎙️')+'</button>'
+    +'<div class="sp-hint" id="sp-hint">'+(_sp.busy?'Zeka is answering…':'Hold to talk, let go to send')+'</div>'
+    +'<button class="sp-endbtn" onclick="S.spEnd()"'+(_sp.busy?' disabled':'')+'>End session</button>';
+  const mic=document.getElementById('sp-mic');
+  if(!_sp.busy){
+    mic.addEventListener('pointerdown',e=>{e.preventDefault();mic.setPointerCapture&&mic.setPointerCapture(e.pointerId);this.spRecStart();});
+    ['pointerup','pointercancel'].forEach(ev=>mic.addEventListener(ev,()=>this.spRecStop()));
+    mic.addEventListener('contextmenu',e=>e.preventDefault());
+  }
+  document.getElementById('sp-cost').textContent='$'+this.spCostUSD().toFixed(3);
+},
+spRenderLog(){
+  const el=document.getElementById('sp-log');if(!el||!_sp)return;
+  let h='';
+  if(!_sp.start&&!_sp.lines.length){
+    h+='<div class="sp-intro"><div class="sp-intro-t">Talk with Zeka</div><div class="sp-intro-s">A patient tutor from Belgrade. Hold the microphone, speak Serbian (or ask in English), let go, and Zeka answers out loud. English support appears in lighter text.</div></div>';
+    const past=(st.speak.sessions||[]).slice(-5).reverse();
+    if(past.length){
+      h+='<div class="ivocab-lbl">Recent sessions</div>';
+      past.forEach(x=>{h+='<details class="sp-past"><summary>'+esc(new Date(x.date).toLocaleDateString())+' · '+Math.max(1,Math.round((x.dur||0)/60))+' min'+(x.summary?'':' · no summary')+'</summary>'+(x.summary?'<div class="sp-sum">'+esc(x.summary).replace(/\n/g,'<br>')+'</div>':'')+'</details>';});
+    }
+  }
+  _sp.lines.forEach((l,i)=>{
+    if(l.kind==='summary'){h+='<div class="sp-summary"><div class="ivocab-lbl">Session summary</div><div class="sp-sum">'+esc(l.text).replace(/\n/g,'<br>')+'</div></div>';return;}
+    if(l.kind==='error'){h+='<div class="sp-err">'+esc(l.text)+'</div>';return;}
+    if(l.role==='user'){h+='<div class="dlg-row r"><div class="dlg-b"><div class="dlg-who">You</div><div class="dlg-sr">'+esc(l.text)+'</div></div></div>';return;}
+    h+='<div class="dlg-row l"><div class="dlg-b"><div class="dlg-who">Zeka</div>';
+    spLines(l.text).forEach(x=>{h+=x.en?'<div class="dlg-en">'+esc(x.t)+'</div>':'<div class="dlg-sr">'+esc(x.t)+'</div>';});
+    if(l.audio)h+='<div class="sp-play"><button onclick="S.spPlay('+i+',false)">▶ Play</button><button onclick="S.spPlay('+i+',true)">🐢 Replay slower</button></div>';
+    h+='</div></div>';
+  });
+  el.innerHTML=h;el.scrollTop=el.scrollHeight;
+},
+async spCall(path,body,isForm){
+  const token=await fbUser.getIdToken();
+  const r=await fetch(TUTOR_URL.replace(/\/$/,'')+path,{method:'POST',headers:isForm?{authorization:'Bearer '+token}:{authorization:'Bearer '+token,'content-type':'application/json'},body});
+  let j={};try{j=await r.json();}catch(e){}
+  if(!r.ok)throw new Error(j.error||('Server error '+r.status));
+  return j;
+},
+spPayload(extra){return Object.assign({history:_sp.history,english:st.speak.eng,mistakes:(st.speak.mistakes||[]).slice(0,5)},extra||{});},
+async spBegin(){
+  if(!fbUser||_sp.busy)return;
+  _sp.start=Date.now();_sp.busy=true;this.spRenderLog();this.spRenderBar();
+  spUnlockAudio();
+  const f=new FormData();f.append('payload',JSON.stringify(this.spPayload({start:true})));
+  try{this.spTake(await this.spCall('/turn',f,true));}
+  catch(e){_sp.lines.push({kind:'error',text:e.message});}
+  _sp.busy=false;this.spRenderLog();this.spRenderBar();
+},
+async spRecStart(){
+  if(!_sp||_sp.busy||(_spRec&&_spRec.state==='recording'))return;
+  spUnlockAudio();
+  if(_spAudio)_spAudio.pause();
+  try{
+    if(!_spStream)_spStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  }catch(e){_sp.lines.push({kind:'error',text:'Microphone blocked. Allow microphone access for zeka.one in your browser settings.'});this.spRenderLog();return;}
+  const mime=['audio/webm;codecs=opus','audio/mp4','audio/webm'].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(m))||'';
+  _spChunks=[];_spRecAt=Date.now();
+  _spRec=new MediaRecorder(_spStream,mime?{mimeType:mime}:undefined);
+  _spRec.ondataavailable=e=>{if(e.data&&e.data.size)_spChunks.push(e.data);};
+  _spRec.onstop=()=>this.spSendRec();
+  _spRec.start();
+  _spMaxT=setTimeout(()=>this.spRecStop(),60000);
+  const mic=document.getElementById('sp-mic');if(mic)mic.classList.add('rec');
+  const hint=document.getElementById('sp-hint');if(hint)hint.textContent='Listening… let go to send';
+  haptic('tap');
+},
+spRecStop(){
+  clearTimeout(_spMaxT);
+  if(_spRec&&_spRec.state==='recording')_spRec.stop();
+  const mic=document.getElementById('sp-mic');if(mic)mic.classList.remove('rec');
+},
+async spSendRec(){
+  const ms=Date.now()-_spRecAt;
+  const type=(_spRec&&_spRec.mimeType)||'audio/webm';
+  const blob=new Blob(_spChunks,{type});
+  if(ms<400||blob.size<800){const hint=document.getElementById('sp-hint');if(hint)hint.textContent='Hold the button while you speak';return;}
+  _sp.busy=true;this.spRenderBar();
+  const f=new FormData();
+  f.append('payload',JSON.stringify(this.spPayload()));
+  f.append('audio',blob,'speech.'+(type.includes('mp4')?'m4a':'webm'));
+  _sp.cost.stt+=ms/1000;
+  try{this.spTake(await this.spCall('/turn',f,true));}
+  catch(e){_sp.lines.push({kind:'error',text:e.message});}
+  _sp.busy=false;this.spRenderLog();this.spRenderBar();
+},
+spTake(j){
+  if(j.empty){_sp.lines.push({kind:'error',text:'I didn\'t catch that. Try again, a little closer to the microphone.'});return;}
+  if(j.user_text){_sp.history.push({role:'user',text:spLatin(j.user_text)});_sp.lines.push({role:'user',text:spLatin(j.user_text)});}
+  const text=spLatin(j.tutor_text||'');
+  const url=j.audio_b64?URL.createObjectURL(new Blob([Uint8Array.from(atob(j.audio_b64),c=>c.charCodeAt(0))],{type:j.audio_mime||'audio/mpeg'})):'';
+  _sp.history.push({role:'assistant',text});
+  _sp.lines.push({role:'assistant',text,audio:url});
+  _sp.cost.tts+=j.tts_chars||0;
+  if(j.usage){_sp.cost.inTok+=j.usage.input_tokens||0;_sp.cost.outTok+=j.usage.output_tokens||0;}
+  this.spRenderLog();
+  if(url)this.spPlay(_sp.lines.length-1,false);
+},
+spPlay(i,slow){
+  const l=_sp&&_sp.lines[i];if(!l||!l.audio)return;
+  const a=spAudioEl();a.pause();a.src=l.audio;
+  a.preservesPitch=true;a.mozPreservesPitch=true;a.webkitPreservesPitch=true;
+  a._slow=!!slow;a.playbackRate=slow?0.7:st.speak.rate;
+  a.play().catch(()=>{});
+},
+async spEnd(){
+  if(!_sp||_sp.busy)return;
+  if(_sp.history.filter(h=>h.role==='user').length===0){this.exitSpeaking();return;}
+  _sp.busy=true;this.spRenderBar();
+  const hint=document.getElementById('sp-hint');if(hint)hint.textContent='Writing your summary…';
+  try{
+    const j=await this.spCall('/summary',JSON.stringify({history:_sp.history}));
+    if(j.usage){_sp.cost.inTok+=j.usage.input_tokens||0;_sp.cost.outTok+=j.usage.output_tokens||0;}
+    _sp.lines.push({kind:'summary',text:spLatin(j.summary||'')});
+    this.spSave(j);_sp.ended=true;
+  }catch(e){_sp.lines.push({kind:'error',text:e.message+' (your conversation is saved without a summary)'});this.spSave(null);_sp.ended=true;}
+  _sp.busy=false;this.spRenderLog();this.spRenderBar();
+},
+// Save the session (and any corrections) once; keeps the last 30 sessions and 50 corrections
+spSave(j){
+  if(_sp.saved)return;_sp.saved=true;
+  const now=Date.now();
+  st.speak.sessions.push({id:now,date:new Date(_sp.start||now).toISOString(),dur:Math.round((now-(_sp.start||now))/1000),
+    transcript:_sp.history.slice(-60),summary:j?spLatin(j.summary||''):'',cost:Math.round(this.spCostUSD()*10000)/10000});
+  if(st.speak.sessions.length>30)st.speak.sessions=st.speak.sessions.slice(-30);
+  if(j&&Array.isArray(j.corrections)){
+    const fresh=j.corrections.filter(c=>c&&c.said&&c.correct).map(c=>({said:spLatin(c.said),correct:spLatin(c.correct),why:c.why||'',t:now}));
+    const key=x=>x.said+'|'+x.correct;const seen=new Set(fresh.map(key));
+    st.speak.mistakes=[...fresh,...(st.speak.mistakes||[]).filter(x=>!seen.has(key(x)))].slice(0,50);
+  }
+  save();
+},
+
 exitReading(){sCl();this.goHome();this.setLearnMode('reading');},
 
 renderClozeHome(){
@@ -6055,7 +6284,8 @@ openModesSheet(e){
     {k:'sentences',em:'💬',t:'Sentences',s:sr?'Today\'s sentence · fill the blanks':'Serbian only'},
     {k:'cloze',em:'✏️',t:'Cloze',s:sr?'One word missing · cases, past, future'+(t.c?' · done today ✓':''):'Serbian only'},
     {k:'reading',em:'📖',t:'Reading',s:sr?(st.readDone||[]).length+' of '+READINGS.length+' texts read'+(t.r?' · read today ✓':''):'Serbian only'},
-    ...(VOICE.n?[{k:'listening',em:'🎧',t:'Listening',s:'Hear it, then answer · '+VOICE.n+' clips'+(t.l?' · done today ✓':'')}]:[])
+    ...(VOICE.n?[{k:'listening',em:'🎧',t:'Listening',s:'Hear it, then answer · '+VOICE.n+' clips'+(t.l?' · done today ✓':'')}]:[]),
+    ...(TUTOR_URL&&sr?[{k:'speaking',em:'🗣️',t:'Speaking Practice',s:fbUser?'Talk with Zeka, your voice tutor':'Sign in to talk with Zeka'}]:[])
   ];
   const cur=st._learnMode||'flashcards';
   const activeKey=cur==='verbs'?(st.grammarMode==='cases'?'cases':'verbs'):cur;
@@ -6074,6 +6304,7 @@ openModesSheet(e){
 },
 pickMode(k){
   this.closeOverflowMenu();
+  if(k==='speaking'){this.openSpeaking();return;}
   if(k==='cases'){st.grammarMode='cases';this.setLearnMode('verbs');return;}
   if(k==='verbs')st.grammarMode='verbs';
   this.setLearnMode(k);

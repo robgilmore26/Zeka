@@ -1,0 +1,11 @@
+name = "zeka-tutor"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+FIREBASE_PROJECT_ID = "zeka-4329b"
+ALLOWED_ORIGINS = "https://zeka.one,http://localhost:8080"
+
+# Secrets (set by setup.ps1 with `wrangler secret put`, never in this file):
+#   ANTHROPIC_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID, ALLOWED_EMAILS
